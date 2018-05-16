@@ -1,5 +1,5 @@
-require('prototypes/spawn');
-require('prototypes/creep')
+require('prototype.creep', 'prototypes.spawn');
+
 module.exports.loop = function () {
 // Clean dead creeps from memory RIP fellow conrades
     for (let name in Memory.creeps) {
@@ -14,7 +14,7 @@ module.exports.loop = function () {
 
 
     // for each spawn run spawn logic
-    for (let spawnName in Game.spawns) {
-        Game.spawns[spawnName].();
+    for(let spawnName in Game.spawns) {
+      Game.spawns[spawnName].createSpawnQueue();
     }
 };
