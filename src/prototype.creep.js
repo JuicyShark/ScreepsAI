@@ -62,9 +62,9 @@
 
 
 var roles = {
-    harvester: require('../roles/harvester.js'),
-    upgrader: require('../roles/upgrader.js'),
-    builder: require('../roles/builder.js'),
+    harvester: require('role.harvester'),
+    upgrader: require('role.upgrader'),
+    builder: require('role.builder'),
 };
 
   Creep.prototype.runRole =
