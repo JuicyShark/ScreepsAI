@@ -1,4 +1,4 @@
-require('nameGen.js');
+require('nameGen');
 var roleList = ['Harvester', 'Upgrader', 'Builder']
 var minRoles1 = [{Harvester: 2}, {Upgrader: 1}]
 var baseTier = 1;
