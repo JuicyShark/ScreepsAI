@@ -1,4 +1,5 @@
-require('prototype.creep', 'prototypes.spawn');
+require('prototype.creep');
+require('prototypes.spawn');
 
 module.exports.loop = function () {
 // Clean dead creeps from memory RIP fellow conrades

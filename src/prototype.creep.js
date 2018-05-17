@@ -1,14 +1,14 @@
-var roles = {
+const roles = {
     harvester: require('role.harvester'),
     upgrader: require('role.upgrader'),
-    builder: require('role.builder'),
+    builder: require('role.builder')
 };
 
   Creep.prototype.runRole =
       function() {
           roles[this.memory.role].run(this);
       };
-      
+
   Creep.prototype.energyCollection =
     function(creep)  {
         let container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
