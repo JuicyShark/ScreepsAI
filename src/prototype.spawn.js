@@ -25,8 +25,10 @@ StructureSpawn.prototype.bodyCost = function(bodyParts){
 StructureSpawn.prototype.bodyBuilder = function(role) {
 
   let outputArray = [];
+  let room = this.room
+  let maxEnergy = room.energyCapacityAvailable;
 
-  let numberOfParts = Math.floor(300 / 200);
+  let numberOfParts = Math.floor(maxEnergy / 200);
   var body = [];
   for (let i = 0; i < numberOfParts; i++) {
     outputArray.push(WORK);
@@ -67,16 +69,32 @@ StructureSpawn.prototype.createSpawnQueue = function() {
   for (let role of roleList) {
     numberOfCreeps[role] = _.sum(creepsInRoom, (creep) => creep.memory.role == role)
 
-    if (numberOfCreeps[role].length < minRoles2[0]) {
+    if (numberOfCreeps[role].length < minRoles2[role]) {
       spawnQueue.push({
         role: role,
         bodyParts: bodyParts
       })
     } else {
+
+      let harvNum = _.sum(creepsInRoom, (creep) => creep.memory.role == "Harvester")
+      let upgrNum = _.sum(creepsInRoom, (creep) => creep.memory.role == "Upgrader")
+
+      if (harvNum != 2){
       spawnQueue.push({
         role: "Harvester",
         bodyParts: bodyParts
       })
+    }
+    else if (upgrNum != 2){
+    spawnQueue.push({
+      role: "Upgrader",
+      bodyParts: bodyParts
+    })
+  }
+  else {
+    return;
+  }
+
     }
   }
 
@@ -84,10 +102,17 @@ StructureSpawn.prototype.createSpawnQueue = function() {
   if(this.bodyCost(bodyParts) <= maxEnergy){
   let result = this.spawnNewCreep(energy, bodyParts, spawnQueue)
 
-  if (result == -6 && result != -4) {
-    console.log("waiting")
-  } else if (result == 0) {
-    console.log("Spawned?")
+  if (result == -6 ) {
+    //Waiting for resources
+
+    console.log("Spawn: ",this.name, " Waiting with: ", spawnQueue[0].role)
+    //console.log(JSON.stringify(spawnQueue))
+
+
+
+
+  } else if (result == 0 || result == -4) {
+    console.log("Spawned!")
   } else if (result != 0) {
     console.log(result)
     console.log("Error in spawning")

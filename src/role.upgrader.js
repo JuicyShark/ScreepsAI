@@ -22,6 +22,7 @@ module.exports = {
       }
       if (creep.carry.energy == 0) {
         creep.memory.working = "false";
+        work.harvest(creep)
       }
 
       if (creep.carryCapacity != 0 && creep.memory.working == "true") {
@@ -34,14 +35,6 @@ module.exports = {
 
         }
       }
-      else if (creep.memory.working == "false") {
-        work.harvest(creep)
-      }
-      else {
-        console.log("Needfixing? Hit an else in Role Upgrader")
-      }
-
-
     }
 
 

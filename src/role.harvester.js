@@ -31,11 +31,6 @@ module.exports = {
         work.harvest(creep)
 
       }
-      else {
-        console.log("Needfixing? Hit an else in Role Harvester")
-      }
-
-
     }
 
 

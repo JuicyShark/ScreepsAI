@@ -5,8 +5,7 @@ var adjectiveList = ["aback ","abaft ","abandoned ","abashed ","aberrant ","abho
 
  StructureSpawn.prototype.nameGen = function() {
 var name =  adjectiveList[Math.floor(Math.random() * adjectiveList.length)] + nameList[Math.floor(Math.random() * nameList.length)];
-  console.log(name);
+//  console.log(name);
   return name
 
 }
-

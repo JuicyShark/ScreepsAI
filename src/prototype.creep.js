@@ -9,6 +9,11 @@
               harvester.run(this);
             }
           }
+          if (this.memory.role == "Upgrader"){
+            if (this.memory.role == "Upgrader"){
+              upgrader.run(this);
+            }
+          }
           /*
 
           if (this.memory.role == "Upgrader"){
