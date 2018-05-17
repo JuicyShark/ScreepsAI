@@ -1,4 +1,5 @@
-//require('nameGen');
+require('nameGen')
+
 var roleList = ['Harvester', 'Upgrader', 'Builder']
 var minRoles1 = [{Harvester: 2}, {Upgrader: 1}]
 var baseTier = 1;
@@ -11,32 +12,27 @@ var energy = 300;
 
     let numberOfParts = Math.floor(300 / 200);
     var body = [];
-    for (let qwq = 0; qwq < numberOfParts; qwq++) {
+    for (let i = 0; i < numberOfParts; i++) {
         outputArray.push(WORK);
     }
-    for (let qwq = 0; qwq < numberOfParts; qwq++) {
+    for (let i = 0; i < numberOfParts; i++) {
         outputArray.push(CARRY);
     }
-    for (let qwq = 0;qwq< numberOfParts; qwq++) {
+    for (let i = 0;i< numberOfParts; i++) {
         outputArray.push(MOVE);
     }
 
-    return outputArray;
+    return outputArray
   }
 
 
 
 
   StructureSpawn.prototype.spawnNewCreep = function(energy, spawnQueue){
-
     var role = spawnQueue[0].role
-
     var bodyParts = spawnQueue[0].bodyParts
-
-    //var name = require('nameGen');
-    var name = Game.time + " Harvesta"
-    //console.log(JSON.stringify(name))
-    //console.log(bodyParts)
+    var name = this.nameGen()
+    
     return this.spawnCreep(bodyParts, name, { memory: {
         role: role,
         working: false
@@ -66,7 +62,7 @@ var energy = 300;
 
   let result = this.spawnNewCreep(energy, spawnQueue);
 
-  if (result == 6 && result != 4) {
+  if (result == -6 && result != 4) {
     console.log("waiting")
   }
   else if (this.spawnNewCreep(energy,spawnQueue) == 0) {
@@ -78,4 +74,4 @@ var energy = 300;
   }
 return this.spawnNewCreep(energy, spawnQueue)
 
-}
+};
