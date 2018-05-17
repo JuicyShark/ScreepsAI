@@ -1,8 +1,8 @@
-
-    Creep.prototype.runRole =
+   Creep.prototype.runRole =
         function() {
           let upgrader = require("role.upgrader")
           let harvester = require("role.harvester")
+
 
           if (this.memory.role == "Harvester"){
             if (this.memory.role == "Harvester"){

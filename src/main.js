@@ -1,6 +1,7 @@
 require('prototype.spawn')
 require('prototype.creep')
 
+
 module.exports.loop = function () {
 // Clean dead creeps from memory RIP fellow conrades
     for(let name in Memory.creeps) {
