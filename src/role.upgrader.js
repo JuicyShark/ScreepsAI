@@ -2,6 +2,8 @@
 module.exports = {
 
   run: function(creep) {
+      var baseTier = 1;
+      var work = require("creepWork")
 
 
     if(creep.ticksToLive < 80 && creep.memory.deathWish != true){
@@ -33,7 +35,7 @@ module.exports = {
         }
       }
       else if (creep.memory.working == "false") {
-        creep.harvest(creep)
+        work.harvest(creep)
       }
       else {
         console.log("Needfixing? Hit an else in Role Upgrader")
