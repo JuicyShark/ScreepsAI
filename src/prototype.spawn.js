@@ -1,15 +1,14 @@
 require('nameGen')
 
 const roleList = ['Harvester', 'Upgrader', 'Builder']
-var minRoles1 = [{
-  Harvester: 2
-}, {
-  Upgrader: 1
-}]
-var minRoles2 = [
-  {Harvester: 2},
-  {Upgrader: 1}
-]
+
+var minRoles1 = {Harvester:"2", Upgrader: "1", Builder: "1"}
+
+/*
+let temp = JSON.stringify(minRoles1)
+console.log(temp)
+console.log(minRoles1[0].Harvester)
+*/
 var baseTier = 1;
 var spawnQueue = []
 
@@ -64,39 +63,45 @@ StructureSpawn.prototype.createSpawnQueue = function() {
   let numberOfCreeps = {}
   let bodyParts = this.bodyBuilder()
 
+
+
   // loop and create list of available creeps
 
+  let name = undefined;
   for (let role of roleList) {
     numberOfCreeps[role] = _.sum(creepsInRoom, (creep) => creep.memory.role == role)
 
-    if (numberOfCreeps[role].length < minRoles2[role]) {
+    var wrapper = function(role, minRoles1) {
+      if (role == "Harvester") {
+        return minRoles1.Harvester
+      }
+      else if (role == "Upgrader") {
+        return minRoles1.Upgrader
+      }
+      else if (role == "Builder") {
+        return minRoles1.Builder
+      }
+
+
+
+
+    }
+
+
+    if (numberOfCreeps[role] != wrapper(role, minRoles1)) {
+      //console.log("Pushing ", role)
       spawnQueue.push({
         role: role,
         bodyParts: bodyParts
       })
-    } else {
-
-      let harvNum = _.sum(creepsInRoom, (creep) => creep.memory.role == "Harvester")
-      let upgrNum = _.sum(creepsInRoom, (creep) => creep.memory.role == "Upgrader")
-
-      if (harvNum != 2){
-      spawnQueue.push({
-        role: "Harvester",
-        bodyParts: bodyParts
-      })
     }
-    else if (upgrNum != 2){
-    spawnQueue.push({
-      role: "Upgrader",
-      bodyParts: bodyParts
-    })
-  }
-  else {
-    return;
-  }
-
+    else {
+      //console.log("This role has been passed in spawn Que: ", role)
     }
   }
+
+
+  //console.log(JSON.stringify(spawnQueue))
 
 
   if(this.bodyCost(bodyParts) <= maxEnergy){
