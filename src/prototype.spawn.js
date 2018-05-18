@@ -2,7 +2,7 @@ require('nameGen')
 
 const roleList = ['Harvester', 'Upgrader', 'Builder']
 
-var minRoles1 = {Harvester:"2", Upgrader: "1", Builder: "1"}
+var minRoles1 = {Harvester:"1", Upgrader: "2", Builder: "2"}
 
 /*
 let temp = JSON.stringify(minRoles1)
@@ -63,6 +63,19 @@ StructureSpawn.prototype.createSpawnQueue = function() {
   let numberOfCreeps = {}
   let bodyParts = this.bodyBuilder()
 
+  var wrapper = function(role, roleList) {
+    if (role == "Harvester") {
+      return roleList.Harvester
+    }
+    else if (role == "Upgrader") {
+      return roleList.Upgrader
+    }
+    else if (role == "Builder") {
+      return roleList.Builder
+    }
+
+  }
+
 
 
   // loop and create list of available creeps
@@ -71,24 +84,10 @@ StructureSpawn.prototype.createSpawnQueue = function() {
   for (let role of roleList) {
     numberOfCreeps[role] = _.sum(creepsInRoom, (creep) => creep.memory.role == role)
 
-    var wrapper = function(role, minRoles1) {
-      if (role == "Harvester") {
-        return minRoles1.Harvester
-      }
-      else if (role == "Upgrader") {
-        return minRoles1.Upgrader
-      }
-      else if (role == "Builder") {
-        return minRoles1.Builder
-      }
 
 
 
-
-    }
-
-
-    if (numberOfCreeps[role] != wrapper(role, minRoles1)) {
+    if (numberOfCreeps[role] != wrapper(role, minRoles1) && numberOfCreeps[role] < wrapper(role,minRoles1)) {
       //console.log("Pushing ", role)
       spawnQueue.push({
         role: role,
@@ -96,7 +95,7 @@ StructureSpawn.prototype.createSpawnQueue = function() {
       })
     }
     else {
-      //console.log("This role has been passed in spawn Que: ", role)
+      console.log("This role has been passed in spawn Que: ", role)
     }
   }
 
