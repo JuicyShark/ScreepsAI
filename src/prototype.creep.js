@@ -26,8 +26,6 @@ function(creep) {
       // move towards the source
       creep.moveTo(source, {visualizePathStyle: {stroke: '#ffffff'}});
   }
-
-
 };
 
 Creep.prototype.energyDeliver =
@@ -41,7 +39,6 @@ Creep.prototype.energyDeliver =
       }
     }
 
-
     if (creep.memory.role != "Upgrader") {
 
     let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
@@ -50,7 +47,6 @@ Creep.prototype.energyDeliver =
             && s.energy < s.energyCapacity
     });
     deliver(container);
-
   }
   else {
     let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
@@ -60,54 +56,39 @@ Creep.prototype.energyDeliver =
           });
     deliver(container);
     }
-
   };
 
 Creep.prototype.building =
   function(creep) {
 
     let buildingSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
-
         if (creep.build(buildingSite) == ERR_NOT_IN_RANGE) {
         const path = creep.pos.findPathTo(buildingSite);
         creep.memory.path = path;
         Memory.path = Room.serializePath(path);
-        creep.moveByPath(Memory.path)
-
+      creep.moveByPath(Memory.path)
   }
-
-
 };
-
-
-
-   Creep.prototype.runRole =
+ Creep.prototype.runRole =
         function() {
           let upgrader = require("role.upgrader")
           let harvester = require("role.harvester")
           let builder = require("role.builder")
 
 
-          if (this.memory.role == "Harvester"){
-            if (this.memory.role == "Harvester"){
+          if (this.memory.role == "harvester"){
+            if (this.memory.role == "harvester"){
               harvester.run(this);
             }
           }
-          if (this.memory.role == "Upgrader"){
-            if (this.memory.role == "Upgrader"){
+          if (this.memory.role == "upgrader"){
+            if (this.memory.role == "upgrader"){
               upgrader.run(this);
             }
           }
-          if (this.memory.role == "Builder"){
-            if (this.memory.role == "Builder"){
+          if (this.memory.role == "builder"){
+            if (this.memory.role == "builder"){
               builder.run(this);
             }
           }
-          /*
-
-          if (this.memory.role == "Upgrader"){
-            upgrader.run(this)
-          }*/
-
-            //roles[this.memory.role].run(this);
         };
