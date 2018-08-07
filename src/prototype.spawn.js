@@ -25,7 +25,8 @@ StructureSpawn.prototype.bodyBuilder = function(role, energy) {
 
 
 StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role) {
-  var name = this.nameGen();
+  var name = undefined;
+   this.nameGen() = name;
   console.log("Spawning a " + role + ", Named: "+ name);
   return this.spawnCreep(bodyParts, name, {
     memory: {
