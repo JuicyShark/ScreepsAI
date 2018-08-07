@@ -11,11 +11,10 @@ Creep.prototype.energyCollection =
 
       // if one was found
       if (container != undefined) {
-      // try to withdraw energy, if the container is not in range
-      if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-              // move towards it
+
+        if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
               creep.moveTo(container, {visualizePathStyle: {stroke: '#ffffff'}});
-          }
+        }
       }
   };
 
@@ -38,6 +37,7 @@ Creep.prototype.energyDeliver =
               creep.moveTo(container, {visualizePathStyle: {stroke: '#ffffff'}});
           }
       }
+      
     }
 
     if (creep.memory.role != "Upgrader") {
@@ -51,8 +51,8 @@ Creep.prototype.energyDeliver =
   }
   else {
     let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-        filter: (s) => (s.structureType == STRUCTURE_CONTROLLER
-            || s.structureType == STRICTURE_SPAWN)
+        filter: (s) => (s.structureType == STRUCTURE_SPAWN
+            || s.structureType == STRICTURE_EXTENSION)
             && s.energy < s.energyCapacity
           });
     deliver(container);
@@ -78,7 +78,7 @@ Creep.prototype.checkDeath =
     let source = creep.pos.findClosestByPath(STRUCTURE_SPAWN);
 
     if(life < 25) {
-    creep.energyDeliver(creep)  
+    creep.energyDeliver(creep)
     }
     if (life < 19 && life > 10) {
         creep.say(creep.name, ": This is a dark tunnel" )

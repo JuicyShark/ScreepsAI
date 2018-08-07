@@ -9,7 +9,7 @@ module.exports = {
 
 
     if (creep.tickToLive > 25){
-
+//now creep will only work when ticktolive is over 25 ticks
       if (creep.carry.energy == creep.carryCapacity) {
         creep.memory.working = "true";
       }

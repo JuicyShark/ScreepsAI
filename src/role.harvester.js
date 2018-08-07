@@ -7,7 +7,7 @@ module.exports = {
     creep.checkDeath(creep)
 
     if (creep.ticksToLive > 25){
-
+//now creep will only work when ticktolive is over 25 ticks
 
       if (creep.memory.working == "false"){
         creep.energyDeliver(creep)
