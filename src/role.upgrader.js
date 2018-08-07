@@ -3,7 +3,6 @@ module.exports = {
 
   run: function(creep) {
       var baseTier = 1;
-      var work = require("creepWork")
 
 
     if(creep.ticksToLive < 80 && creep.memory.deathWish != true){
@@ -24,7 +23,7 @@ module.exports = {
         creep.memory.working = "false";
       }
       if (creep.carry.energy != creep.carryCapacity && creep.memory.working == "false") {
-        work.harvest(creep)
+        creep.harvester(creep)
       }
 
       if (creep.carryCapacity != 0 && creep.memory.working == "true") {

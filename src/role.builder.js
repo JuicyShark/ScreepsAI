@@ -4,8 +4,6 @@ module.exports = {
 
   run: function(creep) {
     var baseTier = 1;
-    var work = require("creepWork")
-
 
     if(creep.ticksToLive < 80 && creep.memory.deathWish != true){
       spawnQueue.push({role: 'Builder', bodyParts: bodyBuilder(Builder)})
@@ -27,18 +25,11 @@ module.exports = {
 
       if (creep.carryCapacity != 0 && creep.memory.working == "true") {
 
-          let buildingSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
-
-              if (creep.build(buildingSite) == ERR_NOT_IN_RANGE) {
-              const path = creep.pos.findPathTo(buildingSite);
-              creep.memory.path = path;
-              Memory.path = Room.serializePath(path);
-              creep.moveByPath(Memory.path)
-
-        }
+        creep.building(creep)
+          //CreepBuilding From Work
       }
       else if (creep.memory.working == "false") {
-        work.harvest(creep)
+        creep.harvester(creep)
       }
       else {
         console.log("Needfixing? Hit an else in Role Builder")
