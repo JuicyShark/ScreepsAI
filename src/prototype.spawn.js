@@ -1,23 +1,13 @@
 require('nameGen')
 
 var minRoles = {
-  Harvester: "1",
-  Upgrader: "2",
-  Builder: "2"
-}
-var baseTier = 1;
-var spawnQueue = []
-
-StructureSpawn.prototype.bodyCost = function(bodyParts) {
-
-  return bodyParts.reduce(function(cost, part) {
-    return cost + BODYPART_COST[part];
-  }, 0);
+  Harvester: "2",
+  Upgrader: "1",
+  Builder: "1"
 }
 
 StructureSpawn.prototype.bodyBuilder = function(role, energy) {
   let outputArray = [];
-  let room = this.room
   let numberOfParts = Math.floor(energy / 200);
   var body = [];
 
@@ -35,7 +25,8 @@ StructureSpawn.prototype.bodyBuilder = function(role, energy) {
 
 
 StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role) {
-  var name = this.nameGen()
+  var name = this.nameGen();
+  console.log("Spawning a " + role + ", Named: "+ name);
   return this.spawnCreep(bodyParts, name, {
     memory: {
       role: role,
@@ -49,16 +40,22 @@ StructureSpawn.prototype.findRoleNeeded = function(energy) {
   var numberOfHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'harvester');
   var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'upgrader');
   var numberOfBuilders = _.sum(Game.creeps, (c) => c.memory.role == 'builder');
-  // Spawn top to bottom what roles need to meet minimum requirements
+    // Spawn top to bottom what roles need to meet minimum requirements
+var canSpawn = false;
   if (numberOfHarvesters <= minRoles.Harvester) {
-    bodyparts = this.bodyBuilder("harvester", energy);
+    bodyParts = this.bodyBuilder("harvester", energy);
     role = "harvester"
+    canSpawn = true;
   } else if (numberOfUpgraders <= minRoles.Upgrader) {
-    bodyparts = this.bodyBuilder("upgrader", energy);
+    bodyParts = this.bodyBuilder("upgrader", energy);
     role = "upgrader"
+      canSpawn = true;
   } else if (numberOfBuilders <= minRoles.Builder) {
-    bodyparts = this.bodyBuilder("builder", energy);
+    bodyParts = this.bodyBuilder("builder", energy);
     role = "builder"
+      canSpawn = true;
   }
-  this.spawnNewCreep(bodyparts, role);
+  if(canSpawn == true){
+    this.spawnNewCreep(bodyParts, role);
+  }
 };
