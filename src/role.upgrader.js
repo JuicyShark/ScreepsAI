@@ -5,11 +5,7 @@ module.exports = {
       var baseTier = 1;
 
 
-    if(creep.ticksToLive < 80 && creep.memory.deathWish != true){
-      spawnQueue.push({role: 'Upgrader', bodyParts: bodyBuilder(Upgrader)})
-      creep.say('Replacement added to Queue')
-      creep.memory.deathWish = true
-    }
+  
     if(creep.ticksToLive < 50) {
       creep.say(creep.name, " The light! I see it!")
     }

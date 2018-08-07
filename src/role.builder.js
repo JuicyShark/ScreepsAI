@@ -5,11 +5,6 @@ module.exports = {
   run: function(creep) {
     var baseTier = 1;
 
-    if(creep.ticksToLive < 80 && creep.memory.deathWish != true){
-      spawnQueue.push({role: 'Builder', bodyParts: bodyBuilder(Builder)})
-      creep.say('Replacement added to Queue')
-      creep.memory.deathWish = true
-    }
     if(creep.ticksToLive < 25) {
       creep.say(creep.name, " Ol mate your times up")
     }

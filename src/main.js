@@ -1,7 +1,6 @@
 require('prototype.spawn')
 require('prototype.creep')
 
-
 module.exports.loop = function () {
 // Clean dead creeps from memory RIP fellow conrades
     for(let name in Memory.creeps) {
@@ -17,8 +16,8 @@ module.exports.loop = function () {
 
     // for each spawn run spawn logic
     for(let spawnName in Game.spawns) {
-
-       Game.spawns[spawnName].createSpawnQueue();
+      var energy = Game.spawns[spawnName].room.energyCapacityAvailable;
+       Game.spawns[spawnName].findRoleNeeded(energy);
        //Game.spawns[spawnName].spawnNewCreep();
     }
 };
