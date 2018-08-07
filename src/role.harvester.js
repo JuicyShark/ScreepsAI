@@ -4,12 +4,9 @@ module.exports = {
   run: function(creep) {
   var baseTier = 1;
 
+    creep.checkDeath(creep)
 
-    
-    if(creep.ticksToLive < 50) {
-      creep.say(creep.name, " Ol bugger your out of luck now")
-    }
-    if (baseTier == 1){
+    if (creep.ticksToLive > 25){
 
 
       if (creep.memory.working == "false"){

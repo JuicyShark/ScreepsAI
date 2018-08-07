@@ -5,12 +5,11 @@ module.exports = {
       var baseTier = 1;
 
 
-  
-    if(creep.ticksToLive < 50) {
-      creep.say(creep.name, " The light! I see it!")
-    }
+      creep.checkDeath(creep)
 
-    if (baseTier == 1){
+
+
+    if (creep.ticksToLive > 25){
 
       if (creep.carry.energy == creep.carryCapacity) {
         creep.memory.working = "true";

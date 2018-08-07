@@ -1,7 +1,8 @@
+
 Creep.prototype.energyCollection =
   function(creep)  {
       let container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-          filter: s => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
+      filter: s => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
       });
 
       if (container == undefined) {
@@ -10,8 +11,8 @@ Creep.prototype.energyCollection =
 
       // if one was found
       if (container != undefined) {
-          // try to withdraw energy, if the container is not in range
-          if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+      // try to withdraw energy, if the container is not in range
+      if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
               // move towards it
               creep.moveTo(container, {visualizePathStyle: {stroke: '#ffffff'}});
           }
@@ -59,16 +60,38 @@ Creep.prototype.energyDeliver =
   };
 
 Creep.prototype.building =
-  function(creep) {
+        function(creep) {
 
-    let buildingSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
-        if (creep.build(buildingSite) == ERR_NOT_IN_RANGE) {
-        const path = creep.pos.findPathTo(buildingSite);
-        creep.memory.path = path;
-        Memory.path = Room.serializePath(path);
-      creep.moveByPath(Memory.path)
+          let buildingSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
+          if (creep.build(buildingSite) == ERR_NOT_IN_RANGE) {
+          const path = creep.pos.findPathTo(buildingSite);
+          creep.memory.path = path;
+          Memory.path = Room.serializePath(path);
+          creep.moveByPath(Memory.path)
   }
 };
+
+Creep.prototype.checkDeath =
+  function (creep) {
+
+    let life = creep.ticksToLive;
+    let source = creep.pos.findClosestByPath(STRUCTURE_SPAWN);
+
+    if(life < 25) {
+    creep.energyDeliver(creep)  
+    }
+    if (life < 19 && life > 10) {
+        creep.say(creep.name, ": This is a dark tunnel" )
+      //possible add a rejuvination thingy here for the creeps
+
+    }
+    else if (life < 9 && life > 1) {
+        creep.say(creep.name, ": I can see the Light!")
+
+    }
+
+  };
+
  Creep.prototype.runRole =
         function() {
           let upgrader = require("role.upgrader")
