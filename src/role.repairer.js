@@ -9,11 +9,11 @@ module.exports = {
       creep.memory.working = "false";
     }
     if (creep.carry.energy != 0 && creep.memory.working == "true") {
-      creep.build(creep)
+      creep.repair(creep)
     } else if (creep.memory.working == "false") {
      creep.energyCollection(creep)
     } else {
-
+      creep.say("Nothing to do boss");
     }
   }
 };

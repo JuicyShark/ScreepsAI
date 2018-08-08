@@ -1,8 +1,9 @@
 require('nameGen')
 var minRoles = {
-  harvester: "0",
-  upgrader: "1",
-  builder: "1"
+  harvester: "1",
+  upgrader: "2",
+  builder: "1",
+  repairer: "0"
 }
 
 StructureSpawn.prototype.bodyBuilder = function(role, energy) {

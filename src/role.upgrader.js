@@ -9,7 +9,7 @@ module.exports = {
       creep.memory.working = "false";
     }
     if (creep.carry.energy != creep.carryCapacity && creep.memory.working == "false") {
-      creep.harvester(creep)
+      creep.harvest(creep)
     }
     if (creep.carryCapacity != 0 && creep.memory.working == "true") {
       if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
@@ -18,6 +18,8 @@ module.exports = {
         Memory.path = Room.serializePath(path);
         creep.moveByPath(Memory.path);
       }
+    } else{
+      creep.say("Nothing to do boss");
     }
   }
 };
