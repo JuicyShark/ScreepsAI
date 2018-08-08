@@ -110,11 +110,11 @@ Creep.prototype.checkDeath =
     //let source = creep.pos.findClosestByPath(STRUCTURE_SPAWN);
 
     if(life < 25) {
-      if (Game.time % 5 === 0){
-      console.log("------------")
-      console.log("Hey there ", creep.name, " is dying.")
-      console.log("-----This was CheckDeath Function is ProtoCreep-------")
-    }
+        if (Game.time % 5 === 0){
+        console.log("------------")
+        console.log("Hey there a"+ creep.memory.role +", "+ creep.name+ " is dying.")
+        console.log("-----This was a CheckDeath Function-------")
+      }
     this.energyDeliver(creep)
 
     }
