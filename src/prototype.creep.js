@@ -77,7 +77,7 @@ Creep.prototype.energyDeliver =
       if (container != null) {
         deliver(container);
       } else {
-        this.building(this)
+  //what this do?      this.building(this)
       }
     } else {
       let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
@@ -132,17 +132,11 @@ Creep.prototype.checkDeath =
     let life = creep.ticksToLive;
     //let source = creep.pos.findClosestByPath(STRUCTURE_SPAWN);
     if (life < 25) {
-      if (Game.time % 5 === 0) {
+      if (Game.time % 15 === 0) {
         console.log("------------")
         console.log("Hey there a " + creep.memory.role + ", " + creep.name + " is dying.")
         console.log("-----This was a CheckDeath Function-------")
       }
       this.energyDeliver(creep)
-    }
-    if (life < 19 && creep.life > 10) {
-      creep.say(creep.name, ": This is a dark tunnel")
-      //possible add a rejuvination thingy here for the creeps
-    } else if (life < 9 && life > 1) {
-      creep.say(creep.name, ": I can see the Light!")
     }
   };
