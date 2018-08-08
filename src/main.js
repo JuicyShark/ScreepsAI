@@ -8,12 +8,6 @@ module.exports.loop = function () {
             delete Memory.creeps[name];
         }
     }
-    // for each creeps run creep logic
-    for(let name in Game.creeps) {
-
-        Game.creeps[name].runRole();
-    }
-
 
     // for each spawn run spawn logic
     for(let spawnName in Game.spawns) {
@@ -22,4 +16,13 @@ module.exports.loop = function () {
        Game.spawns[spawnName].newCreepDebug();
        //Game.spawns[spawnName].spawnNewCreep();
     }
+
+    // for each creeps run creep logic
+    for(let name in Game.creeps) {
+
+        Game.creeps[name].runRole();
+    }
+
+
+
 };
