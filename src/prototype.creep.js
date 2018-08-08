@@ -121,7 +121,7 @@ Creep.prototype.energyDeliver =
           if (container == undefined) {
             container = creep.room.storage;
           } else {
-            collectEnergy(creep, container)
+            this.collectEnergy(creep, container)
           }
             /*    let lastResort = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
                   filter: s => s.structureType == STRUCTURE_SPAWN && s.energy > 299
