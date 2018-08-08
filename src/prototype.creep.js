@@ -1,22 +1,42 @@
 
 Creep.prototype.energyCollection =
   function(creep)  {
+
+      let collectEnergy = function(creep, i) {
+        if (creep.withdraw(i, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+              creep.moveTo(i, {visualizePathStyle: {stroke: '#ffffff'}});
+        }
+        else {
+          //console.log(i)
+          creep.withdraw(i, RESOURCE_ENERGY)
+        }
+
+      }
       let container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
       filter: s => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
       });
 
       if (container == undefined) {
-          let newContainer = creep.room.storage;
+          let nextContainer = creep.room.storage;
+      if (nextContainer != null){
+        collectEnergy(creep, newContainer)
       }
+      else if (nextContainer == null){
+        let lastResort = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+        filter: s => s.structureType == STRUCTURE_SPAWN && s.energy > 299
+        });
 
-    /*  if (newContainer ==)*/
-
+        if (lastResort != null) {
+        collectEnergy(creep, lastResort)
+        }
+        else if (lastResort == null) {
+          //here is where we can turn them into upgraders?
+        }
+      }
       // if one was found
+    }
       if (container != undefined) {
 
-        if (creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-              creep.moveTo(container, {visualizePathStyle: {stroke: '#ffffff'}});
-        }
       }
   };
 

@@ -26,14 +26,11 @@ StructureSpawn.prototype.bodyBuilder = function(role, energy) {
 StructureSpawn.prototype.newCreepDebug = function (creepRole) {
 
 
-
   if (this.spawning != null) {
     let name = this.spawning.name;
     let timeLeft = this.spawning.remainingTime;
     //let creepRole = name.memory.role;
-
     console.log(name + " only has " + timeLeft);
-    console.log("Role" + creepRole)
   }
   else if (this.spawning == null) {
 
