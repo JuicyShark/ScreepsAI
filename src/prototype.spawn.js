@@ -27,7 +27,7 @@ StructureSpawn.prototype.newCreepDebug = function(creepRole) {
 
 };
 
-StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role) {
+StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home) {
   var name = this.nameGen();
   var testCreep = this.spawnCreep(bodyParts, name, {
     dryRun: true
@@ -36,7 +36,8 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role) {
     this.spawnCreep(bodyParts, name, {
       memory: {
         role: role,
-        working: false
+        working: false,
+        home: home
       }
     });
     console.log("Spawning a " + role + ", named " + name);
@@ -45,11 +46,11 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role) {
   }
 };
 
-StructureSpawn.prototype.findRoleNeeded = function(energy) {
-  var canSpawn = false;
+StructureSpawn.prototype.findRoleNeeded = function(currentRoom) {
+  var energy = currentRoom.energyCapacityAvailable;
   if(!this.memory.totalRoles){
     this.memory.totalRoles = {};
-    return this.spawnNewCreep([WORK, CARRY, MOVE], "harvester");
+    return this.spawnNewCreep([WORK, CARRY, MOVE], "harvester", currentRoom);
   }
   // Find amount of different roles alive currently
   this.memory.minRoles = minRoles;
@@ -59,7 +60,7 @@ StructureSpawn.prototype.findRoleNeeded = function(energy) {
     if (this.memory.totalRoles[i] <= this.memory.minRoles[i] && this.spawning == null) {
      var bodyParts = this.bodyBuilder(i, energy);
      var role = i
-    return this.spawnNewCreep(bodyParts, role);
+    return this.spawnNewCreep(bodyParts, role, currentRoom);
   }
 }}
 };

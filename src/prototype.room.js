@@ -9,6 +9,7 @@ Room.prototype.findSource = function(room){
         }
     }else{
         var sourceNodes = room.find(FIND_SOURCES);
+
         for(var i in sourceNodes){
             var source = sourceNodes[i];
             source.memory = this.memory.sourceNodes[source.id];

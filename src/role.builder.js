@@ -2,6 +2,7 @@ module.exports = {
   run: function(creep) {
     creep.checkDeath(creep)
 
+
     if (creep.carry.energy == creep.carryCapacity) {
       creep.memory.working = "true";
     }

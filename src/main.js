@@ -12,8 +12,8 @@ module.exports.loop = function() {
 
   // for each spawn run spawn logic
   for (let spawnName in Game.spawns) {
-    var energy = Game.spawns[spawnName].room.energyCapacityAvailable;
-    Game.spawns[spawnName].findRoleNeeded(energy);
+    var currentRoom = Game.spawns[spawnName].room
+    Game.spawns[spawnName].findRoleNeeded(currentRoom);
   }
   for(let roomName in Game.rooms){//Loop through all rooms your creeps/structures are in
       var room = Game.rooms[roomName];
