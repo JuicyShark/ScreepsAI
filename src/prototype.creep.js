@@ -8,8 +8,7 @@ Creep.prototype.energyCollection =
       if (container == undefined) {
           let newContainer = creep.room.storage;
       }
-      console.log("HI")
-      console.log(newContainer)
+
     /*  if (newContainer ==)*/
 
       // if one was found
