@@ -6,8 +6,11 @@ Creep.prototype.energyCollection =
       });
 
       if (container == undefined) {
-          container = creep.room.storage;
+          let newContainer = creep.room.storage;
       }
+      console.log("HI")
+      console.log(newContainer)
+    /*  if (newContainer ==)*/
 
       // if one was found
       if (container != undefined) {
@@ -59,9 +62,11 @@ Creep.prototype.energyDeliver =
             || s.structureType == STRUCTURE_CONTROLLER)
             && s.energy < s.energyCapacity
           });
-      deliver(container);
-      if (container == null) {
 
+      if (container != null) {
+        deliver(container);
+      }
+      else {
         this.building(this)
       }
 
@@ -86,10 +91,13 @@ Creep.prototype.checkDeath =
     //let source = creep.pos.findClosestByPath(STRUCTURE_SPAWN);
 
     if(life < 25) {
+      if (Game.time % 5 === 0){
       console.log("------------")
-      console.log("Hey there ", creem.name, " is dying.")
+      console.log("Hey there ", creep.name, " is dying.")
       console.log("-----This was CheckDeath Function is ProtoCreep-------")
-    energyDeliver(creep)
+    }
+    this.energyDeliver(creep)
+
     }
     if (life < 19 && creep.life > 10) {
       creep.say(creep.name, ": This is a dark tunnel" )
