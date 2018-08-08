@@ -1,4 +1,5 @@
 require('prototype.spawn')
+require('prototype.room')
 require('prototype.creep')
 
 module.exports.loop = function() {

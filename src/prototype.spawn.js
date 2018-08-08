@@ -46,30 +46,23 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role) {
 };
 
 StructureSpawn.prototype.findRoleNeeded = function(energy) {
+  if(!this.memory.totalRoles){
+    this.memory.totalRoles = {};
+    this.memory.totalRoles.harvester = 0;
+  }
   // Find amount of different roles alive currently
   this.memory.minRoles = minRoles;
-  var harvesters = _.sum(Game.creeps, (c) => c.memory.role == 'harvester');
-  var upgraders = _.sum(Game.creeps, (c) => c.memory.role == 'upgrader');
-  var builders = _.sum(Game.creeps, (c) => c.memory.role == 'builder');
-  this.memory.totalRoles = {
-    harvesters,
-    upgraders,
-    builders
-  }
+  for(var i in this.memory.minRoles){
+  this.memory.totalRoles[i] = _.sum(Game.creeps, (c) => c.memory.role == i);
+}
   // Spawn top to bottom what roles need to meet minimum requirements
   var canSpawn = false;
-  if (this.memory.totalRoles.harvester <= this.memory.minRoles.harvester) {
-    bodyParts = this.bodyBuilder("harvester", energy);
-    role = "harvester"
-    canSpawn = true;
-  } else if (this.memory.totalRoles.upgraders <= this.memory.minRoles.upgrader) {
-    bodyParts = this.bodyBuilder("upgrader", energy);
-    role = "upgrader"
-    canSpawn = true;
-  } else if (this.memory.totalRoles.builders <= this.memory.minRoles.builder) {
-    bodyParts = this.bodyBuilder("builder", energy);
-    role = "builder"
-    canSpawn = true;
+  for(var i in this.memory.totalRoles){
+    if (this.memory.totalRoles[i] <= this.memory.minRoles[i]) {
+      bodyParts = this.bodyBuilder([i], energy);
+      role = i
+      canSpawn = true;
+    }
   }
   if (canSpawn == false && this.memory.totalRoles.harvester == 0) {
     this.spawnNewCreep([WORK, CARRY, MOVE], "harvester");
