@@ -11,26 +11,13 @@ module.exports.loop = function() {
 
   // for each spawn run spawn logic
   for (let spawnName in Game.spawns) {
-    var spawn = Game.spawns[spawnName];
-    var energy = spawn.room.energyCapacityAvailable;
-    spawn.findRoleNeeded(energy);
-    if (!spawn.memory.sourceNodes) {
-      spawn.memory.sourceNodes = {};
-      var sourceNodes = spawn.room.find(FIND_SOURCES);
-      for (var i in sourceNodes) {
-        source = sourceNodes[i];
-        source.memory = spawn.memory.sourceNodes[source.id] = {};
-        source.memory.workers = 0
-      }
-    } else {
-      var sourceNodes = spawn.room.find(FIND_SOURCES);
-      for (var i in sourceNodes) {
-        source = sourceNodes[i];
-        source.memory = spawn.memory.sourceNodes[source.id];
-      }
-    }
+    var energy = Game.spawns[spawnName].room.energyCapacityAvailable;
+    Game.spawns[spawnName].findRoleNeeded(energy);
   }
-
+  for(var roomName in Game.rooms){//Loop through all rooms your creeps/structures are in
+      var room = Game.rooms[roomName];
+      room.findSource(room);
+    }
   // for each creeps run creep logic
   for (let name in Game.creeps) {
     Game.creeps[name].runRole();
