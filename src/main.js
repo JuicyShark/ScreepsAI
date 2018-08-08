@@ -1,6 +1,7 @@
 require('prototype.spawn')
 require('prototype.creep')
 
+
 module.exports.loop = function () {
 // Clean dead creeps from memory RIP fellow conrades
     for(let name in Memory.creeps) {
@@ -9,17 +10,35 @@ module.exports.loop = function () {
         }
     }
 
+
     // for each spawn run spawn logic
     for(let spawnName in Game.spawns) {
-      var energy = Game.spawns[spawnName].room.energyCapacityAvailable;
-       Game.spawns[spawnName].findRoleNeeded(energy);
-       Game.spawns[spawnName].newCreepDebug();
-       //Game.spawns[spawnName].spawnNewCreep();
+        var spawn = Game.spawns[spawnName];
+      var energy = spawn.room.energyCapacityAvailable;
+       spawn.findRoleNeeded(energy);
+
+       if(!spawn.memory.sourceNodes){
+           spawn.memory.sourceNodes = {};
+           var sourceNodes = spawn.room.find(FIND_SOURCES);
+           for(var i in sourceNodes){
+            source = sourceNodes[i];
+              source.memory = spawn.memory.sourceNodes[source.id] = {};
+              source.memory.workers = 0
+           }
+           }else{
+               var sourceNodes = spawn.room.find(FIND_SOURCES);
+           for(var i in sourceNodes){
+            source = sourceNodes[i];
+              source.memory = spawn.memory.sourceNodes[source.id];
+           }
+
+
+
+       }
     }
 
     // for each creeps run creep logic
     for(let name in Game.creeps) {
-
         Game.creeps[name].runRole();
     }
 

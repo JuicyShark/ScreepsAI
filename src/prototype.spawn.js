@@ -3,7 +3,7 @@ require('nameGen')
 var minRoles = {
   Harvester: "0",
   Upgrader: "1",
-  Builder: "0"
+  Builder: "1"
 }
 
 StructureSpawn.prototype.bodyBuilder = function(role, energy) {
@@ -45,7 +45,7 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role) {
         working: false
       }
     });
-    return console.log("Spawning a " + role + ", named " + name + " in: " + this.spawning.remainingTime + " Ticks.")
+     console.log("Spawning a " + role + ", named " + name + " in: " + this.spawning.remainingTime + " Ticks.")
   } else {
     console.log("Spawn Unsuccesful");
   }
@@ -53,20 +53,22 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role) {
 
 StructureSpawn.prototype.findRoleNeeded = function(energy) {
   // Find amount of different roles alive currently
-  var numberOfHarvesters = _.sum(Game.creeps, (c) => c.memory.role == 'harvester');
-  var numberOfUpgraders = _.sum(Game.creeps, (c) => c.memory.role == 'upgrader');
-  var numberOfBuilders = _.sum(Game.creeps, (c) => c.memory.role == 'builder');
+  this.memory.minRoles = minRoles;
+  var harvesters = _.sum(Game.creeps, (c) => c.memory.role == 'harvester');
+  var upgraders = _.sum(Game.creeps, (c) => c.memory.role == 'upgrader');
+  var builders = _.sum(Game.creeps, (c) => c.memory.role == 'builder');
+  this.memory.totalRoles = {harvesters, upgraders, builders}
   // Spawn top to bottom what roles need to meet minimum requirements
   var canSpawn = false;
-  if (numberOfHarvesters <= minRoles.Harvester) {
+  if (this.memory.totalRoles.harversters <= minRoles.Harvester) {
     bodyParts = this.bodyBuilder("harvester", energy);
     role = "harvester"
     canSpawn = true;
-  } else if (numberOfUpgraders <= minRoles.Upgrader) {
+  } else if (this.memory.totalRoles.upgraders <= minRoles.Upgrader) {
     bodyParts = this.bodyBuilder("upgrader", energy);
     role = "upgrader"
     canSpawn = true;
-  } else if (numberOfBuilders <= minRoles.Builder) {
+  } else if (this.memory.totalRoles.builders <= minRoles.Builder) {
     bodyParts = this.bodyBuilder("builder", energy);
     role = "builder"
     canSpawn = true;
