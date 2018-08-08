@@ -3,13 +3,11 @@
 module.exports = {
 
   run: function(creep) {
-    var baseTier = 1;
-
     creep.checkDeath(creep)
 
 
     if (creep.ticksToLive > 25){
-//now creep will only work when ticktolive is over 25 ticks
+      //now creep will only work when ticktolive is over 25 ticks
       if (creep.carry.energy == creep.carryCapacity) {
         creep.memory.working = "true";
       }
@@ -26,7 +24,7 @@ module.exports = {
         creep.energyCollection(creep)
       }
       else {
-        
+
       }
 
 

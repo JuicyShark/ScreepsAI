@@ -2,14 +2,7 @@
 module.exports = {
 
   run: function(creep) {
-      var baseTier = 1;
-
-
       creep.checkDeath(creep)
-
-
-
-    if (creep.ticksToLive > 25){
       //now creep will only work when ticktolive is over 25 ticks
 
       if (creep.carry.energy == creep.carryCapacity) {
@@ -29,12 +22,8 @@ module.exports = {
           creep.memory.path = path;
           Memory.path = Room.serializePath(path);
           creep.moveByPath(Memory.path);
-
         }
       }
-    }
-
-
   }
 
 

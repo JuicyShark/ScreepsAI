@@ -23,37 +23,22 @@ StructureSpawn.prototype.bodyBuilder = function(role, energy) {
   return outputArray
 }
 
-StructureSpawn.prototype.newCreepDebug = function (creepRole) {
-
-
-  if (this.spawning != null) {
-    let name = this.spawning.name;
-    let timeLeft = this.spawning.remainingTime;
-    //let creepRole = name.memory.role;
-    console.log(name + " only has " + timeLeft);
-  }
-  else if (this.spawning == null) {
-
-    //spawning logic to be implimented here. Well reference to it to clean it out of main.
-
-
-    if (Game.time % 5 === 0){
-    console.log("============")
-    console.log("Not Spawning")
-    }
-  }
-};
-
 
 StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role) {
-  var name = this.nameGen();
-
-  return this.spawnCreep(bodyParts, name, {
+  if(this.spawning == null){
+  var name = undefined;
+   name = this.nameGen();
+   var testIfCanSpawn = this.spawnCreep(bodyParts, name, {
+    dryRun: true
+  });
+   this.spawnCreep(bodyParts, name, {
     memory: {
       role: role,
       working: false
     }
   });
+  console.log("Spawning a " + role + ", Named: "+ name);
+}
 };
 
 StructureSpawn.prototype.findRoleNeeded = function(energy) {
@@ -78,5 +63,6 @@ var canSpawn = false;
   }
   if(canSpawn == true){
     this.spawnNewCreep(bodyParts, role);
+    canSpawn = false;
   }
 };
