@@ -42,7 +42,7 @@ Creep.prototype.energyCollection =
 
     }
   };
-Creep.prototype.repair =
+Creep.prototype.roleRepairer =
   function(creep) {
     var structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
       filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL
@@ -55,13 +55,13 @@ Creep.prototype.repair =
       else if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
         creep.moveTo(structure);
       }
-    } else {
+     else {
       builder.run(creep);
     }
   }
-}
 
-Creep.prototype.harvest =
+
+Creep.prototype.roleHarvester =
   function(creep) {
     let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
     // try to harvest energy, if the source is not in range
@@ -75,7 +75,7 @@ Creep.prototype.harvest =
     }
   };
 
-Creep.prototype.build =
+Creep.prototype.roleBuilder =
   function(creep) {
 
     let buildingSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);

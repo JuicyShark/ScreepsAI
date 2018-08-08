@@ -9,7 +9,7 @@ module.exports = {
       creep.memory.working = "false";
     }
     if (creep.carry.energy != 0 && creep.memory.working == "true") {
-      creep.repair(creep)
+      creep.roleRepairer(creep)
     } else if (creep.memory.working == "false") {
      creep.energyCollection(creep)
     } else {
