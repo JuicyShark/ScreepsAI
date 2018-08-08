@@ -1,7 +1,4 @@
-var outposts = {}
-
 Room.prototype.findSource = function(room){
-
     if(!room.memory.sourceNodes){
         room.memory.sourceNodes = {};
         var sourceNodes = room.find(FIND_SOURCES);

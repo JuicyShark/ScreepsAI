@@ -45,7 +45,7 @@ Creep.prototype.roleRepairer =
         filter: (s) => s.hits < s.hitsMax && s.structureType == STRUCTURE_WALL
       });
     }
-      else if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
+      if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
         creep.moveTo(structure);
       }
      else {
@@ -129,10 +129,10 @@ Creep.prototype.energyDeliver =
 
 Creep.prototype.checkDeath =
   function(creep) {
-    if (creep.ticksToLive; < 25) {
+    if (creep.ticksToLive < 25) {
       if (Game.time % 15 === 0) {
-        console.log("------------"/n + "Hey there a " + creep.memory.role + ", " + creep.name + " is dying." )
-        console.log();
+        console.log("------------" )
+        console.log("Hey there a " + creep.memory.role + ", " + creep.name + " is dying.");
         console.log("-----This was a CheckDeath Function-------")
       }
       this.energyDeliver(creep)
