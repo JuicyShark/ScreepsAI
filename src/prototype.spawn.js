@@ -48,7 +48,7 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role) {
 StructureSpawn.prototype.findRoleNeeded = function(energy) {
   if(!this.memory.totalRoles){
     this.memory.totalRoles = {};
-    this.memory.totalRoles.harvester = 0;
+    this.spawnNewCreep([WORK, CARRY, MOVE], "harvester");
   }
   // Find amount of different roles alive currently
   this.memory.minRoles = minRoles;
@@ -57,7 +57,7 @@ StructureSpawn.prototype.findRoleNeeded = function(energy) {
 }
   // Spawn top to bottom what roles need to meet minimum requirements
   var canSpawn = false;
-  for(var i in this.memory.totalRoles){
+  for(var i in this.memory.minRoles){
     if (this.memory.totalRoles[i] <= this.memory.minRoles[i]) {
       bodyParts = this.bodyBuilder([i], energy);
       role = i
