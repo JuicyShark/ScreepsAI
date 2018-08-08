@@ -10,6 +10,7 @@ module.exports.loop = function () {
     }
     // for each creeps run creep logic
     for(let name in Game.creeps) {
+
         Game.creeps[name].runRole();
     }
 
@@ -18,6 +19,7 @@ module.exports.loop = function () {
     for(let spawnName in Game.spawns) {
       var energy = Game.spawns[spawnName].room.energyCapacityAvailable;
        Game.spawns[spawnName].findRoleNeeded(energy);
+       Game.spawns[spawnName].newCreepDebug();
        //Game.spawns[spawnName].spawnNewCreep();
     }
 };

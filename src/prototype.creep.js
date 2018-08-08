@@ -28,37 +28,6 @@ function(creep) {
   }
 };
 
-Creep.prototype.energyDeliver =
-  function(creep) {
-
-    var deliver = function(container) {
-      if (container != undefined) {
-          if (creep.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-              creep.moveTo(container, {visualizePathStyle: {stroke: '#ffffff'}});
-          }
-      }
-      
-    }
-
-    if (creep.memory.role != "Upgrader") {
-
-    let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-        filter: (s) => (s.structureType == STRUCTURE_SPAWN
-            || s.structureType == STRUCTURE_CONTROLLER)
-            && s.energy < s.energyCapacity
-    });
-    deliver(container);
-  }
-  else {
-    let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-        filter: (s) => (s.structureType == STRUCTURE_SPAWN
-            || s.structureType == STRICTURE_EXTENSION)
-            && s.energy < s.energyCapacity
-          });
-    deliver(container);
-    }
-  };
-
 Creep.prototype.building =
         function(creep) {
 
@@ -71,22 +40,64 @@ Creep.prototype.building =
   }
 };
 
+Creep.prototype.energyDeliver =
+  function(creep) {
+
+    var deliver = function(container) {
+      if (container != undefined) {
+          if (creep.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+              creep.moveTo(container, {visualizePathStyle: {stroke: '#ffffff'}});
+          }
+      }
+
+    }
+
+    if (creep.memory.role != "Upgrader") {
+
+      let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+          filter: (s) => (s.structureType == STRUCTURE_SPAWN
+            || s.structureType == STRUCTURE_CONTROLLER)
+            && s.energy < s.energyCapacity
+          });
+      deliver(container);
+      if (container == null) {
+
+        this.building(this)
+      }
+
+
+  }
+  else {
+    let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+        filter: (s) => (s.structureType == STRUCTURE_SPAWN
+            || s.structureType == STRUCTURE_EXTENSION)
+            && s.energy < s.energyCapacity
+          });
+    deliver(container);
+    }
+  };
+
+
+
 Creep.prototype.checkDeath =
   function (creep) {
 
     let life = creep.ticksToLive;
-    let source = creep.pos.findClosestByPath(STRUCTURE_SPAWN);
+    //let source = creep.pos.findClosestByPath(STRUCTURE_SPAWN);
 
     if(life < 25) {
-    creep.energyDeliver(creep)
+      console.log("------------")
+      console.log("Hey there ", creem.name, " is dying.")
+      console.log("-----This was CheckDeath Function is ProtoCreep-------")
+    energyDeliver(creep)
     }
-    if (life < 19 && life > 10) {
-        creep.say(creep.name, ": This is a dark tunnel" )
+    if (life < 19 && creep.life > 10) {
+      creep.say(creep.name, ": This is a dark tunnel" )
       //possible add a rejuvination thingy here for the creeps
 
     }
     else if (life < 9 && life > 1) {
-        creep.say(creep.name, ": I can see the Light!")
+      creep.say(creep.name, ": I can see the Light!")
 
     }
 
