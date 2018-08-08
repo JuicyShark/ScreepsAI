@@ -54,19 +54,11 @@ StructureSpawn.prototype.findRoleNeeded = function(energy) {
   this.memory.minRoles = minRoles;
   for(var i in this.memory.minRoles){
   this.memory.totalRoles[i] = _.sum(Game.creeps, (c) => c.memory.role == i);
-    if (this.memory.totalRoles[i] <= this.memory.minRoles[i]) {
+  if(this.room.energyAvailable == energy){
+    if (this.memory.totalRoles[i] <= this.memory.minRoles[i] && this.spawning == null) {
      var bodyParts = this.bodyBuilder(i, energy);
      var role = i
-      canSpawn = true;
-    }
-    else{
-        canSpawn = false;
-    }
+    return this.spawnNewCreep(bodyParts, role);
   }
-  if (canSpawn == false && this.memory.totalRoles.harvester == 0) {
-    this.spawnNewCreep([WORK, CARRY, MOVE], "harvester");
-  } else if (canSpawn == true) {
-      canSpawn = false;
-    this.spawnNewCreep(bodyParts, role);
-  }
+}}
 };

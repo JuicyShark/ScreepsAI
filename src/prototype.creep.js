@@ -120,7 +120,7 @@ Creep.prototype.checkDeath =
     if (life < 25) {
       if (Game.time % 5 === 0) {
         console.log("------------")
-        console.log("Hey there a" + creep.memory.role + ", " + creep.name + " is dying.")
+        console.log("Hey there a " + creep.memory.role + ", " + creep.name + " is dying.")
         console.log("-----This was a CheckDeath Function-------")
       }
       this.energyDeliver(creep)

@@ -11,7 +11,7 @@ module.exports = {
     if (creep.carry.energy != 0 && creep.memory.working == "true") {
       creep.building(creep)
     } else if (creep.memory.working == "false") {
-      // creep.energyCollection(creep)
+     creep.energyCollection(creep)
     } else {
 
     }
