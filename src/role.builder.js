@@ -12,6 +12,7 @@ module.exports = {
     if (creep.carry.energy != 0 && creep.memory.working == "true") {
       creep.roleBuilder(creep)
     } else if (creep.memory.working == "false") {
+      console.log("Collecting Source")
      creep.energyCollection(creep)
     } else {
       creep.say("Nothing to do boss");
