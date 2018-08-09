@@ -67,19 +67,23 @@ Creep.prototype.findDeliveryTarget = function(creep) {
   });
 }
  if(container == null) {
-     container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-      filter: (s) => (s.structureType == STRUCTURE_CONTAINER) &&
-        s.store[RESOURCE_ENERGY] > 0
+     container = creep.room.find(FIND_STRUCTURES, {
+      filter: (s) => (s.structureType == STRUCTURE_CONTAINER)
     })
-    console.log(container + " #2")
+    container.sort(function(a, b) {
+      return a.store.energy - b.store.energy
+    })
+    console.log(container[0].store.energy)
+    this.deliver(container[0]);
+
 }
 
-   if (container == null) {
+   /*if (container == null) {
      console.log("Nowhere to deliver time to build")
    this.roleBuilder(this)
  }else{
   this.deliver(container);
-}
+}*/
 };
 
 /** @function
