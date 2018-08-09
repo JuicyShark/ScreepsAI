@@ -30,10 +30,27 @@ Creep.prototype.roleHarvester =  function(creep) {
 
 Creep.prototype.roleBuilder =  function(creep) {
 
-    let buildingSite = this.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
+/*  var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+   if(targets.length) {
+      targets.sort(function(a,b){
+        return a.progress > b.progress ? -1 : 1});
+         if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
+           creep.ourPath(targets[0]); }*/
+
+
+           var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+           // Sort construction sites by progress.
+              targets.sort(function(a, b){
+              return b.progress - a.progress; })
+              if(targets.length) {
+                if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
+                   creep.ourPath(targets[0])}
+                 }
+
+    /*let buildingSite = this.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
     if (this.build(buildingSite) == ERR_NOT_IN_RANGE) {
       this.ourPath(buildingSite)
-    }
+    }*/
 /*    if (buildingSite == undefined) {
       var target = Memory.outposts[Object.keys(Memory.outposts)[0]]
       this.ourPath(target);
@@ -46,18 +63,19 @@ Creep.prototype.roleRepairer =  function(creep) {
     });
     if (structure == undefined) {
       structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-        filter: (s) => s.hits < s.hitsMax && s.structureType == STRUCTURE_WALL
+        filter: (s) => s.hits < s.hitsMax && s.structureType == STRUCTURE_WALL ||
+        s.structureType == STRUCTURE_CONTAINER||
+        s.structureType == STRUCTURE_EXTENSION
       });
     }
     if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
-      creep.moveTo(structure);
+      this.ourPath(structure);
     } else {
       roles.builder.run(creep);
     }
   }
 Creep.prototype.Deliver = function(container){
-  console.log(this + " Wants to deliver to: "+ container)
-  if (container != null) {
+  if (container != undefined) {
     if (this.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
       this.ourPath(container)
     }
@@ -80,14 +98,13 @@ Creep.prototype.energyDeliver =  function(creep) {
         });
       }
      if(container != null){
-      return this.Deliver(container);
-    }else{
+      this.Deliver(container);
+      }
           this.roleBuilder(this)
-        }
       };
 
       Creep.prototype.collectEnergy = function(creep, i) {
-        console.log(this+ " Is collecting from: "+ i)
+        //console.log(this+ " Is collecting from: "+ i)
           if (this.withdraw(i, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             this.ourPath(i)
           } else {
@@ -97,7 +114,7 @@ Creep.prototype.energyDeliver =  function(creep) {
 
       Creep.prototype.energyCollection =  function(creep) {
           let container =  this.pos.findClosestByPath(FIND_STRUCTURES, {
-            filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
+            filter: (s) => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 0
           });
               if(container != null){
               this.collectEnergy(this, container)
