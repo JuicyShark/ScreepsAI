@@ -2,11 +2,11 @@ require('prototype.creepBuilder'),
 require('nameGen')
 
 var minRoles = {
-  harvester: "1",
+  harvester: "0",
   upgrader: "1",
   builder: "0",
   repairer: "0",
-  miner: "0",
+  miner: "1",
   lorry: "1"
 }
 
