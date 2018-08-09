@@ -10,7 +10,7 @@ Creep.prototype.runRole =  function() {
   };
 
   Creep.prototype.ourPath = function(destination){
-    const path = this.pos.findPathTo(buildingSite);
+    const path = this.pos.findPathTo(destination);
     this.memory.path = path;
     Memory.path = Room.serializePath(path);
     this.moveByPath(Memory.path)
