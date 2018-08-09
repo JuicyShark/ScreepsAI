@@ -13,12 +13,13 @@ module.exports = {
     }
     if (creep.carryCapacity != 0 && creep.memory.working == "true") {
       if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-        const path = creep.pos.findPathTo(creep.room.controller);
-        creep.memory.path = path;
-        Memory.path = Room.serializePath(path);
-        creep.moveByPath(Memory.path);
+        creep.ourPath(creep.room.controller);
+
       }
+<<<<<<< HEAD
     } else{
+=======
+>>>>>>> 517310a13499cb2fcbe65e0b5dd4fb2c532f4b86
     }
   }
 };
