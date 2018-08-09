@@ -15,7 +15,6 @@ module.exports = {
       creep.roleHarvester(creep)
     }
     else if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "true"){
-      creep.say("Nothing to do boss");
     }
   }
 };

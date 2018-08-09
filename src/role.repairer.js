@@ -13,7 +13,6 @@ module.exports = {
     } else if (creep.memory.working == "false") {
      creep.energyCollection(creep)
     } else {
-      creep.say("Nothing to do boss");
     }
   }
 };

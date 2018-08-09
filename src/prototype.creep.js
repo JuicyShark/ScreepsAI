@@ -16,6 +16,22 @@ Creep.prototype.runRole =  function() {
     this.moveByPath(Memory.path)
   }
 
+  Creep.prototype.roleContainerMiner =  function(creep) {
+      let closeSource = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+      source = Game.getObjectById(closeSource.id);
+    source.memory = this.room.memory.sourceNodes[source.id]
+      let container = source.pos.findInRange(FIND_STRUCTURES, 1, {
+        filter: (s) => s.structureType == STRUCTURE_CONTAINER
+      })[0]
+      // try to harvest energy, if the source is not in range
+      if (this.pos.isEqualTo(container.pos)) {
+        source.memory.workers = +1
+        this.harvest(source)
+      }else{
+        this.moveTo(container)
+      }
+    };
+
 
 Creep.prototype.roleHarvester =  function(creep) {
     let source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
@@ -54,7 +70,8 @@ Creep.prototype.roleRepairer =  function(creep) {
     }
   }
 Creep.prototype.Deliver = function(container){
-  if (container != undefined) {
+  console.log(this + " Wants to deliver to: "+ container)
+  if (container != null) {
     if (this.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
       this.ourPath(container)
     }
@@ -77,9 +94,10 @@ Creep.prototype.energyDeliver =  function(creep) {
         });
       }
      if(container != null){
-      this.Deliver(container);
-      }
+      return this.Deliver(container);
+    }else{
           this.roleBuilder(this)
+        }
       };
 
       Creep.prototype.collectEnergy = function(creep, i) {
@@ -93,7 +111,7 @@ Creep.prototype.energyDeliver =  function(creep) {
 
       Creep.prototype.energyCollection =  function(creep) {
           let container =  this.pos.findClosestByPath(FIND_STRUCTURES, {
-            filter: (s) => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 0
+            filter: (s) => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] > 0
           });
               if(container != null){
               this.collectEnergy(this, container)

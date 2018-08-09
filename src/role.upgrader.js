@@ -19,7 +19,6 @@ module.exports = {
         creep.moveByPath(Memory.path);
       }
     } else{
-      creep.say("Nothing to do boss");
     }
   }
 };
