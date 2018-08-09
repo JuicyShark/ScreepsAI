@@ -16,10 +16,6 @@ module.exports = {
         creep.ourPath(creep.room.controller);
 
       }
-<<<<<<< HEAD
-    } else{
-=======
->>>>>>> 517310a13499cb2fcbe65e0b5dd4fb2c532f4b86
     }
   }
 };
