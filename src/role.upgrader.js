@@ -13,13 +13,9 @@ module.exports = {
     }
     if (creep.carryCapacity != 0 && creep.memory.working == "true") {
       if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-        const path = creep.pos.findPathTo(creep.room.controller);
-        creep.memory.path = path;
-        Memory.path = Room.serializePath(path);
-        creep.moveByPath(Memory.path);
+        creep.ourPath(creep.room.controller);
+
       }
-    } else{
-      creep.say("Nothing to do boss");
     }
   }
 };
