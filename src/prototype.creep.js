@@ -18,25 +18,7 @@ Creep.prototype.ourPath = function(destination) {
   this.moveByPath(Memory.path)
 }
 
-
-Creep.prototype.roleHarvester = function(creep) {
-  let source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-  if (this.harvest(source) == ERR_NOT_IN_RANGE) {
-    // move towards the source
-    this.ourPath(source)
-  }
-};
-
 Creep.prototype.roleBuilder = function(creep) {
-
-  /*  var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
-     if(targets.length) {
-        targets.sort(function(a,b){
-          return a.progress > b.progress ? -1 : 1});
-           if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-             creep.ourPath(targets[0]); }*/
-
-
   var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
   // Sort construction sites by progress.
   targets.sort(function(a, b) {
@@ -62,8 +44,6 @@ Creep.prototype.roleRepairer = function(creep) {
   }
   if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
     this.ourPath(structure);
-  } else {
-    roles.builder.run(creep);
   }
 }
 
@@ -77,21 +57,29 @@ Creep.prototype.Deliver = function(container) {
 
 
 Creep.prototype.energyDeliver = function(creep) {
-    let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+  let container = null;
+  if(creep.room.energyAvailable != creep.room.energyCapacity){
+
+     container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
     filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
         s.structureType == STRUCTURE_EXTENSION) &&
       s.energy < s.energyCapacity
   });
-  if (container == null) {
+}
+else {
      container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
       filter: (s) => (s.structureType == STRUCTURE_CONTAINER) &&
         s.store[RESOURCE_ENERGY] > 0
     })
-  }
-  else if (container == null) {
+    console.log(container + " #2")
+}
+
+   if (container == null) {
+     console.log("Nowhere to deliver time to build")
    this.roleBuilder(this)
-  }
+ }else{
   this.Deliver(container);
+}
 };
 
 /** @function
@@ -103,11 +91,11 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
   if (getFromContainer == true) {
     container = this.pos.findClosestByPath(FIND_STRUCTURES, {
       filter: s => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&
-        s.store[RESOURCE_ENERGY] > 0
+        s.store[RESOURCE_ENERGY] > 250
     });
     if (container != undefined) {
       if (this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-        this.moveTo(container);
+        this.ourPath(container);
       }
     }
   }
@@ -115,7 +103,7 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
   if (container == null && getFromSource == true) {
     var source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
     if (this.harvest(source) == ERR_NOT_IN_RANGE) {
-      this.moveTo(source);
+      this.ourPath(source);
     }
   }
 }

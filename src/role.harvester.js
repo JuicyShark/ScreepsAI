@@ -4,6 +4,7 @@ module.exports = {
 
     if (creep.memory.working == "false") {
       creep.energyDeliver(creep)
+
     }
     if (creep.carry.energy == creep.carryCapacity) {
       creep.memory.working = "false";
@@ -12,7 +13,7 @@ module.exports = {
       creep.memory.working = "true";
     }
     if (creep.carry.energy != creep.carryCapacity && creep.memory.working == "true") {
-      creep.roleHarvester(creep)
+      creep.getEnergy(false, true)
     } else if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "true") {}
   }
 };

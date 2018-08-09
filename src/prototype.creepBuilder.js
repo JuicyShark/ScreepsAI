@@ -1,35 +1,36 @@
 /** @function
     @param {String} role
+    @param {spawn} spawn
     @param {Number} energy */
-StructureSpawn.prototype.roleToBuild = function(role, energy) {
+StructureSpawn.prototype.roleToBuild = function(role, spawn, energy) {
   switch (role.toString()) {
 
     case "miner":
-      this.minerBuilder(energy)
-      break;
+      return spawn.minerBuilder(energy)
+
 
     case "harvester":
-      this.basicBodyBuilder(role, energy)
+     return spawn.basicBodyBuilder(energy)
       break;
 
     case "builder":
-      this.basicBodyBuilder(role, energy)
+   return   spawn.basicBodyBuilder(energy)
       break;
 
     case "repairer":
-      this.basicBodyBuilder(role, energy)
+   return   spawn.basicBodyBuilder(energy)
       break;
 
     case "lorry":
-      this.basicBodyBuilder(role, energy)
+    return  spawn.basicBodyBuilder(energy)
       break;
 
     case "claimer":
-      this.basicBodyBuilder(role, energy)
+    return  spawn.basicBodyBuilder(energy)
       break;
 
     case "upgrader":
-      this.basicBodyBuilder(role, energy)
+   return   spawn.basicBodyBuilder(energy)
       break;
   }
 }
@@ -55,14 +56,13 @@ StructureSpawn.prototype.basicBodyBuilder = function(energy) {
 
 StructureSpawn.prototype.minerBuilder = function(energy) {
   let outputArray = [];
-  let numberOfParts = Math.floor(energy / 200);
+  energy = Math.floor(energy - 50);
+  let numberOfParts = Math.floor(energy / 100);
   var body = [];
 
   for (let i = 0; i < numberOfParts; i++) {
     outputArray.push(WORK);
   }
-  for (let i = 0; i < numberOfParts; i++) {
     outputArray.push(MOVE);
-  }
   return outputArray
 }
