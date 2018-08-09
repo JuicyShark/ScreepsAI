@@ -99,12 +99,7 @@ Creep.prototype.energyDeliver =  function(creep) {
           let container = this.room.find(FIND_STRUCTURES, {
             filter: (s) => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 0
           });
-          if(container == undefined){    container = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                  filter: (s) => s.structureType == STRUCTURE_SPAWN && s.energy > 299
-                });
-              }
               if(container != undefined){
-
               this.collectEnergy(this, container)
             } else {
               this.roleHarvester(this)
