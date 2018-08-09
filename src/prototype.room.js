@@ -1,3 +1,4 @@
+require("prototype.spawn")
 Room.prototype.findSource = function(room) {
   if (!room.memory.sourceNodes) {
     room.memory.sourceNodes = {};
@@ -15,11 +16,14 @@ Room.prototype.findSource = function(room) {
       source.memory = this.memory.sourceNodes[source.id];
       let worker = source.pos.findInRange(FIND_MY_CREEPS, 1)
       source.memory.workers = worker.length;
-      if(source.memory.workers == 0){
+  /*    if(source.memory.workers == 0){
         console.log("Empty SourceNode")
-
-      Memory.availableSourceNodes.push(source)
-    }
+      var spawn = this.find(FIND_MY_STRUCTURES, {
+    filter: { structureType: STRUCTURE_SPAWN }
+});
+var bodyparts = spawn.minerBuilder(spawn.energyCapacityAvailable)
+     spawn.spawnNewCreep(bodyparts, "miner", spawn.room, source.id)
+   }*/
     }
   }
 }

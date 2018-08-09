@@ -105,25 +105,49 @@ Creep.prototype.energyDeliver = function(creep) {
   this.roleBuilder(this)
 };
 
-Creep.prototype.collectEnergy = function(creep, i) {
+/*Creep.prototype.collectEnergy = function(creep, i) {
   //console.log(this+ " Is collecting from: "+ i)
   if (this.withdraw(i, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
     this.ourPath(i)
   } else {
     this.withdraw(i, RESOURCE_ENERGY)
   }
+}*/
+
+/** @function
+    @param {bool} getFromContainer
+    @param {bool} getFromSource */
+Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
+  /**  @type {STRUCTURE_CONTAINER} **/
+  let container;
+  if (getFromContainer == true) {
+    container = this.pos.findClosestByPath(FIND_STRUCTURES, {
+      filter: s => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&
+        s.store[RESOURCE_ENERGY] > 0
+    });
+    if (container != undefined) {
+      if (this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        this.moveTo(container);
+      }
+    }
+  }
+  // if no container was found
+  if (container == null && getFromSource == true) {
+    var source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+    if (this.harvest(source) == ERR_NOT_IN_RANGE) {
+      this.moveTo(source);
+    }
+  }
 }
 
-Creep.prototype.energyCollection = function(creep) {
+/*Creep.prototype.energyCollection = function(creep) {
   let container = this.pos.findClosestByPath(FIND_STRUCTURES, {
-    filter: (s) => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 0
+    filter: (s) => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 100
   });
   if (container != null) {
     this.collectEnergy(this, container)
-  } else {
-    this.roleHarvester(this)
   }
-}
+}*/
 
 Creep.prototype.checkDeath = function(creep) {
   if (creep.ticksToLive < 25) {

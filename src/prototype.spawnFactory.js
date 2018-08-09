@@ -30,7 +30,7 @@ StructureSpawn.prototype.minerBuilder = function(energy) {
   }
   return outputArray
   }
-}
+
 
 StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceId) {
   if(sourceId == null){

@@ -11,7 +11,7 @@ module.exports = {
     if (creep.carry.energy != 0 && creep.memory.working == "true") {
       creep.roleBuilder(creep)
     } else if (creep.memory.working == "false") {
-      creep.energyCollection(creep)
+      creep.getEnergy(true, false)
     }
   }
 };
