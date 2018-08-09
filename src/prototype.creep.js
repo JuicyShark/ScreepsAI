@@ -9,16 +9,20 @@ Creep.prototype.runRole =  function() {
     roles[this.memory.role].run(this);
   };
 
+  Creep.prototype.ourPath = function(destination){
+    const path = this.pos.findPathTo(buildingSite);
+    this.memory.path = path;
+    Memory.path = Room.serializePath(path);
+    this.moveByPath(Memory.path)
+  }
+
+
 Creep.prototype.roleHarvester =  function(creep) {
     let source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
     // try to harvest energy, if the source is not in range
     if (this.harvest(source) == ERR_NOT_IN_RANGE) {
       // move towards the source
-      creep.moveTo(source, {
-        visualizePathStyle: {
-          stroke: '#ffffff'
-        }
-      });
+      this.ourPath(source)
     }
   };
 
@@ -26,14 +30,11 @@ Creep.prototype.roleBuilder =  function(creep) {
 
     let buildingSite = this.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
     if (this.build(buildingSite) == ERR_NOT_IN_RANGE) {
-      const path = this.pos.findPathTo(buildingSite);
-      this.memory.path = path;
-      Memory.path = Room.serializePath(path);
-      this.moveByPath(Memory.path)
+      this.ourPath(buildingSite)
     }
 /*    if (buildingSite == undefined) {
       var target = Memory.outposts[Object.keys(Memory.outposts)[0]]
-      this.moveTo(target);
+      this.ourPath(target);
     } */
   };
 
@@ -55,11 +56,7 @@ Creep.prototype.roleRepairer =  function(creep) {
 Creep.prototype.Deliver = function(container){
   if (container != undefined) {
     if (this.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-      this.moveTo(container, {
-        visualizePathStyle: {
-          stroke: '#ffffff'
-        }
-      });
+      this.ourPath(container)
     }
   }//else{console.log(this +" was unable to Deliver")     Calls once even if delivered successfully or repeatedly if everything is full
 }
@@ -88,11 +85,7 @@ Creep.prototype.energyDeliver =  function(creep) {
       Creep.prototype.collectEnergy = function(creep, i) {
         console.log(this+ " Is collecting from: "+ i)
           if (this.withdraw(i, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            this.moveTo(i, {
-              visualizePathStyle: {
-                stroke: '#ffffff'
-              }
-            });
+            this.ourPath(i)
           } else {
             this.withdraw(i, RESOURCE_ENERGY)
           }
