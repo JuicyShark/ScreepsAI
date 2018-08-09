@@ -11,9 +11,9 @@ Creep.prototype.runRole =
   };
 
 Creep.prototype.roleHarvester =  function(creep) {
-    let source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+    let source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
     // try to harvest energy, if the source is not in range
-    if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+    if (this.harvest(source) == ERR_NOT_IN_RANGE) {
       // move towards the source
       creep.moveTo(source, {
         visualizePathStyle: {
@@ -53,48 +53,36 @@ Creep.prototype.roleRepairer =  function(creep) {
       roles.builder.run(creep);
     }
   }
+Creep.prototype.Deliver = function(container){
+  if (container != undefined) {
+    if (creep.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+      creep.moveTo(container, {
+        visualizePathStyle: {
+          stroke: '#ffffff'
+        }
+      });
+    }
+  }console.log(this +" was unable to Deliver")
+}
 
 Creep.prototype.energyDeliver =  function(creep) {
-    var deliver = function(container) {
-      if (container != undefined) {
-        if (creep.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(container, {
-            visualizePathStyle: {
-              stroke: '#ffffff'
-            }
-          });
-        }
-      }
-    }
-
-    if (creep.memory.role != "Upgrader") {
-      let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-        filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
-            s.structureType == STRUCTURE_CONTROLLER) &&
-          s.energy < s.energyCapacity
-      });
-      if (container != null) {
-        deliver(container);
-      } else {
-        //what this do?      this.building(this)
-      }
-    } else {
-      let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-        filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
-            s.structureType == STRUCTURE_EXTENSION) &&
-          s.energy < s.energyCapacity
-      });
-      if (container == undefined) {
-        container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-            filter: (s) => (s.structureType == STRUCTURE_CONTAINER) &&
+      let container = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+            filter: s => (s.structureType == STRUCTURE_CONTAINER) &&
               s.energy < s.energyCapacity
           })
-        }
-        else {
-          deliver(container);
-        }
+          console.log(this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+                filter: s => (s.structureType == STRUCTURE_CONTAINER) &&
+                  s.energy < s.energyCapacity
+              }))
+        if (container == undefined) {
+        let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+          filter: s => (s.structureType == STRUCTURE_SPAWN ||
+              s.structureType == STRUCTURE_EXTENSION) &&
+            s.energy < s.energyCapacity
+        });
+      }
+          this.Deliver(container);
       };
-}
 
       Creep.prototype.collectEnergy = function(creep, i) {
 
