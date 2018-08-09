@@ -79,10 +79,10 @@ Creep.prototype.energyDeliver =  function(creep) {
 
         });
       }
-      else if(container == null){
-        this.roleBuilder(this)
+     if(container != null){
+      this.Deliver(container);
       }
-          this.Deliver(container);
+          this.roleBuilder(this)
       };
 
       Creep.prototype.collectEnergy = function(creep, i) {
