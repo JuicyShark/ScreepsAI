@@ -24,17 +24,17 @@ Creep.prototype.roleHarvester =  function(creep) {
 
 Creep.prototype.roleBuilder =  function(creep) {
 
-    let buildingSite = creep.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
-    if (creep.build(buildingSite) == ERR_NOT_IN_RANGE) {
-      const path = creep.pos.findPathTo(buildingSite);
-      creep.memory.path = path;
+    let buildingSite = this.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
+    if (this.build(buildingSite) == ERR_NOT_IN_RANGE) {
+      const path = this.pos.findPathTo(buildingSite);
+      this.memory.path = path;
       Memory.path = Room.serializePath(path);
-      creep.moveByPath(Memory.path)
+      this.moveByPath(Memory.path)
     }
-    if (buildingSite == undefined) {
+/*    if (buildingSite == undefined) {
       var target = Memory.outposts[Object.keys(Memory.outposts)[0]]
       this.moveTo(target);
-    }
+    } */
   };
 
 Creep.prototype.roleRepairer =  function(creep) {
@@ -61,45 +61,48 @@ Creep.prototype.Deliver = function(container){
         }
       });
     }
-  }else{console.log(this +" was unable to Deliver")
+  }//else{console.log(this +" was unable to Deliver")     Calls once even if delivered successfully or repeatedly if everything is full
 }
-}
+
 
 Creep.prototype.energyDeliver =  function(creep) {
   // this = creep selected
-      let container =  creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+      let container =  this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
             filter: (s) => (s.structureType == STRUCTURE_CONTAINER) &&
             s.store[RESOURCE_ENERGY] > 0
           })
         if (container == null) {
-          container =   creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+          container =  this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
           filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
               s.structureType == STRUCTURE_EXTENSION) &&
             s.energy < s.energyCapacity
+
         });
+      }
+      else if(container == null){
+        this.roleBuilder(this)
       }
           this.Deliver(container);
       };
 
       Creep.prototype.collectEnergy = function(creep, i) {
-
-          if (creep.withdraw(i, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(i, {
+        console.log(this+ " Is collecting from: "+ i)
+          if (this.withdraw(i, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            this.moveTo(i, {
               visualizePathStyle: {
                 stroke: '#ffffff'
               }
             });
           } else {
-            creep.withdraw(i, RESOURCE_ENERGY)
+            this.withdraw(i, RESOURCE_ENERGY)
           }
-
       }
 
       Creep.prototype.energyCollection =  function(creep) {
-          let container = this.room.find(FIND_STRUCTURES, {
+          let container =  this.pos.findClosestByPath(FIND_STRUCTURES, {
             filter: (s) => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 0
           });
-              if(container != undefined){
+              if(container != null){
               this.collectEnergy(this, container)
             } else {
               this.roleHarvester(this)
