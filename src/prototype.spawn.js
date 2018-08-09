@@ -24,6 +24,12 @@ StructureSpawn.prototype.findRoleNeeded = function(currentRoom) {
     this.memory.totalRoles[i] = _.sum(Game.creeps, (c) => c.memory.role == i);
     if (this.room.energyAvailable == energy) {
       if (this.memory.totalRoles[i] <= this.memory.minRoles[i] && this.spawning == null) {
+        if (i == miner && Memory.availableSourceNodes.length >= 1) {
+          var bodyParts = this.minerBuilder(energy)
+          var role = i
+          var sourceId = Memory.availableSourceNodes.shift(Memory.availableSourceNodes)
+          return this.spawnNewCreep(bodyParts, role, currentRoom, sourceId)
+        }
         var bodyParts = this.basicBodyBuilder(i, energy);
         var role = i
         return this.spawnNewCreep(bodyParts, role, currentRoom);

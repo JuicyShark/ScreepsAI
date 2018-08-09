@@ -3,6 +3,7 @@ module.exports = {
     creep.checkDeath(creep)
 
     let closeSource = creep.pos.findClosestByPath(FIND_SOURCES);
+    if(closeSource != null){
     source = Game.getObjectById(closeSource.id);
     source.memory = creep.room.memory.sourceNodes[source.id]
     let container = source.pos.findInRange(FIND_STRUCTURES, 1, {
@@ -14,5 +15,6 @@ module.exports = {
     } else {
       creep.moveTo(container)
     }
+  }
   }
 };
