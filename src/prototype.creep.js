@@ -66,7 +66,7 @@ Creep.prototype.findDeliveryTarget = function(creep) {
       s.energy < s.energyCapacity
   });
 }
-else {
+ if(container == null) {
      container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
       filter: (s) => (s.structureType == STRUCTURE_CONTAINER) &&
         s.store[RESOURCE_ENERGY] > 0

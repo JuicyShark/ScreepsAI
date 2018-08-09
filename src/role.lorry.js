@@ -3,6 +3,7 @@ module.exports = {
     creep.checkDeath(creep)
 
     if (creep.memory.working == "false") {
+      console.log("test")
       creep.getEnergy(true, false)
     }
     if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "false") {

@@ -21,7 +21,7 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceI
   if (testCreep == 0) {
     this.spawnCreep(bodyParts, name, {
       memory: {
-        role: role,
+        role: role.toString(),
         working: false,
         home: home,
         sourceId: sourceId
