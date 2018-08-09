@@ -5,8 +5,7 @@ var roles = {
   repairer: require('role.repairer')
 }
 
-Creep.prototype.runRole =
-  function() {
+Creep.prototype.runRole =  function() {
     roles[this.memory.role].run(this);
   };
 
@@ -55,32 +54,32 @@ Creep.prototype.roleRepairer =  function(creep) {
   }
 Creep.prototype.Deliver = function(container){
   if (container != undefined) {
-    if (creep.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-      creep.moveTo(container, {
+    if (this.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+      this.moveTo(container, {
         visualizePathStyle: {
           stroke: '#ffffff'
         }
       });
     }
-  }console.log(this +" was unable to Deliver")
+  }else{console.log(this +" was unable to Deliver")
+}
 }
 
 Creep.prototype.energyDeliver =  function(creep) {
-      let container = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-            filter: s => (s.structureType == STRUCTURE_CONTAINER) &&
-              s.energy < s.energyCapacity
+      let container =  creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+            filter: (s) => (s.structureType == STRUCTURE_CONTAINER) &&
+            s.store[RESOURCE_ENERGY] > 0
           })
-          console.log(this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                filter: s => (s.structureType == STRUCTURE_CONTAINER) &&
-                  s.energy < s.energyCapacity
-              }))
-        if (container == undefined) {
-        let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-          filter: s => (s.structureType == STRUCTURE_SPAWN ||
+
+  console.log(container + " #1")
+        if (container == null) {
+          container =   creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+          filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
               s.structureType == STRUCTURE_EXTENSION) &&
             s.energy < s.energyCapacity
         });
       }
+      console.log(container + " #2")
           this.Deliver(container);
       };
 
@@ -99,11 +98,11 @@ Creep.prototype.energyDeliver =  function(creep) {
       }
 
       Creep.prototype.energyCollection =  function(creep) {
-          let container = this.pos.findClosestByPath(FIND_STRUCTURES, {
-            filter: s => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 0
+          let container = this.room.find(FIND_STRUCTURES, {
+            filter: (s) => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 0
           });
           if(container == undefined){    container = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-                  filter: s => s.structureType == STRUCTURE_SPAWN && s.energy > 299
+                  filter: (s) => s.structureType == STRUCTURE_SPAWN && s.energy > 299
                 });
               }
               if(container != undefined){

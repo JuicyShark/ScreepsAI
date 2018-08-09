@@ -48,11 +48,16 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home) {
 
 StructureSpawn.prototype.findRoleNeeded = function(currentRoom) {
   var energy = currentRoom.energyCapacityAvailable;
+  //console.log(this +" #3")
   if(!this.memory.totalRoles){
     this.memory.totalRoles = {};
-    return this.spawnNewCreep([WORK, CARRY, MOVE], "harvester", currentRoom);
-  }
+    return this.spawnNewCreep([WORK, CARRY, MOVE], "harvester", this);
+  }/*   else if(this.memory.totalRoles.harvester == 0 && currentRoom.energyAvailable != energy){
+    var bodyParts = this.bodyBuilder("harvester", currentRoom.energyAvailable);
+   return this.spawnNewCreep(bodyParts, "harvester", this);
+ }*/
   // Find amount of different roles alive currently
+  console.log(this +" #3")
   this.memory.minRoles = minRoles;
   for(var i in this.memory.minRoles){
   this.memory.totalRoles[i] = _.sum(Game.creeps, (c) => c.memory.role == i);
