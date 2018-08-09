@@ -8,30 +8,23 @@ StructureSpawn.prototype.roleToBuild = function(role, spawn, energy) {
     case "miner":
       return spawn.minerBuilder(energy)
 
-
     case "harvester":
      return spawn.basicBodyBuilder(energy)
-      break;
 
     case "builder":
    return   spawn.basicBodyBuilder(energy)
-      break;
 
     case "repairer":
    return   spawn.basicBodyBuilder(energy)
-      break;
 
     case "lorry":
     return  spawn.lorryBuilder(energy)
-      break;
 
     case "claimer":
     return  spawn.basicBodyBuilder(energy)
-      break;
 
     case "upgrader":
    return   spawn.basicBodyBuilder(energy)
-      break;
   }
 }
 
