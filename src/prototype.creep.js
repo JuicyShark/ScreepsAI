@@ -70,11 +70,14 @@ Creep.prototype.findDeliveryTarget = function(creep) {
      container = creep.room.find(FIND_STRUCTURES, {
       filter: (s) => (s.structureType == STRUCTURE_CONTAINER)
     })
+    if(container.length >= 2){
     container.sort(function(a, b) {
       return a.store.energy - b.store.energy
     })
     console.log(container[0].store.energy)
-    this.deliver(container[0]);
+    container = container[0];
+  }
+    this.deliver(container);
 
 }
 
