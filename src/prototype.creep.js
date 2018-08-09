@@ -21,7 +21,6 @@ Creep.prototype.ourPath = function(destination) {
 
 Creep.prototype.roleHarvester = function(creep) {
   let source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
-  // try to harvest energy, if the source is not in range
   if (this.harvest(source) == ERR_NOT_IN_RANGE) {
     // move towards the source
     this.ourPath(source)
@@ -48,15 +47,6 @@ Creep.prototype.roleBuilder = function(creep) {
       creep.ourPath(targets[0])
     }
   }
-
-  /*let buildingSite = this.pos.findClosestByRange(FIND_MY_CONSTRUCTION_SITES);
-  if (this.build(buildingSite) == ERR_NOT_IN_RANGE) {
-    this.ourPath(buildingSite)
-  }*/
-  /*    if (buildingSite == undefined) {
-        var target = Memory.outposts[Object.keys(Memory.outposts)[0]]
-        this.ourPath(target);
-      } */
 };
 
 Creep.prototype.roleRepairer = function(creep) {
@@ -76,43 +66,33 @@ Creep.prototype.roleRepairer = function(creep) {
     roles.builder.run(creep);
   }
 }
+
 Creep.prototype.Deliver = function(container) {
   if (container != undefined) {
     if (this.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
       this.ourPath(container)
     }
-  } //else{console.log(this +" was unable to Deliver")     Calls once even if delivered successfully or repeatedly if everything is full
+  }
 }
 
 
 Creep.prototype.energyDeliver = function(creep) {
-  // this = creep selected
-  let container = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-    filter: (s) => (s.structureType == STRUCTURE_CONTAINER) &&
-      s.store[RESOURCE_ENERGY] > 0
-  })
+    let container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+    filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
+        s.structureType == STRUCTURE_EXTENSION) &&
+      s.energy < s.energyCapacity
+  });
   if (container == null) {
-    container = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
-      filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
-          s.structureType == STRUCTURE_EXTENSION) &&
-        s.energy < s.energyCapacity
-
-    });
+     container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+      filter: (s) => (s.structureType == STRUCTURE_CONTAINER) &&
+        s.store[RESOURCE_ENERGY] > 0
+    })
   }
-  if (container != null) {
-    this.Deliver(container);
+  else if (container == null) {
+   this.roleBuilder(this)
   }
-  this.roleBuilder(this)
+  this.Deliver(container);
 };
-
-/*Creep.prototype.collectEnergy = function(creep, i) {
-  //console.log(this+ " Is collecting from: "+ i)
-  if (this.withdraw(i, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-    this.ourPath(i)
-  } else {
-    this.withdraw(i, RESOURCE_ENERGY)
-  }
-}*/
 
 /** @function
     @param {bool} getFromContainer
@@ -140,15 +120,6 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
   }
 }
 
-/*Creep.prototype.energyCollection = function(creep) {
-  let container = this.pos.findClosestByPath(FIND_STRUCTURES, {
-    filter: (s) => s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 100
-  });
-  if (container != null) {
-    this.collectEnergy(this, container)
-  }
-}*/
-
 Creep.prototype.checkDeath = function(creep) {
   if (creep.ticksToLive < 25) {
     if (Game.time % 15 === 0) {
@@ -156,6 +127,5 @@ Creep.prototype.checkDeath = function(creep) {
       console.log("Hey there a " + creep.memory.role + ", " + creep.name + " is dying.");
       console.log("-----This was a CheckDeath Function-------")
     }
-    this.energyDeliver(creep);
   }
 };

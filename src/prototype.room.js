@@ -2,7 +2,6 @@ require("prototype.spawn")
 Room.prototype.findSource = function(room) {
   if (!room.memory.sourceNodes) {
     room.memory.sourceNodes = {};
-    Memory.availableSourceNodes = [];
     var sourceNodes = room.find(FIND_SOURCES);
     for (var i in sourceNodes) {
       var source = sourceNodes[i];
