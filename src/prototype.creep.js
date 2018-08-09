@@ -77,10 +77,8 @@ Creep.prototype.findDeliveryTarget = function(creep) {
     console.log(container[0].store.energy)
     container = container[0];
   }
-    this.deliver(container);
-
 }
-
+this.deliver(container);
    /*if (container == null) {
      console.log("Nowhere to deliver time to build")
    this.roleBuilder(this)
@@ -96,10 +94,17 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
   /**  @type {STRUCTURE_CONTAINER} **/
   let container;
   if (getFromContainer == true) {
-    container = this.pos.findClosestByPath(FIND_STRUCTURES, {
+    container = this.room.find(FIND_STRUCTURES, {
       filter: s => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&
         s.store[RESOURCE_ENERGY] > 250
     });
+    if(container.length >= 2){
+    container.sort(function(a, b) {
+      return a.store.energy - b.store.energy
+    })
+    container.reverse()
+    container = container[0];
+  }
     if (container != undefined) {
       if (this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         this.ourPath(container);
