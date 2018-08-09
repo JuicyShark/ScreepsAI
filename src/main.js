@@ -16,10 +16,10 @@ module.exports.loop = function() {
     Game.spawns[spawnName].findRoleNeeded(currentRoom);
   }
   //Loop through all rooms your creeps/structures are in
-  for(let roomName in Game.rooms){
-      var room = Game.rooms[roomName];
-      room.findSource(room);
-    }
+  for (let roomName in Game.rooms) {
+    var room = Game.rooms[roomName];
+    room.findSource(room);
+  }
 
   /*  if(!Memory.outposts){
       Memory.outposts = {}

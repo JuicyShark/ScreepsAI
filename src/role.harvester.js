@@ -13,8 +13,6 @@ module.exports = {
     }
     if (creep.carry.energy != creep.carryCapacity && creep.memory.working == "true") {
       creep.roleHarvester(creep)
-    }
-    else if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "true"){
-    }
+    } else if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "true") {}
   }
 };

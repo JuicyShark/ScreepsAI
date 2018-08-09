@@ -4,7 +4,7 @@ StructureSpawn.prototype.basicBodyBuilder = function(role, energy) {
   let outputArray = [];
   let numberOfParts = Math.floor(energy / 200);
   var body = [];
-
+  
   for (let i = 0; i < numberOfParts; i++) {
     outputArray.push(WORK);
   }
@@ -34,5 +34,4 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home) {
   } else {
     console.log("Spawn Unsuccesful");
   }
-
 };

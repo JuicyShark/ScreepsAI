@@ -11,8 +11,7 @@ module.exports = {
     if (creep.carry.energy != 0 && creep.memory.working == "true") {
       creep.roleRepairer(creep)
     } else if (creep.memory.working == "false") {
-     creep.energyCollection(creep)
-    } else {
+      creep.energyCollection(creep)
     }
   }
 };
