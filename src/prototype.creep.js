@@ -66,12 +66,11 @@ Creep.prototype.Deliver = function(container){
 }
 
 Creep.prototype.energyDeliver =  function(creep) {
+  // this = creep selected
       let container =  creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
             filter: (s) => (s.structureType == STRUCTURE_CONTAINER) &&
             s.store[RESOURCE_ENERGY] > 0
           })
-
-  console.log(container + " #1")
         if (container == null) {
           container =   creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
           filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
@@ -79,7 +78,6 @@ Creep.prototype.energyDeliver =  function(creep) {
             s.energy < s.energyCapacity
         });
       }
-      console.log(container + " #2")
           this.Deliver(container);
       };
 

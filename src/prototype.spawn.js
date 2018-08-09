@@ -1,7 +1,7 @@
 require('nameGen')
 var minRoles = {
   harvester: "1",
-  upgrader: "2",
+  upgrader: "1",
   builder: "1",
   repairer: "0"
 }
@@ -47,8 +47,8 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home) {
 };
 
 StructureSpawn.prototype.findRoleNeeded = function(currentRoom) {
+  // this = current spawn selected
   var energy = currentRoom.energyCapacityAvailable;
-  //console.log(this +" #3")
   if(!this.memory.totalRoles){
     this.memory.totalRoles = {};
     return this.spawnNewCreep([WORK, CARRY, MOVE], "harvester", this);
@@ -57,7 +57,6 @@ StructureSpawn.prototype.findRoleNeeded = function(currentRoom) {
    return this.spawnNewCreep(bodyParts, "harvester", this);
  }*/
   // Find amount of different roles alive currently
-  console.log(this +" #3")
   this.memory.minRoles = minRoles;
   for(var i in this.memory.minRoles){
   this.memory.totalRoles[i] = _.sum(Game.creeps, (c) => c.memory.role == i);
