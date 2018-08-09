@@ -22,7 +22,7 @@ StructureSpawn.prototype.roleToBuild = function(role, spawn, energy) {
       break;
 
     case "lorry":
-    return  spawn.basicBodyBuilder(energy)
+    return  spawn.lorryBuilder(energy)
       break;
 
     case "claimer":
@@ -64,5 +64,19 @@ StructureSpawn.prototype.minerBuilder = function(energy) {
     outputArray.push(WORK);
   }
     outputArray.push(MOVE);
+  return outputArray
+}
+
+StructureSpawn.prototype.lorryBuilder = function(energy) {
+  let outputArray = [];
+  let numberOfParts = Math.floor(energy / 100);
+  var body = [];
+
+  for (let i = 0; i < numberOfParts; i++) {
+    outputArray.push(MOVE);
+  }
+  for (let i = 0; i < numberOfParts; i++) {
+    outputArray.push(CARRY);
+  }
   return outputArray
 }

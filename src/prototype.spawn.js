@@ -6,7 +6,8 @@ var minRoles = {
   upgrader: "1",
   builder: "0",
   repairer: "0",
-  miner: "0"
+  miner: "0",
+  lorry: "1"
 }
 
 StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceId) {

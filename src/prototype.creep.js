@@ -4,7 +4,8 @@ var roles = {
   builder: require('role.builder'),
   repairer: require('role.repairer'),
   claimer: require('role.claimer'),
-  miner: require('role.miner')
+  miner: require('role.miner'),
+  lorry: require('role.lorry')
 }
 
 Creep.prototype.runRole = function() {
@@ -47,7 +48,7 @@ Creep.prototype.roleRepairer = function(creep) {
   }
 }
 
-Creep.prototype.Deliver = function(container) {
+Creep.prototype.deliver = function(container) {
   if (container != undefined) {
     if (this.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
       this.ourPath(container)
@@ -56,10 +57,9 @@ Creep.prototype.Deliver = function(container) {
 }
 
 
-Creep.prototype.energyDeliver = function(creep) {
+Creep.prototype.findDeliveryTarget = function(creep) {
   let container = null;
   if(creep.room.energyAvailable != creep.room.energyCapacity){
-
      container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
     filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
         s.structureType == STRUCTURE_EXTENSION) &&
@@ -78,7 +78,7 @@ else {
      console.log("Nowhere to deliver time to build")
    this.roleBuilder(this)
  }else{
-  this.Deliver(container);
+  this.deliver(container);
 }
 };
 
