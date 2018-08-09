@@ -13,7 +13,8 @@ module.exports = {
     }
     if (creep.carry.energy != creep.carryCapacity && creep.memory.working == "true") {
       creep.roleHarvester(creep)
-    }else{
+    }
+    else if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "true"){
       creep.say("Nothing to do boss");
     }
   }
