@@ -14,6 +14,7 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceI
   if(sourceId == null){
     sourceId == "no Target"
   }
+
   var name = this.nameGen();
   var testCreep = this.spawnCreep(bodyParts, name, {
     dryRun: true
@@ -21,8 +22,8 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceI
   if (testCreep == 0) {
     this.spawnCreep(bodyParts, name, {
       memory: {
-        role: role.toString(),
-        working: false,
+        role: role,
+        working: "false",
         home: home,
         sourceId: sourceId
       }
