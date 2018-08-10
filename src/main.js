@@ -28,6 +28,7 @@ module.exports.loop = function() {
   for (let roomName in Game.rooms) {
     var currentRoom = Game.rooms[roomName];
     currentRoom.findSource(currentRoom);
+    currentRoom.needMiner();
   }
 
   /*  if(!Memory.outposts){
