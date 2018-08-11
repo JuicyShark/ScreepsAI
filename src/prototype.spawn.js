@@ -10,9 +10,12 @@ var minRoles = {
   repairer: "0"
 }
 
-StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceId) {
-  if(sourceId == null){
+StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceId, idleFlag) {
+  if(sourceId == null || sourceId == "n/a"){
     sourceId == "no Target"
+  }
+  if (idleFlag == null){
+    idleFlag == "no Flag"
   }
 
   var name = this.nameGen();
@@ -25,15 +28,22 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceI
         role: role,
         working: "false",
         home: home,
-        sourceId: sourceId
+        sourceId: sourceId,
+
       }
     });
     console.log("Spawning a " + role + ", named " + name);
   } else {
-    console.log("Spawn Unsuccesful");
+    console.log("Spawn " + role + ' Unsuccesful');
   }
 };
 
+StructureSpawn.prototype.spawnAttackCreep = function(bodyParts, role, home, idleFlag) {
+
+}
+StructureSpawn.prototype.spawnDefenseCreep = function(bodyParts, role, home, idleFlag) {
+
+}
 
 StructureSpawn.prototype.findRoleNeeded = function(currentRoom) {
   // this = current spawn selected

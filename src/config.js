@@ -10,18 +10,18 @@ module.exports = {
     3: 49
   },
   maxMiners: {
-    1: 2,
-    2: 2,
+    1: 1,
+    2: 1,
     3: 1
   },
   maxUpgraders: {
     1: 2,
-    2: 3,
+    2: 2,
     3: 3
   },
   maxBuilders: {
     1: 1,
-    2: 2,
+    2: 1,
     3: 2
   },
   maxRepairers: {
@@ -30,13 +30,18 @@ module.exports = {
     3: 2,
     4: 3
   },
+  maxLorrys: {
+    1: 1,
+    2: 1,
+    3: 2
+  },
   bodies: {
     claimer: [CLAIM, CLAIM, MOVE, MOVE],
     default: [WORK, CARRY, MOVE],
     harvester : {
-      300: [],
-      350: [],
-      400: [],
+      300: [WORK, WORK, CARRY, MOVE],
+      350: [WORK, WORK, CARRY, CARRY, MOVE],
+      400: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
       450: [],
       500: [],
       550: []
@@ -49,7 +54,7 @@ module.exports = {
        500: [WORK, WORK, WORK, MOVE],
        550: [WORK, WORK, WORK, WORK, WORK, MOVE]
      },
-     hauler: {
+     lorry: {
        300: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
        350: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
        400: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
@@ -71,6 +76,11 @@ module.exports = {
      },
 
      builder: {
+       300: [CARRY, CARRY, WORK, MOVE, MOVE],
+       400: [CARRY, CARRY, WORK, WORK, MOVE, MOVE]
+     },
+
+     repairer: {
        300: [CARRY, CARRY, WORK, MOVE, MOVE],
        400: [CARRY, CARRY, WORK, WORK, MOVE, MOVE]
      },

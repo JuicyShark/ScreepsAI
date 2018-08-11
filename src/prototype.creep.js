@@ -16,7 +16,7 @@ Creep.prototype.ourPath = function(destination) {
   const path = this.pos.findPathTo(destination);
   this.memory.path = path;
   Memory.path = Room.serializePath(path);
-  this.moveByPath(Memory.path)
+  this.moveByPath(Room.deserializePath(Memory.path))
 }
 
 Creep.prototype.roleBuilder = function(creep) {
@@ -98,6 +98,7 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
       filter: s => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&
         s.store[RESOURCE_ENERGY] > 250
     });
+
     if(container.length >= 2){
     container.sort(function(a, b) {
       return a.store.energy - b.store.energy
