@@ -27,7 +27,7 @@ module.exports.loop = function() {
   //Loop through all rooms your creeps/structures are in
   for (let roomName in Game.rooms) {
     var currentRoom = Game.rooms[roomName];
-    currentRoom.findSource(currentRoom);
+    //currentRoom.findSource(currentRoom);
   }
 
   /*  if(!Memory.outposts){
