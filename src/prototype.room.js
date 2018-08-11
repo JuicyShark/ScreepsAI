@@ -85,26 +85,35 @@ Room.prototype.needRepairer = function() {
 
     let repairer = _(Game.creeps).filter( {memory: { role: 'repairer' } } ).size();
     if (repairer <= config.maxRepairers[this.level()]) {
-      this.spawnRepairer
+      return true
+    } else {
+      return false
     }
 }
 
 Room.prototype.needMiner = function() {
   let miner = _(Game.creeps).filter( {memory: { role: 'miner' } } ).size();
   if (miner <= config.maxMiners[this.level()]) {
-    this.spawnMiner
+    return true
+  } else {
+    return false
   }
 }
 
 Room.prototype.needUpgrader = function() {
   let upgrader = _(Game.creeps).filter( {memory: { role: 'upgrader' } } ).size();
   if (upgrader <= config.maxUpgrader[this.level()]) {
-    this.spawnUpgrader
+    return true
+  } else {
+    return false
   }
 }
 
 Room.prototype.needBuilder = function() {
-  if
+  let builder = _(Game.creeps).filter( {memory: { role: 'builder' } } ).size();
+  if (upgrader <= config.maxBuilders[this.level()]) {
+    this.spawnBuilder
+  }
 }
 
 Room.prototype.needDefender = function() {

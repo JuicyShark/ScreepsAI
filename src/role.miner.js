@@ -13,7 +13,7 @@ module.exports = {
     if (creep.pos.isEqualTo(container.pos)) {
       creep.harvest(source)
     } else {
-      creep.moveTo(container)
+      creep.ourPath(container)
     }
   }
   }
