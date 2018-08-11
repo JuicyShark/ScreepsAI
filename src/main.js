@@ -42,7 +42,7 @@ module.exports.loop = function() {
   } */
   // for each creeps run creep logic
   for (let name in Game.creeps) {
-    Game.creep[name].suicide();
+    Game.creeps[name].suicide();
     Game.creeps[name].runRole();
   }
 });
