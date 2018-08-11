@@ -1,5 +1,5 @@
 require("prototype.spawn")
-require("config")
+var config = require("config")
 
 Room.prototype.tick = function() {
   if(this.isMine()) {
@@ -80,8 +80,8 @@ Room.prototype.needHarvester = function() {
 Room.prototype.needRepairer = function() {
     let repairer = _(Game.creeps).filter( {memory: { role: 'repairer' } } ).size();
     console.log(repairer)
-    console.log(Config.maxRepairers)
-    if (repairer <= Config.maxRepairers[this.level()]) {
+    console.log(config.maxRepairers[2])
+    if (repairer <= config.maxRepairers[this.level()]) {
       this.spawnRepairer
     }
 }

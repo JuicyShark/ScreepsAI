@@ -1,5 +1,4 @@
-
-var Config = {
+var config = {
 
   wallHitpoints: {
     1: 1,

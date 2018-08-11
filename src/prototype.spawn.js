@@ -3,9 +3,9 @@ require('nameGen')
 
 var minRoles = {
   harvester: "0",
-  upgrader: "1",
-  miner: "1",
-  lorry: "0",
+  upgrader: "2",
+  miner: "0",
+  lorry: "2",
   builder: "0",
   repairer: "0"
 }
@@ -49,6 +49,12 @@ StructureSpawn.prototype.findRoleNeeded = function(currentRoom) {
     if (this.room.energyAvailable == energy) {
       if (this.room.memory.totalRoles[i] <= this.room.memory.minRoles[i] && this.spawning == null) {
         var bodyParts = this.roleToBuild(i, this, energy)
+        return this.spawnNewCreep(bodyParts, i, currentRoom);
+      }
+    }
+    else if (this.room.energyAvailable != energy) {
+      if (this.room.memory.totalRoles[i] <= this.room.memory.minRoles[i] && this.spawning == null) {
+        var bodyParts = this.roleToBuild(i, this, this.room.energyAvailable)
         return this.spawnNewCreep(bodyParts, i, currentRoom);
       }
     }
