@@ -52,5 +52,11 @@ StructureSpawn.prototype.findRoleNeeded = function(currentRoom) {
         return this.spawnNewCreep(bodyParts, i, currentRoom);
       }
     }
+    else if (this.room.energyAvailable != energy) {
+      if (this.room.memory.totalRoles[i] <= this.room.memory.minRoles[i] && this.spawning == null) {
+        var bodyParts = this.roleToBuild(i, this, this.room.energyAvailable)
+        return this.spawnNewCreep(bodyParts, i, currentRoom);
+      }
+    }
   }
 };
