@@ -1,5 +1,4 @@
-var config = {
-
+module.exports = {
   wallHitpoints: {
     1: 1,
     2: 10,
@@ -17,7 +16,7 @@ var config = {
   },
   maxUpgraders: {
     1: 2,
-    2: 4,
+    2: 3,
     3: 3
   },
   maxBuilders: {

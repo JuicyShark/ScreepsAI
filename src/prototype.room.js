@@ -48,7 +48,7 @@ Room.prototype.findSource = function(room) {
 Room.prototype.createNeeds = function(){
 
     if (this.needBasicWorker()) {
-
+      this.spawnHarvester()
     }
     else if (this.needHarvester()) {
       //this.spawnHarvester()
@@ -62,6 +62,10 @@ Room.prototype.needBasicWorker = function() {
   //check room level and how many creeps are alive
   if (!this.memory.totalRoles) {
     this.memory.totalRoles = {};
+    return true;
+  }
+  else {
+    return
   }
 }
 
@@ -78,28 +82,37 @@ Room.prototype.needHarvester = function() {
 }
 
 Room.prototype.needRepairer = function() {
+
     let repairer = _(Game.creeps).filter( {memory: { role: 'repairer' } } ).size();
-    console.log(repairer)
-    console.log(config.maxRepairers[2])
     if (repairer <= config.maxRepairers[this.level()]) {
       this.spawnRepairer
     }
 }
 
 Room.prototype.needMiner = function() {
-
+  let miner = _(Game.creeps).filter( {memory: { role: 'miner' } } ).size();
+  if (miner <= config.maxMiners[this.level()]) {
+    this.spawnMiner
+  }
 }
 
 Room.prototype.needUpgrader = function() {
+  let upgrader = _(Game.creeps).filter( {memory: { role: 'upgrader' } } ).size();
+  if (upgrader <= config.maxUpgrader[this.level()]) {
+    this.spawnUpgrader
+  }
+}
 
+Room.prototype.needBuilder = function() {
+  if
 }
 
 Room.prototype.needDefender = function() {
-
+  //Need being attacked logic
 }
 
 Room.prototype.needAttacker = function() {
-
+  //attacking logic
 }
 
 
@@ -112,7 +125,7 @@ Room.prototype.needContainerMiner = function(){
     }
   }
 
-Room.prototype.spawnBasicWorker = function(){}
+Room.prototype.spawnHarvester = function(){}
 
 Room.prototype.spawnMiner = function(sourceId) {
   spawn = this.pos.findClosestByRange(FIND_MY_SPAWNS)
