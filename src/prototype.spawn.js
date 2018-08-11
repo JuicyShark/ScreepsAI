@@ -3,11 +3,11 @@ require('nameGen')
 
 var minRoles = {
   harvester: "0",
-  upgrader: "1",
+  upgrader: "2",
   miner: "1",
-  lorry: "0",
-  builder: "0",
-  repairer: "0"
+  lorry: "2",
+  builder: "3",
+  repairer: "2"
 }
 
 StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceId) {
