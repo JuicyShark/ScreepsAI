@@ -26,9 +26,23 @@ var Config = {
     2: 2,
     3: 2
   },
+  maxRepairers: {
+    1: 0,
+    2: 1,
+    3: 2,
+    4: 3
+  },
   bodies: {
     claimer: [CLAIM, CLAIM, MOVE, MOVE],
     default: [WORK, CARRY, MOVE],
+    harvester : {
+      300: [],
+      350: [],
+      400: [],
+      450: [],
+      500: [],
+      550: []
+    },
     miner: {
        300: [WORK, WORK, MOVE],
        350: [WORK, WORK, MOVE],
@@ -62,6 +76,16 @@ var Config = {
        300: [CARRY, CARRY, WORK, MOVE, MOVE],
        400: [CARRY, CARRY, WORK, WORK, MOVE, MOVE]
      },
+
+
+
+     defender: {
+
+     },
+
+     attacker: {
+
+     }
   }
 
 }

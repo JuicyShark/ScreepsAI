@@ -1,14 +1,30 @@
 require("prototype.spawn")
+require("config")
 
 Room.prototype.tick = function() {
   if(this.isMine()) {
-    this.processAsOwner(); //dont think we want them?
+    this.processAsMine();
   } else {
-    this.processAsGuest(); //dont think we want them?
+    this.processAsGuest();
+  }
+}
+Room.prototype.level = function() {
+  if(this.isMine()) {
+    return this.controller.level
+  } else {
+    return 0
   }
 }
 Room.prototype.isMine = function() {
-  return this.controller && this.controller.my
+  return this.controller && this.controller.my;
+}
+
+Room.prototype.processAsMine = function() {
+  this.createNeeds();
+}
+
+Room.prototype.processAsGuest = function() {
+  console.log("Im just a Guest here! " + this.name)
 }
 
 Room.prototype.findSource = function(room) {
@@ -28,14 +44,64 @@ Room.prototype.findSource = function(room) {
     }
   }
 }
-Room.protype.createNeeds = function(){
-    if (this.needHarvester()) {
+
+Room.prototype.createNeeds = function(){
+
+    if (this.needBasicWorker()) {
+
+    }
+    else if (this.needHarvester()) {
       //this.spawnHarvester()
     }
     else if (this.needContainerMiner()){
       //this.spawnContainerMiner
     }
 }
+
+Room.prototype.needBasicWorker = function() {
+  //check room level and how many creeps are alive
+  if (!this.memory.totalRoles) {
+    this.memory.totalRoles = {};
+  }
+}
+
+Room.prototype.needHarvester = function() {
+  let harvesters = _(Game.creeps).filter( {memory: { role: 'harvester' } } ).size();
+  let creepsInRoom = _(Game.creeps).filter({room: this}).size;
+
+  if (creepsInRoom >= 1) {
+    return creepsInRoom
+  }
+  else {
+    return;
+  }
+}
+
+Room.prototype.needRepairer = function() {
+    let repairer = _(Game.creeps).filter( {memory: { role: 'repairer' } } ).size();
+    console.log(repairer)
+    console.log(Config.maxRepairers)
+    if (repairer <= Config.maxRepairers[this.level()]) {
+      this.spawnRepairer
+    }
+}
+
+Room.prototype.needMiner = function() {
+
+}
+
+Room.prototype.needUpgrader = function() {
+
+}
+
+Room.prototype.needDefender = function() {
+
+}
+
+Room.prototype.needAttacker = function() {
+
+}
+
 
 
 Room.prototype.needContainerMiner = function(){
@@ -46,6 +112,7 @@ Room.prototype.needContainerMiner = function(){
     }
   }
 
+Room.prototype.spawnBasicWorker = function(){}
 
 Room.prototype.spawnMiner = function(sourceId) {
   spawn = this.pos.findClosestByRange(FIND_MY_SPAWNS)
@@ -57,3 +124,12 @@ Room.prototype.spawnMiner = function(sourceId) {
   }
 
 }
+
+Room.prototype.spawnRepairer = function() {
+  spawn = this.pos.findClosestByRange(FIND_MY_SPAWNS)
+  console.log(spawn);
+}
+Room.prototype.spawnBuilder = function() {}
+Room.prototype.spawnUpgrader = function() {}
+Room.prototype.spawnAttacker = function(idleFlag) {}
+Room.prototype.spawnDefender = function() {}
