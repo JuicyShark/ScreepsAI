@@ -5,13 +5,13 @@ require('prototype.creep')
 require('screeps-perf')({
   speedUpArrayFunctions: true,
   cleanUpCreepMemory: true,
-  optimizePathFinding: true
+  optimizePathFinding: false
 });
-//const profiler = require('screeps-profiler');
+const profiler = require('screeps-profiler');
 
-//profiler.enable();
+profiler.enable();
 module.exports.loop = function() {
-  // profiler.wrap(function() {
+   profiler.wrap(function() {
   // Clean dead creeps from memory RIP fellow conrades
   for (let name in Memory.creeps) {
     if (Game.creeps[name] == undefined) {
@@ -45,5 +45,5 @@ module.exports.loop = function() {
     Game.creep[name].suicide();
     Game.creeps[name].runRole();
   }
-//});
+});
 };
