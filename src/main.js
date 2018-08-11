@@ -7,11 +7,11 @@ require('screeps-perf')({
   cleanUpCreepMemory: true,
   optimizePathFinding: true
 });
-const profiler = require('screeps-profiler');
+//const profiler = require('screeps-profiler');
 
-profiler.enable();
+//profiler.enable();
 module.exports.loop = function() {
-   profiler.wrap(function() {
+  // profiler.wrap(function() {
   // Clean dead creeps from memory RIP fellow conrades
   for (let name in Memory.creeps) {
     if (Game.creeps[name] == undefined) {
@@ -28,6 +28,7 @@ module.exports.loop = function() {
   for (let roomName in Game.rooms) {
     var currentRoom = Game.rooms[roomName];
     //currentRoom.findSource(currentRoom);
+    //currentRoom.needRepairer();
   }
 
   /*  if(!Memory.outposts){
@@ -41,7 +42,8 @@ module.exports.loop = function() {
   } */
   // for each creeps run creep logic
   for (let name in Game.creeps) {
+    Game.creep[name].suicide();
     Game.creeps[name].runRole();
   }
-});
+//});
 };
