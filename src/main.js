@@ -2,11 +2,11 @@ require('prototype.spawn')
 require('prototype.room')
 require('prototype.creep')
 // Turn off any of the below features by passing false.
-require('screeps-perf')({
+/*require('screeps-perf')({
   speedUpArrayFunctions: true,
   cleanUpCreepMemory: true,
   optimizePathFinding: false
-});
+});*/
 //const profiler = require('screeps-profiler');
 
 //profiler.enable();
