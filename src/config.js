@@ -9,13 +9,21 @@ module.exports = {
     2: 9,
     3: 49
   },
+  roleList: {
+    harvester: '',
+    miner: '',
+    builder: '',
+    lorry: '',
+    upgrader: '',
+    repairer: ''
+  },
   maxMiners: {
-    1: 1,
-    2: 1,
-    3: 1
+    1: 0,
+    2: 0,
+    3: 0
   },
   maxUpgraders: {
-    1: 2,
+    1: 1,
     2: 2,
     3: 3
   },
@@ -25,7 +33,7 @@ module.exports = {
     3: 2
   },
   maxRepairers: {
-    1: 0,
+    1: 1,
     2: 1,
     3: 2,
     4: 3
@@ -42,7 +50,7 @@ module.exports = {
       300: [WORK, WORK, CARRY, MOVE],
       350: [WORK, WORK, CARRY, CARRY, MOVE],
       400: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
-      450: [],
+      450: [MOVE, MOVE, CARRY, CARRY, WORK, WORK],
       500: [],
       550: []
     },

@@ -99,7 +99,7 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
         s.store[RESOURCE_ENERGY] > 250
     });
 
-    if(container.length >= 2){
+    if(container.length >= 1){
     container.sort(function(a, b) {
       return a.store.energy - b.store.energy
     })
@@ -108,7 +108,7 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
   }
     if (container != undefined) {
       if (this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-        this.ourPath(container);
+        this.ourPath(container.pos);
       }
     }
   }
