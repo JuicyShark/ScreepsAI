@@ -94,24 +94,17 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
   /**  @type {STRUCTURE_CONTAINER} **/
   let container;
   if (getFromContainer == true) {
-    container = this.room.find(FIND_STRUCTURES, {
+    container = this.pos.findClosestByPath(FIND_STRUCTURES, {
       filter: s => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&
         s.store[RESOURCE_ENERGY] > 250
     });
-
-    if(container.length >= 1){
-    container.sort(function(a, b) {
-      return a.store.energy - b.store.energy
-    })
-    container.reverse()
-    container = container[0];
   }
     if (container != undefined) {
       if (this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-        this.ourPath(container.pos);
+        this.ourPath(container);
       }
     }
-  }
+
   // if no container was found
   if (container == null && getFromSource == true) {
     var source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
@@ -120,7 +113,6 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
     }
   }
 }
-
 Creep.prototype.checkDeath = function(creep) {
   if (creep.ticksToLive < 25) {
     if (Game.time % 15 === 0) {

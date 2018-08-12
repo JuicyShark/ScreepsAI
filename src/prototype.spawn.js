@@ -1,16 +1,6 @@
 require('prototype.creepBuilder'),
 require('nameGen')
 
-var minRoles = {
-  harvester: "0",
-  upgrader: "2",
-  miner: "0",
-  lorry: "2",
-  builder: "0",
-  repairer: "0"
-}
-
-
 StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceId) {
   if(sourceId == null || sourceId == "n/a"){
     sourceId == "no Target"
