@@ -27,7 +27,7 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceI
         role: role,
         working: "false",
         home: home,
-        sourceId: sourceId,
+        sourceId: sourceId
 
       }
     });

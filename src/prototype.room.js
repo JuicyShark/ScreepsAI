@@ -94,9 +94,14 @@ Room.prototype.createNeeds = function(){
 
       this.spawnHarvester()
     }
-    else if (this.needContainerMiner() != false){
+    else if (this.needContainerMiner()){
+      for(var i in this.memory.sourceNodes){
+        if(this.memory.sourceNodes[i].miners == 0){
+          console.log(this.memory.sourceNodes[i].id )
+            this.spawnContainerMiner(this.memory.sourceNodes[i].id)
 
-      this.spawnContainerMiner(this.needContainerMiner())
+            }
+        }
     }
     else if (this.needLorry()){
 
@@ -135,12 +140,12 @@ Room.prototype.needBasicWorker = function() {
 Room.prototype.needHarvester = function() {
   let harvesters = this.memory.totalRoles.harvester;
   let miners = this.memory.totalRoles.miner;
-  let lorrys = this.memory.totalRoles.lorry;
-  let creepsInRoom = this.memory.totalRoles.roomPopulation;
   if (harvesters == 0 && miners == 0) {
     return true
   }
-
+  else{
+    false
+  }
   }
 
 
@@ -174,14 +179,15 @@ Room.prototype.needBuilder = function() {
 }
 Room.prototype.needContainerMiner = function(){
   for(var i in this.memory.sourceNodes){
-    if(this.memory.sourceNodes[i].miners == 0){
-        return i.id
-        }
-      else {
+
+      if (this.memory.sourceNodes[i].miners == 1){
         return false
       }
-    }
+      else if (this.memory.sourceNodes[i].miners == 0) {
+        return true
+      }
   }
+}
 
 Room.prototype.needDefender = function() {
 
