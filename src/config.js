@@ -24,8 +24,8 @@ module.exports = {
   },
   maxUpgraders: {
     1: 1,
-    2: 2,
-    3: 3
+    2: 1,
+    3: 2
   },
   maxBuilders: {
     1: 1,
@@ -39,9 +39,9 @@ module.exports = {
     4: 3
   },
   maxLorrys: {
-    1: 1,
-    2: 1,
-    3: 2
+    1: 0,
+    2: 0,
+    3: 1
   },
   bodies: {
     claimer: [CLAIM, CLAIM, MOVE, MOVE],

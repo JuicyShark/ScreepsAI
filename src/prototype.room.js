@@ -70,7 +70,7 @@ Room.prototype.createNeeds = function(){
     else if (this.needHarvester()){
       this.spawnHarvester()
     }
-    else if (this.needContainerMiner() != false){
+    else if (this.needContainerMiner()){
       this.spawnContainerMiner(this.needContainerMiner())
     }
     else if (this.needLorry()){
