@@ -1,6 +1,7 @@
-
-var Config = {
-
+module.exports = {
+  allies: {
+    username: "Juicy-shark"
+  },
   wallHitpoints: {
     1: 1,
     2: 10,
@@ -11,24 +12,53 @@ var Config = {
     2: 9,
     3: 49
   },
+  roleList: {
+    harvester: '',
+    miner: '',
+    builder: '',
+    lorry: '',
+    upgrader: '',
+    repairer: '',
+    roomPopulation: ''
+  },
   maxMiners: {
-    1: 2,
-    2: 2,
-    3: 1
+    1: 0,
+    2: 0,
+    3: 0
   },
   maxUpgraders: {
-    1: 2,
-    2: 4,
-    3: 3
+    1: 1,
+    2: 1,
+    3: 2
   },
   maxBuilders: {
     1: 1,
-    2: 2,
+    2: 1,
     3: 2
+  },
+  maxRepairers: {
+    1: 1,
+    2: 1,
+    3: 2,
+    4: 3
+  },
+  maxLorrys: {
+    1: 0,
+    2: 0,
+    3: 1
   },
   bodies: {
     claimer: [CLAIM, CLAIM, MOVE, MOVE],
     default: [WORK, CARRY, MOVE],
+    harvester : {
+      300: [WORK, WORK, CARRY, MOVE],
+      350: [WORK, WORK, CARRY, CARRY, MOVE],
+      400: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+      450: [MOVE, MOVE, CARRY, CARRY, WORK, WORK],
+      500: [MOVE, MOVE, CARRY, CARRY, WORK, WORK, WORK],
+      550: [MOVE, MOVE, CARRY, CARRY, CARRY, WORK, WORK, WORK],
+      600: [MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, WORK, WORK, WORK]
+    },
     miner: {
        300: [WORK, WORK, MOVE],
        350: [WORK, WORK, MOVE],
@@ -37,7 +67,7 @@ var Config = {
        500: [WORK, WORK, WORK, MOVE],
        550: [WORK, WORK, WORK, WORK, WORK, MOVE]
      },
-     hauler: {
+     lorry: {
        300: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
        350: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
        400: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
@@ -59,9 +89,83 @@ var Config = {
      },
 
      builder: {
+       300: [CARRY, CARRY, MOVE, MOVE, WORK],
+       400: [CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+       500: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK]
+     },
+
+     repairer: {
        300: [CARRY, CARRY, WORK, MOVE, MOVE],
+       350: [CARRY, CARRY, CARRY, WORK, MOVE, MOVE],
        400: [CARRY, CARRY, WORK, WORK, MOVE, MOVE]
      },
+
+
+
+     defender: function(energy) {
+       let outputArray = [];
+       let numberOfParts = Math.floor(energy / 200);
+       var body = [];
+
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(MOVE);
+         outputArray.push(MOVE);
+       }
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(ATTACK);
+       }
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(TOUGH);
+         outputArray.push(TOUGH);
+       }
+       return outputArray
+     },
+
+     rangedAttacker: function(energy) {
+       let outputArray = [];
+       let numberOfParts = Math.floor(energy / 200);
+       var body = [];
+
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(MOVE);
+       }
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(RANGED_ATTACK);
+       }
+
+       return outputArray
+     },
+     brawler: function(energy) {
+       let outputArray = [];
+       let numberOfParts = Math.floor(energy / 200);
+       var body = [];
+
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(MOVE);
+         outputArray.push(MOVE);
+       }
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(ATTACK);
+       }
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(TOUGH);
+         outputArray.push(TOUGH);
+       }
+       return outputArray
+     },
+     medic: function(energy) {
+       let outputArray = [];
+       let numberOfParts = Math.floor(energy / 300);
+       var body = [];
+
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(MOVE);
+       }
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(HEAL);
+       }
+       return outputArray
+     }
   }
 
 }

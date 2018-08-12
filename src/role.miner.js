@@ -2,10 +2,10 @@ module.exports = {
   run: function(creep) {
     creep.checkDeath(creep)
 
-    let closeSource = creep.pos.findClosestByPath(FIND_SOURCES);
-    if(closeSource != null){
-    source = Game.getObjectById(closeSource.id);
-    source.memory = creep.room.memory.sourceNodes[source.id]
+
+    source = Game.getObjectById(creep.memory.sourceId);
+    //console.log(JSON.stringify(source))
+    //source.memory = creep.room.memory.sourceNodes[source,id]
     let container = source.pos.findInRange(FIND_STRUCTURES, 1, {
       filter: (s) => s.structureType == STRUCTURE_CONTAINER
     })[0]
@@ -16,5 +16,4 @@ module.exports = {
       creep.moveTo(container)
     }
   }
-  }
-};
+}

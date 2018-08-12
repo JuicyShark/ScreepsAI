@@ -1,19 +1,11 @@
 require('prototype.creepBuilder'),
 require('nameGen')
 
-var minRoles = {
-  harvester: "0",
-  upgrader: "0",
-//  miner: "1",
-//  lorry: "2",
-  builder: "1",
-  repairer: "1"
-}
-
 StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceId) {
-  if(sourceId == null){
+  if(sourceId == null || sourceId == "n/a"){
     sourceId == "no Target"
   }
+
 
   var name = this.nameGen();
   var testCreep = this.spawnCreep(bodyParts, name, {
@@ -26,37 +18,22 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceI
         working: "false",
         home: home,
         sourceId: sourceId
+
       }
     });
     console.log("Spawning a " + role + ", named " + name);
+  } else if (this.spawning){
+    console.log("Spawning " + role);
   } else {
-    console.log("Spawn Unsuccesful");
+    if (Game.time % 5 === 0) {
+    console.log("Spawn waiting with " + role)
+  }
   }
 };
 
+StructureSpawn.prototype.spawnAttackCreep = function(bodyParts, role, home, idleFlag) {
 
-StructureSpawn.prototype.findRoleNeeded = function(currentRoom) {
-  // this = current spawn selected
-  var energy = currentRoom.energyCapacityAvailable;
-  if (!this.room.memory.totalRoles) {
-    this.room.memory.totalRoles = {};
-    return this.spawnNewCreep([WORK, CARRY, MOVE], "harvester", this);
-  }
-  // Find amount of different roles alive currently
-  this.room.memory.minRoles = minRoles;
-  for (var i in this.room.memory.minRoles) {
-  this.room.memory.totalRoles[i] = _.sum(Game.creeps, (c) => c.memory.role == i);
-    if (this.room.energyAvailable == energy) {
-      if (this.room.memory.totalRoles[i] <= this.room.memory.minRoles[i] && this.spawning == null) {
-        var bodyParts = this.roleToBuild(i, this, energy)
-        return this.spawnNewCreep(bodyParts, i, currentRoom);
-      }
-    }
-    else if (this.room.energyAvailable != energy && this.room.energyAvailable > 200) {
-      if (this.room.memory.totalRoles[i] <= this.room.memory.minRoles[i] && this.spawning == null) {
-        var bodyParts = this.roleToBuild(i, this, this.room.energyAvailable)
-        return this.spawnNewCreep(bodyParts, i, currentRoom);
-      }
-    }
-  }
-};
+}
+StructureSpawn.prototype.spawnDefenseCreep = function(bodyParts, role, home, idleFlag) {
+
+}

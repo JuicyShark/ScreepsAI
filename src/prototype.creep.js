@@ -16,7 +16,7 @@ Creep.prototype.ourPath = function(destination) {
   const path = this.pos.findPathTo(destination);
   this.memory.path = path;
   Memory.path = Room.serializePath(path);
-  this.moveByPath(Memory.path)
+  this.moveByPath(Room.deserializePath(Memory.path))
 }
 
 Creep.prototype.roleBuilder = function(creep) {
@@ -104,7 +104,7 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
         this.ourPath(container);
       }
     }
-  
+
   // if no container was found
   if (container == null && getFromSource == true) {
     var source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
@@ -113,7 +113,6 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
     }
   }
 }
-
 Creep.prototype.checkDeath = function(creep) {
   if (creep.ticksToLive < 25) {
     if (Game.time % 15 === 0) {

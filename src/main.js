@@ -20,16 +20,10 @@ module.exports.loop = function() {
     }
   }
 
-  // for each spawn run spawn logic
-  for (let spawnName in Game.spawns) {
-    var currentRoom = Game.spawns[spawnName].room
-    Game.spawns[spawnName].findRoleNeeded(currentRoom);
-  }
   //Loop through all rooms your creeps/structures are in
   for (let roomName in Game.rooms) {
     var currentRoom = Game.rooms[roomName];
-    //currentRoom.findSource(currentRoom);
-    //currentRoom.needRepairer();
+    currentRoom.tick();
   }
 
 
@@ -39,7 +33,6 @@ module.exports.loop = function() {
   //  Game.creeps[name].suicide();
     Game.creeps[name].runRole();
   }
-});
 
-
+}
 };
