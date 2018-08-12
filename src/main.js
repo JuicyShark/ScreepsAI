@@ -34,5 +34,5 @@ module.exports.loop = function() {
     Game.creeps[name].runRole();
   }
 
-}
+})
 };
