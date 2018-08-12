@@ -69,14 +69,13 @@ Room.prototype.findSource = function() {
       var miners = 0
       var source = sourceNode[i];
 
-      for(var i in Game.creeps, (c) => c.memory.role == "miner"){
-        if(source == i.sourceId){
+      for(var i in Game.creeps){
+        if(source.id ==  Game.creeps[i].memory.sourceId){
           miners++
-          console.log(i.name + " Is Working At " + source);
+          console.log(Game.creeps[i].name + " Is Working At " + source);
         }
       }
       source.miners = miners;
-      source.room = null;
       sources.push(source)
     }
     this.memory.sourceNodes = sources;
@@ -97,7 +96,7 @@ Room.prototype.createNeeds = function(){
     else if (this.needContainerMiner()){
       for(var i in this.memory.sourceNodes){
         if(this.memory.sourceNodes[i].miners == 0){
-          console.log(this.memory.sourceNodes[i].id )
+
             this.spawnContainerMiner(this.memory.sourceNodes[i].id)
 
             }
