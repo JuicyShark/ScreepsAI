@@ -1,4 +1,7 @@
 module.exports = {
+  allies: {
+    username: "Juicy-shark"
+  },
   wallHitpoints: {
     1: 1,
     2: 10,
@@ -15,7 +18,8 @@ module.exports = {
     builder: '',
     lorry: '',
     upgrader: '',
-    repairer: ''
+    repairer: '',
+    roomPopulation: ''
   },
   maxMiners: {
     1: 0,
@@ -51,8 +55,9 @@ module.exports = {
       350: [WORK, WORK, CARRY, CARRY, MOVE],
       400: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
       450: [MOVE, MOVE, CARRY, CARRY, WORK, WORK],
-      500: [],
-      550: []
+      500: [MOVE, MOVE, CARRY, CARRY, WORK, WORK, WORK],
+      550: [MOVE, MOVE, CARRY, CARRY, CARRY, WORK, WORK, WORK],
+      600: [MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, WORK, WORK, WORK]
     },
     miner: {
        300: [WORK, WORK, MOVE],
@@ -84,23 +89,82 @@ module.exports = {
      },
 
      builder: {
-       300: [CARRY, CARRY, WORK, MOVE, MOVE],
-       400: [CARRY, CARRY, WORK, WORK, MOVE, MOVE]
+       300: [CARRY, CARRY, MOVE, MOVE, WORK],
+       400: [CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+       500: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK]
      },
 
      repairer: {
        300: [CARRY, CARRY, WORK, MOVE, MOVE],
+       350: [CARRY, CARRY, CARRY, WORK, MOVE, MOVE],
        400: [CARRY, CARRY, WORK, WORK, MOVE, MOVE]
      },
 
 
 
-     defender: {
+     defender: function(energy) {
+       let outputArray = [];
+       let numberOfParts = Math.floor(energy / 200);
+       var body = [];
 
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(MOVE);
+         outputArray.push(MOVE);
+       }
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(ATTACK);
+       }
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(TOUGH);
+         outputArray.push(TOUGH);
+       }
+       return outputArray
      },
 
-     attacker: {
+     rangedAttacker: function(energy) {
+       let outputArray = [];
+       let numberOfParts = Math.floor(energy / 200);
+       var body = [];
 
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(MOVE);
+       }
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(RANGED_ATTACK);
+       }
+
+       return outputArray
+     },
+     brawler: function(energy) {
+       let outputArray = [];
+       let numberOfParts = Math.floor(energy / 200);
+       var body = [];
+
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(MOVE);
+         outputArray.push(MOVE);
+       }
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(ATTACK);
+       }
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(TOUGH);
+         outputArray.push(TOUGH);
+       }
+       return outputArray
+     },
+     medic: function(energy) {
+       let outputArray = [];
+       let numberOfParts = Math.floor(energy / 300);
+       var body = [];
+
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(MOVE);
+       }
+       for (let i = 0; i < numberOfParts; i++) {
+         outputArray.push(HEAL);
+       }
+       return outputArray
      }
   }
 

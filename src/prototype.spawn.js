@@ -10,13 +10,12 @@ var minRoles = {
   repairer: "0"
 }
 
-StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceId, idleFlag) {
+
+StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceId) {
   if(sourceId == null || sourceId == "n/a"){
     sourceId == "no Target"
   }
-  if (idleFlag == null){
-    idleFlag == "no Flag"
-  }
+
 
   var name = this.nameGen();
   var testCreep = this.spawnCreep(bodyParts, name, {

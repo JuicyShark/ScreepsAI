@@ -20,63 +20,90 @@ Room.prototype.isMine = function() {
 }
 
 Room.prototype.processAsMine = function() {
-  if (!(this.memoryInit())) {
+  //This is where I am going to call things from! :D
+
     this.memoryInit()
-  }
-  //this.canSpawn().findRoleNeeded(this)
-  this.createNeeds();
+    this.createNeeds();
 }
 
 Room.prototype.processAsGuest = function() {
   console.log("Im just a Guest here! " + this.name)
 }
 
+
+
 Room.prototype.memoryInit = function() {
-  //console.log("here in Init")
-  if(!this.memory.totalRoles){
-    this.memory.totalRoles = config.roleList
+  if (!this.memory.totalRoles) {
+    this.memory.totalRoles = {};
   }
-  for(var i in this.memory.totalRoles) {
-    this.memory.totalRoles[i] = _.sum(Game.creeps, (c) => c.memory.role == i);
+  // Find amount of different roles alive currently
+  for (var i in config.roleList) {
+  this.memory.totalRoles[i] = _.sum(Game.creeps, (c) => c.memory.role == i);
   }
-    if (!this.memory.sourceNodes) {
-      this.memory.sourceNodes = {};
+
+  if (!this.memory.sourceNodes) {
+    //console.log("THEFUCK")
+    this.memory.sourceNodes = {};
     }
-  this.findSource(this)
+  this.findSource()
+
 }
 
-Room.prototype.findSource = function(room) {
-    var sourceNodes = room.find(FIND_SOURCES);
-    for (var i in sourceNodes) {
+Room.prototype.alertLevel = function() {
+  let hostiles = this.find(FIND_HOSTILE_CREEPS, {
+    filter: { owner: { username: !config.allies.username}}
+  });
+
+    if (hostiles.size() >= 1) {
+      return 2;
+    }
+
+}
+
+Room.prototype.findSource = function() {
+  let sources = [];
+
+    var sourceNode = this.find(FIND_SOURCES);
+    for (var i in sourceNode) {
+
       var miners = 0
-      var source = sourceNodes[i];
+      var source = sourceNode[i];
+
       for(var i in Game.creeps, (c) => c.memory.role == "miner"){
         if(source == i.sourceId){
           miners++
           console.log(i.name + " Is Working At " + source);
         }
       }
-      source.memory = this.memory.sourceNodes[source];
-      source.memory.miners = miners;
+      source.miners = miners;
+      source.room = null;
+      sources.push(source)
     }
+    this.memory.sourceNodes = sources;
   }
+
 
 
 Room.prototype.createNeeds = function(){
 
     if (this.needBasicWorker()) {
+
       this.spawnHarvester()
     }
     else if (this.needHarvester()){
+
       this.spawnHarvester()
     }
-    else if (this.needContainerMiner()){
+    else if (this.needContainerMiner() != false){
+
       this.spawnContainerMiner(this.needContainerMiner())
     }
     else if (this.needLorry()){
+
       this.spawnLorry()
     }
     else if (this.needUpgrader()) {
+
       this.spawnUpgrader()
     }
     else if (this.needBuilder()) {
@@ -85,56 +112,50 @@ Room.prototype.createNeeds = function(){
     else if (this.needRepairer()){
       this.spawnRepairer()
     }
-    else { console.log("Needs Met!")}
+    else if (this.needDefender()) {
+      this.spawnDefender()
+    }
+  /*  else if (this.needA) {
+
+    }*/
+    else { console.log("Needs have been Met!")}
 }
 
 Room.prototype.needBasicWorker = function() {
-  //check room level and how many creeps are alive
-  //need to check for body parts of all creeps in room for any work and if they are harvesting
-  if (this.memory.totalRoles.harvester == null) {
+  let harvesters = this.memory.totalRoles.harvester;
+  if (harvesters == null || harvesters == 0) {
     return true;
   }
-  else {
+  else if (harvesters >= 1) {
     return false
   }
 }
 
   // Testing to only want harvesters if we dont have miners and lorrys around
 Room.prototype.needHarvester = function() {
-  let harvesters = _(Game.creeps).filter( {memory: { role: 'harvester' } } ).size;
-  let creepsInRoom = _(Game.creeps).filter({room: this}).size;
-  if (this.memory.totalRoles.harvester == 0 && this.memory.totalRoles.miner == 0) {
+  let harvesters = this.memory.totalRoles.harvester;
+  let miners = this.memory.totalRoles.miner;
+  let lorrys = this.memory.totalRoles.lorry;
+  let creepsInRoom = this.memory.totalRoles.roomPopulation;
+  if (harvesters == 0 && miners == 0) {
     return true
   }
-   else {
-     if(this.memory.totalRoles.miner > 0 && this.memory.totalRoles.lorry == 0){
-       this.spawnLorry()
-       return false
-     }
-     else if(this.memory.totalRoles.miner > 0 && this.memory.totalRoles.lorry > 0){
-       return false
-     }else{
-       return true
-     }
+
   }
-}
+
 
 Room.prototype.needLorry = function() {
   let lorrys = _(Game.creeps).filter( {memory: {role: 'lorry'}}).size()
   if (lorrys <= config.maxLorrys[this.level()]) {
     return true
   }
-  else {
-    return false
-  }
 }
+
 
 Room.prototype.needRepairer = function() {
     let repairer = _(Game.creeps).filter( {memory: { role: 'repairer' } } ).size();
     if (repairer <= config.maxRepairers[this.level()]) {
       return true
-    } else {
-      return false
     }
 }
 
@@ -142,8 +163,6 @@ Room.prototype.needUpgrader = function() {
   let upgrader = _(Game.creeps).filter( {memory: { role: 'upgrader' } } ).size();
   if (upgrader <= config.maxUpgraders[this.level()]) {
     return true
-  } else {
-    return false
   }
 }
 
@@ -152,23 +171,7 @@ Room.prototype.needBuilder = function() {
   if (builder <= config.maxBuilders[this.level()]) {
     return true;
   }
-  else {
-    return false;
-  }
 }
-
-Room.prototype.needDefender = function() {
-  return false
-  //Need being attacked logic
-}
-
-Room.prototype.needAttacker = function() {
-  return false
-  //attacking logic
-}
-
-
-
 Room.prototype.needContainerMiner = function(){
   for(var i in this.memory.sourceNodes){
     if(this.memory.sourceNodes[i].miners == 0){
@@ -179,6 +182,33 @@ Room.prototype.needContainerMiner = function(){
       }
     }
   }
+
+Room.prototype.needDefender = function() {
+
+/*  if () {
+
+    return true
+  }
+  else {
+    return false
+  }*/
+
+}
+
+Room.prototype.needRangedAttacker = function() {
+  return false
+  //attacking logic
+}
+
+Room.prototype.needBrawler = function() {
+  return false
+  //attacking logic
+}
+
+Room.prototype.needMedic = function() {
+  return false
+  //attacking logic
+}
 
 Room.prototype.spawnHarvester = function(){
   if(this.canSpawn() != false){
@@ -229,21 +259,19 @@ Room.prototype.spawnAttacker = function(idleFlag) {
   if(this.canSpawn() != false){
     spawn = this.canSpawn();
     var bodyParts = config.bodies.attacker[spawn.energyCapacity]
-    spawn.spawnAttackCreep(bodyParts, "attacker", spawn.room, idleFlag)
+    spawn.spawnAttackCreep(bodyParts, "attacker", spawn.room)
   }
 }
-Room.prototype.spawnDefender = function(idleFlag) {
+Room.prototype.spawnDefender = function() {
   if(this.canSpawn() != false){
     spawn = this.canSpawn();
-    var bodyParts = config.bodies.defender[spawn.energyCapacity]
-    spawn.spawnDefenseCreep(bodyParts, "defender", spawn.room, idleFlag)
+    var bodyParts = config.bodies.defender(spawn.energyCapacity)
+    spawn.spawnDefenseCreep(bodyParts, "defender", spawn.room)
   }
 }
 Room.prototype.canSpawn = function() {
   if(this.isMine()) {
     spawn = this.find(FIND_MY_SPAWNS)
     return spawn[0]
-  } else {
-    return false
   }
 }
