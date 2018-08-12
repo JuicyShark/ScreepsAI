@@ -12,7 +12,7 @@ module.exports = {
       creep.memory.working = "false";
     }
     if (creep.memory.working == "true") {
-      creep.findDeliveryTarget()
+      creep.findDeliveryTarget(this.memory.oldTarget)
     }
   }
 };

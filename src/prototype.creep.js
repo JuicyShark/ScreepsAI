@@ -57,7 +57,7 @@ Creep.prototype.deliver = function(container) {
 }
 
 
-Creep.prototype.findDeliveryTarget = function() {
+Creep.prototype.findDeliveryTarget = function(oldTarget) {
   let container = null;
   if(this.room.energyAvailable != this.room.energyCapacity){
      container = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
