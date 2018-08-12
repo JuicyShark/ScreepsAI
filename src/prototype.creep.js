@@ -57,27 +57,23 @@ Creep.prototype.deliver = function(container) {
 }
 
 
-Creep.prototype.findDeliveryTarget = function(creep) {
+Creep.prototype.findDeliveryTarget = function() {
   let container = null;
-  if(creep.room.energyAvailable != creep.room.energyCapacity){
-     container = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+  if(this.room.energyAvailable != this.room.energyCapacity){
+     container = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
     filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
         s.structureType == STRUCTURE_EXTENSION) &&
       s.energy < s.energyCapacity
   });
 }
  if(container == null) {
-     container = creep.room.find(FIND_STRUCTURES, {
+     container = this.room.find(FIND_STRUCTURES, {
       filter: (s) => (s.structureType == STRUCTURE_CONTAINER)
     })
-    if(container.length >= 2){
-    container.sort(function(a, b) {
-      return a.store.energy - b.store.energy
-    })
-    console.log(container[0].store.energy)
-    container = container[0];
+
+
   }
-}
+
 this.deliver(container);
    /*if (container == null) {
      console.log("Nowhere to deliver time to build")
@@ -102,6 +98,7 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
     if (container != undefined) {
       if (this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         this.ourPath(container);
+        this.memory.oldTarget == container
       }
     }
 

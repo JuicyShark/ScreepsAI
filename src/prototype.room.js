@@ -8,6 +8,7 @@ Room.prototype.tick = function() {
     this.processAsGuest();
   }
 }
+
 Room.prototype.level = function() {
   if (this.isMine()) {
     return this.controller.level
@@ -15,13 +16,13 @@ Room.prototype.level = function() {
     return 0
   }
 }
+
 Room.prototype.isMine = function() {
   return this.controller && this.controller.my;
 }
 
 Room.prototype.processAsMine = function() {
   //This is where I am going to call things from! :D
-
   this.memoryInit()
   this.createNeeds();
 }
@@ -29,8 +30,6 @@ Room.prototype.processAsMine = function() {
 Room.prototype.processAsGuest = function() {
   console.log("Im just a Guest here! " + this.name)
 }
-
-
 
 Room.prototype.memoryInit = function() {
   if (!this.memory.totalRoles) {
@@ -42,7 +41,6 @@ Room.prototype.memoryInit = function() {
   }
 
   if (!this.memory.sourceNodes) {
-    //console.log("THEFUCK")
     this.memory.sourceNodes = {};
   }
   this.findSource()
@@ -61,7 +59,6 @@ Room.prototype.alertLevel = function() {
   if (hostiles.size() >= 1) {
     return 2;
   }
-
 }
 
 Room.prototype.findSource = function() {
@@ -74,7 +71,6 @@ Room.prototype.findSource = function() {
     for (var i in Game.creeps) {
       if (source.id == Game.creeps[i].memory.sourceId) {
         miners++
-      //  console.log(Game.creeps[i].name + " Is Working At " + source);
       }
     }
     source.miners = miners;
