@@ -3,7 +3,7 @@ module.exports = {
     creep.checkDeath(creep)
 
     if (creep.memory.working == "false") {
-      creep.findDeliveryTarget(creep)
+      creep.findDeliveryTarget(null)
 
     }
     if (creep.carry.energy == creep.carryCapacity) {

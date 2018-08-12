@@ -2,10 +2,7 @@ module.exports = {
   run: function(creep) {
     creep.checkDeath(creep)
 
-
     source = Game.getObjectById(creep.memory.sourceId);
-    //console.log(JSON.stringify(source))
-    //source.memory = creep.room.memory.sourceNodes[source,id]
     let container = source.pos.findInRange(FIND_STRUCTURES, 1, {
       filter: (s) => s.structureType == STRUCTURE_CONTAINER
     })[0]
