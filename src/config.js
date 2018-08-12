@@ -28,8 +28,8 @@ module.exports = {
   },
   maxUpgraders: {
     1: 1,
-    2: 1,
-    3: 2
+    2: 3,
+    3: 3
   },
   maxBuilders: {
     1: 1,

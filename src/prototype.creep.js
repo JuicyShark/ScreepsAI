@@ -70,17 +70,8 @@ Creep.prototype.findDeliveryTarget = function(oldTarget) {
      container = this.room.find(FIND_STRUCTURES, {
       filter: (s) => (s.structureType == STRUCTURE_CONTAINER)
     })
-
-
   }
-
 this.deliver(container);
-   /*if (container == null) {
-     console.log("Nowhere to deliver time to build")
-   this.roleBuilder(this)
- }else{
-  this.deliver(container);
-}*/
 };
 
 /** @function
