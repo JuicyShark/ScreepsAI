@@ -24,17 +24,13 @@ module.exports.loop = function() {
   for (let roomName in Game.rooms) {
     var currentRoom = Game.rooms[roomName];
     currentRoom.tick();
-
   }
 
 
   // for each creeps run creep logic
   for (let name in Game.creeps) {
-
-  //  Game.creeps[name].suicide();
     Game.creeps[name].runRole();
   }
-//});
 
 
 };
