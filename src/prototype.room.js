@@ -218,12 +218,9 @@ Room.prototype.needHarvester = function() {
 
 
 Room.prototype.needLorry = function() {
-  let lorrys = _(Game.creeps).filter({
-    memory: {
-      role: 'lorry'
-    }
-  }).size()
-  if (lorrys <= config.maxLorrys[this.level()]) {
+  let lorrys = this.memory.totalRoles.lorry;
+  let miners = this.memory.totalRoles.miner;
+  if (lorrys <= 1 && miners >= 1 ) {
     return true
   }
 }
