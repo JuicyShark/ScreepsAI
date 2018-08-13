@@ -29,7 +29,7 @@ Creep.prototype.ourPath = function(destination) {
 
 
 Creep.prototype.roleBuilder = function(creep) {
-  var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
+  var targets = creep.room.constructionSites
   // Sort construction sites by progress.
   targets.sort(function(a, b) {
     return b.progress - a.progress;
