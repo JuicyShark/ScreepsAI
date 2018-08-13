@@ -26,9 +26,9 @@ Room.prototype.tick = function() {
 
 
 Room.prototype.memoryInit = function() {
-    //this.initSource();
+    this.initSource();
     this.initTotalRoles();
-  //  this.initStructures();
+    this.initStructures();
 }
 
 Room.prototype.level = function() {
@@ -79,8 +79,8 @@ Room.prototype.initSource = function() {
   for (let source of this.find(FIND_SOURCES)) {
     if(!this.memory.sourceNodes[source.id]){
       this.memory.sourceNodes[source.id] = {id: source.id}
-      this.memory.hostileSpawns = this.find(STRUCTURE_KEEPER_LAIR);
     }
+    this.memory.hostileSpawns = this.find(STRUCTURE_KEEPER_LAIR);
     let miners = this.find(FIND_MY_CREEPS, {filter: {memory: {sourceId: source.id}}});
     this.memory.sourceNodes[source.id].miners = miners.length
   }
@@ -89,8 +89,8 @@ Room.prototype.initSource = function() {
 Room.prototype.loadSource = function() {
   this.sourceNodes = {};
   for(let id in this.memory.sourceNodes){
+    console.log( this.sourceNodes + " " + id)
     this.sourceNodes[id] = Game.getObjectById(id)
-
   }
 
   this.hostileSpawns = [];
