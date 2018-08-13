@@ -267,7 +267,7 @@ Room.prototype.needContainerMiner = function() {
 
     if (this.memory.sourceNodes[i].miners == 1) {
       return false
-    } else if (this.memory.sourceNodes[i].miners == 0) {
+    } else if (this.memory.sourceNodes[i].miners == 0 && this.memory.structures.containerIds.length >= 1) {
       return true
     }
   }
