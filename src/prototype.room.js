@@ -3,7 +3,10 @@ var config = require("config")
 
 Room.prototype.tick = function() {
   if (this.isMine()) {
+    if (Game.time % 14 === 0) {
+      console.log(this.name + " tick! " + Game.time)
     this.processAsMine();
+    }
   } else {
     this.processAsGuest();
   }

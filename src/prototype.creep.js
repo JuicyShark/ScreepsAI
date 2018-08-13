@@ -13,11 +13,20 @@ Creep.prototype.runRole = function() {
 };
 
 Creep.prototype.ourPath = function(destination) {
+
+
+  if (Game.time % 13 === 0) {
+    //console.log("RESET TIME ")
+    delete this.memory.path
+  }
+  if (!this.memory.path) {
   const path = this.pos.findPathTo(destination);
   this.memory.path = path;
-  Memory.path = Room.serializePath(path);
-  this.moveByPath(Room.deserializePath(Memory.path))
-}
+  }
+  this.moveByPath(this.memory.path)
+  }
+
+
 
 Creep.prototype.roleBuilder = function(creep) {
   var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
