@@ -17,7 +17,9 @@ Room.prototype.tick = function() {
     if (this.memory.timer % 15 == 0) {
       this.createNeeds();
       if(this.constructionSites.length != 0){
+        console.log("looking for builder")
         this.findBuilder(this.constructionSites[0]);
+
       }
     }
     -- this.memory.timer;
@@ -29,7 +31,7 @@ Room.prototype.tick = function() {
 }
 
 Room.prototype.initCreeps = function(){
-  this.creepsAllRound = this.find(FIND_MY_CREEPS, filter: {memory: {type: "ALL_ROUND"}});
+  this.creepsAllRound = this.find(FIND_MY_CREEPS, {filter: {memory: {type: "ALL_ROUND"}}});
 }
 
 Room.prototype.memoryInit = function() {
@@ -331,7 +333,7 @@ Room.prototype.spawnBuilder = function() {
     spawn = this.canSpawn();
     var bodyParts = config.bodies.builder[spawn.energyCapacity]
     var type = "ALL_ROUND"
-    spawn.spawnNewCreep(bodyParts, "builder", spawn.room, ,type )
+    spawn.spawnNewCreep(bodyParts, "builder", spawn.room, "" ,type )
   }
 }
 Room.prototype.spawnUpgrader = function() {

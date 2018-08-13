@@ -29,12 +29,12 @@ Creep.prototype.ourPath = function(destination) {
 
 
 Creep.prototype.roleBuilder = function(creep) {
-  var targets = creep.room.constructionSites
+  var target = creep.memory.target
   // Sort construction sites by progress.
-  targets.sort(function(a, b) {
+  /*targets.sort(function(a, b) {
     return b.progress - a.progress;
-  })
-  if (targets.length) {
+  })*/
+  if (target != null) {
     if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
       creep.ourPath(targets[0])
     }
