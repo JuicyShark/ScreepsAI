@@ -18,7 +18,7 @@ Room.prototype.tick = function() {
       this.createNeeds();
       if(this.constructionSites.length != 0){
         console.log("looking for builder")
-        this.findBuilder(this.constructionSites.memory.shift());
+        this.findBuilder(this.memory.constructionSites);
       }
     }
     -- this.memory.timer;
@@ -161,10 +161,10 @@ Room.prototype.findBuilder = function(constructionSite){
    var potentialCreep = this.creepsAllRound[i]
    console.log(potentialCreep)
     if(!potentialCreep.memory.target){
+      var target = constructionSite.shift()
+      console.log("test " + target)
+      potentialCreep.memory.target = target
 
-      console.log("test " + constructionSite)
-      potentialCreep.memory.target = constructionSite
-      console.log(potentialCreep.memory.target)
 
       break;
     }
