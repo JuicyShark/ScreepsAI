@@ -29,14 +29,15 @@ Creep.prototype.ourPath = function(destination) {
 
 
 Creep.prototype.roleBuilder = function(creep) {
-  var target = creep.memory.target
+  var target = Game.getObjectById(creep.memory.target)
+  
   // Sort construction sites by progress.
   /*targets.sort(function(a, b) {
     return b.progress - a.progress;
   })*/
   if (target != null) {
-    if (creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-      creep.ourPath(targets[0])
+    if (creep.build(target) == ERR_NOT_IN_RANGE) {
+      creep.ourPath(target)
     }
   }
 };

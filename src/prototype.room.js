@@ -158,8 +158,13 @@ Room.prototype.loadConstructionSites = function(){
 Room.prototype.findBuilder = function(constructionSite){
   for(let i in this.creepsAllRound){
    var potentialCreep = this.creepsAllRound[i]
-    if(potentialCreep.memory.target == null){
-      potentialCreep.memory.target == constructionSite
+   console.log(potentialCreep)
+    if(!potentialCreep.memory.target){
+
+      console.log("test " + constructionSite.id)
+      potentialCreep.memory.target = constructionSite.pos
+      console.log(potentialCreep.memory.target)
+
       break;
     }
   }
