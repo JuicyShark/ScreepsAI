@@ -3,10 +3,19 @@ var config = require("config")
 
 Room.prototype.tick = function() {
   if (this.isMine()) {
-    if (Game.time % 14 === 0) {
-      console.log(this.name + " tick! " + Game.time)
-    this.processAsMine();
+    if (!this.memory.timer || this.memory.timer % 60 === 0) {
+      this.memory.timer = -1;
+
+      this.memory.timer = 60;
+      console.log(this.name + " Timer has been reset")
     }
+    if (this.memory.timer % 15 == 0) {
+      this.createNeeds();
+    }
+    if (this.memory.timer % 60 === 0) {
+      this.memoryInit()
+    }
+    -- this.memory.timer;
   } else {
     this.processAsGuest();
   }
@@ -24,11 +33,6 @@ Room.prototype.isMine = function() {
   return this.controller && this.controller.my;
 }
 
-Room.prototype.processAsMine = function() {
-  //This is where I am going to call things from! :D
-  this.memoryInit()
-  this.createNeeds();
-}
 
 Room.prototype.processAsGuest = function() {
   console.log("Im just a Guest here! " + this.name)
@@ -42,7 +46,9 @@ Room.prototype.memoryInit = function() {
   for (var i in config.roleList) {
     this.memory.totalRoles[i] = _.sum(Game.creeps, (c) => c.memory.role == i);
   }
-
+  if (!this.memory.structures) {
+    this.initStructures()
+  }
   if (!this.memory.sourceNodes) {
     this.memory.sourceNodes = {};
   }
@@ -82,6 +88,28 @@ Room.prototype.findSource = function() {
   this.memory.sourceNodes = sources;
 }
 
+
+Room.prototype.initStructures = function() {
+  this.memory.structures = {}
+  this.initContainers()
+}
+
+Room.prototype.initContainers = function() {
+  this.memory.structures.containerIds = [];
+  var containers = this.find(FIND_STRUCTURES, {
+    filter: {
+      structureType: STRUCTURE_CONTAINER
+    }
+  });
+  for (let i in containers) {
+    if (containers[i] instanceof StructureContainer) {
+      this.memory.structures.containerIds[i] = containers[i].id
+    } else {
+      console.log('Container is not instanceof SturctureContainer')
+      containers.splice(i);
+    }
+  }
+}
 
 
 Room.prototype.createNeeds = function() {
