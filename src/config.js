@@ -32,12 +32,12 @@ module.exports = {
     3: 3
   },
   maxBuilders: {
-    1: 1,
+    1: 0,
     2: 1,
     3: 2
   },
   maxRepairers: {
-    1: 1,
+    1: 0,
     2: 1,
     3: 2,
     4: 3

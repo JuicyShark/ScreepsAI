@@ -18,8 +18,7 @@ Room.prototype.tick = function() {
       this.createNeeds();
       if(this.constructionSites.length != 0){
         console.log("looking for builder")
-        this.findBuilder(this.constructionSites[0]);
-
+        this.findBuilder(this.constructionSites.memory.shift());
       }
     }
     -- this.memory.timer;
@@ -143,8 +142,10 @@ Room.prototype.initConstructionSites = function(){
   this.memory.constructionSites = [];
   this.constructionSites = this.find(FIND_CONSTRUCTION_SITES)
   for(let i in this.constructionSites){
+    var potentialDuplicate = this.find(FIND_MY_CREEPS, {filter: {memory: {target: i.id}}})
+    if(!potentialDuplicate){
     this.memory.constructionSites[i] = this.constructionSites[i].id
-  }
+  }}
 };
 
 Room.prototype.loadConstructionSites = function(){
@@ -161,8 +162,8 @@ Room.prototype.findBuilder = function(constructionSite){
    console.log(potentialCreep)
     if(!potentialCreep.memory.target){
 
-      console.log("test " + constructionSite.id)
-      potentialCreep.memory.target = constructionSite.pos
+      console.log("test " + constructionSite)
+      potentialCreep.memory.target = constructionSite
       console.log(potentialCreep.memory.target)
 
       break;
@@ -223,9 +224,12 @@ Room.prototype.needHarvester = function() {
 
 
 Room.prototype.needLorry = function() {
-  let lorrys = this.memory.totalRoles.lorry;
-  let miners = this.memory.totalRoles.miner;
-  if (lorrys <= 1 && miners >= 1 ) {
+  let lorrys = _(Game.creeps).filter({
+    memory: {
+      role: 'lorry'
+    }
+  }).size()
+  if (lorrys <= config.maxLorrys[this.level()]) {
     return true
   }
 }
@@ -269,7 +273,7 @@ Room.prototype.needContainerMiner = function() {
 
     if (this.memory.sourceNodes[i].miners == 1) {
       return false
-    } else if (this.memory.sourceNodes[i].miners == 0 && this.memory.structures.containerIds.length >= 1) {
+    } else if (this.memory.sourceNodes[i].miners == 0) {
       return true
     }
   }
