@@ -2,6 +2,8 @@
 require('prototype.spawn')
 require('prototype.room')
 require('prototype.creep')
+require('prototype.flags')
+require('prototype.outpost')
 // Turn off any of the below features by passing false.
 require('screeps-perf')({
   speedUpArrayFunctions: true,
@@ -18,6 +20,11 @@ module.exports.loop = function() {
     if (Game.creeps[name] == undefined) {
       delete Memory.creeps[name];
     }
+  }
+  for(var i in Game.flags) {
+    var currentFlag = Game.flags[i];
+    currentFlag.tick();
+
   }
 
   //Loop through all rooms your creeps/structures are in

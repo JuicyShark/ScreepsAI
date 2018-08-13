@@ -1,16 +1,24 @@
-module.exportrs.flagSelector(flagName) {
 
-    function determineFlagBuilding(flagName) {
 
-      if (flagName.pos.roomName.find(FIND_MY_CONSTRUCTION_SITES).length >= 100 {
+Flag.prototype.tick = function() {
+  //this.flagSelector()
+}
+
+
+Flag.prototype.flagSelector = function() {
+
+    determineFlagBuilding = function () {
+
+      if (this.room.find(FIND_MY_CONSTRUCTION_SITES).length >= 100) {
           return;
           //this is here to try to exit this if building que is full or reached its limit. I think..
         }
+        let flagName = this.name;
 
         if (flagName == "Road") {
           return;
         } else if (flagName == "Container") {
-          let buildContainer = flagName.pos.roomName.createConstructionSite(flagName.pos, STRUCTURE_CONTAINER);
+          let buildContainer = this.room.createConstructionSite(this.pos, STRUCTURE_CONTAINER);
           if (buildContainer == 0) {
             return true;
           } else if (buildContainer != 0) {
@@ -19,7 +27,7 @@ module.exportrs.flagSelector(flagName) {
           }
           //above ready for debug
         } else if (flagName == "Extension") {
-          let buildExtension = flagName.pos.roomName.createConstructionSite(flagName.pos, STRUCTURE_EXTENSION);
+          let buildExtension = this.room.createConstructionSite(this.pos, STRUCTURE_EXTENSION);
           if (buildExtension == 0) {
             return true;
           } else if (buildExtension != 0) {
@@ -33,10 +41,10 @@ module.exportrs.flagSelector(flagName) {
 
       } // end of function call
 
-      if (determineFlagBuilding(flagName)) {
+      if (determineFlagBuilding()) {
         return;
       } else {
         console.log("did not return True?! Maybe this isnt needed...")
       }
 
-    };
+    }
