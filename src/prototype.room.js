@@ -5,20 +5,30 @@ Room.prototype.tick = function() {
   if (this.isMine()) {
     if (!this.memory.timer || this.memory.timer % 60 === 0) {
       this.memory.timer = -1;
-
+    this.memoryInit()
       this.memory.timer = 60;
       console.log(this.name + " Timer has been reset")
     }
+    // load things needed each tick without if statement
+    this.loadSource()
+
     if (this.memory.timer % 15 == 0) {
       this.createNeeds();
     }
-    if (this.memory.timer % 60 === 0) {
-      this.memoryInit()
-    }
+
     -- this.memory.timer;
-  } else {
+  }
+
+  else {
     this.processAsGuest();
   }
+}
+
+
+Room.prototype.memoryInit = function() {
+    //this.initSource();
+    this.initTotalRoles();
+  //  this.initStructures();
 }
 
 Room.prototype.level = function() {
@@ -38,7 +48,7 @@ Room.prototype.processAsGuest = function() {
   console.log("Im just a Guest here! " + this.name)
 }
 
-Room.prototype.memoryInit = function() {
+Room.prototype.initTotalRoles = function(){
   if (!this.memory.totalRoles) {
     this.memory.totalRoles = {};
   }
@@ -46,14 +56,6 @@ Room.prototype.memoryInit = function() {
   for (var i in config.roleList) {
     this.memory.totalRoles[i] = _.sum(Game.creeps, (c) => c.memory.role == i);
   }
-  if (!this.memory.structures) {
-    this.initStructures()
-  }
-  if (!this.memory.sourceNodes) {
-    this.memory.sourceNodes = {};
-  }
-  this.findSource()
-
 }
 
 Room.prototype.alertLevel = function() {
@@ -70,43 +72,56 @@ Room.prototype.alertLevel = function() {
   }
 }
 
-Room.prototype.findSource = function() {
-  let sources = [];
-  var sourceNode = this.find(FIND_SOURCES);
-  for (var i in sourceNode) {
-    var miners = 0
-    var source = sourceNode[i];
-
-    for (var i in Game.creeps) {
-      if (source.id == Game.creeps[i].memory.sourceId) {
-        miners++
-      }
+Room.prototype.initSource = function() {
+  if(!this.memory.sourceNodes) {
+    this.memory.sourceNodes = {}
+}
+  for (let source of this.find(FIND_SOURCES)) {
+    if(!this.memory.sourceNodes[source.id]){
+      this.memory.sourceNodes[source.id] = {id: source.id}
+      this.memory.hostileSpawns = this.find(STRUCTURE_KEEPER_LAIR);
     }
-    source.miners = miners;
-    sources.push(source)
+    let miners = this.find(FIND_MY_CREEPS, {filter: {memory: {sourceId: source.id}}});
+    this.memory.sourceNodes[source.id].miners = miners.length
   }
-  this.memory.sourceNodes = sources;
 }
 
+Room.prototype.loadSource = function() {
+  this.sourceNodes = {};
+  for(let id in this.memory.sourceNodes){
+    this.sourceNodes[id] = Game.getObjectById(id)
+
+  }
+
+  this.hostileSpawns = [];
+  for(let i in this.memory.hostileSpawns){
+    this.hostileSpawns[i] = Game.getObjectById(i.id)
+  }
+}
 
 Room.prototype.initStructures = function() {
-  this.memory.structures = {}
-  this.initContainers()
+  if(!this.memory.structures){
+    this.memory.structures = {}
+  }else{
+  this.initContainers();
+}
 }
 
 Room.prototype.initContainers = function() {
-  this.memory.structures.containerIds = [];
-  var containers = this.find(FIND_STRUCTURES, {
+  if(!this.memory.structures.containerIds){
+    this.memory.structures.containerIds = [];
+  }
+  this.containers = this.find(FIND_STRUCTURES, {
     filter: {
       structureType: STRUCTURE_CONTAINER
     }
   });
-  for (let i in containers) {
-    if (containers[i] instanceof StructureContainer) {
-      this.memory.structures.containerIds[i] = containers[i].id
+  for (let i in this.containers) {
+    if (this.containers[i] instanceof StructureContainer) {
+      this.memory.structures.containerIds[i] = this.containers[i].id
     } else {
       console.log('Container is not instanceof SturctureContainer')
-      containers.splice(i);
+      this.containers.splice(i);
     }
   }
 }
