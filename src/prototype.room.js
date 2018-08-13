@@ -18,7 +18,8 @@ Room.prototype.tick = function() {
       this.createNeeds();
       if(this.constructionSites.length != 0){
         console.log("looking for builder")
-        this.findBuilder(this.memory.constructionSites);
+        this.findBuilder(this.constructionSites[0]);
+
       }
     }
     -- this.memory.timer;
@@ -142,10 +143,8 @@ Room.prototype.initConstructionSites = function(){
   this.memory.constructionSites = [];
   this.constructionSites = this.find(FIND_CONSTRUCTION_SITES)
   for(let i in this.constructionSites){
-    var potentialDuplicate = this.find(FIND_MY_CREEPS, {filter: {memory: {target: i.id}}})
-    if(!potentialDuplicate){
     this.memory.constructionSites[i] = this.constructionSites[i].id
-  }}
+  }
 };
 
 Room.prototype.loadConstructionSites = function(){
@@ -161,10 +160,10 @@ Room.prototype.findBuilder = function(constructionSite){
    var potentialCreep = this.creepsAllRound[i]
    console.log(potentialCreep)
     if(!potentialCreep.memory.target){
-      var target = constructionSite.shift()
-      console.log("test " + target)
-      potentialCreep.memory.target = target
 
+      console.log("test " + constructionSite.id)
+      potentialCreep.memory.target = constructionSite.id
+      console.log(potentialCreep.memory.target)
 
       break;
     }
