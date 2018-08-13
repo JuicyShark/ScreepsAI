@@ -16,7 +16,7 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceI
       memory: {
         role: role,
         working: "false",
-        home: home,
+        home: home.name,
         sourceId: sourceId
 
       }

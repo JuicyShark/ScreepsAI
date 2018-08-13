@@ -10,11 +10,13 @@ Room.prototype.tick = function() {
       console.log(this.name + " Timer has been reset")
     }
     // load things needed each tick without if statement
+
     this.loadSource()
 
     if (this.memory.timer % 15 == 0) {
       this.createNeeds();
     }
+
 
     -- this.memory.timer;
   }
@@ -89,7 +91,7 @@ Room.prototype.initSource = function() {
 Room.prototype.loadSource = function() {
   this.sourceNodes = {};
   for(let id in this.memory.sourceNodes){
-    console.log( this.sourceNodes + " " + id)
+
     this.sourceNodes[id] = Game.getObjectById(id)
   }
 
@@ -111,17 +113,17 @@ Room.prototype.initContainers = function() {
   if(!this.memory.structures.containerIds){
     this.memory.structures.containerIds = [];
   }
-  this.containers = this.find(FIND_STRUCTURES, {
+  var containers = this.find(FIND_STRUCTURES, {
     filter: {
       structureType: STRUCTURE_CONTAINER
     }
   });
   for (let i in this.containers) {
-    if (this.containers[i] instanceof StructureContainer) {
-      this.memory.structures.containerIds[i] = this.containers[i].id
+    if (containers[i] instanceof StructureContainer) {
+      this.memory.structures.containerIds[i] = containers[i].id
     } else {
       console.log('Container is not instanceof SturctureContainer')
-      this.containers.splice(i);
+      containers.splice(i);
     }
   }
 }
