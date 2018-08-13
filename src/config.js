@@ -2,6 +2,12 @@ module.exports = {
   allies: {
     username: "Juicy-shark"
   },
+  buildingLevels: {
+    sources: {
+      Road: true,
+      Container: true
+    }
+  },
   wallHitpoints: {
     1: 1,
     2: 10,
@@ -32,12 +38,12 @@ module.exports = {
     3: 3
   },
   maxBuilders: {
-    1: 0,
+    1: 1,
     2: 1,
     3: 2
   },
   maxRepairers: {
-    1: 0,
+    1: 1,
     2: 1,
     3: 2,
     4: 3

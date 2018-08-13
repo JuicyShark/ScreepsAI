@@ -4,6 +4,8 @@ require('prototype.room')
 require('prototype.creep')
 require('prototype.flags')
 require('prototype.outpost')
+require('prototype.SorterMan')
+
 // Turn off any of the below features by passing false.
 require('screeps-perf')({
   speedUpArrayFunctions: true,
@@ -30,7 +32,7 @@ module.exports.loop = function() {
   //Loop through all rooms your creeps/structures are in
   for (let roomName in Game.rooms) {
     var currentRoom = Game.rooms[roomName];
-    currentRoom.tick();
+    currentRoom.runLogic()
   }
 
 

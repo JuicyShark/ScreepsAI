@@ -17,7 +17,6 @@ Room.prototype.tick = function() {
     if (this.memory.timer % 15 == 0) {
       this.createNeeds();
       if(this.constructionSites.length != 0){
-        console.log("looking for builder")
         this.findBuilder(this.constructionSites[0]);
 
       }
@@ -95,6 +94,12 @@ Room.prototype.initSource = function() {
     this.memory.hostileSpawns = this.find(STRUCTURE_KEEPER_LAIR);
     let miners = this.find(FIND_MY_CREEPS, {filter: {memory: {sourceId: source.id}}});
     this.memory.sourceNodes[source.id].miners = miners.length
+    if(!this.memory.sourceNodes[source.id].toBuild) {
+      this.memory.sourceNodes[source.id].toBuild = config.buildingLevels.sources;
+    }
+    if(!this.memory.sourceNodes[source.id].container) {
+      this.memory.sourceNodes[source.id].container = "";
+    }
   }
 }
 
@@ -114,23 +119,25 @@ Room.prototype.loadSource = function() {
 Room.prototype.initStructures = function() {
   if(!this.memory.structures){
     this.memory.structures = {}
-  }else{
+  }
+
   this.initContainers();
-}
+
 }
 
 Room.prototype.initContainers = function() {
-  if(!this.memory.structures.containerIds){
-    this.memory.structures.containerIds = [];
-  }
+
   var containers = this.find(FIND_STRUCTURES, {
     filter: {
       structureType: STRUCTURE_CONTAINER
     }
   });
-  for (let i in this.containers) {
+  for (let i in containers) {
+
     if (containers[i] instanceof StructureContainer) {
-      this.memory.structures.containerIds[i] = containers[i].id
+      let source = containers[i].pos.findInRange(FIND_SOURCES, 1)
+      this.memory.sourceNodes[source[0].id].container = containers[i].id
+      this.memory.sourceNodes[source[0].id].toBuild.Container = false;
     } else {
       console.log('Container is not instanceof SturctureContainer')
       containers.splice(i);
@@ -158,13 +165,9 @@ Room.prototype.loadConstructionSites = function(){
 Room.prototype.findBuilder = function(constructionSite){
   for(let i in this.creepsAllRound){
    var potentialCreep = this.creepsAllRound[i]
-   console.log(potentialCreep)
+
     if(!potentialCreep.memory.target){
-
-      console.log("test " + constructionSite.id)
       potentialCreep.memory.target = constructionSite.id
-      console.log(potentialCreep.memory.target)
-
       break;
     }
   }
@@ -265,14 +268,13 @@ Room.prototype.needBuilder = function() {
 }
 
 Room.prototype.needContainerMiner = function() {
-  for (var i in this.memory.sourceNodes) {
-
-    if (this.memory.sourceNodes[i].miners == 1) {
-      return false
-    } else if (this.memory.sourceNodes[i].miners == 0 && this.memory.structures.containerIds.length >= 1) {
-      return true
+    for (var i in this.memory.sourceNodes) {
+      if (this.memory.sourceNodes[i].miners == 1) {
+        return false
+      } else if (this.memory.sourceNodes[i].miners == 0 && this.memory.sourceNodes[i].container != "") {
+        return true
+      }
     }
-  }
 }
 
 Room.prototype.needDefender = function() {
