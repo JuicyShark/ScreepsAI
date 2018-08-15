@@ -65,10 +65,6 @@ Room.prototype.alertLevel = function() {
   });
 
   if (hostiles.size() >= 1) {
-<<<<<<< HEAD
-    return 2;
-  }
-=======
     this.safeGuardUp()
     return 2;
   }
@@ -79,7 +75,7 @@ Room.prototype.safeGuardUp = function() {
     this.saveLog(EnemySafeMode)
     this.controller.activateSafeMode()
 
->>>>>>> updateTime
+
 }
 
 Room.prototype.saveLog = function(type) {
@@ -90,9 +86,6 @@ Room.prototype.saveLog = function(type) {
     this.memory.log.gameTime = Config.defaultLogs.EnemyInRoom + Config.defaultLogs.SafeModeActivate;
   }
 }
-
-<<<<<<< HEAD
-=======
 }
 
 Room.prototype.processAsGuest = function() {
@@ -106,7 +99,6 @@ Room.prototype.processAsGuest = function() {
   }
 }
 
->>>>>>> updateTime
 Room.prototype.initTotalRoles = function(){
   if (!this.memory.totalRoles) {
     this.memory.totalRoles = {};
@@ -136,10 +128,8 @@ Room.prototype.initSource = function() {
       this.memory.sourceNodes[source.id].container = "";
     }
   }
-<<<<<<< HEAD
-=======
+
   this.initContainers();
->>>>>>> updateTime
 }
 
 Room.prototype.loadSource = function() {
@@ -158,11 +148,6 @@ Room.prototype.loadSource = function() {
 Room.prototype.initStructures = function() {
   if(!this.memory.structures){
     this.memory.structures = {}
-<<<<<<< HEAD
-  }
-
-  this.initContainers();
-=======
     this.memory.structures.controller = {};
     this.memory.structures.controller.toBuild = {}
     this.memory.structures.controller.toBuild.Road = true;
@@ -170,7 +155,7 @@ Room.prototype.initStructures = function() {
 
 
 
->>>>>>> updateTime
+
 
 }
 
