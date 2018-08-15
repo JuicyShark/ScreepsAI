@@ -46,6 +46,7 @@ SorterMan.prototype.runLogic = function() {
   else {
     this.tick();
     this.level3Things()
+    //this.createRoadToController()
   }
 }
 SorterMan.prototype.checkRoadToSource = function(){
@@ -58,10 +59,16 @@ SorterMan.prototype.checkRoadToSource = function(){
       let posA = spawn[0].pos;
       let source = Game.getObjectById(this.memory.sourceNodes[i].id)
       this.createRoadway(posA, source)
+    }
+    else {
+    console.log("Hit else in SorterMan checkRoadToSource")
+    }
   }
-  else {
-  console.log("Hit else in SorterMan checkRoadToSource")
 }
-  }
 
+SorterMan.prototype.createRoadToController = function() {
+  let spawn = this.find(FIND_MY_SPAWNS);
+  let posA = spawn[0].pos;
+  let posB = this.controller
+  this.createRoadway(posA, posB)
 }

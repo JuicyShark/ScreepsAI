@@ -36,10 +36,10 @@ Outpost.prototype.createRoadway = function(posA, source) {
             console.log("Construction que too large.. The numSitesLeft should solve this... needs fixing +!+!+!+!+")
           }
           else if (constructGo == -7 || constructGo == -10) {
-            break;
+            //console.log("Nope")
           }
           if (path[i] === path[path.length]) {
-            this.memory.source.toBuild.Road = false;
+            return true;
           }
         }
       }
