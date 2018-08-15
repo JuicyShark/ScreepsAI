@@ -1,11 +1,6 @@
 
 
 Flag.prototype.tick = function() {
-<<<<<<< HEAD
-  //this.flagSelector()
-}
-
-=======
   this.initFlagMem()
   this.longDistanceMining()
 }
@@ -46,7 +41,7 @@ Flag.prototype.attackLogic = function() {
 
 
 }
->>>>>>> updateTime
+
 
 Flag.prototype.flagSelector = function() {
 
