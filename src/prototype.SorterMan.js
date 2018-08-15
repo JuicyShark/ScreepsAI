@@ -46,7 +46,7 @@ SorterMan.prototype.runLogic = function() {
   else {
     this.tick();
     this.level3Things()
-    //this.createRoadToController()
+
   }
 }
 SorterMan.prototype.checkRoadToSource = function(){
@@ -56,9 +56,9 @@ SorterMan.prototype.checkRoadToSource = function(){
     }
     else if (this.memory.sourceNodes[i].toBuild.Road) {
       let spawn = this.find(FIND_MY_SPAWNS);
-      let posA = spawn[0].pos;
-      let source = Game.getObjectById(this.memory.sourceNodes[i].id)
-      this.createRoadway(posA, source)
+      let ObjectIDA = spawn[0].id;
+      let ObjectIDB = this.memory.sourceNodes[i].id
+      this.createRoadway(ObjectIDA, ObjectIDB)
     }
     else {
     console.log("Hit else in SorterMan checkRoadToSource")
@@ -68,7 +68,9 @@ SorterMan.prototype.checkRoadToSource = function(){
 
 SorterMan.prototype.createRoadToController = function() {
   let spawn = this.find(FIND_MY_SPAWNS);
-  let posA = spawn[0].pos;
-  let posB = this.controller
-  this.createRoadway(posA, posB)
+  let ObjectIDA = spawn[0].id;
+  let ObjectIDB = this.controller.id
+  if (this.memory.structures.controller.toBuild.Road == true) {
+  this.createRoadway(ObjectIDA, ObjectIDB)
+  }
 }

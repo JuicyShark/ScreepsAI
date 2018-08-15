@@ -9,6 +9,7 @@ Outpost.prototype.level3Things = function () {
   //called in line 48 of SorterMan
   if (this.level() >= 3) {
     this.checkRoadToSource();
+    this.createRoadToController()
   }
 }
 
@@ -19,10 +20,10 @@ Outpost.prototype.level3Things = function () {
     @param {pos object} ObjectIDB
  */
 Outpost.prototype.createRoadway = function(ObjectIDA, ObjectIDB) {
-  let tempa = Game.getObjectById(ObjectIDA);
-  let tempb = Game.getObjectById(ObjectIDB)
-  var posA = tempa.pos;
-  var posB = tempb.pos;
+  let tempA = Game.getObjectById(ObjectIDA);
+  let tempB = Game.getObjectById(ObjectIDB);
+  var posA = tempA.pos;
+  var posB = tempB.pos;
     var path = this.findPath(posA, posB, {
       ignoreCreeps: true,
       ignoreRoads: true,
@@ -64,6 +65,9 @@ Outpost.prototype.createRoadway = function(ObjectIDA, ObjectIDB) {
         }
       else if (path.length <= 99 && path.length >= numSitesLeft) {
         console.log("A Path is too long for your build list D:")
+      }
+      else {
+        console.log("Other error for pathbuilding!")
       }
 
 }
