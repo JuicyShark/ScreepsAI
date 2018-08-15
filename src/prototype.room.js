@@ -3,11 +3,44 @@ var config = require("config")
 
 Room.prototype.tick = function() {
   if (this.isMine()) {
-    this.processAsMine();
-  } else {
+    this.initCreeps();
+    if (!this.memory.timer || this.memory.timer % 60 === 0) {
+      this.memory.timer = -1;
+    this.memoryInit()
+      this.memory.timer = 60;
+      console.log(this.name + " Timer has been reset")
+    }
+    // load things needed each tick without if statement
+    this.loadSource();
+    this.loadConstructionSites();
+
+    if (this.memory.timer % 15 == 0) {
+      this.createNeeds();
+      if(this.constructionSites.length != 0){
+        this.findBuilder(this.constructionSites[0]);
+
+      }
+    }
+    -- this.memory.timer;
+  }
+
+  else {
     this.processAsGuest();
   }
 }
+
+Room.prototype.initCreeps = function(){
+  this.creepsAllRound = this.find(FIND_MY_CREEPS, {filter: {memory: {type: "ALL_ROUND"}}});
+}
+
+Room.prototype.memoryInit = function() {
+    this.initSource();
+    this.initTotalRoles();
+    this.initStructures();
+    this.initConstructionSites();
+
+}
+
 Room.prototype.level = function() {
   if (this.isMine()) {
     return this.controller.level
@@ -15,39 +48,11 @@ Room.prototype.level = function() {
     return 0
   }
 }
+
 Room.prototype.isMine = function() {
   return this.controller && this.controller.my;
 }
 
-Room.prototype.processAsMine = function() {
-  //This is where I am going to call things from! :D
-
-  this.memoryInit()
-  this.createNeeds();
-}
-
-Room.prototype.processAsGuest = function() {
-  console.log("Im just a Guest here! " + this.name)
-}
-
-
-
-Room.prototype.memoryInit = function() {
-  if (!this.memory.totalRoles) {
-    this.memory.totalRoles = {};
-  }
-  // Find amount of different roles alive currently
-  for (var i in config.roleList) {
-    this.memory.totalRoles[i] = _.sum(Game.creeps, (c) => c.memory.role == i);
-  }
-
-  if (!this.memory.sourceNodes) {
-    //console.log("THEFUCK")
-    this.memory.sourceNodes = {};
-  }
-  this.findSource()
-
-}
 
 Room.prototype.alertLevel = function() {
   let hostiles = this.find(FIND_HOSTILE_CREEPS, {
@@ -61,29 +66,112 @@ Room.prototype.alertLevel = function() {
   if (hostiles.size() >= 1) {
     return 2;
   }
-
 }
 
-Room.prototype.findSource = function() {
-  let sources = [];
-  var sourceNode = this.find(FIND_SOURCES);
-  for (var i in sourceNode) {
-    var miners = 0
-    var source = sourceNode[i];
+Room.prototype.processAsGuest = function() {
+  console.log("Im just a Guest here! " + this.name)
+}
 
-    for (var i in Game.creeps) {
-      if (source.id == Game.creeps[i].memory.sourceId) {
-        miners++
-      //  console.log(Game.creeps[i].name + " Is Working At " + source);
-      }
-    }
-    source.miners = miners;
-    sources.push(source)
+Room.prototype.initTotalRoles = function(){
+  if (!this.memory.totalRoles) {
+    this.memory.totalRoles = {};
   }
-  this.memory.sourceNodes = sources;
+  // Find amount of different roles alive currently
+  for (var i in config.roleList) {
+    this.memory.totalRoles[i] = _.sum(Game.creeps, (c) => c.memory.role == i);
+  }
 }
 
 
+Room.prototype.initSource = function() {
+  if(!this.memory.sourceNodes) {
+    this.memory.sourceNodes = {}
+}
+  for (let source of this.find(FIND_SOURCES)) {
+    if(!this.memory.sourceNodes[source.id]){
+      this.memory.sourceNodes[source.id] = {id: source.id}
+    }
+    this.memory.hostileSpawns = this.find(STRUCTURE_KEEPER_LAIR);
+    let miners = this.find(FIND_MY_CREEPS, {filter: {memory: {sourceId: source.id}}});
+    this.memory.sourceNodes[source.id].miners = miners.length
+    if(!this.memory.sourceNodes[source.id].toBuild) {
+      this.memory.sourceNodes[source.id].toBuild = config.buildingLevels.sources;
+    }
+    if(!this.memory.sourceNodes[source.id].container) {
+      this.memory.sourceNodes[source.id].container = "";
+    }
+  }
+}
+
+Room.prototype.loadSource = function() {
+  this.sourceNodes = {};
+  for(let id in this.memory.sourceNodes){
+
+    this.sourceNodes[id] = Game.getObjectById(id)
+  }
+
+  this.hostileSpawns = [];
+  for(let i in this.memory.hostileSpawns){
+    this.hostileSpawns[i] = Game.getObjectById(i.id)
+  }
+}
+
+Room.prototype.initStructures = function() {
+  if(!this.memory.structures){
+    this.memory.structures = {}
+  }
+
+  this.initContainers();
+
+}
+
+Room.prototype.initContainers = function() {
+
+  var containers = this.find(FIND_STRUCTURES, {
+    filter: {
+      structureType: STRUCTURE_CONTAINER
+    }
+  });
+  for (let i in containers) {
+
+    if (containers[i] instanceof StructureContainer) {
+      let source = containers[i].pos.findInRange(FIND_SOURCES, 1)
+      this.memory.sourceNodes[source[0].id].container = containers[i].id
+      this.memory.sourceNodes[source[0].id].toBuild.Container = false;
+    } else {
+      console.log('Container is not instanceof SturctureContainer')
+      containers.splice(i);
+    }
+  }
+}
+
+
+Room.prototype.initConstructionSites = function(){
+  this.memory.constructionSites = [];
+  this.constructionSites = this.find(FIND_CONSTRUCTION_SITES)
+  for(let i in this.constructionSites){
+    this.memory.constructionSites[i] = this.constructionSites[i].id
+  }
+};
+
+Room.prototype.loadConstructionSites = function(){
+  this.constructionSites = [];
+  for(let i in this.memory.constructionSites){
+    this.constructionSites[i] = (Game.getObjectById(this.memory.constructionSites[i]));
+  }
+};
+
+
+Room.prototype.findBuilder = function(constructionSite){
+  for(let i in this.creepsAllRound){
+   var potentialCreep = this.creepsAllRound[i]
+
+    if(!potentialCreep.memory.target){
+      potentialCreep.memory.target = constructionSite.id
+      break;
+    }
+  }
+}
 
 Room.prototype.createNeeds = function() {
 
@@ -138,12 +226,9 @@ Room.prototype.needHarvester = function() {
 
 
 Room.prototype.needLorry = function() {
-  let lorrys = _(Game.creeps).filter({
-    memory: {
-      role: 'lorry'
-    }
-  }).size()
-  if (lorrys <= config.maxLorrys[this.level()]) {
+  let lorrys = this.memory.totalRoles.lorry;
+  let miners = this.memory.totalRoles.miner;
+  if (lorrys <= 1 && miners >= 1 ) {
     return true
   }
 }
@@ -183,14 +268,13 @@ Room.prototype.needBuilder = function() {
 }
 
 Room.prototype.needContainerMiner = function() {
-  for (var i in this.memory.sourceNodes) {
-
-    if (this.memory.sourceNodes[i].miners == 1) {
-      return false
-    } else if (this.memory.sourceNodes[i].miners == 0) {
-      return true
+    for (var i in this.memory.sourceNodes) {
+      if (this.memory.sourceNodes[i].miners == 1) {
+        return false
+      } else if (this.memory.sourceNodes[i].miners == 0 && this.memory.sourceNodes[i].container != "") {
+        return true
+      }
     }
-  }
 }
 
 Room.prototype.needDefender = function() {
@@ -252,7 +336,8 @@ Room.prototype.spawnBuilder = function() {
   if (this.canSpawn() != false) {
     spawn = this.canSpawn();
     var bodyParts = config.bodies.builder[spawn.energyCapacity]
-    spawn.spawnNewCreep(bodyParts, "builder", spawn.room)
+    var type = "ALL_ROUND"
+    spawn.spawnNewCreep(bodyParts, "builder", spawn.room, "" ,type )
   }
 }
 Room.prototype.spawnUpgrader = function() {
