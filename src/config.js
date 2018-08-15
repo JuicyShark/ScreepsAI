@@ -27,34 +27,48 @@ module.exports = {
     repairer: '',
     roomPopulation: ''
   },
-  maxMiners: {
-    1: 0,
-    2: 0,
-    3: 0
-  },
   maxUpgraders: {
     1: 1,
-    2: 3,
-    3: 3
+    2: 2,
+    3: 2,
+    4: 2,
+    5: 2,
+    6: 2,
+    7: 2,
+    8: 2
   },
   maxBuilders: {
     1: 1,
     2: 1,
-    3: 2
+    3: 2,
+    4: 2,
+    5: 2,
+    6: 2,
+    7: 2,
+    8: 2
   },
   maxRepairers: {
     1: 1,
     2: 1,
     3: 2,
-    4: 3
+    4: 2,
+    5: 2,
+    6: 2,
+    7: 2,
+    8: 2
   },
   maxLorrys: {
     1: 0,
     2: 0,
-    3: 1
+    3: 1,
+    4: 2,
+    5: 2,
+    6: 2,
+    7: 2,
+    8: 2
   },
   bodies: {
-    claimer: [CLAIM, CLAIM, MOVE, MOVE],
+    claimer: [CLAIM, MOVE, MOVE],
     default: [WORK, CARRY, MOVE],
     harvester : {
       300: [WORK, WORK, CARRY, MOVE],
@@ -172,6 +186,26 @@ module.exports = {
        }
        return outputArray
      }
+  },
+  defaultLogs: {
+    EnemyInRoom: "There was an Enemy in the room! ",
+    SafeModeActivate: "SafeMode Activated"
+  },
+  attackFlagMemory: {
+    name: "",
+    room: "",
+    attackOrders: {
+      targetRoom: "",
+      idleFlagID: "",
+      creeps: []
+    },
+  idleFlagMemory: {
+    name: "",
+    room: "",
+    attackFlagID: "",
+    creeps: []
+  }
+
   }
 
 }

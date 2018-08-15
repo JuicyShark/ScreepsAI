@@ -2,6 +2,7 @@ require("prototype.spawn")
 var config = require("config")
 
 Room.prototype.tick = function() {
+
   if (this.isMine()) {
     this.initCreeps();
     if (!this.memory.timer || this.memory.timer % 60 === 0) {
@@ -64,14 +65,48 @@ Room.prototype.alertLevel = function() {
   });
 
   if (hostiles.size() >= 1) {
+<<<<<<< HEAD
+    return 2;
+  }
+=======
+    this.safeGuardUp()
     return 2;
   }
 }
 
-Room.prototype.processAsGuest = function() {
-  console.log("Im just a Guest here! " + this.name)
+Room.prototype.safeGuardUp = function() {
+    console.log("ENEMYSPOTTED!")
+    this.saveLog(EnemySafeMode)
+    this.controller.activateSafeMode()
+
+>>>>>>> updateTime
 }
 
+Room.prototype.saveLog = function(type) {
+  if (!this.memory.log) {
+    this.memory.log = {}
+  if(type == "EnemySafeMode") {
+    let gameTime = Game.time
+    this.memory.log.gameTime = Config.defaultLogs.EnemyInRoom + Config.defaultLogs.SafeModeActivate;
+  }
+}
+
+<<<<<<< HEAD
+=======
+}
+
+Room.prototype.processAsGuest = function() {
+  console.log("Im just a Guest here! " + this.name)
+  let roomFlags = this.find(FIND_FLAGS, {
+    filter: { name: "mineRoom"}
+  });
+  if(roomFlags != undefined) {
+    console.log("FLAG!")
+    this.initSource();
+  }
+}
+
+>>>>>>> updateTime
 Room.prototype.initTotalRoles = function(){
   if (!this.memory.totalRoles) {
     this.memory.totalRoles = {};
@@ -101,6 +136,10 @@ Room.prototype.initSource = function() {
       this.memory.sourceNodes[source.id].container = "";
     }
   }
+<<<<<<< HEAD
+=======
+  this.initContainers();
+>>>>>>> updateTime
 }
 
 Room.prototype.loadSource = function() {
@@ -119,9 +158,19 @@ Room.prototype.loadSource = function() {
 Room.prototype.initStructures = function() {
   if(!this.memory.structures){
     this.memory.structures = {}
+<<<<<<< HEAD
   }
 
   this.initContainers();
+=======
+    this.memory.structures.controller = {};
+    this.memory.structures.controller.toBuild = {}
+    this.memory.structures.controller.toBuild.Road = true;
+  }
+
+
+
+>>>>>>> updateTime
 
 }
 
@@ -196,6 +245,8 @@ Room.prototype.createNeeds = function() {
   } else if (this.needDefender()) {
     this.spawnDefender()
   }
+  /*else if (this.needClaimer()){
+  }*/
   /*  else if (this.needA) {
 
     }*/
@@ -292,6 +343,7 @@ Room.prototype.needRangedAttacker = function() {
 }
 
 Room.prototype.needBrawler = function() {
+
   return false
   //attacking logic
 }
@@ -299,6 +351,31 @@ Room.prototype.needBrawler = function() {
 Room.prototype.needMedic = function() {
   return false
   //attacking logic
+}
+
+Room.prototype.needClaimer = function() {
+  if(this.energyCapacityAvailable >= 700) {
+    for(let i in Memory.flags) {
+      let = thisFlag = Memory.flags[i]
+      if(thisFlag.name == "ClaimRoom" && thisFlag.hasClaimer == false) {
+      this.spawnClaimer(roomName, thisFlag)
+      }
+    }
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+Room.prototype.spawnClaimer = function(roomName, thisFlag) {
+  if (this.canSpawn() != false) {
+    spawn = this.canSpawn();
+    var bodyParts = config.bodies.claimer
+    spawn.spawnNewCreep(bodyParts, "claimer", spawn.room, "", roomName)
+    thisFlag.hasClaimer = true;
+  }
+
 }
 
 Room.prototype.spawnHarvester = function() {

@@ -1,9 +1,52 @@
 
 
 Flag.prototype.tick = function() {
+<<<<<<< HEAD
   //this.flagSelector()
 }
 
+=======
+  this.initFlagMem()
+  this.longDistanceMining()
+}
+
+Flag.prototype.initFlagMem = function() {
+  if (!this.memory.colours) {
+    this.memory.name = this.name;
+    this.memory.room = this.pos.roomName;
+    let flagColours = []
+    flagColours.push(this.color)
+    flagColours.push(this.secondaryColor)
+    this.memory.colours = flagColours;
+    if (this.name == "ClaimRoom") {
+      this.memory.hasClaimer = false;
+    }
+  }
+
+
+}
+
+Flag.prototype.longDistanceMining = function() {
+  if(this.name != "HarvestSources") {
+    return false
+  }
+  else {
+    this.memory.reserving = false;
+    return true;
+  }
+}
+
+Flag.prototype.initAttackFlag = function() {
+  let atkflg = Config.attackFlagMemory
+  Memory.flags[this] = atkflg;
+}
+
+Flag.prototype.attackLogic = function() {
+
+
+
+}
+>>>>>>> updateTime
 
 Flag.prototype.flagSelector = function() {
 
@@ -16,10 +59,12 @@ Flag.prototype.flagSelector = function() {
         let flagName = this.name;
 
         if (flagName == "Road") {
+          //have a function for this...
           return;
         } else if (flagName == "Container") {
           let buildContainer = this.room.createConstructionSite(this.pos, STRUCTURE_CONTAINER);
           if (buildContainer == 0) {
+
             return true;
           } else if (buildContainer != 0) {
             console.log(buildContiner)

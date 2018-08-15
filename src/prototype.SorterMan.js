@@ -45,6 +45,7 @@ SorterMan.prototype.runLogic = function() {
   }
   else {
     this.tick();
+<<<<<<< HEAD
   }
 }
 SorterMan.prototype.checkRoadToSource = function(){
@@ -54,4 +55,34 @@ SorterMan.prototype.checkRoadToSource = function(){
     }
   }
 */
+=======
+    this.level3Things()
+
+  }
+}
+SorterMan.prototype.checkRoadToSource = function(){
+  for(let i in this.memory.sourceNodes){
+    if(!this.memory.sourceNodes[i].toBuild.Road) {
+      return
+    }
+    else if (this.memory.sourceNodes[i].toBuild.Road) {
+      let spawn = this.find(FIND_MY_SPAWNS);
+      let ObjectIDA = spawn[0].id;
+      let ObjectIDB = this.memory.sourceNodes[i].id
+      this.createRoadway(ObjectIDA, ObjectIDB)
+    }
+    else {
+    console.log("Hit else in SorterMan checkRoadToSource")
+    }
+  }
+}
+
+SorterMan.prototype.createRoadToController = function() {
+  let spawn = this.find(FIND_MY_SPAWNS);
+  let ObjectIDA = spawn[0].id;
+  let ObjectIDB = this.controller.id
+  if (this.memory.structures.controller.toBuild.Road == true) {
+  this.createRoadway(ObjectIDA, ObjectIDB)
+  }
+>>>>>>> updateTime
 }
