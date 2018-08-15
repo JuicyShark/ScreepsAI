@@ -2,7 +2,7 @@ require("prototype.spawn")
 var config = require("config")
 
 Room.prototype.tick = function() {
-  
+
   if (this.isMine()) {
     this.initCreeps();
     if (!this.memory.timer || this.memory.timer % 60 === 0) {
@@ -228,8 +228,8 @@ Room.prototype.createNeeds = function() {
   } else if (this.needDefender()) {
     this.spawnDefender()
   }
-  else if (this.needClaimer()){
-  }
+  /*else if (this.needClaimer()){
+  }*/
   /*  else if (this.needA) {
 
     }*/
