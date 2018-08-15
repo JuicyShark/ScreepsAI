@@ -14,11 +14,16 @@ Outpost.prototype.level3Things = function () {
 
 
 /** @function RoomObj=this
-    @param {pos object} positionA
-    @param {pos object} positionB */
-Outpost.prototype.createRoadway = function(posA, source) {
 
-    var path = this.findPath(posA, source.pos, {
+    @param {pos object} ObjectIDA
+    @param {pos object} ObjectIDB
+ */
+Outpost.prototype.createRoadway = function(ObjectIDA, ObjectIDB) {
+  let tempa = Game.getObjectById(ObjectIDA);
+  let tempb = Game.getObjectById(ObjectIDB)
+  var posA = tempa.pos;
+  var posB = tempb.pos;
+    var path = this.findPath(posA, posB, {
       ignoreCreeps: true,
       ignoreRoads: true,
       swampCost: 1
@@ -38,12 +43,27 @@ Outpost.prototype.createRoadway = function(posA, source) {
           else if (constructGo == -7 || constructGo == -10) {
             //console.log("Nope")
           }
-          if (path[i] === path[path.length]) {
-            return true;
+          if (path[path.length] === constructionAdded.length) {
+            var spawns = this.find(FIND_MY_SPAWNS)
+            console.log("Path Done!")
+
+              if(ObjectIDA == spawns[0].id) {
+                this.memory.sourceNodes.ObjectIDA.toBuild.Road = false
+              }
+              else if (ObjectIDB == spawns[0].id) {
+                this.memory.sourceNodes.ObjectIDB.toBuild.Road = false
+              }
+              else if (ObjectIDA == this.controller.id) {
+                this.memory.sourceNodes.ObjectIDA.toBuild.Road = false
+              }
+              else if (ObjectIDB == this.controller.id) {
+                this.memory.sourceNodes.ObjectIDB.toBuild.Road = false
+              }
+            }
           }
         }
-      }
       else if (path.length <= 99 && path.length >= numSitesLeft) {
         console.log("A Path is too long for your build list D:")
       }
+
 }

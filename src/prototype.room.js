@@ -101,6 +101,7 @@ Room.prototype.initSource = function() {
       this.memory.sourceNodes[source.id].container = "";
     }
   }
+  this.initContainers();
 }
 
 Room.prototype.loadSource = function() {
@@ -119,9 +120,13 @@ Room.prototype.loadSource = function() {
 Room.prototype.initStructures = function() {
   if(!this.memory.structures){
     this.memory.structures = {}
+    this.memory.structures.controller = {};
+    this.memory.structures.controller.toBuild = {}
+    this.memory.structures.controller.toBuild.Road = true;
   }
 
-  this.initContainers();
+
+
 
 }
 

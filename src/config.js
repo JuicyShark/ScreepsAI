@@ -51,7 +51,7 @@ module.exports = {
   maxLorrys: {
     1: 0,
     2: 0,
-    3: 1
+    3: 3
   },
   bodies: {
     claimer: [CLAIM, CLAIM, MOVE, MOVE],
