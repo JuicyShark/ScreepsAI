@@ -210,7 +210,7 @@ Room.prototype.createNeeds = function() {
         this.spawnContainerMiner(this.memory.sourceNodes[i].id)
       }
     }
-  }else if (!this.needLorry()) {
+  }else if (this.needLorry()) {
   let longDistance = false
     this.spawnLorry(longDistance) // false meaning long distance or not
   } else if (this.needUpgrader()) {
