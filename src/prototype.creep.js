@@ -15,8 +15,8 @@ Creep.prototype.runRole = function() {
 Creep.prototype.ourPath = function(destination) {
 
 
-  if (Game.time % 60 === 0) {
-    console.log("RESET TIME ")
+  if (Game.time % 8 === 0) {
+    //console.log("RESET TIME")
     delete this.memory.paths
   }
   if (!this.memory.paths) {
