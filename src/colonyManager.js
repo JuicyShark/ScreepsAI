@@ -3,15 +3,17 @@ if (!(colonyManager)) {
 }
 
 colonyManager.prototype.runColony = function() {
+
   colonyMemInit();
   creepManager();
-  roomManager()
+  roomManager();
+  //flagManager();
 
 }
 colonyManager.prototype.flagManager = function() {
   for(var i in Game.flags) {
     var currentFlag = Game.flags[i];
-    currentFlag.tick();
+    currentFlag.flagTick();
 
   }
 }
@@ -24,10 +26,12 @@ colonyManager.prototype.creepManager = function() {
   }
 }
 colonyManager.prototype.roomManager = function() {
+
   //Loop through all rooms your creeps/structures are in
   for (let roomName in Game.rooms) {
     var currentRoom = Game.rooms[roomName];
-    currentRoom.runLogic()
+    currentRoom.runLogic();
+    
   }
 }
 /*colonyManager.prototype.

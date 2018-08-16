@@ -2,15 +2,28 @@ module.exports = {
   DefaultMem: {
     colonyMem: {
       outpost: {
-        spawnRoom: []
+        spawnRoom: {},
+        quarrys: {},
       },
       Castles: {
-        spawnRoom: {}
+        spawnRooms: {},
+        quarrys: {}
       },
       allies: {
         username: "Juicy-shark"
       },
       enemys: {}
+    },
+    RoomStructureMem: {
+      controller : {
+        toBuild: {
+          Road: true
+        }
+      },
+      Containers: {},
+      Extensions: {},
+      Spawns : {},
+      Towers: {}
     }
   },
   buildingLevels: {
@@ -41,12 +54,12 @@ module.exports = {
   maxUpgraders: {
     1: 1,
     2: 2,
-    3: 2,
-    4: 2,
-    5: 2,
-    6: 2,
-    7: 2,
-    8: 2
+    3: 3,
+    4: 3,
+    5: 3,
+    6: 3,
+    7: 3,
+    8: 3
   },
   maxBuilders: {
     1: 1,
@@ -95,7 +108,7 @@ module.exports = {
        350: [WORK, WORK, MOVE],
        400: [WORK, WORK, MOVE],
        450: [WORK, WORK, MOVE],
-       500: [WORK, WORK, WORK, MOVE],
+       500: [WORK, WORK, WORK, WORK, MOVE],
        550: [WORK, WORK, WORK, WORK, WORK, MOVE]
      },
      lorry: {
@@ -122,13 +135,21 @@ module.exports = {
      builder: {
        300: [CARRY, CARRY, MOVE, MOVE, WORK],
        400: [CARRY, CARRY, MOVE, MOVE, WORK, WORK],
-       500: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK]
+       500: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+       550: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+       600: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+       650: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+       700: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK]
      },
 
      repairer: {
        300: [CARRY, CARRY, WORK, MOVE, MOVE],
        350: [CARRY, CARRY, CARRY, WORK, MOVE, MOVE],
-       400: [CARRY, CARRY, WORK, WORK, MOVE, MOVE]
+       400: [CARRY, CARRY, WORK, WORK, MOVE, MOVE],
+       500: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+       550: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+       600: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+       650: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK]
      },
 
 

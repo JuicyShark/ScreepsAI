@@ -1,6 +1,6 @@
 
 
-Flag.prototype.tick = function() {
+Flag.prototype.flagTick = function() {
   this.initFlagMem()
   this.longDistanceMining()
 }
@@ -27,6 +27,14 @@ Flag.prototype.longDistanceMining = function() {
   }
   else {
     this.memory.reserving = false;
+    if(!this.room) {
+        if (Memory.Colonies.outpost.quarrys.room == this.room) {
+
+          Memory.Colonies.outpost.quarrys = {
+            room: this.memory.room
+          };
+        }
+      }
     return true;
   }
 }

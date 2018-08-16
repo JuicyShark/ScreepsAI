@@ -15,15 +15,23 @@ Creep.prototype.runRole = function() {
 Creep.prototype.ourPath = function(destination) {
 
 
-  if (Game.time % 13 === 0) {
-    //console.log("RESET TIME ")
-    delete this.memory.path
+  if (Game.time % 60 === 0) {
+    console.log("RESET TIME ")
+    delete this.memory.paths
   }
-  if (!this.memory.path) {
+  if (!this.memory.paths) {
   const path = this.pos.findPathTo(destination);
-  this.memory.path = path;
+  let tempName = destination.id;
+  let temp1 = {
+    [destination.structureType]: {
+      [destination.id]: path
+    }
+  };
+  this.memory.paths = temp1;
+  this.memory.paths.myPath = path
   }
-  this.moveByPath(this.memory.path)
+
+  this.moveByPath(this.memory.paths.myPath)
   }
 
 

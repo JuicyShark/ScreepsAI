@@ -20,11 +20,16 @@ SorterMan.prototype.sortRoom = function() {
   if(!(this.isMine())) {
     console.log("Not my room!" + this.name)
     this.memory.sortComplete = true;
+
+    //where s its home room? Saved into memory when flagplaced? or when creeps come? <---
   }
   else if (this.isMine() && !(this.sortComplete())) {
     if (this.controller.level <= 7) {
       if (!(this.memory.isOutpost) || this.memory.isOutpost == false) {
       this.memory.isOutpost = true;
+      Memory.Colonies.outpost.spawnRoom = {
+        room: this.name
+      };
       }
       this.memory.sortComplete = true;
     }
@@ -32,23 +37,13 @@ SorterMan.prototype.sortRoom = function() {
       if (!(this.memory.isCastle) || this.memory.isCastle == false){
         this.memory.isCastle = true;
         this.memory.isOutpost = false
+        Memory.Colonies.Castles.spawnRoom = this.name;
       }
       this.memory.sortComplete = true;
     }
   }
 }
 
-SorterMan.prototype.runLogic = function() {
-  if(!this.sortComplete()){
-
-    this.sortRoom()
-  }
-  else {
-    this.tick();
-    this.level3Things()
-
-  }
-}
 SorterMan.prototype.checkRoadToSource = function(){
   for(let i in this.memory.sourceNodes){
     if(!this.memory.sourceNodes[i].toBuild.Road) {
@@ -67,10 +62,14 @@ SorterMan.prototype.checkRoadToSource = function(){
 }
 
 SorterMan.prototype.createRoadToController = function() {
-  let spawn = this.find(FIND_MY_SPAWNS);
-  let ObjectIDA = spawn[0].id;
-  let ObjectIDB = this.controller.id
-  if (this.memory.structures.controller.toBuild.Road == true) {
-  this.createRoadway(ObjectIDA, ObjectIDB)
+  if (!this.memory.structureIDs.controller.toBuild.Road) {
+
+  } else {
+    let spawn = this.find(FIND_MY_SPAWNS);
+    let ObjectIDA = spawn[0].id;
+    let ObjectIDB = this.controller.id
+    if (this.memory.structureIDs.controller.toBuild.Road == true) {
+    this.createRoadway(ObjectIDA, ObjectIDB)
+    }
   }
 }

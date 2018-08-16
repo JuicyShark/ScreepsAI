@@ -1,31 +1,25 @@
 if (!(Outpost)) {
   var Outpost = Object.create(Object);
 }
+/** @function RoomObj=this
+*/
+Outpost.prototype.runLogic = function() {
+  if(!this.sortComplete()){
 
-Outpost.prototype.OutpostCheck = function () {
-  if(this.memory.isOutpost == true) {
-    if(!(!this.canSpawn())) {
-      if(!Memory.Colonies.outpost.spawnRoom[0]) {
-        let ab = []
-        ab.push(this.roomName)
-        Memory.Colonies.outpost.spawnRoom = ab;
-      } else {
-      for(let i in Memory.Colonies.outpost.spawnRoom) {
-        if(this.roomName != Memory.Colonies.outpost.spawnRoom[i]) {
-          let ab = []
-          ab.push(this.roomName)
-          Memory.Colonies.outpost.spawnRoom = ab;
-        }
-      }
-    }
+    this.sortRoom()
   }
+  else {
+    this.tick();
+  //  this.level3Things();
+
   }
+
 }
 Outpost.prototype.level3Things = function () {
   //called in line 48 of SorterMan
   if (this.level() >= 3) {
     this.checkRoadToSource();
-    this.createRoadToController()
+    this.createRoadToController();
   }
 }
 

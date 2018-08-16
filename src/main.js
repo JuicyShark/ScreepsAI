@@ -24,6 +24,6 @@ module.exports.loop = function() {
       delete Memory.creeps[name];
     }
   }
-  runColony()
+  runColony();
 })
 };
