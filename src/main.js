@@ -5,6 +5,7 @@ require('prototype.creep')
 require('prototype.flags')
 require('prototype.outpost')
 require('prototype.SorterMan')
+require('colonyManager')
 
 // Turn off any of the below features by passing false.
 require('screeps-perf')({
@@ -23,25 +24,6 @@ module.exports.loop = function() {
       delete Memory.creeps[name];
     }
   }
-  for(var i in Game.flags) {
-    var currentFlag = Game.flags[i];
-    currentFlag.tick();
-
-  }
-
-  //Loop through all rooms your creeps/structures are in
-  for (let roomName in Game.rooms) {
-    var currentRoom = Game.rooms[roomName];
-    currentRoom.runLogic()
-  }
-
-
-  // for each creeps run creep logic
-  for (let name in Game.creeps) {
-
-  //  Game.creeps[name].suicide();
-    Game.creeps[name].runRole();
-  }
-
+  runColony()
 })
 };

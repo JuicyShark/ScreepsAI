@@ -3,9 +3,24 @@ if (!(Outpost)) {
 }
 
 Outpost.prototype.OutpostCheck = function () {
-  console.log("HI")
+  if(this.memory.isOutpost == true) {
+    if(!(!this.canSpawn())) {
+      if(!Memory.Colonies.outpost.spawnRoom[0]) {
+        let ab = []
+        ab.push(this.roomName)
+        Memory.Colonies.outpost.spawnRoom = ab;
+      } else {
+      for(let i in Memory.Colonies.outpost.spawnRoom) {
+        if(this.roomName != Memory.Colonies.outpost.spawnRoom[i]) {
+          let ab = []
+          ab.push(this.roomName)
+          Memory.Colonies.outpost.spawnRoom = ab;
+        }
+      }
+    }
+  }
+  }
 }
-
 Outpost.prototype.level3Things = function () {
   //called in line 48 of SorterMan
   if (this.level() >= 3) {

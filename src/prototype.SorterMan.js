@@ -45,15 +45,6 @@ SorterMan.prototype.runLogic = function() {
   }
   else {
     this.tick();
-  }
-}
-SorterMan.prototype.checkRoadToSource = function(){
-  /*for(let i in this.memory.sourceNodes){
-    if(!this.memory.sourceNodes[i].toBuild.Road) {
-
-    }
-  }
-*/
     this.level3Things()
 
   }
@@ -82,5 +73,4 @@ SorterMan.prototype.createRoadToController = function() {
   if (this.memory.structures.controller.toBuild.Road == true) {
   this.createRoadway(ObjectIDA, ObjectIDB)
   }
-
 }

@@ -1,6 +1,17 @@
 module.exports = {
-  allies: {
-    username: "Juicy-shark"
+  DefaultMem: {
+    colonyMem: {
+      outpost: {
+        spawnRoom: []
+      },
+      Castles: {
+        spawnRoom: {}
+      },
+      allies: {
+        username: "Juicy-shark"
+      },
+      enemys: {}
+    }
   },
   buildingLevels: {
     sources: {
@@ -191,6 +202,8 @@ module.exports = {
     EnemyInRoom: "There was an Enemy in the room! ",
     SafeModeActivate: "SafeMode Activated"
   },
+
+  //need to be moved to defuat mem
   attackFlagMemory: {
     name: "",
     room: "",

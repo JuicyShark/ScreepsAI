@@ -42,7 +42,6 @@ Flag.prototype.attackLogic = function() {
 
 }
 
-
 Flag.prototype.flagSelector = function() {
 
     determineFlagBuilding = function () {

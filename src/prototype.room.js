@@ -2,12 +2,15 @@ require("prototype.spawn")
 var config = require("config")
 
 Room.prototype.tick = function() {
+  /*this.OutpostCheck()
+  console.log("Yep")*/
 
   if (this.isMine()) {
     this.initCreeps();
     if (!this.memory.timer || this.memory.timer % 60 === 0) {
       this.memory.timer = -1;
     this.memoryInit()
+
       this.memory.timer = 60;
       console.log(this.name + " Timer has been reset")
     }
@@ -75,7 +78,6 @@ Room.prototype.safeGuardUp = function() {
     this.saveLog(EnemySafeMode)
     this.controller.activateSafeMode()
 
-
 }
 
 Room.prototype.saveLog = function(type) {
@@ -86,6 +88,7 @@ Room.prototype.saveLog = function(type) {
     this.memory.log.gameTime = Config.defaultLogs.EnemyInRoom + Config.defaultLogs.SafeModeActivate;
   }
 }
+
 }
 
 Room.prototype.processAsGuest = function() {
@@ -128,7 +131,6 @@ Room.prototype.initSource = function() {
       this.memory.sourceNodes[source.id].container = "";
     }
   }
-
   this.initContainers();
 }
 
@@ -152,7 +154,6 @@ Room.prototype.initStructures = function() {
     this.memory.structures.controller.toBuild = {}
     this.memory.structures.controller.toBuild.Road = true;
   }
-
 
 
 

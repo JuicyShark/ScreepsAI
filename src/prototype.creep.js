@@ -29,14 +29,6 @@ Creep.prototype.ourPath = function(destination) {
 
 
 Creep.prototype.roleBuilder = function(creep) {
-
-  var target = Game.getObjectById(creep.memory.target)
-  
-  // Sort construction sites by progress.
-  /*targets.sort(function(a, b) {
-    return b.progress - a.progress;
-  })*/
-
   var targets = this.room.memory.constructionSites
   if (_.size(targets) >= 1) {
 
@@ -49,7 +41,6 @@ Creep.prototype.roleBuilder = function(creep) {
   if (thisTarget != null) {
     if (creep.build(thisTarget) == ERR_NOT_IN_RANGE) {
       creep.ourPath(thisTarget)
-
     }
   }
 };
