@@ -14,22 +14,22 @@ Creep.prototype.runRole = function() {
 
 Creep.prototype.ourPath = function(destination) {
 
-
-  if (Game.time % 4 === 0) {
-    //console.log("RESET TIME")
-    delete this.memory.paths
-  }
-  if (!this.memory.paths) {
-  const path = this.pos.findPathTo(destination);
-  let tempName = destination.id;
-  let temp1 = {
-    [destination.structureType]: {
-      [destination.id]: path
+    if (Game.time % 4 === 0) {
+      //console.log("RESET TIME")
+      delete this.memory.paths
     }
-  };
-  this.memory.paths = temp1;
-  this.memory.paths.myPath = path
-  }
+    if (!this.memory.paths) {
+    var path = this.pos.findPathTo(destination, {serialize: true});
+    /*let tempName = destination.id;
+    let temp1 = {
+      [destination.structureType]: {
+        [destination.id]: path
+      }
+    };*/
+    this.memory.paths = {};
+    this.memory.paths.myPath = path;
+    }
+
 
   this.moveByPath(this.memory.paths.myPath)
   }
@@ -79,6 +79,7 @@ Creep.prototype.deliver = function(container) {
 
 
 Creep.prototype.findDeliveryTarget = function(oldTarget) {
+  let target = null;
   let container = null;
   if(this.room.energyAvailable != this.room.energyCapacityAvailable){
      container = this.pos.findClosestByPath(FIND_STRUCTURES, {
@@ -86,20 +87,28 @@ Creep.prototype.findDeliveryTarget = function(oldTarget) {
         s.structureType == STRUCTURE_EXTENSION) &&
       s.energy < s.energyCapacity
   });
-}
- if(container == null) {
-     container = this.room.find(FIND_STRUCTURES, {
-      filter: (s) => (s.structureType == STRUCTURE_CONTAINER)
-    })
+} else if (this.room.energyAvailable == this.room.energyCapacityAvailable) {
+  let temp1 = this.pos.findClosestByPath(FIND_STRUCTURES, {
+ filter: (s) => (s.structureType == STRUCTURE_CONTAINER) &&
+   s.store != s.energyCapacity
+});
+    let temp2 = [];
+    for(let i in this.room.memory.structureIDs.Containers) {
+    if (this.room.memory.structureIDs.Containers[i] == temp1.id){
+      temp2.push(temp1)
+    }
   }
-
-this.deliver(container);
+  container = temp2[0]
+}
+target = container;
+this.deliver(target);
 };
 
 /** @function
     @param {bool} getFromContainer
     @param {bool} getFromSource */
 Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
+  var config = require("config")
   /**  @type {STRUCTURE_CONTAINER} **/
   let container;
   var miner = this.room.find(FIND_MY_CREEPS, {
@@ -113,14 +122,14 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
 
     }*/
     let droppedEnergy = this.pos.findInRange(FIND_DROPPED_RESOURCES, 2)
-    if (droppedEnergy.length != 0) {
-      this.pickup(droppedEnergy.pop())
+    if (droppedEnergy != null) {
+    this.pickup(droppedEnergy[0])
     }
 
   if (getFromContainer == true) {
     container = this.pos.findClosestByPath(FIND_STRUCTURES, {
-      filter: s => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&
-        s.store[RESOURCE_ENERGY] > 250
+      filter: (s) => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&
+        s.store[RESOURCE_ENERGY] > config.containerGetEnergyLevels[this.room.level()]
     });
   }
     if (container != undefined) {
@@ -137,6 +146,7 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
       this.ourPath(source);
     }
   }
+
 }
 Creep.prototype.checkDeath = function(creep) {
   if (creep.ticksToLive < 25) {

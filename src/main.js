@@ -2,10 +2,10 @@
 require('prototype.spawn')
 require('prototype.room')
 require('prototype.creep')
-require('prototype.flags')
 require('prototype.outpost')
 require('prototype.SorterMan')
 require('colonyManager')
+require('prototype.flags')
 
 // Turn off any of the below features by passing false.
 require('screeps-perf')({

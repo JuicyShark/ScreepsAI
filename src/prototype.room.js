@@ -16,11 +16,11 @@ Room.prototype.tick = function() {
       console.log(this.name + " Timer has been reset")
     }
     // load things needed each tick without if statement
-    this.initContainers();
     this.loadSource();
     this.loadConstructionSites();
 
-    if (this.memory.timer % 15 == 0) {
+    if (this.memory.timer % 30 == 0) {
+      this.initSource();
       this.createNeeds();
       if(this.constructionSites.length != 0){
         this.findBuilder(this.constructionSites[0]);
@@ -40,7 +40,6 @@ Room.prototype.initCreeps = function(){
 }
 
 Room.prototype.memoryInit = function() {
-    this.initSource();
 
     this.initStructures();
     this.initConstructionSites();
@@ -96,11 +95,10 @@ Room.prototype.saveLog = function(type) {
 Room.prototype.processAsGuest = function() {
   console.log("Im just a Guest here! " + this.name)
   let roomFlags = this.find(FIND_FLAGS, {
-    filter: { name: "mineRoom"}
+    filter: { name: "HarvestSources"}
   });
   if(roomFlags != undefined) {
     console.log("FLAG!")
-    this.initSource();
   }
 }
 
@@ -122,7 +120,7 @@ Room.prototype.initSource = function() {
       this.memory.sourceNodes[source.id].container = "";
     }
   }
-  //this.initContainers();
+  this.initContainers();
 }
 
 Room.prototype.loadSource = function() {
@@ -156,6 +154,8 @@ Room.prototype.initContainers = function() {
       structureType: STRUCTURE_CONTAINER
     }
   });
+
+  if (!(!containers)){
       let temp1 = [];
   for (let i in containers) {
 
@@ -180,6 +180,7 @@ Room.prototype.initContainers = function() {
   }
     if(this.memory.structureIDs.Containers != temp1) {
       this.memory.structureIDs.Containers = temp1;
+    }
     }
 }
 
@@ -213,14 +214,13 @@ Room.prototype.findBuilder = function(constructionSite){
 
 Room.prototype.createNeeds = function() {
   if (this.needBasicWorker()) {
-    this.spawnHarvester()
+    this.spawnHarvester("n/a","n/a")
   } else if (this.needLorry()) {
   let longDistance = false
     this.spawnLorry(longDistance) // false meaning long distance or not
   } else if (this.needContainerMiner()) {
     for (var i in this.memory.sourceNodes) {
       if (this.memory.sourceNodes[i].miners == 0) {
-        console.log(this.memory.sourceNodes[i].miners)
         this.spawnContainerMiner(this.memory.sourceNodes[i].id)
       }
     }
@@ -238,11 +238,33 @@ Room.prototype.createNeeds = function() {
   /*  else if (this.needA) {
 
     }*/
+    else if (this.needSourceScouts()) {
+      let theReturned = this.needSourceScouts()
+      let roomName = theReturned[0]
+      let flag = theReturned[1]
+      this.spawnHarvester(roomName, flag.name)
+    }
   else {
     console.log("Needs have been Met!")
-    console.log(this.energyCapacityAvailable + " Is the energy Capacity of the room")
+    console.log(this.energyAvailable + "/" + this.energyCapacityAvailable + " Is the energy Capacity of the room")
   }
 }
+
+Room.prototype.needSourceScouts = function() {
+  let scoutRoomFlags = [];
+  for (i in Memory.flags) {
+    if(Memory.flags[i].needScout){
+      scoutRoomFlags.push(Memory.flags[i].id)
+      scoutRoomFlags.push(Memory.flags[i])
+    }
+  }
+  if(scoutRoomFlags.length != 0) {
+    return scoutRoomFlags;
+  }
+  else {
+    return false;
+  }
+  }
 
 Room.prototype.needBasicWorker = function() {
   let harvesters = this.find(FIND_MY_CREEPS, {
@@ -266,7 +288,7 @@ Room.prototype.needBasicWorker = function() {
       }
     }
   });
-  if (harvesters.length > 2 || miners.length >= 2 && lorrys.length >=2) {
+  if (miners.length >= 2 && lorrys.length >=2) {
     return false;
   }
   else if (harvesters.length == null || harvesters == 0) {
@@ -393,22 +415,40 @@ Room.prototype.needClaimer = function() {
   }
 }
 
-
-Room.prototype.spawnClaimer = function(roomName, thisFlag) {
+Room.prototype.spawnReserver = function(roomName, flag) {
   if (this.canSpawn() != false) {
     spawn = this.canSpawn();
     var bodyParts = config.bodies.claimer
-    spawn.spawnNewCreep(bodyParts, "claimer", spawn.room, "", roomName)
+    spawn.spawnNewCreep(bodyParts, "claimer", spawn.room, "n/a", roomName, flag)
+
+  }
+
+}
+Room.prototype.spawnClaimer = function(roomName, thisFlag) {
+  if (this.canSpawn() != false) {
+
+    if(thisFlag == null || thisFlag == "n/a"){
+      thisFlag = "n/a"
+    }
+    spawn = this.canSpawn();
+    var bodyParts = config.bodies.claimer
+    spawn.spawnNewCreep(bodyParts, "claimer", spawn.room, "n/a", roomName, thisFlag )
     thisFlag.hasClaimer = true;
   }
 
 }
 
-Room.prototype.spawnHarvester = function() {
+Room.prototype.spawnHarvester = function(roomName, flagName) {
   if (this.canSpawn() != false) {
     spawn = this.canSpawn();
+    if(!roomName) {
     var bodyParts = config.bodies.default
-    spawn.spawnNewCreep(bodyParts, "harvester", spawn.room)
+    }
+    else {
+      let myConfig = config.bodies.harvester;
+      var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.energyCapacityAvailable)]
+    }
+    spawn.spawnNewCreep(bodyParts, "harvester", spawn.room, "n/a", roomName, flagName)
   }
 }
 
@@ -482,9 +522,9 @@ Room.prototype.canSpawn = function() {
     @param {string} RoomName
     @return {X:"", Y:""}
 */
-Room.prototype.getRoomLocation = function () {
+Room.prototype.getRoomLocation = function (roomName) {
       let temp1 = [];
-      let thisString = this.name.split("");
+      let thisString = roomName.split("");
       for (let i = 0; i < thisString.length; i++) {
         let result = thisString[i];
         if(result == "W" || result == "S") {

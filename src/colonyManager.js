@@ -7,7 +7,7 @@ colonyManager.prototype.runColony = function() {
   colonyMemInit();
   creepManager();
   roomManager();
-  //flagManager();
+  flagManager();
 
 }
 colonyManager.prototype.flagManager = function() {
@@ -31,7 +31,7 @@ colonyManager.prototype.roomManager = function() {
   for (let roomName in Game.rooms) {
     var currentRoom = Game.rooms[roomName];
     currentRoom.runLogic();
-    
+
   }
 }
 /*colonyManager.prototype.

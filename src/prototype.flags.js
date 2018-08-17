@@ -1,5 +1,4 @@
 
-
 Flag.prototype.flagTick = function() {
   this.initFlagMem()
   this.longDistanceMining()
@@ -7,14 +6,24 @@ Flag.prototype.flagTick = function() {
 
 Flag.prototype.initFlagMem = function() {
   if (!this.memory.colours) {
+
+
     this.memory.name = this.name;
     this.memory.room = this.pos.roomName;
+    this.memory.roomPos = [];
     let flagColours = []
     flagColours.push(this.color)
     flagColours.push(this.secondaryColor)
     this.memory.colours = flagColours;
+
     if (this.name == "ClaimRoom") {
       this.memory.hasClaimer = false;
+    }
+    if (this.memory.name == "HarvestSources") {
+      this.memory.needScout = true;
+    }
+    else {
+      this.memory.needScout = false;
     }
   }
 
