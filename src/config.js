@@ -84,7 +84,7 @@ module.exports = {
   maxLorrys: {
     1: 0,
     2: 0,
-    3: 1,
+    3: 2,
     4: 2,
     5: 2,
     6: 2,
@@ -95,62 +95,99 @@ module.exports = {
     claimer: [CLAIM, MOVE, MOVE],
     default: [WORK, CARRY, MOVE],
     harvester : {
-      300: [WORK, WORK, CARRY, MOVE],
-      350: [WORK, WORK, CARRY, CARRY, MOVE],
-      400: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
-      450: [MOVE, MOVE, CARRY, CARRY, WORK, WORK],
-      500: [MOVE, MOVE, CARRY, CARRY, WORK, WORK, WORK],
-      550: [MOVE, MOVE, CARRY, CARRY, CARRY, WORK, WORK, WORK],
-      600: [MOVE, MOVE, CARRY, CARRY, CARRY, CARRY, WORK, WORK, WORK]
+        300: [WORK, WORK, CARRY, MOVE],
+        350: [WORK, WORK, CARRY, CARRY, MOVE],
+        400: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+        450: [MOVE, MOVE, CARRY, CARRY, WORK, WORK],
+        500: [MOVE, MOVE, CARRY, CARRY, WORK, WORK, WORK]
     },
     miner: {
-       300: [WORK, WORK, MOVE],
-       350: [WORK, WORK, MOVE],
-       400: [WORK, WORK, MOVE],
-       450: [WORK, WORK, MOVE],
-       500: [WORK, WORK, WORK, WORK, MOVE],
-       550: [WORK, WORK, WORK, WORK, WORK, MOVE]
-     },
+      bodyReturn: function(energyCap) {
+        if(energyCap > 500) {
+          return 500
+        }
+      },
+        defaults: {
+        300: [WORK, WORK, MOVE],
+        350: [WORK, WORK, MOVE],
+        400: [WORK, WORK, MOVE],
+        450: [WORK, WORK, MOVE],
+        500: [WORK, WORK, WORK, WORK, MOVE],
+        550: [WORK, WORK, WORK, WORK, WORK, MOVE],
+        600: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
+        650: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
+        700: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
+        750: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE]
+      }
+      },
      lorry: {
-       300: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
-       350: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
-       400: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
-       450: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
-       500: [CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
-       550: [CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
-       600: [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
-     },
+        bodyReturn: function(energyCap) {
+          if(energyCap > 600) {
+           return 600
+          }
+        },
+        defaults: {
+          300: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+          350: [CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+          400: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+          450: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+          500: [CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
+          550: [CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
+          600: [CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE]
+        }
+      },
      upgrader: {
-       300: [CARRY, CARRY, WORK, MOVE, MOVE],
-       350: [CARRY, CARRY, WORK, MOVE, MOVE, MOVE],
-       400: [CARRY, CARRY, WORK, MOVE, MOVE, MOVE],
-       450: [CARRY, CARRY, WORK, MOVE, MOVE, MOVE],
-       500: [CARRY, CARRY, WORK, WORK, MOVE, MOVE, MOVE, MOVE],
-       550: [CARRY, CARRY, WORK, WORK, MOVE, MOVE, MOVE, MOVE],
-       600: [CARRY, CARRY, WORK, WORK, MOVE, MOVE, MOVE, MOVE],
-       650: [CARRY, CARRY, WORK, WORK, MOVE, MOVE, MOVE, MOVE],
-       700: [CARRY, CARRY, WORK, WORK, MOVE, MOVE, MOVE, MOVE]
-     },
+       bodyReturn: function(energyCap) {
+          if(energyCap > 500) {
+           return 500
+          }
+        },
+        defaults: {
+          300: [CARRY, CARRY, WORK, MOVE, MOVE],
+          350: [CARRY, CARRY, WORK, MOVE, MOVE, MOVE],
+          400: [CARRY, CARRY, WORK, MOVE, MOVE, MOVE],
+          450: [CARRY, CARRY, WORK, MOVE, MOVE, MOVE],
+          500: [CARRY, CARRY, WORK, WORK, MOVE, MOVE, MOVE, MOVE],
+          550: [CARRY, CARRY, WORK, WORK, MOVE, MOVE, MOVE, MOVE],
+          600: [CARRY, CARRY, WORK, WORK, MOVE, MOVE, MOVE, MOVE],
+          650: [CARRY, CARRY, WORK, WORK, MOVE, MOVE, MOVE, MOVE],
+          700: [CARRY, CARRY, WORK, WORK, MOVE, MOVE, MOVE, MOVE]
+        }
+      },
 
      builder: {
-       300: [CARRY, CARRY, MOVE, MOVE, WORK],
-       400: [CARRY, CARRY, MOVE, MOVE, WORK, WORK],
-       500: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
-       550: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
-       600: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
-       650: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
-       700: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK]
+       bodyReturn: function(energyCap) {
+          if(energyCap > 700) {
+           return 700
+          }
+        },
+        defaults: {
+          300: [CARRY, CARRY, MOVE, MOVE, WORK],
+          400: [CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+          500: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+          550: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+          600: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+          650: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+          700: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK]
+        }
      },
 
      repairer: {
-       300: [CARRY, CARRY, WORK, MOVE, MOVE],
-       350: [CARRY, CARRY, CARRY, WORK, MOVE, MOVE],
-       400: [CARRY, CARRY, WORK, WORK, MOVE, MOVE],
-       500: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
-       550: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
-       600: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
-       650: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK]
-     },
+       bodyReturn: function(energyCap) {
+          if(energyCap > 650) {
+           return 650
+          }
+        },
+        defaults:{
+            300: [CARRY, CARRY, WORK, MOVE, MOVE],
+            350: [CARRY, CARRY, CARRY, WORK, MOVE, MOVE],
+            400: [CARRY, CARRY, WORK, WORK, MOVE, MOVE],
+            500: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+            550: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+            600: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK],
+            650: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK]
+        }
+      },
 
 
 

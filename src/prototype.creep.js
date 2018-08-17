@@ -15,7 +15,7 @@ Creep.prototype.runRole = function() {
 Creep.prototype.ourPath = function(destination) {
 
 
-  if (Game.time % 8 === 0) {
+  if (Game.time % 4 === 0) {
     //console.log("RESET TIME")
     delete this.memory.paths
   }
@@ -80,8 +80,8 @@ Creep.prototype.deliver = function(container) {
 
 Creep.prototype.findDeliveryTarget = function(oldTarget) {
   let container = null;
-  if(this.room.energyAvailable != this.room.energyCapacity){
-     container = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+  if(this.room.energyAvailable != this.room.energyCapacityAvailable){
+     container = this.pos.findClosestByPath(FIND_STRUCTURES, {
     filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
         s.structureType == STRUCTURE_EXTENSION) &&
       s.energy < s.energyCapacity
@@ -92,6 +92,7 @@ Creep.prototype.findDeliveryTarget = function(oldTarget) {
       filter: (s) => (s.structureType == STRUCTURE_CONTAINER)
     })
   }
+
 this.deliver(container);
 };
 
@@ -101,6 +102,21 @@ this.deliver(container);
 Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
   /**  @type {STRUCTURE_CONTAINER} **/
   let container;
+  var miner = this.room.find(FIND_MY_CREEPS, {
+    filter: {memory: {role: "miner"} }
+});
+
+  /*var fullMiner = miner[0].getActiveBodyparts(WORK)
+    if (fullMiner == 5) {
+      getFromSource = false;
+    } else {
+
+    }*/
+    let droppedEnergy = this.pos.findInRange(FIND_DROPPED_RESOURCES, 2)
+    if (droppedEnergy.length != 0) {
+      this.pickup(droppedEnergy.pop())
+    }
+
   if (getFromContainer == true) {
     container = this.pos.findClosestByPath(FIND_STRUCTURES, {
       filter: s => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&

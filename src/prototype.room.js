@@ -16,6 +16,7 @@ Room.prototype.tick = function() {
       console.log(this.name + " Timer has been reset")
     }
     // load things needed each tick without if statement
+    this.initContainers();
     this.loadSource();
     this.loadConstructionSites();
 
@@ -121,7 +122,7 @@ Room.prototype.initSource = function() {
       this.memory.sourceNodes[source.id].container = "";
     }
   }
-  this.initContainers();
+  //this.initContainers();
 }
 
 Room.prototype.loadSource = function() {
@@ -147,6 +148,7 @@ Room.prototype.initStructures = function() {
 
 }
 
+
 Room.prototype.initContainers = function() {
 
   var containers = this.find(FIND_STRUCTURES, {
@@ -154,14 +156,18 @@ Room.prototype.initContainers = function() {
       structureType: STRUCTURE_CONTAINER
     }
   });
+      let temp1 = [];
   for (let i in containers) {
 
     if (containers[i] instanceof StructureContainer) {
+
+
       let source = containers[i].pos.findInRange(FIND_SOURCES, 1);
-      if(source.id == undefined) {
-        //console.log(containers[i].id)
+
+      if(source.length == 0) {
+        temp1.push(containers[i].id)
       }
-      else {
+      else if(source.length == 1){
         this.memory.sourceNodes[source[0].id].container = containers[i].id
         this.memory.sourceNodes[source[0].id].toBuild.Container = false;
       }
@@ -170,7 +176,11 @@ Room.prototype.initContainers = function() {
       console.log('Container is not instanceof SturctureContainer')
       containers.splice(i);
     }
+
   }
+    if(this.memory.structureIDs.Containers != temp1) {
+      this.memory.structureIDs.Containers = temp1;
+    }
 }
 
 
@@ -204,15 +214,16 @@ Room.prototype.findBuilder = function(constructionSite){
 Room.prototype.createNeeds = function() {
   if (this.needBasicWorker()) {
     this.spawnHarvester()
-  }else if (this.needContainerMiner()) {
+  } else if (this.needLorry()) {
+  let longDistance = false
+    this.spawnLorry(longDistance) // false meaning long distance or not
+  } else if (this.needContainerMiner()) {
     for (var i in this.memory.sourceNodes) {
       if (this.memory.sourceNodes[i].miners == 0) {
+        console.log(this.memory.sourceNodes[i].miners)
         this.spawnContainerMiner(this.memory.sourceNodes[i].id)
       }
     }
-  }else if (this.needLorry()) {
-  let longDistance = false
-    this.spawnLorry(longDistance) // false meaning long distance or not
   } else if (this.needUpgrader()) {
     this.spawnUpgrader()
   } else if (this.needBuilder()) {
@@ -241,7 +252,21 @@ Room.prototype.needBasicWorker = function() {
       }
     }
   });
-  if (harvesters.length > 2) {
+  let miners = this.find(FIND_MY_CREEPS, {
+    filter: {
+      memory : {
+        role: "miner"
+      }
+    }
+  });
+  let lorrys = this.find(FIND_MY_CREEPS, {
+    filter: {
+      memory : {
+        role: "lorry"
+      }
+    }
+  });
+  if (harvesters.length > 2 || miners.length >= 2 && lorrys.length >=2) {
     return false;
   }
   else if (harvesters.length == null || harvesters == 0) {
@@ -318,11 +343,13 @@ Room.prototype.needBuilder = function() {
 }
 
 Room.prototype.needContainerMiner = function() {
+  console.log("Need Miner")
     for (var i in this.memory.sourceNodes) {
-      if (this.memory.sourceNodes[i].miners == 1) {
-        return false
-      } else if (this.memory.sourceNodes[i].miners == 0 && this.memory.sourceNodes[i].container != "") {
+      if (this.memory.sourceNodes[i].miners == 0 && this.memory.sourceNodes[i].container != "") {
         return true
+      }
+      else if (this.memory.sourceNodes[i].miners == 1) {
+        return false
       }
     }
 }
@@ -367,6 +394,7 @@ Room.prototype.needClaimer = function() {
   }
 }
 
+
 Room.prototype.spawnClaimer = function(roomName, thisFlag) {
   if (this.canSpawn() != false) {
     spawn = this.canSpawn();
@@ -388,11 +416,9 @@ Room.prototype.spawnHarvester = function() {
 Room.prototype.spawnContainerMiner = function(sourceId) {
   if (this.canSpawn() != false) {
     spawn = this.canSpawn();
-    var bodyParts = config.bodies.miner[this.energyCapacityAvailable]
+    let myConfig = config.bodies.miner;
+    var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.energyCapacityAvailable)]
     spawn.spawnNewCreep(bodyParts, "miner", spawn.room, sourceId)
-  }
-  else {
-    console.log("ERROR")
   }
 }
 
@@ -400,7 +426,8 @@ Room.prototype.spawnLorry = function(longDistance) {
   if(longDistance == false) {
     if (this.canSpawn() != false) {
       spawn = this.canSpawn();
-      var bodyParts = config.bodies.lorry[this.energyCapacityAvailable]
+      let myConfig = config.bodies.lorry;
+      var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.energyCapacityAvailable)]
       spawn.spawnNewCreep(bodyParts, "lorry", spawn.room)
     }
   }
@@ -409,14 +436,16 @@ Room.prototype.spawnLorry = function(longDistance) {
 Room.prototype.spawnRepairer = function() {
   if (this.canSpawn() != false) {
     spawn = this.canSpawn();
-    var bodyParts = config.bodies.repairer[this.energyCapacityAvailable]
+    let myConfig = config.bodies.repairer;
+    var bodyParts = myConfig.defaults[myConfig.defaults.bodyReturn(this.energyCapacityAvailable)]
     spawn.spawnNewCreep(bodyParts, "repairer", spawn.room)
   }
 }
 Room.prototype.spawnBuilder = function() {
   if (this.canSpawn() != false) {
     spawn = this.canSpawn();
-    var bodyParts = config.bodies.builder[this.energyCapacityAvailable]
+    let myConfig = config.bodies.builder;
+    var bodyParts = myConfig.defaults[myConfig.defaults.bodyReturn(this.energyCapacityAvailable)]
     var type = "ALL_ROUND"
     spawn.spawnNewCreep(bodyParts, "builder", spawn.room, "" ,type )
   }
@@ -424,7 +453,8 @@ Room.prototype.spawnBuilder = function() {
 Room.prototype.spawnUpgrader = function() {
   if (this.canSpawn() != false) {
     spawn = this.canSpawn();
-    var bodyParts = config.bodies.upgrader[this.energyCapacityAvailable]
+    let myConfig = config.bodies.upgrader;
+    var bodyParts = myConfig.defaults[myConfig.defaults.bodyReturn(this.energyCapacityAvailable)]
     spawn.spawnNewCreep(bodyParts, "upgrader", spawn.room)
   }
 }
