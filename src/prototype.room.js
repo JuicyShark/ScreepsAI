@@ -290,14 +290,14 @@ Room.prototype.needLorry = function() {
   let miners = this.find(FIND_MY_CREEPS, {
     filter: {
       memory : {
-        role: "miners"
+        role: "miner"
       }
     }
   });
-  if (miners >= 1 && lorrys <= config.maxLorrys[this.level()]) {
+  if (miners.length >= 1 && lorrys.length < config.maxLorrys[this.level()]) {
     return true
   }
-  else {
+  else if (lorrys.length > config.maxLorrys[this.level()]){
     return false;
   }
 }
@@ -311,7 +311,7 @@ Room.prototype.needRepairer = function() {
       }
     }
   });
-  if (repairer <= config.maxRepairers[this.level()]) {
+  if (repairer.length <= config.maxRepairers[this.level()]) {
     return true
   }
 }
@@ -324,7 +324,7 @@ Room.prototype.needUpgrader = function() {
       }
     }
   });
-  if (upgrader <= config.maxUpgraders[this.level()]) {
+  if (upgrader.length <= config.maxUpgraders[this.level()]) {
     return true
   }
 }
@@ -337,18 +337,17 @@ Room.prototype.needBuilder = function() {
       }
     }
   });
-  if (builder <= config.maxBuilders[this.level()]) {
+  if (builder.length <= config.maxBuilders[this.level()]) {
     return true;
   }
 }
 
 Room.prototype.needContainerMiner = function() {
-  console.log("Need Miner")
     for (var i in this.memory.sourceNodes) {
       if (this.memory.sourceNodes[i].miners == 0 && this.memory.sourceNodes[i].container != "") {
         return true
       }
-      else if (this.memory.sourceNodes[i].miners == 1) {
+      if (this.memory.sourceNodes[i].miners == 1) {
         return false
       }
     }
