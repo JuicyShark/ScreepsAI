@@ -437,7 +437,7 @@ Room.prototype.spawnRepairer = function() {
   if (this.canSpawn() != false) {
     spawn = this.canSpawn();
     let myConfig = config.bodies.repairer;
-    var bodyParts = myConfig.defaults[myConfig.defaults.bodyReturn(this.energyCapacityAvailable)]
+    var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.energyCapacityAvailable)]
     spawn.spawnNewCreep(bodyParts, "repairer", spawn.room)
   }
 }
@@ -445,7 +445,7 @@ Room.prototype.spawnBuilder = function() {
   if (this.canSpawn() != false) {
     spawn = this.canSpawn();
     let myConfig = config.bodies.builder;
-    var bodyParts = myConfig.defaults[myConfig.defaults.bodyReturn(this.energyCapacityAvailable)]
+    var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.energyCapacityAvailable)]
     var type = "ALL_ROUND"
     spawn.spawnNewCreep(bodyParts, "builder", spawn.room, "" ,type )
   }
@@ -454,23 +454,23 @@ Room.prototype.spawnUpgrader = function() {
   if (this.canSpawn() != false) {
     spawn = this.canSpawn();
     let myConfig = config.bodies.upgrader;
-    var bodyParts = myConfig.defaults[myConfig.defaults.bodyReturn(this.energyCapacityAvailable)]
+    var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.energyCapacityAvailable)]
     spawn.spawnNewCreep(bodyParts, "upgrader", spawn.room)
   }
 }
 Room.prototype.spawnAttacker = function(idleFlag) {
-  if (this.canSpawn() != false) {
+  /*if (this.canSpawn() != false) {
     spawn = this.canSpawn();
     var bodyParts = config.bodies.attacker[this.energyCapacityAvailable]
     spawn.spawnAttackCreep(bodyParts, "attacker", spawn.room)
-  }
+  }*/
 }
 Room.prototype.spawnDefender = function() {
-  if (this.canSpawn() != false) {
+/*  if (this.canSpawn() != false) {
     spawn = this.canSpawn();
     var bodyParts = config.bodies.defender(this.energyCapacityAvailable)
     spawn.spawnDefenseCreep(bodyParts, "defender", spawn.room)
-  }
+  }*/
 }
 Room.prototype.canSpawn = function() {
   if (this.isMine()) {
