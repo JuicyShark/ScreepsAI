@@ -144,8 +144,8 @@ Room.prototype.initSource = function() {
     }
     if (!this.memory.sourceNodes[source.id].container) {
 
-      let containers = this.find(FIND_STRUCTURES, {
-       filter: (s) => s.structureType === STRUCTURE_CONTAINER && s.pos.findInRange(FIND_SOURCES, 1)
+      let containers = source.pos.findInRange(FIND_STRUCTURES, 1, {
+       filter: (s) => s.structureType === STRUCTURE_CONTAINER
    });
       console.log(containers)
       this.memory.sourceNodes[source.id].container = containers[0].id;
