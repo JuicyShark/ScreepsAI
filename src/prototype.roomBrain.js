@@ -2,6 +2,71 @@ require("prototype.spawn")
 var config = require("config")
 
 
+//Work in progress and not applied anywhere yet
+
+
+/** @function createTask
+    @param {string} name  // String name of the task,                                example: TASK_HARVEST
+    @param {string} typeNeeded  // String of the Type of body needed for task,       example: TYPE_ALLROUND
+    @param {number} priority  // number of the priority of tasks assign tasks starting from one first
+    @param {object} details   // further details of the task including target/s and any id's of things associated
+   // create a task to assign in a queue
+    */
+Room.prototype.createTask = function(name, typeNeeded, priority, details) {
+  var task = {
+    name: name,
+    typeNeeded: typeNeeded,
+    priority: priority,
+    details: details
+  }
+console.log("trying to create Task")
+  var duplicateTask = null;
+    for (var i in Game.creeps) {
+      if (Game.creeps[i].memory.task == task){
+      console.log("Duplicate task found in creep")
+
+         duplicateTask = true;}
+    }
+
+    for (var i in this.memory.taskList) {
+      if ( i == task){
+      console.log("Duplicate task found in queue")
+           duplicateTask = true;}
+    }
+    console.log("trying to create Task #2 "+ duplicateTask)
+  if (duplicateTask != true ) {
+    console.log("Adding task")
+    this.memory.taskList.push(task)
+  }
+}
+
+Room.prototype.assignTask = function() {
+
+}
+
+Room.prototype.filterTasks = function(taskName) {
+  var filteredTasks = []
+  for (var i in this.memory.taskList){
+     if(this.memory.taskList[i].name == taskName){
+       filteredTasks.push(this.memory.taskList[i])
+     }
+  }
+  return filteredTasks
+}
+
+
+Room.prototype.findBuilder = function(task) {
+  for (let i in this.creepsAllRound) {
+    var potentialCreep = this.creepsAllRound[i]
+
+    if (!potentialCreep.memory.tasks[0]) {
+      potentialCreep.memory.tasks[0] = task
+      break;
+    }
+  }
+}
+
+
 Room.prototype.isMine = function() {
   return this.controller && this.controller.my;
 }
@@ -33,16 +98,6 @@ Room.prototype.processAsGuest = function() {
 }
 
 
-Room.prototype.findBuilder = function(constructionSite) {
-  for (let i in this.creepsAllRound) {
-    var potentialCreep = this.creepsAllRound[i]
-
-    if (!potentialCreep.memory.target) {
-      potentialCreep.memory.target = constructionSite.id
-      break;
-    }
-  }
-}
 
 Room.prototype.needSourceScouts = function() {
   let scoutRoomFlags = [];

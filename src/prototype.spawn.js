@@ -20,6 +20,7 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceI
     dryRun: true
   });
   if (testCreep == 0) {
+    var tasks = [];
     this.spawnCreep(bodyParts, name, {
       memory: {
         role: role,
@@ -27,7 +28,8 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceI
         home: home.name,
         sourceId: sourceId,
         targetRoom: targetRoom,
-        targetFlag: thisFlag
+        targetFlag: thisFlag,
+        tasks: tasks
 
       }
     });
@@ -62,7 +64,7 @@ Spawn.prototype.spawnClaimer = function(roomName, thisFlag) {
 
 Spawn.prototype.spawnHarvester = function(roomName, flagName) {
 
-    console.log("trying to spawn basic " + spawn )
+
 
     if (roomName == "n/a") {
       var bodyParts = config.bodies.default

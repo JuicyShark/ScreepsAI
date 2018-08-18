@@ -22,8 +22,9 @@ Room.prototype.tick = function() {
     if (this.memory.timer % 30 == 0) {
       this.initSource();
       this.createNeeds();
-      if (this.constructionSites.length != 0) {
-        this.findBuilder(this.constructionSites[0]);
+    var buildList = this.filterTasks("TASK_BUILD")
+      if (buildList.length != 0) {
+        this.findBuilder(buildList[0]);
       }
     }
     --this.memory.timer;
@@ -86,7 +87,7 @@ Room.prototype.initCreeps = function() {
   this.creepsAllRound = this.find(FIND_MY_CREEPS, {
     filter: {
       memory: {
-        type: "ALL_ROUND"
+        type: "TYPE_ALLROUND"
       }
     }
   });
@@ -95,6 +96,9 @@ Room.prototype.initCreeps = function() {
 Room.prototype.memoryInit = function() {
   this.initStructures();
   this.initConstructionSites();
+  if(!this.memory.taskList){
+    this.memory.taskList = []
+  }
 }
 
 Room.prototype.level = function() {
@@ -203,6 +207,8 @@ Room.prototype.initConstructionSites = function() {
   this.constructionSites = this.find(FIND_CONSTRUCTION_SITES)
   for (let i in this.constructionSites) {
     this.memory.constructionSites[i] = this.constructionSites[i].id
+    details = {target: this.constructionSites[i].id, targetRoom: this.constructionSites.room};
+    this.createTask("TASK_BUILD", "TYPE_ALLROUND", 3, details)
   }
 };
 

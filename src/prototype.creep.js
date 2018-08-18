@@ -36,20 +36,19 @@ Creep.prototype.ourPath = function(destination) {
 
 
 
-Creep.prototype.roleBuilder = function(creep) {
-  var targets = this.room.memory.constructionSites
-  if (_.size(targets) >= 1) {
+Creep.prototype.roleBuilder = function() {
 
-    var thisTarget = Game.getObjectById(targets[0]);
+  var task = this.memory.tasks[0]
+  if(task != null){
+    var thisTarget = Game.getObjectById(task.details.target);
 
-  }
-  else if (_.size(targets) == 0) {
-    console.log("Builder no build D:")
-  }
   if (thisTarget != null) {
-    if (creep.build(thisTarget) == ERR_NOT_IN_RANGE) {
-      creep.ourPath(thisTarget)
+    if (this.build(thisTarget) == ERR_NOT_IN_RANGE) {
+      this.ourPath(thisTarget)
     }
+  }
+  }else{
+      console.log("no current tasks")
   }
 };
 
