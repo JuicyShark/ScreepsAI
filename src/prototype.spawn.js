@@ -1,5 +1,6 @@
 require('prototype.creepBuilder'),
 require('nameGen')
+var config = require("config")
 
 StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceId, targetRoom, thisFlag) {
   var thisFlagName = ""
@@ -40,9 +41,90 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceI
   }
 };
 
-StructureSpawn.prototype.spawnAttackCreep = function(bodyParts, role, home, idleFlag) {
+Spawn.prototype.spawnReserver = function(roomName, flag) {
+    var bodyParts = config.bodies.claimer
+    this.spawnNewCreep(bodyParts, "claimer", this.room.name, "n/a", roomName, flag)
+
+  }
+
+
+
+Spawn.prototype.spawnClaimer = function(roomName, thisFlag) {
+    if (thisFlag == null || thisFlag == "n/a") {
+      thisFlag = "n/a"
+    }
+    var bodyParts = config.bodies.claimer
+    this.spawnNewCreep(bodyParts, "claimer", this.room.name, "n/a", roomName, thisFlag)
+    //thisFlag.hasClaimer = true;
+  }
+
+
+
+Spawn.prototype.spawnHarvester = function(roomName, flagName) {
+
+    console.log("trying to spawn basic " + spawn )
+
+    if (roomName == "n/a") {
+      var bodyParts = config.bodies.default
+    } else {
+      let myConfig = config.bodies.harvester;
+      var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.room.energyCapacityAvailable)]
+    }
+    this.spawnNewCreep(bodyParts, "harvester", this.room.name, "n/a", roomName, flagName)
+}
+
+Spawn.prototype.spawnContainerMiner = function(sourceId) {
+    let myConfig = config.bodies.miner;
+    var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.room.energyCapacityAvailable)]
+    this.spawnNewCreep(bodyParts, "miner", this.room.name, sourceId)
+}
+
+Spawn.prototype.spawnLorry = function(longDistance) {
+  if (longDistance == false) {
+
+      let myConfig = config.bodies.lorry;
+      var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.room.energyCapacityAvailable)]
+      this.spawnNewCreep(bodyParts, "lorry", this.room.name)
+
+  }
+}
+
+Spawn.prototype.spawnRepairer = function() {
+
+    let myConfig = config.bodies.repairer;
+    var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.room.energyCapacityAvailable)]
+    this.spawnNewCreep(bodyParts, "repairer", this.room.name)
 
 }
-StructureSpawn.prototype.spawnDefenseCreep = function(bodyParts, role, home, idleFlag) {
 
+Spawn.prototype.spawnBuilder = function() {
+
+    let myConfig = config.bodies.builder;
+    var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.room.energyCapacityAvailable)]
+    var type = "ALL_ROUND"
+    this.spawnNewCreep(bodyParts, "builder", this.room.name, "", type)
+
+}
+
+Spawn.prototype.spawnUpgrader = function() {
+
+    let myConfig = config.bodies.upgrader;
+    var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.room.energyCapacityAvailable)]
+    this.spawnNewCreep(bodyParts, "upgrader", this.room.name)
+  }
+
+
+Spawn.prototype.spawnAttacker = function(idleFlag) {
+  /*if (this.canSpawn() != false) {
+    spawn = this.canSpawn();
+    var bodyParts = config.bodies.attacker[this.room.energyCapacityAvailable]
+    this.spawnAttackCreep(bodyParts, "attacker", this.room.name)
+  }*/
+}
+Spawn.prototype.spawnDefender = function() {
+  /*  if (this.canSpawn() != false) {
+      spawn = this.canSpawn();
+      var bodyParts = config.bodies.defender(this.room.energyCapacityAvailable)
+      this.spawnDefenseCreep(bodyParts, "defender", this.room.name)
+    }*/
 }

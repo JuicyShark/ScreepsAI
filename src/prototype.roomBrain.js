@@ -2,38 +2,204 @@ require("prototype.spawn")
 var config = require("config")
 
 
-Room.prototype.createNeeds = function() {
-  if (this.needBasicWorker()) {
-    this.spawnHarvester("n/a", "n/a")
-  } else if (this.needLorry()) {
-    let longDistance = false
-    this.spawnLorry(longDistance) // false meaning long distance or not
-  } else if (this.needContainerMiner()) {
-    for (var i in this.memory.sourceNodes) {
-      if (this.memory.sourceNodes[i].miners == 0) {
-        this.spawnContainerMiner(this.memory.sourceNodes[i].id)
+Room.prototype.isMine = function() {
+  return this.controller && this.controller.my;
+}
+
+Room.prototype.alertLevel = function() {
+  let hostiles = this.find(FIND_HOSTILE_CREEPS, {
+    filter: {
+      owner: {
+        username: !config.allies.username
       }
     }
-  } else if (this.needUpgrader()) {
-    this.spawnUpgrader()
-  } else if (this.needBuilder()) {
-    this.spawnBuilder()
-  } else if (this.needRepairer()) {
-    this.spawnRepairer()
-  } else if (this.needDefender()) {
-    this.spawnDefender()
+  });
+  if (hostiles.size() >= 1) {
+    this.safeGuardUp()
+    return 2;
   }
-  /*else if (this.needClaimer()){
-  }*/
-  /*  else if (this.needA) {
-    }*/
-  else if (this.needSourceScouts()) {
-    let theReturned = this.needSourceScouts()
-    let roomName = theReturned[0]
-    let flag = theReturned[1]
-    this.spawnHarvester(roomName, flag.name)
+}
+
+Room.prototype.processAsGuest = function() {
+  console.log("Im just a Guest here! " + this.name)
+  let roomFlags = this.find(FIND_FLAGS, {
+    filter: {
+      name: "HarvestSources"
+    }
+  });
+  if (roomFlags != undefined) {
+    console.log("FLAG!")
+  }
+}
+
+
+Room.prototype.findBuilder = function(constructionSite) {
+  for (let i in this.creepsAllRound) {
+    var potentialCreep = this.creepsAllRound[i]
+
+    if (!potentialCreep.memory.target) {
+      potentialCreep.memory.target = constructionSite.id
+      break;
+    }
+  }
+}
+
+Room.prototype.needSourceScouts = function() {
+  let scoutRoomFlags = [];
+  for (i in Memory.flags) {
+    if (Memory.flags[i].needScout) {
+      scoutRoomFlags.push(Memory.flags[i].id)
+      scoutRoomFlags.push(Memory.flags[i])
+    }
+  }
+  if (scoutRoomFlags.length != 0) {
+    return scoutRoomFlags;
   } else {
-    console.log("Needs have been Met!")
-    console.log(this.energyAvailable + "/" + this.energyCapacityAvailable + " Is the energy Capacity of the room")
+    return false;
+  }
+}
+
+Room.prototype.needBasicWorker = function() {
+  let harvesters = this.find(FIND_MY_CREEPS, {
+    filter: {
+      memory: {
+        role: "harvester"
+      }
+    }
+  });
+  let miners = this.find(FIND_MY_CREEPS, {
+    filter: {
+      memory: {
+        role: "miner"
+      }
+    }
+  });
+  let lorrys = this.find(FIND_MY_CREEPS, {
+    filter: {
+      memory: {
+        role: "lorry"
+      }
+    }
+  });
+  if (miners.length >= 2 && lorrys.length >= 2) {
+    return false;
+  } else if (harvesters.length == null || harvesters == 0) {
+    console.log("need worker")
+    return true;
+  } else if (this.needContainerMiner()) {
+    return false;
+  }
+
+}
+// Testing to only want harvesters if we dont have miners and lorrys around
+Room.prototype.needLorry = function() {
+  let lorrys = this.find(FIND_MY_CREEPS, {
+    filter: {
+      memory: {
+        role: "lorry"
+      }
+    }
+  });
+  let miners = this.find(FIND_MY_CREEPS, {
+    filter: {
+      memory: {
+        role: "miner"
+      }
+    }
+  });
+  if (miners.length >= 1 && lorrys.length < config.maxLorrys[this.level()]) {
+    return true
+  } else if (lorrys.length > config.maxLorrys[this.level()]) {
+    return false;
+  }
+}
+
+Room.prototype.needRepairer = function() {
+  let repairer = this.find(FIND_MY_CREEPS, {
+    filter: {
+      memory: {
+        role: "repairer"
+      }
+    }
+  });
+  if (repairer.length <= config.maxRepairers[this.level()]) {
+    return true
+  }
+}
+
+Room.prototype.needUpgrader = function() {
+  let upgrader = this.find(FIND_MY_CREEPS, {
+    filter: {
+      memory: {
+        role: "upgrader"
+      }
+    }
+  });
+  if (upgrader.length <= config.maxUpgraders[this.level()]) {
+    return true
+  }
+}
+
+Room.prototype.needBuilder = function() {
+  let builder = this.find(FIND_MY_CREEPS, {
+    filter: {
+      memory: {
+        role: "builder"
+      }
+    }
+  });
+  if (builder.length <= config.maxBuilders[this.level()]) {
+    return true;
+  }
+}
+
+Room.prototype.needContainerMiner = function() {
+  for (var i in this.memory.sourceNodes) {
+    if (this.memory.sourceNodes[i].miners == 0 && this.memory.sourceNodes[i].container != "") {
+      return true
+    }
+    if (this.memory.sourceNodes[i].miners == 1) {
+      return false
+    }
+  }
+}
+
+Room.prototype.needDefender = function() {
+  /*  if () {
+      return true
+    }
+    else {
+      return false
+    }*/
+}
+
+Room.prototype.needRangedAttacker = function() {
+  return false
+  //attacking logic
+}
+
+Room.prototype.needBrawler = function() {
+
+  return false
+  //attacking logic
+}
+
+Room.prototype.needMedic = function() {
+  return false
+  //attacking logic
+}
+
+Room.prototype.needClaimer = function() {
+  if (this.energyCapacityAvailable >= 700) {
+    for (let i in Memory.flags) {
+      let = thisFlag = Memory.flags[i]
+      if (thisFlag.name == "ClaimRoom" && thisFlag.hasClaimer == false) {
+        var spawn = this.find(FIND_MY_SPAWNS)
+        spawn[0].spawnClaimer(roomName, thisFlag)
+      }
+    }
+    return true;
+  } else {
+    return false;
   }
 }
