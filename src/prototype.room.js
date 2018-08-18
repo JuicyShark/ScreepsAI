@@ -26,7 +26,6 @@ Room.prototype.tick = function() {
       if (availableBuilder != null) {
         for(let i in availableBuilder){
           var newTask = this.filterTasks("TASK_BUILD")
-          console.log(availableBuilder)
         availableBuilder[i].memory.task.push(newTask)
 }
       }
@@ -209,7 +208,8 @@ Room.prototype.initConstructionSites = function() {
   for (let i in this.constructionSites) {
     this.memory.constructionSites[i] = this.constructionSites[i].id
     details = {target: this.constructionSites[i].id, targetRoom: this.constructionSites.room};
-    this.createTask("TASK_BUILD", "TYPE_ALLROUND", 3, details)
+    var id = details.target + i + Game.time
+    this.createTask("TASK_BUILD", id, "TYPE_ALLROUND", 3, details)
   }
 };
 

@@ -6,15 +6,17 @@ var config = require("config")
 
 
 /** @function createTask
-    @param {string} name  // String name of the task,                                example: TASK_HARVEST
+    @param {string} name  // String name of the task,     example: TASK_HARVEST
+    @param {string} id  //      please do this   var id = details.target + i + Game.time .... ensure ID is unique
     @param {string} typeNeeded  // String of the Type of body needed for task,       example: TYPE_ALLROUND
     @param {number} priority  // number of the priority of tasks assign tasks starting from one first
     @param {object} details   // further details of the task including target/s and any id's of things associated
    // create a task to assign in a queue
     */
-Room.prototype.createTask = function(name, typeNeeded, priority, details) {
+Room.prototype.createTask = function(name, id, typeNeeded, priority, details) {
   var task = {
     name: name,
+    id: id,
     typeNeeded: typeNeeded,
     priority: priority,
     details: details
@@ -22,17 +24,16 @@ Room.prototype.createTask = function(name, typeNeeded, priority, details) {
   var duplicateTask = null;
     for (var i in Game.creeps) {
       if( duplicateTask == true) break;
-      if (Game.creeps[i].memory.task[0] != null){
-        if(Game.creeps[i].memory.task[0].details.target == task.details.target){
+      if (Game.creeps[i].memory.task.length >= 1){
+        if(Game.creeps[i].memory.task[0].id == task.id){
 
              duplicateTask = true;
          }
        }
     }
-
     for (var i in this.memory.taskList) {
       if( duplicateTask == true) break;
-      if ( this.memory.taskList[i].details.target == task.details.target){
+      if ( this.memory.taskList[i].id == task.id){
            duplicateTask = true;
 
          }
@@ -68,7 +69,6 @@ Room.prototype.findBuilder = function() {
   for (let i in this.creepsAllRound) {
     var potentialCreep = this.creepsAllRound[i]
     if (potentialCreep.memory.task[0] == null) {
-      console.log(potentialCreep)
     potentialCreeps.push(potentialCreep)
     }
   }
