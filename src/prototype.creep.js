@@ -38,17 +38,18 @@ Creep.prototype.ourPath = function(destination) {
 
 Creep.prototype.roleBuilder = function() {
 
-  var task = this.memory.tasks[0]
-  if(task != null){
-    var thisTarget = Game.getObjectById(task.details.target);
+  if(this.memory.task[0] != null){
+  var  creepTask = this.memory.task[0].details.target
+    var thisTarget = Game.getObjectById(creepTask);
 
   if (thisTarget != null) {
     if (this.build(thisTarget) == ERR_NOT_IN_RANGE) {
       this.ourPath(thisTarget)
     }
+  } else{
+    console.log(this.name + " Target is nowhere to be found. Removing task");
+    this.memory.task.shift();
   }
-  }else{
-      console.log("no current tasks")
   }
 };
 

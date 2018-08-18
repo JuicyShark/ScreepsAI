@@ -19,23 +19,25 @@ Room.prototype.createTask = function(name, typeNeeded, priority, details) {
     priority: priority,
     details: details
   }
-console.log("trying to create Task")
   var duplicateTask = null;
     for (var i in Game.creeps) {
-      if (Game.creeps[i].memory.task == task){
-      console.log("Duplicate task found in creep")
+      if( duplicateTask == true) break;
+      if (Game.creeps[i].memory.task[0] != null){
+        if(Game.creeps[i].memory.task[0].details.target == task.details.target){
 
-         duplicateTask = true;}
+             duplicateTask = true;
+         }
+       }
     }
 
     for (var i in this.memory.taskList) {
-      if ( i == task){
-      console.log("Duplicate task found in queue")
-           duplicateTask = true;}
+      if( duplicateTask == true) break;
+      if ( this.memory.taskList[i].details.target == task.details.target){
+           duplicateTask = true;
+
+         }
     }
-    console.log("trying to create Task #2 "+ duplicateTask)
   if (duplicateTask != true ) {
-    console.log("Adding task")
     this.memory.taskList.push(task)
   }
 }
@@ -44,26 +46,34 @@ Room.prototype.assignTask = function() {
 
 }
 
+Room.prototype.checkTask = function(type) {
+
+}
+
 Room.prototype.filterTasks = function(taskName) {
-  var filteredTasks = []
+
   for (var i in this.memory.taskList){
      if(this.memory.taskList[i].name == taskName){
-       filteredTasks.push(this.memory.taskList[i])
+      var  filteredTask = this.memory.taskList[i]
+        this.memory.taskList.splice(i, 1);
+        return filteredTask
      }
   }
-  return filteredTasks
+
 }
 
 
-Room.prototype.findBuilder = function(task) {
+Room.prototype.findBuilder = function() {
+  var potentialCreeps = []
   for (let i in this.creepsAllRound) {
     var potentialCreep = this.creepsAllRound[i]
-
-    if (!potentialCreep.memory.tasks[0]) {
-      potentialCreep.memory.tasks[0] = task
-      break;
+    if (potentialCreep.memory.task[0] == null) {
+      console.log(potentialCreep)
+    potentialCreeps.push(potentialCreep)
     }
   }
+if (potentialCreeps.length >= 1)
+  return potentialCreeps
 }
 
 

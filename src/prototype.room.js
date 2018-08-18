@@ -22,9 +22,13 @@ Room.prototype.tick = function() {
     if (this.memory.timer % 30 == 0) {
       this.initSource();
       this.createNeeds();
-    var buildList = this.filterTasks("TASK_BUILD")
-      if (buildList.length != 0) {
-        this.findBuilder(buildList[0]);
+    var availableBuilder = this.findBuilder()
+      if (availableBuilder != null) {
+        for(let i in availableBuilder){
+          var newTask = this.filterTasks("TASK_BUILD")
+          console.log(availableBuilder)
+        availableBuilder[i].memory.task.push(newTask)
+}
       }
     }
     --this.memory.timer;
@@ -41,18 +45,14 @@ Room.prototype.tick = function() {
 Room.prototype.createNeeds = function() {
   var spawns = this.find(FIND_MY_SPAWNS)
   var spawn = spawns[0];
-  console.log(spawn)
   if (this.needBasicWorker()) {
-      console.log(spawn + " spawn a basic Harvester")
     spawn.spawnHarvester("n/a", "n/a")
   } else if (this.needLorry()) {
     let longDistance = false
-      console.log(spawn + " spawn a Lorry")
     spawn.spawnLorry(longDistance) // false meaning long distance or not
   } else if (this.needContainerMiner()) {
     for (var i in this.memory.sourceNodes) {
       if (this.memory.sourceNodes[i].miners == 0) {
-          console.log(spawn + " spawn a Miner")
         spawn.spawnContainerMiner(this.memory.sourceNodes[i].id)
       }
     }
@@ -94,11 +94,12 @@ Room.prototype.initCreeps = function() {
 }
 
 Room.prototype.memoryInit = function() {
-  this.initStructures();
-  this.initConstructionSites();
   if(!this.memory.taskList){
     this.memory.taskList = []
   }
+  this.initStructures();
+  this.initConstructionSites();
+
 }
 
 Room.prototype.level = function() {
