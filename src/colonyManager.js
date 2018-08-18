@@ -28,10 +28,16 @@ colonyManager.prototype.creepManager = function() {
 colonyManager.prototype.roomManager = function() {
 
   //Loop through all rooms your creeps/structures are in
-  for (let roomName in Game.rooms) {
-    var currentRoom = Game.rooms[roomName];
+  for (let roomName in Game.colonies.bases) {
+    var currentRoom = Game.colonies.bases[roomName];
     currentRoom.runLogic();
-
+  }
+  for (let roomName in Game.colonies.outposts) {
+    var currentRoom = Game.colonies.outposts[roomName];
+    currentRoom.runLogic();
+  }for (let roomName in Game.colonies.outposts) {
+    var currentRoom = Game.colonies.outposts[roomName];
+    currentRoom.runLogic();
   }
 }
 /*colonyManager.prototype.
@@ -40,8 +46,8 @@ colonyManager.prototype.
 colonyManager.prototype.
 */
 colonyManager.prototype.colonyMemInit = function() {
-  if (!Memory.Colonies) {
+  if (!Memory.colonies) {
     var config = require("config")
-    Memory.Colonies = config.DefaultMem.colonyMem;
+    Memory.colonies = config.defaultMem.colonyMem;
   }
 }

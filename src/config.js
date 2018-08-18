@@ -1,18 +1,21 @@
 module.exports = {
-  DefaultMem: {
+  defaultMem: {
     colonyMem: {
+      bases: {
+
+      },
+
       outpost: {
-        spawnRoom: {},
-        quarrys: {},
+
       },
-      Castles: {
-        spawnRooms: {},
-        quarrys: {}
-      },
-      allies: {
-        username: "Juicy-shark"
-      },
+    otherRooms: {
+      
+    },
       enemys: {}
+    },
+    allies: {
+      username: "Juicy-shark",
+      username: "CrazedGod"
     },
     RoomStructureMem: {
       controller : {
@@ -99,7 +102,7 @@ module.exports = {
         if(energyCap > 500) {
           return 500
         }
-      },    
+      },
       defaults: {
         300: [WORK, WORK, CARRY, MOVE],
         350: [WORK, WORK, CARRY, CARRY, MOVE],

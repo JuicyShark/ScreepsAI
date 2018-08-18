@@ -26,11 +26,14 @@ Room.prototype.tick = function() {
       }
     }
     --this.memory.timer;
-  } else {
+  }
+// Room is not Ours
+  else {
     this.processAsGuest();
   }
 }
-
+// need to start applying types to creeps based on body bodyParts
+// need to create a legend of types and what tasks they are most suitable for
 Room.prototype.initCreeps = function() {
   this.creepsAllRound = this.find(FIND_MY_CREEPS, {
     filter: {

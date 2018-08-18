@@ -4,7 +4,7 @@ require('prototype.room')
 require('prototype.creep')
 require('prototype.outpost')
 require('prototype.SorterMan')
-require('colonyManager')
+//require('colonyManager')
 require('prototype.flags')
 
 // Turn off any of the below features by passing false.
@@ -24,6 +24,24 @@ module.exports.loop = function() {
       delete Memory.creeps[name];
     }
   }
-  runColony();
+    for(var i in Game.flags) {
+      var currentFlag = Game.flags[i];
+      currentFlag.tick();
+
+    }
+
+    //Loop through all rooms your creeps/structures are in
+    for (let roomName in Game.rooms) {
+      var currentRoom = Game.rooms[roomName];
+      currentRoom.runLogic()
+    }
+
+
+    // for each creeps run creep logic
+    for (let name in Game.creeps) {
+
+    //  Game.creeps[name].suicide();
+      Game.creeps[name].runRole();
+    }
 })
 };
