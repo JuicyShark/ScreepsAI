@@ -2,18 +2,7 @@ require('prototype.creepBuilder'),
 require('nameGen')
 var config = require("config")
 
-StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceId, targetRoom, thisFlag) {
-  var thisFlagName = ""
-  if(sourceId == null || sourceId == "n/a"){
-    sourceId = "NoSource";
-  }
-  if(targetRoom == null || targetRoom == "n/a"){
-    targetRoom = "NoTarget";
-  }
-  if(thisFlag == null || thisFlag == "n/a"){
-    thisFlag = "NoFlag";
-  }
-
+StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home) {
 
   var name = this.nameGen();
   var testCreep = this.spawnCreep(bodyParts, name, {
@@ -24,11 +13,7 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceI
       memory: {
         role: role,
         working: "false",
-        home: home.name,
-        sourceId: sourceId,
-        targetRoom: targetRoom,
-        targetFlag: thisFlag
-
+        home: home.name
       }
     });
     console.log("Spawning a " + role + ", named " + name);
@@ -43,18 +28,15 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, sourceI
 
 Spawn.prototype.spawnReserver = function(roomName, flag) {
     var bodyParts = config.bodies.claimer
-    this.spawnNewCreep(bodyParts, "claimer", this.room.name, "n/a", roomName, flag)
+    this.spawnNewCreep(bodyParts, "claimer", this.room.name)
 
   }
 
 
 
 Spawn.prototype.spawnClaimer = function(roomName, thisFlag) {
-    if (thisFlag == null || thisFlag == "n/a") {
-      thisFlag = "n/a"
-    }
     var bodyParts = config.bodies.claimer
-    this.spawnNewCreep(bodyParts, "claimer", this.room.name, "n/a", roomName, thisFlag)
+    this.spawnNewCreep(bodyParts, "claimer", this.room.name)
     //thisFlag.hasClaimer = true;
   }
 
@@ -62,7 +44,6 @@ Spawn.prototype.spawnClaimer = function(roomName, thisFlag) {
 
 Spawn.prototype.spawnHarvester = function(roomName, flagName) {
 
-    console.log("trying to spawn basic " + spawn )
 
     if (roomName == "n/a") {
       var bodyParts = config.bodies.default
