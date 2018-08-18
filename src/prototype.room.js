@@ -49,12 +49,11 @@ Room.prototype.createNeeds = function() {
     let longDistance = false
     spawn.spawnLorry(longDistance) // false meaning long distance or not
   } else if (this.needContainerMiner()) {
-    for (var i in this.memory.sourceNodes) {
-      if (this.memory.sourceNodes[i].miners == 0) {
-        spawn.spawnContainerMiner(this.memory.sourceNodes[i].id)
+
+      //  spawn.spawnContainerMiner(this.memory.sourceNodes[i].id)
       }
-    }
-  } else if (this.needUpgrader()) {
+
+   else if (this.needUpgrader()) {
     spawn.spawnUpgrader()
   } else if (this.needBuilder()) {
     spawn.spawnBuilder()
@@ -79,7 +78,7 @@ Room.prototype.createNeeds = function() {
 // need to start applying types to creeps based on body bodyParts
 // need to create a legend of types and what tasks they are most suitable for
 Room.prototype.initCreeps = function() {
-  this.memory.creepsAllRound = this.find(FIND_MY_CREEPS, {
+  this.creepsAllRound = this.find(FIND_MY_CREEPS, {
     filter: {
       memory: {
         type: "ALL_ROUND"
@@ -93,6 +92,7 @@ Room.prototype.memoryInit = function() {
     this.memory.taskList = []
   }
   this.initStructures();
+  this.initContainers();
   this.initConstructionSites();
 }
 
@@ -134,7 +134,7 @@ Room.prototype.initSource = function() {
     let miners = this.find(FIND_MY_CREEPS, {
       filter: {
         memory: {
-          sourceId: source.id
+          task: {details: {sourceId: source.id}}
         }
       }
     });
@@ -143,10 +143,15 @@ Room.prototype.initSource = function() {
       this.memory.sourceNodes[source.id].toBuild = config.buildingLevels.sources;
     }
     if (!this.memory.sourceNodes[source.id].container) {
-      this.memory.sourceNodes[source.id].container = "";
+
+      let containers = this.find(FIND_STRUCTURES, {
+       filter: (s) => s.structureType === STRUCTURE_CONTAINER && s.pos.findInRange(FIND_SOURCES, 1)
+   });
+      console.log(containers)
+      this.memory.sourceNodes[source.id].container = containers[0].id;
     }
   }
-  this.initContainers();
+
 }
 
 Room.prototype.loadSource = function() {
@@ -174,24 +179,14 @@ Room.prototype.initContainers = function() {
     }
   });
   if (containers) {
-    let temp1 = [];
     for (let i in containers) {
       if (containers[i] instanceof StructureContainer) {
-        let source = containers[i].pos.findInRange(FIND_SOURCES, 1);
-        if (source.length == 0) {
-          temp1.push(containers[i].id)
-        } else if (source.length == 1) {
-          this.memory.sourceNodes[source[0].id].container = containers[i].id
-          this.memory.sourceNodes[source[0].id].toBuild.Container = false;
-        }
+        this.memory.structureIDs.Containers[i] = containers[i].id
       } else {
         console.log('Container is not instanceof SturctureContainer')
         containers.splice(i);
       }
     }
-    /*  if(this.memory.structureIDs.Containers != temp1) {
-        this.memory.structureIDs.Containers = temp1;
-      }*/
   }
 }
 
@@ -206,8 +201,8 @@ Room.prototype.initConstructionSites = function() {
 
 Room.prototype.initConstructionTasks = function(constructionSite){
   details = {target: constructionSite};
-  var id = details.target + Game.time
-  this.createTask("BUILD", id, "ALL_ROUND", 3, details)
+
+  this.createTask("BUILD", "ALL_ROUND", 3, details)
 }
 Room.prototype.loadConstructionSites = function() {
   this.constructionSites = [];
