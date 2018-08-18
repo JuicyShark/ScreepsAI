@@ -2,15 +2,17 @@ module.exports = {
   run: function(creep) {
     creep.checkDeath(creep)
 
-    source = Game.getObjectById(creep.memory.sourceId);
-    let container = source.pos.findInRange(FIND_STRUCTURES, 1, {
-      filter: (s) => s.structureType == STRUCTURE_CONTAINER
-    })[0]
-    // try to harvest energy, if the source is not in range
-    if (creep.pos.isEqualTo(container.pos)) {
-      creep.harvest(source)
-    } else {
-      creep.moveTo(container)
+    if(creep.memory.task[0] != null || creep.memory.task[0] != undefined){
+      let container = creep.memory.task[0].details.target
+      let sourceId = creep.memory.task[0].details.sourceId
+      var source = Game.getObjectById(sourceId)
+      var thisContainer = Game.getObjectById(container);
+
+      if (thisContainer != null) {
+        if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+          creep.ourPath(thisContainer)
+        }
+      }
     }
   }
 }

@@ -14,6 +14,8 @@ module.exports = {
     }
     if (creep.carry.energy != creep.carryCapacity && creep.memory.working == "true") {
       creep.getEnergy(false, true)
-    } else if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "true") {}
+    } else if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "true") {
+      creep.memory.working = "false"
+    }
   }
 };

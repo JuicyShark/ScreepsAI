@@ -56,13 +56,13 @@ Spawn.prototype.spawnHarvester = function(roomName, flagName) {
       let myConfig = config.bodies.harvester;
       var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.room.energyCapacityAvailable)]
     }
-    this.spawnNewCreep(bodyParts, "harvester", this.room.name, "n/a", roomName, flagName)
+    this.spawnNewCreep(bodyParts, "harvester", this.room.name, "ALL_ROUND", roomName, flagName)
 }
 
-Spawn.prototype.spawnContainerMiner = function(sourceId) {
+Spawn.prototype.spawnContainerMiner = function() {
     let myConfig = config.bodies.miner;
     var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.room.energyCapacityAvailable)]
-    this.spawnNewCreep(bodyParts, "miner", this.room.name, "",sourceId)
+    this.spawnNewCreep(bodyParts, "miner", this.room.name, "CONTAINER_MINER")
 }
 
 Spawn.prototype.spawnLorry = function(longDistance) {

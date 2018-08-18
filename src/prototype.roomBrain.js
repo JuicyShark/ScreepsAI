@@ -54,6 +54,7 @@ Room.prototype.filterTasks = function(taskName) {
 
   for (var i in this.memory.taskList){
      if(this.memory.taskList[i].name == taskName){
+       //console.log(this.memory.taskList[i].name + " " + taskName)
       var  filteredTask = this.memory.taskList[i]
         this.memory.taskList.splice(i, 1);
         return filteredTask
@@ -73,6 +74,19 @@ Room.prototype.findBuilder = function() {
   }
 if (potentialCreeps.length >= 1)
   return potentialCreeps
+}
+
+Room.prototype.findContainerMiner = function() {
+  var potentialCreeps = [];
+  for (let i in this.creepsContainerMiner) {
+    var potentialCreep = this.creepsContainerMiner[i]
+    if (potentialCreep.memory.task[0] == null) {
+    potentialCreeps.push(potentialCreep)
+    }
+  if (potentialCreeps.length >= 1)
+  //console.log(potentialCreeps)
+    return potentialCreeps
+  }
 }
 
 
@@ -218,16 +232,29 @@ Room.prototype.needBuilder = function() {
 }
 
 Room.prototype.needContainerMiner = function() {
-  for (var i in this.memory.sourceNodes) {
-    if (this.memory.sourceNodes[i].miners == 0 && this.memory.sourceNodes[i].container != "") {
-      details = {target: this.memory.sourceNodes[i].container, sourceId: this.memory.sourceNodes[i].id}
-      this.createTask("CONTAINER_MINE", "CONTAINER_MINER", 1, details )
-      return true
+  let miner = this.find(FIND_MY_CREEPS, {
+    filter: {
+      memory: {
+        type: "CONTAINER_MINER"
+      }
     }
-    if (this.memory.sourceNodes[i].miners == 1) {
-      return false
+  });
+  let output = [];
+  for (let i in this.memory.sourceNodes) {
+
+    let thisSource = this.memory.sourceNodes[i];
+    if(thisSource.miners == 0) {
+      output.push(thisSource)
     }
   }
+    if (output.length != 0) {
+      let selectedSource = output.pop()
+      details = {target: selectedSource.container, sourceId: selectedSource.id}
+      this.createTask("CONTAINER_MINE", "CONTAINER_MINER", 1, details )
+      return true
+    } else if (output.length == 0) {
+      return false
+    }
 }
 
 Room.prototype.needDefender = function() {

@@ -19,15 +19,7 @@ Room.prototype.tick = function() {
     if (this.memory.timer % 30 == 0) {
       this.initSource();
       this.createNeeds();
-    var availableBuilder = this.findBuilder()
-      if (availableBuilder != null) {
-        for(let i in availableBuilder){
-          var newTask = this.filterTasks("BUILD")
-          console.log(availableBuilder[i]);
-          console.log(availableBuilder[i].memory.task)
-        availableBuilder[i].memory.task.push(newTask)
-}
-      }
+      this.avaliableCreeps();
     }
     --this.memory.timer;
   }
@@ -38,7 +30,41 @@ Room.prototype.tick = function() {
 }
 
 
+Room.prototype.avaliableCreeps = function () {
+  this.checkBuilders();
+  this.checkContainerMiners();
 
+}
+
+Room.prototype.checkBuilders = function() {
+  var availableBuilder = this.findBuilder()
+    if (availableBuilder != null) {
+      for(let i in availableBuilder){
+        var newTask = this.filterTasks("BUILD")
+        //console.log(availableBuilder[i]);
+        //console.log(availableBuilder[i].memory.task)
+      availableBuilder[i].memory.task.push(newTask)
+      }
+    }
+}
+Room.prototype.checkContainerMiners = function() {
+  var availableMiner = this.findContainerMiner()
+    if (availableMiner != null) {
+      for(let i in availableMiner){
+        for(let a in Game.creeps) {
+          var newTask = this.filterTasks("CONTAINER_MINE")
+          if (availableMiner[i] == Game.creeps[a]) {
+            if(availableMiner[i].memory.task.length == 0) {
+              availableMiner[i].memory.task.push(newTask)
+            }
+          }
+        }
+      }
+
+        //console.log(availableMiner[i]);
+        //console.log(availableMiner[i].memory.task)
+      }
+    }
 
 Room.prototype.createNeeds = function() {
   var spawns = this.find(FIND_MY_SPAWNS)
@@ -49,10 +75,8 @@ Room.prototype.createNeeds = function() {
     let longDistance = false
     spawn.spawnLorry(longDistance) // false meaning long distance or not
   } else if (this.needContainerMiner()) {
-
-      //  spawn.spawnContainerMiner(this.memory.sourceNodes[i].id)
-      }
-
+      spawn.spawnContainerMiner()
+    }
    else if (this.needUpgrader()) {
     spawn.spawnUpgrader()
   } else if (this.needBuilder()) {
@@ -77,11 +101,19 @@ Room.prototype.createNeeds = function() {
 
 // need to start applying types to creeps based on body bodyParts
 // need to create a legend of types and what tasks they are most suitable for
+/*Legend can go in config file? */
 Room.prototype.initCreeps = function() {
   this.creepsAllRound = this.find(FIND_MY_CREEPS, {
     filter: {
       memory: {
         type: "ALL_ROUND"
+      }
+    }
+  });
+  this.creepsContainerMiner = this.find(FIND_MY_CREEPS, {
+    filter: {
+      memory: {
+        type: "CONTAINER_MINER"
       }
     }
   });

@@ -89,19 +89,22 @@ Creep.prototype.findDeliveryTarget = function(oldTarget) {
   });
 } else if (this.room.energyAvailable == this.room.energyCapacityAvailable) {
   let temp1 = this.pos.findClosestByPath(FIND_STRUCTURES, {
- filter: (s) => (s.structureType == STRUCTURE_CONTAINER) &&
-   s.store != s.energyCapacity
+ filter: (s) => s.structureType == STRUCTURE_CONTAINER &&
+              s.store[RESOURCE_ENERGY] != s.storeCapacity
+
 });
     let temp2 = [];
     for(let i in this.room.memory.structureIDs.Containers) {
     if (this.room.memory.structureIDs.Containers[i] == temp1.id){
       temp2.push(temp1)
+
     }
   }
   container = temp2[0]
 }
 target = container;
-this.deliver(target);
+//console.log(container.id)
+this.deliver(Game.getObjectById(target.id));
 };
 
 /** @function
@@ -115,12 +118,6 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
     filter: {memory: {role: "miner"} }
 });
 
-  /*var fullMiner = miner[0].getActiveBodyparts(WORK)
-    if (fullMiner == 5) {
-      getFromSource = false;
-    } else {
-
-    }*/
     let droppedEnergy = this.pos.findInRange(FIND_DROPPED_RESOURCES, 2)
     if (droppedEnergy != null) {
     this.pickup(droppedEnergy[0])
