@@ -87,7 +87,7 @@ Spawn.prototype.spawnBuilder = function() {
 
     let myConfig = config.bodies.builder;
     var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.room.energyCapacityAvailable)]
-    var type = "TYPE_ALLROUND"
+    var type = "ALL_ROUND"
     this.spawnNewCreep(bodyParts, "builder", this.room.name, type)
 
 }

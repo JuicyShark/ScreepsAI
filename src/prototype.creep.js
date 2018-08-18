@@ -47,7 +47,7 @@ Creep.prototype.roleBuilder = function() {
       this.ourPath(thisTarget)
     }
   } else{
-    console.log(this.name + " Target is nowhere to be found. Removing task");
+    console.log(this.name + ", Target is nowhere to be found. Removing task");
     this.memory.task.shift();
   }
   }
@@ -84,7 +84,7 @@ Creep.prototype.findDeliveryTarget = function(oldTarget) {
   if(this.room.energyAvailable != this.room.energyCapacityAvailable){
      container = this.pos.findClosestByPath(FIND_STRUCTURES, {
     filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
-        s.structureType == STRUCTURE_EXTENSION) &&
+        s.structureType == STRUCTURE_EXTENSION ) &&
       s.energy < s.energyCapacity
   });
 } else if (this.room.energyAvailable == this.room.energyCapacityAvailable) {

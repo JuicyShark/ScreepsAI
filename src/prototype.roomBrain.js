@@ -6,17 +6,16 @@ var config = require("config")
 
 
 /** @function createTask
-    @param {string} name  // String name of the task,     example: TASK_HARVEST
+    @param {string} name  // String name of the task,     example: HARVEST
     @param {string} id  //      please do this   var id = details.target + i + Game.time .... ensure ID is unique
-    @param {string} typeNeeded  // String of the Type of body needed for task,       example: TYPE_ALLROUND
+    @param {string} typeNeeded  // String of the Type of body needed for task,       example: ALL_ROUND
     @param {number} priority  // number of the priority of tasks assign tasks starting from one first
     @param {object} details   // further details of the task including target/s and any id's of things associated
    // create a task to assign in a queue
     */
-Room.prototype.createTask = function(name, id, typeNeeded, priority, details) {
+Room.prototype.createTask = function(name,  typeNeeded, priority, details) {
   var task = {
     name: name,
-    id: id,
     typeNeeded: typeNeeded,
     priority: priority,
     details: details
@@ -24,8 +23,8 @@ Room.prototype.createTask = function(name, id, typeNeeded, priority, details) {
   var duplicateTask = null;
     for (var i in Game.creeps) {
       if( duplicateTask == true) break;
-      if (Game.creeps[i].memory.task.length >= 1){
-        if(Game.creeps[i].memory.task[0].id == task.id){
+      if (Game.creeps[i].memory.task[0] != null){
+        if(Game.creeps[i].memory.task[0].details.target == task.details.target){
 
              duplicateTask = true;
          }
@@ -33,7 +32,7 @@ Room.prototype.createTask = function(name, id, typeNeeded, priority, details) {
     }
     for (var i in this.memory.taskList) {
       if( duplicateTask == true) break;
-      if ( this.memory.taskList[i].id == task.id){
+      if ( this.memory.taskList[i].details.target == task.details.target){
            duplicateTask = true;
 
          }
@@ -221,6 +220,8 @@ Room.prototype.needBuilder = function() {
 Room.prototype.needContainerMiner = function() {
   for (var i in this.memory.sourceNodes) {
     if (this.memory.sourceNodes[i].miners == 0 && this.memory.sourceNodes[i].container != "") {
+      details = {target: this.memory.sourceNodes[i].container, sourceId: this.memory.sourceNodes[i].id}
+      this.createTask("CONTAINER_MINE", "CONTAINER_MINER", 1, details )
       return true
     }
     if (this.memory.sourceNodes[i].miners == 1) {

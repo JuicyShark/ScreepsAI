@@ -79,7 +79,7 @@ Room.prototype.createNeeds = function() {
 // need to start applying types to creeps based on body bodyParts
 // need to create a legend of types and what tasks they are most suitable for
 Room.prototype.initCreeps = function() {
-  this.creepsAllRound = this.find(FIND_MY_CREEPS, {
+  this.memory.creepsAllRound = this.find(FIND_MY_CREEPS, {
     filter: {
       memory: {
         type: "ALL_ROUND"
@@ -200,13 +200,13 @@ Room.prototype.initConstructionSites = function() {
   this.constructionSites = this.find(FIND_CONSTRUCTION_SITES)
   for (let i in this.constructionSites) {
     this.memory.constructionSites[i] = this.constructionSites[i].id
-    this.initConstructionTasks(this.constructionSites[i], i)
+    this.initConstructionTasks(this.constructionSites[i].id )
   }
 };
 
-Room.prototype.initConstructionTasks = function(constructionSite, i){
-  details = {target: constructionSite.id, targetRoom: constructionSite.room};
-  var id = details.target + i + Game.time
+Room.prototype.initConstructionTasks = function(constructionSite){
+  details = {target: constructionSite};
+  var id = details.target + Game.time
   this.createTask("BUILD", id, "ALL_ROUND", 3, details)
 }
 Room.prototype.loadConstructionSites = function() {
