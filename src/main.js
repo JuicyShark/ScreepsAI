@@ -6,6 +6,7 @@ require('prototype.outpost')
 require('prototype.SorterMan')
 //require('colonyManager')
 require('prototype.flags')
+require('prototype.tower')
 
 // Turn off any of the below features by passing false.
 require('screeps-perf')({
@@ -35,7 +36,13 @@ module.exports.loop = function() {
       var currentRoom = Game.rooms[roomName];
       currentRoom.runLogic()
     }
-
+    // find all towers
+       var towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER);
+       // for each tower
+       for (let tower of towers) {
+           // run tower logic
+           tower.defend();
+       }
 
     // for each creeps run creep logic
     for (let name in Game.creeps) {

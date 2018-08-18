@@ -3,9 +3,6 @@ var config = require("config")
 require("prototype.roomBrain")
 
 Room.prototype.tick = function() {
-  /*this.OutpostCheck()
-  console.log("Yep")
-  */
   if (this.isMine()) {
     this.initCreeps();
     if (!this.memory.timer || this.memory.timer % 60 === 0) {
@@ -25,7 +22,9 @@ Room.prototype.tick = function() {
     var availableBuilder = this.findBuilder()
       if (availableBuilder != null) {
         for(let i in availableBuilder){
-          var newTask = this.filterTasks("TASK_BUILD")
+          var newTask = this.filterTasks("BUILD")
+          console.log(availableBuilder[i]);
+          console.log(availableBuilder[i].memory.task)
         availableBuilder[i].memory.task.push(newTask)
 }
       }
@@ -64,10 +63,7 @@ Room.prototype.createNeeds = function() {
   } else if (this.needDefender()) {
     spawn.spawnDefender()
   }
-  /*else if (this.needClaimer()){
-  }*/
-  /*  else if (this.needA) {
-    }*/
+
   else if (this.needSourceScouts()) {
     let theReturned = this.needSourceScouts()
     let roomName = theReturned[0]
@@ -86,7 +82,7 @@ Room.prototype.initCreeps = function() {
   this.creepsAllRound = this.find(FIND_MY_CREEPS, {
     filter: {
       memory: {
-        type: "TYPE_ALLROUND"
+        type: "ALL_ROUND"
       }
     }
   });
@@ -98,7 +94,6 @@ Room.prototype.memoryInit = function() {
   }
   this.initStructures();
   this.initConstructionSites();
-
 }
 
 Room.prototype.level = function() {
@@ -108,8 +103,6 @@ Room.prototype.level = function() {
     return 0
   }
 }
-
-
 
 Room.prototype.safeGuardUp = function() {
   console.log("ENEMYSPOTTED!")
@@ -207,18 +200,22 @@ Room.prototype.initConstructionSites = function() {
   this.constructionSites = this.find(FIND_CONSTRUCTION_SITES)
   for (let i in this.constructionSites) {
     this.memory.constructionSites[i] = this.constructionSites[i].id
-    details = {target: this.constructionSites[i].id, targetRoom: this.constructionSites.room};
-    var id = details.target + i + Game.time
-    this.createTask("TASK_BUILD", id, "TYPE_ALLROUND", 3, details)
+    this.initConstructionTasks(this.constructionSites[i], i)
   }
 };
 
+Room.prototype.initConstructionTasks = function(constructionSite, i){
+  details = {target: constructionSite.id, targetRoom: constructionSite.room};
+  var id = details.target + i + Game.time
+  this.createTask("BUILD", id, "ALL_ROUND", 3, details)
+}
 Room.prototype.loadConstructionSites = function() {
   this.constructionSites = [];
   for (let i in this.memory.constructionSites) {
     this.constructionSites[i] = (Game.getObjectById(this.memory.constructionSites[i]));
   }
 };
+
 
 
 
