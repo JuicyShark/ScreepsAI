@@ -149,7 +149,7 @@ Room.prototype.initSource = function() {
     let miners = this.find(FIND_MY_CREEPS, {
       filter: {
         memory: {
-          task: {details: {sourceId: source.id}}
+          task: [{details: {sourceId: source.id}}]
         }
       }
     });

@@ -2,14 +2,13 @@ require('prototype.creepBuilder'),
 require('nameGen')
 var config = require("config")
 
-StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, type, sourceId) {
+StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, type, task = []) {
 
   var name = this.nameGen();
   var testCreep = this.spawnCreep(bodyParts, name, {
     dryRun: true
   });
   if (testCreep == 0) {
-    var task = [];
     this.spawnCreep(bodyParts, name, {
       memory: {
         role: role,
@@ -17,7 +16,6 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, role, home, type, s
         home: home.name,
         type: type,
         task: task,
-        sourceId: sourceId
       }
     });
     console.log("Spawning a " + role + ", named " + name);
