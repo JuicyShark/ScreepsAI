@@ -52,7 +52,7 @@ Room.prototype.checkContainerMiners = function() {
   var availableMiner = this.findContainerMiner()
     if (availableMiner != null) {
       for(let i in availableMiner){
-        console.log(availableMiner[i])
+      //  console.log(availableMiner[i])
           var newTask = this.filterTasks("CONTAINER_MINE")
 
             if(availableMiner[i].memory.task.length == 0) {
@@ -109,16 +109,17 @@ Room.prototype.initCreeps = function() {
     this.memory.creepsByType.allRound = []
     this.memory.creepsByType.containerMiner = []
   }
-  var creepTypes = {
-  allRound: this.findType("ALL_ROUND"),
-  containerMiner: this.findType("CONTAINER_MINER")
-  }
-console.log(creepTypes)
-  for(var creepType in creepTypes){
-    for(var i in creepType){
+
+  var allRound = this.findType("ALL_ROUND")
+  var containerMiner = this.findType("CONTAINER_MINER")
+
+
+  for(var i in allRound){
+      console.log(allRound[i].id)
+       /*for(var i in creepType){
      var creepId = creepType[i].id
-     this.memory.[creeptype].push(creepId)
-    }
+     this.memory.[creepType].push(creepId)
+   } */
   }
 }
 
@@ -182,7 +183,7 @@ Room.prototype.initSource = function() {
       let containers = source.pos.findInRange(FIND_STRUCTURES, 1, {
        filter: (s) => s.structureType === STRUCTURE_CONTAINER
    });
-      console.log(containers)
+//      console.log(containers)
       this.memory.sourceNodes[source.id].container = containers[0].id;
     }
   }
