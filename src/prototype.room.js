@@ -5,7 +5,7 @@ require("prototype.finder")
 
 Room.prototype.tick = function() {
   if (this.isMine()) {
-    this.initCreeps();
+
     if (!this.memory.timer || this.memory.timer % 60 === 0) {
       this.memory.timer = -1;
       this.memoryInit();
@@ -13,15 +13,20 @@ Room.prototype.tick = function() {
       this.memory.timer = 60;
       console.log(this.name + " Timer has been reset")
     }
-    // load things needed each tick without if statement
-    this.loadSource();
-    this.loadConstructionSites();
-
+    if (this.memory.timer % 15 == 0) {
+        this.initCreeps();
+    }
     if (this.memory.timer % 30 == 0) {
       this.initSource();
       this.createNeeds();
       this.avaliableCreeps();
     }
+    // load things needed each tick without if statement
+    this.loadSource();
+    this.loadConstructionSites();
+
+
+
     --this.memory.timer;
   }
 // Room is not Ours
@@ -51,8 +56,15 @@ Room.prototype.checkBuilders = function() {
 Room.prototype.checkContainerMiners = function() {
   var availableMiner = this.findContainerMiner()
     if (availableMiner != null) {
-      for(let i in availableMiner){
-      //  console.log(availableMiner[i])
+      if(availableMiner.length == 1){
+        var newTask = this.filterTasks("CONTAINER_MINE")
+        console.log(availableMiner[0].memory)
+        if(availableMiner[0].memory.task.length == 0 ) {
+          availableMiner[0].memory.task.push(newTask)
+        }
+      } else{
+      for(let i in availableMiner.length){
+        console.log(availableMiner[i])
           var newTask = this.filterTasks("CONTAINER_MINE")
 
             if(availableMiner[i].memory.task.length == 0) {
@@ -60,7 +72,7 @@ Room.prototype.checkContainerMiners = function() {
             }
 
 
-      }
+      }}
 
         //console.log(availableMiner[i]);
         //console.log(availableMiner[i].memory.task)
@@ -106,20 +118,21 @@ Room.prototype.createNeeds = function() {
 Room.prototype.initCreeps = function() {
   if(!this.memory.creepsByType){
     this.memory.creepsByType = {}
-    this.memory.creepsByType.allRound = []
-    this.memory.creepsByType.containerMiner = []
-  }
 
+  }
+  this.memory.creepsByType.allRound = []
+  this.memory.creepsByType.containerMiner = []
   var allRound = this.findType("ALL_ROUND")
   var containerMiner = this.findType("CONTAINER_MINER")
 
-
   for(var i in allRound){
-      console.log(allRound[i].id)
-       /*for(var i in creepType){
-     var creepId = creepType[i].id
-     this.memory.[creepType].push(creepId)
-   } */
+    var  creepId = allRound[i].id
+    this.memory.creepsByType.allRound.push(creepId)
+
+  }
+  for(var i in containerMiner){
+    var  creepId = containerMiner[i].id
+    this.memory.creepsByType.containerMiner.push(creepId)
   }
 }
 

@@ -9,7 +9,7 @@ Room.prototype.findType = function(type) {
       }
     }
   });
-    console.log(creeps)
+    //console.log(creeps)
 
   return creeps
 }
@@ -32,12 +32,14 @@ if (potentialCreeps.length >= 1)
 Room.prototype.findContainerMiner = function() {
   var potentialCreeps = [];
   for (let i in this.memory.creepsByType.containerMiner) {
+
     var potentialCreep = Game.getObjectById(this.memory.creepsByType.containerMiner[i])
-    if (potentialCreep.memory.task[0] == null) {
+    if (potentialCreep != null && potentialCreep.memory.task[0] == null) {
     potentialCreeps.push(potentialCreep)
     }
-  if (potentialCreeps.length >= 1)
-  //console.log(potentialCreeps)
-    return potentialCreeps
-  }
+
+}
+if (potentialCreeps.length >= 1)
+console.log()
+  return potentialCreeps
 }
