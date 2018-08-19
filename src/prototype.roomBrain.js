@@ -132,8 +132,7 @@ Room.prototype.needSourceScouts = function() {
     return false;
   }
 }
-
-Room.prototype.needBasicWorker = function() {
+Room.prototype.roomHarvesters = function() {
   let harvesters = this.find(FIND_MY_CREEPS, {
     filter: {
       memory: {
@@ -141,23 +140,13 @@ Room.prototype.needBasicWorker = function() {
       }
     }
   });
-  let miners = this.find(FIND_MY_CREEPS, {
-    filter: {
-      memory: {
-        role: "miner"
-      }
-    }
-  });
-  let lorrys = this.find(FIND_MY_CREEPS, {
-    filter: {
-      memory: {
-        role: "lorry"
-      }
-    }
-  });
-  if (miners.length >= 2 && lorrys.length >= 2) {
+  return harvesters;
+}
+Room.prototype.needBasicWorker = function() {
+
+  if (this.roomMiners().length >= 2 && this.roomLorrys().length >= 2) {
     return false;
-  } else if (harvesters.length == null || harvesters == 0) {
+  } else if (this.roomHarvesters().length == null || this.roomHarvesters().length == 0) {
     console.log("need worker")
     return true;
   } else if (this.needContainerMiner()) {
@@ -166,90 +155,101 @@ Room.prototype.needBasicWorker = function() {
 
 }
 // Testing to only want harvesters if we dont have miners and lorrys around
-Room.prototype.needLorry = function() {
+Room.prototype.roomLorrys = function() {
   let lorrys = this.find(FIND_MY_CREEPS, {
     filter: {
       memory: {
         role: "lorry"
-      }
-    }
+    }}
   });
-  let miners = this.find(FIND_MY_CREEPS, {
-    filter: {
-      memory: {
-        role: "miner"
-      }
-    }
-  });
-  if (miners.length >= 1 && lorrys.length < config.maxLorrys[this.level()]) {
+  return lorrys;
+}
+Room.prototype.needLorry = function() {
+  if (this.roomMiners().length >= 1 && this.roomLorrys().length < config.maxLorrys[this.level()]) {
     return true
-  } else if (lorrys.length > config.maxLorrys[this.level()]) {
+  } else if (this.roomLorrys().length > config.maxLorrys[this.level()]) {
     return false;
   } else{
     return false
   }
 }
-
-Room.prototype.needRepairer = function() {
+Room.prototype.roomRepairers = function() {
   let repairer = this.find(FIND_MY_CREEPS, {
     filter: {
       memory: {
         role: "repairer"
-      }
-    }
+      }}
   });
-  if (repairer.length <= config.maxRepairers[this.level()]) {
+  return repairer;
+}
+Room.prototype.needRepairer = function() {
+
+  if (this.roomRepairers().length <= config.maxRepairers[this.level()]) {
     return true
   }
 }
 
-Room.prototype.needUpgrader = function() {
-  let upgrader = this.find(FIND_MY_CREEPS, {
+Room.prototype.roomUpgraders = function () {
+  let roomUpgraders = this.find(FIND_MY_CREEPS, {
     filter: {
       memory: {
-        role: "upgrader"
-      }
-    }
-  });
-  if (upgrader.length <= config.maxUpgraders[this.level()]) {
+        type: "UPGRADER"
+      }}
+    });
+  return roomUpgraders;
+}
+Room.prototype.needUpgrader = function() {
+  if (this.roomUpgraders().length <= config.maxUpgraders[this.level()]) {
     return true
   }
 }
 
-Room.prototype.needBuilder = function() {
+Room.prototype.roomBuilders = function() {
   let builder = this.find(FIND_MY_CREEPS, {
     filter: {
       memory: {
         role: "builder"
-      }
-    }
+      }}
   });
-  if (builder.length <= config.maxBuilders[this.level()]) {
+  return builder;
+}
+Room.prototype.needBuilder = function() {
+
+  if (this.roomBuilders().length <= config.maxBuilders[this.level()]) {
     return true;
   }
 }
-
-Room.prototype.needContainerMiner = function() {
+Room.prototype.roomMiners = function() {
   let miner = this.find(FIND_MY_CREEPS, {
     filter: {
       memory: {
         type: "CONTAINER_MINER"
-      }
-    }
+      }}
   });
+  return miner;
+}
+Room.prototype.needContainerMiner = function() {
+
   let output = [];
+  let tempy = Object.keys(this.memory.sourceNodes)
+  if(this.roomMiners().length >= tempy.length) {
+    console.log("MinerFalsy bc of sourcenode cap")
+    return false
+  }
   for (let i in this.memory.sourceNodes) {
 
     let thisSource = this.memory.sourceNodes[i];
-    if(thisSource.miners == 0) {
+    if(thisSource.miner == "waiting" && thisSource.container != "") {
       output.push(thisSource)
     }
   }
     if (output.length != 0) {
       let selectedSource = output.pop()
+      if (selectedSource.container != "") {
       details = {target: selectedSource.container, sourceId: selectedSource.id}
       this.createTask("CONTAINER_MINE", "CONTAINER_MINER", 1, details )
       return true
+      }
     } else if (output.length == 0) {
       return false
     }

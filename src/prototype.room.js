@@ -5,6 +5,14 @@ require("prototype.finder")
 
 Room.prototype.tick = function() {
   if (this.isMine()) {
+    if(!this.memory) {
+      this.memoryInit();
+      this.assignTasks();
+      this.initSource();
+      this.initCreeps();
+      this.createNeeds();
+      this.avaliableCreeps();
+    }
 
     if (!this.memory.timer || this.memory.timer % 60 === 0) {
       this.memory.timer = -1;
@@ -26,7 +34,7 @@ Room.prototype.tick = function() {
     // load things needed each tick without if statement
     this.loadSource();
     this.loadConstructionSites();
-
+    //this.initStructures();
 
 
     --this.memory.timer;
@@ -39,10 +47,14 @@ Room.prototype.tick = function() {
 
 
 Room.prototype.avaliableCreeps = function () {
-  this.checkBuilders();
-  this.checkContainerMiners();
+  var configSection = Object.values(config.creepTypes)
+  let output = []
+  for(let i = 0;i < configSection.length; i++) {
+    let creepType = this.findType(configSection[i])
+      this.checkAvaliableCreeps(configSection[i])
+      }
+  }
 
-}
 
 
 Room.prototype.createNeeds = function() {
@@ -90,6 +102,7 @@ Room.prototype.initCreeps = function() {
   this.memory.creepsByType.containerMiner = []
   var allRound = this.findType("ALL_ROUND")
   var containerMiner = this.findType("CONTAINER_MINER")
+  var lorry = this.findType("LORRY")
 
   for(var i in allRound){
     var  creepId = allRound[i].id
@@ -98,6 +111,10 @@ Room.prototype.initCreeps = function() {
   }
   for(var i in containerMiner){
     var  creepId = containerMiner[i].id
+    this.memory.creepsByType.containerMiner.push(creepId)
+  }
+  for(var i in lorry){
+    var creepId = lorry[i].id
     this.memory.creepsByType.containerMiner.push(creepId)
   }
 }
@@ -145,15 +162,25 @@ Room.prototype.initSource = function() {
         id: source.id
       }
     }
+    this.memory.sourceNodes[source.id].miner = "waiting"
     this.memory.hostileSpawns = this.find(STRUCTURE_KEEPER_LAIR);
-    let miners = this.find(FIND_MY_CREEPS, {
-      filter: {
-        memory: {
-          task: [{details: {sourceId: source.id}}]
+    let miners = this.roomMiners()
+
+    //console.log("MINERS" + miners)
+    //miners[i].memory.task[0].details.sourceId == source.id
+    for(i in miners) {
+      if(miners[i].memory.task[0]) {
+        if(miners[i].memory.task[0].details.sourceId == source.id) {
+
+        this.memory.sourceNodes[source.id].miner = miners[i].id;
         }
-      }
-    });
-    this.memory.sourceNodes[source.id].miners = miners.length
+      } else if(!miners[i].memory.task[0]) {
+
+        }
+    }
+    if (!this.memory.sourceNodes[source.id].miner) {
+      this.memory.sourceNodes[source.id].miner = "waiting"
+    }
     if (!this.memory.sourceNodes[source.id].toBuild) {
       this.memory.sourceNodes[source.id].toBuild = config.buildingLevels.sources;
     }
@@ -161,9 +188,12 @@ Room.prototype.initSource = function() {
 
       let containers = source.pos.findInRange(FIND_STRUCTURES, 1, {
        filter: (s) => s.structureType === STRUCTURE_CONTAINER
-   });
-//      console.log(containers)
-      this.memory.sourceNodes[source.id].container = containers[0].id;
+      });
+        if(containers.length == 0) {
+          this.memory.sourceNodes[source.id].container = ""
+        } else {
+        this.memory.sourceNodes[source.id].container = containers[0].id;
+      }
     }
   }
 
@@ -182,8 +212,34 @@ Room.prototype.loadSource = function() {
 }
 
 Room.prototype.initStructures = function() {
+
+
+//  console.log(Object.values(extension))
+
   if (!this.memory.structureIDs) {
+
     this.memory.structureIDs = config.defaultMem.RoomStructureMem;
+    this.structures = this.find(FIND_MY_STRUCTURES);
+    this.memory.structureIDs = config.defaultMem.RoomStructureMem;
+    let mem = this.memory.structureIDs;
+    for (let i in this.structures) {
+      if(this.structures[i].structureType == "tower"){
+        mem.Towers.push(this.structures[i].id)
+      }
+      if(this.structures[i].structureType == "spawn"){
+        mem.Spawns.push(this.structures[i].id)
+      }
+      if(this.structures[i].structureType == "extension"){
+        mem.Extensions.push(this.structures[i].id)
+      }
+    }
+/*
+
+    this.memory.structureIDs = config.defaultMem.RoomStructureMem;
+    let mem = this.memory.structureIDs;
+    mem.controller.id = this.controller.id;
+    mem.Extensions =
+    mem.Towers */
   }
 }
 

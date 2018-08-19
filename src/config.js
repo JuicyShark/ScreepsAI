@@ -9,7 +9,7 @@ module.exports = {
 
       },
     otherRooms: {
-      
+
     },
       enemys: {}
     },
@@ -18,15 +18,15 @@ module.exports = {
       username: "CrazedGod"
     },
     RoomStructureMem: {
-      controller : {
-        toBuild: {
-          Road: true
-        }
-      },
-      Containers: {},
-      Extensions: {},
-      Spawns : {},
-      Towers: {}
+      controller : [
+        toBuild = [
+          Road = true
+        ]
+      ],
+      Containers: [],
+      Extensions: [],
+      Spawns : [],
+      Towers: []
     }
   },
   buildingLevels: {
@@ -101,6 +101,8 @@ module.exports = {
       bodyReturn: function(energyCap){
         if(energyCap > 500) {
           return 500
+        } else {
+          return energyCap
         }
       },
       defaults: {
@@ -115,6 +117,8 @@ module.exports = {
       bodyReturn: function(energyCap) {
         if(energyCap > 500) {
           return 500
+        } else {
+          return energyCap
         }
       },
         defaults: {
@@ -134,6 +138,8 @@ module.exports = {
         bodyReturn: function(energyCap) {
           if(energyCap > 600) {
            return 600
+          } else {
+            return energyCap
           }
         },
         defaults: {
@@ -150,6 +156,8 @@ module.exports = {
        bodyReturn: function(energyCap) {
           if(energyCap > 500) {
            return 500
+          } else {
+            return energyCap
           }
         },
         defaults: {
@@ -165,6 +173,8 @@ module.exports = {
        bodyReturn: function(energyCap) {
           if(energyCap > 500) {
            return 500
+          } else {
+            return energyCap
           }
         },
         defaults: {
@@ -178,6 +188,8 @@ module.exports = {
        bodyReturn: function(energyCap) {
           if(energyCap > 500) {
            return 500
+          } else {
+            return energyCap
           }
         },
         defaults:{
@@ -286,6 +298,15 @@ containerGetEnergyLevels: {
   6: 800,
   7: 800,
   8: 1000
+},
+creepTypes : {
+  allRound: "ALL_ROUND",
+  containerMiner: "CONTAINER_MINER",
+  upgrader: "UPGRADER",
+  lorry: "LORRY",
+  claimer: "CLAIMER",
+  attacker: "ATTACKER",
+  defender: "DEFENDER"
 }
 
 }

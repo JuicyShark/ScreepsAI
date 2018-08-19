@@ -78,7 +78,8 @@ Creep.prototype.deliver = function(container) {
 }
 
 
-Creep.prototype.findDeliveryTarget = function(oldTarget) {
+Creep.prototype.findDeliveryTarget = function() {
+  
   let target = null;
   let container = null;
   if(this.room.energyAvailable != this.room.energyCapacityAvailable){
@@ -101,8 +102,15 @@ Creep.prototype.findDeliveryTarget = function(oldTarget) {
     }
   }
   container = temp2[0]
+  if (!container) {
+    container = this.pos.findClosestByPath(FIND_STRUCTURES, {
+      filter: (s) => s.structureType == STRUCTURE_TOWER &&
+      s.energy < s.energyCapacity
+    })
+  }
 }
 target = container;
+
 //console.log(container.id)
 this.deliver(Game.getObjectById(target.id));
 };
