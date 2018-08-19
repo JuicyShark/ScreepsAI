@@ -1,4 +1,5 @@
 require("prototype.spawn")
+require("prototype.finder")
 var config = require("config")
 
 
@@ -63,31 +64,6 @@ Room.prototype.filterTasks = function(taskName) {
 
 }
 
-
-Room.prototype.findBuilder = function() {
-  var potentialCreeps = []
-  for (let i in this.creepsAllRound) {
-    var potentialCreep = this.creepsAllRound[i]
-    if (potentialCreep.memory.task[0] == null) {
-    potentialCreeps.push(potentialCreep)
-    }
-  }
-if (potentialCreeps.length >= 1)
-  return potentialCreeps
-}
-
-Room.prototype.findContainerMiner = function() {
-  var potentialCreeps = [];
-  for (let i in this.creepsContainerMiner) {
-    var potentialCreep = this.creepsContainerMiner[i]
-    if (potentialCreep.memory.task[0] == null) {
-    potentialCreeps.push(potentialCreep)
-    }
-  if (potentialCreeps.length >= 1)
-  //console.log(potentialCreeps)
-    return potentialCreeps
-  }
-}
 
 
 Room.prototype.isMine = function() {
@@ -189,6 +165,8 @@ Room.prototype.needLorry = function() {
     return true
   } else if (lorrys.length > config.maxLorrys[this.level()]) {
     return false;
+  } else{
+    return false
   }
 }
 

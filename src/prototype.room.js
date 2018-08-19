@@ -1,6 +1,7 @@
 require("prototype.spawn")
 var config = require("config")
 require("prototype.roomBrain")
+require("prototype.finder")
 
 Room.prototype.tick = function() {
   if (this.isMine()) {
@@ -51,14 +52,14 @@ Room.prototype.checkContainerMiners = function() {
   var availableMiner = this.findContainerMiner()
     if (availableMiner != null) {
       for(let i in availableMiner){
-        for(let a in Game.creeps) {
+        console.log(availableMiner[i])
           var newTask = this.filterTasks("CONTAINER_MINE")
-          if (availableMiner[i] == Game.creeps[a]) {
+
             if(availableMiner[i].memory.task.length == 0) {
               availableMiner[i].memory.task.push(newTask)
             }
-          }
-        }
+
+
       }
 
         //console.log(availableMiner[i]);
@@ -71,11 +72,11 @@ Room.prototype.createNeeds = function() {
   var spawn = spawns[0];
   if (this.needBasicWorker()) {
     spawn.spawnHarvester("n/a", "n/a")
-  } else if (this.needLorry()) {
-    let longDistance = false
-    spawn.spawnLorry(longDistance) // false meaning long distance or not
-  } else if (this.needContainerMiner()) {
+  }else if (this.needContainerMiner()) {
       spawn.spawnContainerMiner()
+    } else if (this.needLorry()) {
+      let longDistance = false
+      spawn.spawnLorry(longDistance) // false meaning long distance or not
     }
    else if (this.needUpgrader()) {
     spawn.spawnUpgrader()
@@ -103,20 +104,22 @@ Room.prototype.createNeeds = function() {
 // need to create a legend of types and what tasks they are most suitable for
 /*Legend can go in config file? */
 Room.prototype.initCreeps = function() {
-  this.creepsAllRound = this.find(FIND_MY_CREEPS, {
-    filter: {
-      memory: {
-        type: "ALL_ROUND"
-      }
+  if(!this.memory.creepsByType){
+    this.memory.creepsByType = {}
+    this.memory.creepsByType.allRound = []
+    this.memory.creepsByType.containerMiner = []
+  }
+  var creepTypes = {
+  allRound: this.findType("ALL_ROUND"),
+  containerMiner: this.findType("CONTAINER_MINER")
+  }
+
+  for(var creepType in creepTypes){
+    for(var i in creepType){
+     var creepId = creepType[i].id
+     this.memory.[creeptype].push(creepId)
     }
-  });
-  this.creepsContainerMiner = this.find(FIND_MY_CREEPS, {
-    filter: {
-      memory: {
-        type: "CONTAINER_MINER"
-      }
-    }
-  });
+  }
 }
 
 Room.prototype.memoryInit = function() {
