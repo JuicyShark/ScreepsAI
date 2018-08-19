@@ -45,7 +45,7 @@ Room.prototype.createTask = function(name,  typeNeeded, priority, details) {
 
 Room.prototype.assignTasks = function() {
 
- var builders = this.checkBuilders();
+ var builders = this.checkAvaliableCreeps("BUILDER");
  if (builders != null){
    for(var i in builders){
      var builder = builders[i]
@@ -55,7 +55,7 @@ Room.prototype.assignTasks = function() {
      }
    }
  }
- var miners = this.checkContainerMiners();
+ var miners = this.checkAvaliableCreeps("CONTAINER_MINER");
  if(miners != null){
    for(var i in miners){
      var miner = miners[i]
