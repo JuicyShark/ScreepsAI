@@ -43,8 +43,28 @@ Room.prototype.createTask = function(name,  typeNeeded, priority, details) {
   }
 }
 
-Room.prototype.assignTask = function() {
+Room.prototype.assignTasks = function() {
 
+ var builders = this.checkBuilders();
+ if (builders != null){
+   for(var i in builders){
+     var builder = Game.getObjectById(builders[i])
+     if(builders[i] instanceof Creep){
+         var newTask = this.filterTasks("BUILD")
+         builders[i].memory.task.push(newTask)
+     }
+   }
+ }
+ var miners = this.checkContainerMiners();
+ if(miners != null){
+   for(var i in miners){
+     var miner = Game.getObjectById(miners[i])
+     if(miner instanceof Creep){
+         var newTask = this.filterTasks("CONTAINER_MINE")
+         miner.memory.task.push(newTask)
+     }
+   }
+ }
 }
 
 Room.prototype.checkTask = function(type) {

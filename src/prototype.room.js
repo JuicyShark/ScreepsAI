@@ -15,6 +15,7 @@ Room.prototype.tick = function() {
     }
     if (this.memory.timer % 15 == 0) {
         this.initCreeps();
+        this.assignTasks();
     }
     if (this.memory.timer % 30 == 0) {
       this.initSource();
@@ -42,42 +43,6 @@ Room.prototype.avaliableCreeps = function () {
 
 }
 
-Room.prototype.checkBuilders = function() {
-  var availableBuilder = this.findBuilder()
-    if (availableBuilder != null) {
-      for(let i in availableBuilder){
-        var newTask = this.filterTasks("BUILD")
-        //console.log(availableBuilder[i]);
-        //console.log(availableBuilder[i].memory.task)
-      availableBuilder[i].memory.task.push(newTask)
-      }
-    }
-}
-Room.prototype.checkContainerMiners = function() {
-  var availableMiner = this.findContainerMiner()
-    if (availableMiner != null) {
-      if(availableMiner.length == 1){
-        var newTask = this.filterTasks("CONTAINER_MINE")
-        console.log(availableMiner[0].memory)
-        if(availableMiner[0].memory.task.length == 0 ) {
-          availableMiner[0].memory.task.push(newTask)
-        }
-      } else{
-      for(let i in availableMiner.length){
-        console.log(availableMiner[i])
-          var newTask = this.filterTasks("CONTAINER_MINE")
-
-            if(availableMiner[i].memory.task.length == 0) {
-              availableMiner[i].memory.task.push(newTask)
-            }
-
-
-      }}
-
-        //console.log(availableMiner[i]);
-        //console.log(availableMiner[i].memory.task)
-      }
-    }
 
 Room.prototype.createNeeds = function() {
   var spawns = this.find(FIND_MY_SPAWNS)
