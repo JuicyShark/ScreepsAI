@@ -20,20 +20,26 @@ Room.prototype.findType = function(type) {
 Room.prototype.checkBuilders = function() {
     var avaliableCreeps = []
       for(let i in this.memory.creepsByType.allRound){
-        var potentialCreep = this.memory.creepsByType.allRound[i]
+        var potentialCreep = Game.getObjectById(this.memory.creepsByType.allRound[i])
+      if(potentialCreep != null){
+
+      console.log(potentialCreep.memory)
       if(potentialCreep.memory.task.length == 0){
         avaliableCreeps.push(potentialCreep)
       }
     }
-    return avaliableCreeps 
+  }
+    return avaliableCreeps
 }
 Room.prototype.checkContainerMiners = function() {
   var avaliableCreeps = []
     for(let i in this.memory.creepsByType.containerMiner){
-      var potentialCreep = this.memory.creepsByType.containerMiner[i]
+      var potentialCreep = Game.getObjectById(this.memory.creepsByType.containerMiner[i])
+  if(potentialCreep != null){
     if(potentialCreep.memory.task.length == 0){
       avaliableCreeps.push(potentialCreep)
     }
   }
+}
   return avaliableCreeps
     }

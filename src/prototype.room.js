@@ -14,11 +14,12 @@ Room.prototype.tick = function() {
       console.log(this.name + " Timer has been reset")
     }
     if (this.memory.timer % 15 == 0) {
-        this.initCreeps();
+
         this.assignTasks();
     }
     if (this.memory.timer % 30 == 0) {
       this.initSource();
+      this.initCreeps();
       this.createNeeds();
       this.avaliableCreeps();
     }
