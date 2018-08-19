@@ -8,6 +8,7 @@ Room.prototype.findType = function(type) {
       }
     }
   });
+  console.log(creeps, type)
   return creeps
 }
 

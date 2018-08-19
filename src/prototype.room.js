@@ -113,7 +113,7 @@ Room.prototype.initCreeps = function() {
   allRound: this.findType("ALL_ROUND"),
   containerMiner: this.findType("CONTAINER_MINER")
   }
-
+console.log(creepTypes)
   for(var creepType in creepTypes){
     for(var i in creepType){
      var creepId = creepType[i].id
