@@ -17,10 +17,11 @@ Room.prototype.findType = function(type) {
 Room.prototype.findBuilder = function() {
   var potentialCreeps = []
   for (let i in this.memory.creepsByType.allRound) {
-    console.log(this.memory.creepsByType.allRound)
+  //  console.log(this.memory.creepsByType.allRound)
     var potentialCreep = Game.getObjectById(this.memory.creepsByType.allRound[i])
-    console.log(potentialCreep)
-    if (potentialCreep.memory.task[0] == null) {
+  //  console.log(potentialCreep)
+
+    if (potentialCreep != null && potentialCreep.memory.task[0] == null) {
     potentialCreeps.push(potentialCreep)
     }
   }
