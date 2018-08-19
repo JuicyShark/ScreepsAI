@@ -15,31 +15,24 @@ Room.prototype.findType = function(type) {
 }
 
 
-
-
-Room.prototype.checkBuilders = function() {
-    var avaliableCreeps = []
-      for(let i in this.memory.creepsByType.allRound){
-        var potentialCreep = Game.getObjectById(this.memory.creepsByType.allRound[i])
-      if(potentialCreep != null){
-
-      console.log(potentialCreep.memory)
-      if(potentialCreep.memory.task.length == 0){
-        avaliableCreeps.push(potentialCreep)
-      }
-    }
+Room.prototype.checkAvaliableCreeps = function (creepType) {
+  if (!creepType) {
+    console.log("Not Defined")
+  } else {
+    var temp1 = this.memory.creepsByType
   }
-    return avaliableCreeps
-}
-Room.prototype.checkContainerMiners = function() {
-  var avaliableCreeps = []
-    for(let i in this.memory.creepsByType.containerMiner){
-      var potentialCreep = Game.getObjectById(this.memory.creepsByType.containerMiner[i])
+  let avaliableCreeps = []
+
+
+  for(let i in temp1){
+    var potentialCreep = Game.getObjectById(temp1[i])
   if(potentialCreep != null){
+
+
     if(potentialCreep.memory.task.length == 0){
-      avaliableCreeps.push(potentialCreep)
+    avaliableCreeps.push(potentialCreep)
+    }
     }
   }
-}
   return avaliableCreeps
-    }
+}
