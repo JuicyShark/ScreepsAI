@@ -79,7 +79,7 @@ Creep.prototype.deliver = function(container) {
 
 
 Creep.prototype.findDeliveryTarget = function() {
-  
+
   let target = null;
   let container = null;
   if(this.room.energyAvailable != this.room.energyCapacityAvailable){
@@ -110,9 +110,12 @@ Creep.prototype.findDeliveryTarget = function() {
   }
 }
 target = container;
+if(target != null){
+this.deliver(Game.getObjectById(target.id));
+}
 
 //console.log(container.id)
-this.deliver(Game.getObjectById(target.id));
+
 };
 
 /** @function

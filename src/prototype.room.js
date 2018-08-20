@@ -29,12 +29,12 @@ Room.prototype.tick = function() {
       this.initSource();
       this.initCreeps();
       this.createNeeds();
-      this.avaliableCreeps();
+      //this.avaliableCreeps();
     }
     // load things needed each tick without if statement
     this.loadSource();
     this.loadConstructionSites();
-    //this.initStructures();
+    //this.avaliableCreeps();
 
 
     --this.memory.timer;
@@ -47,13 +47,13 @@ Room.prototype.tick = function() {
 
 
 Room.prototype.avaliableCreeps = function () {
-  var configSection = Object.values(config.creepTypes)
-  let output = []
-  for(let i = 0;i < configSection.length; i++) {
-    let creepType = this.findType(configSection[i])
-      this.checkAvaliableCreeps(configSection[i])
+  var creepTypes = this.memory.creepsByType
+  for(var i in creepTypes) {
+      if(creepTypes[i].creeps.length >= 1) {
+        console.log(JSON.stringify(creepTypes[i]))
       }
   }
+}
 
 
 
@@ -98,19 +98,30 @@ Room.prototype.initCreeps = function() {
     this.memory.creepsByType = config.creepTypes
 
   }
+  let output = [];
   for(var i in this.memory.creepsByType){
     let list = this.memory.creepsByType[i]
     let findCreeps = this.findType(list.type)
     for(var a in findCreeps) {
-      let creepId = findCreeps[a].id
-      if(findCreeps[a].ticksToLive > 30) {
-        list.creeps.push(creepId)
-      } else {
-        console.log("DYING!")
-        delete list.creeps[creepId]
-      }
+      var thisCreep = Game.getObjectById(findCreeps[a].id)
+      if(thisCreep instanceof Creep) {
+        if(thisCreep.memory.type == list.type) {
+          let creepFound = false;
+          for(var o in list.creeps) {
+              if(thisCreep.id == list.creeps[o]){
+                creepFound = true;
+              }
+            }
+            if(creepFound == false){
+              list.creeps.push(thisCreep.id)
+            }
+          }
     }
-}
+    }
+    //console.log(list.type + " " + output)
+    //list.creeps = output;
+
+  }
 }
 
 Room.prototype.memoryInit = function() {

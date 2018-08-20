@@ -19,13 +19,12 @@ Room.prototype.checkAvaliableCreeps = function (creepType) {
   if (!creepType) {
     console.log("Not Defined")
   } else {
-    var temp1 = config.creepTypes
   }
   let avaliableCreeps = []
 
-  let creepTypes = Object.entries(temp1)
+  let creepTypes = this.memory.creepsByType;
   for(let i = 0; i < creepTypes.length; i++){
-    if(creepTypes[0] == creepType) {
+    if(creepTypes[i].type == creepType) {
     let temp2 = creepTypes[i]
 
     if(temp2.length >= 2) {
