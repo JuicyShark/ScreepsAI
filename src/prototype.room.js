@@ -95,28 +95,22 @@ Room.prototype.createNeeds = function() {
 /*Legend can go in config file? */
 Room.prototype.initCreeps = function() {
   if(!this.memory.creepsByType){
-    this.memory.creepsByType = {}
+    this.memory.creepsByType = config.creepTypes
 
   }
-  this.memory.creepsByType.allRound = []
-  this.memory.creepsByType.containerMiner = []
-  var allRound = this.findType("ALL_ROUND")
-  var containerMiner = this.findType("CONTAINER_MINER")
-  var lorry = this.findType("LORRY")
-
-  for(var i in allRound){
-    var  creepId = allRound[i].id
-    this.memory.creepsByType.allRound.push(creepId)
-
-  }
-  for(var i in containerMiner){
-    var  creepId = containerMiner[i].id
-    this.memory.creepsByType.containerMiner.push(creepId)
-  }
-  for(var i in lorry){
-    var creepId = lorry[i].id
-    this.memory.creepsByType.containerMiner.push(creepId)
-  }
+  for(var i in this.memory.creepsByType){
+    let list = this.memory.creepsByType[i]
+    let findCreeps = this.findType(list.type)
+    for(var a in findCreeps) {
+      let creepId = findCreeps[a].id
+      if(findCreeps[a].ticksToLive > 30) {
+        list.creeps.push(creepId)
+      } else {
+        console.log("DYING!")
+        delete list.creeps[creepId]
+      }
+    }
+}
 }
 
 Room.prototype.memoryInit = function() {

@@ -290,23 +290,44 @@ module.exports = {
 
   },
 containerGetEnergyLevels: {
-  1: 200,
-  2: 400,
-  3: 600,
-  4: 800,
-  5: 800,
-  6: 800,
-  7: 800,
-  8: 1000
-},
-creepTypes : {
-  allRound: "ALL_ROUND",
-  containerMiner: "CONTAINER_MINER",
-  upgrader: "UPGRADER",
-  lorry: "LORRY",
-  claimer: "CLAIMER",
-  attacker: "ATTACKER",
-  defender: "DEFENDER"
-}
+    1: 200,
+    2: 400,
+    3: 600,
+    4: 800,
+    5: 800,
+    6: 800,
+    7: 800,
+    8: 1000
+  },
+  creepTypes : {
+    allRound: {
+      creeps: [],
+      type: "ALL_ROUND"
+    },
+    containerMiner: {
+      creeps: [],
+      type: "CONTAINER_MINER"
+    },
+    upgrader: {
+      creeps: [],
+      type: "UPGRADER"
+    },
+    lorry:  {
+      creeps: [],
+      type: "LORRY"
+    },
+    claimer:  {
+      creeps: [],
+      type: "CLAIMER"
+    },
+    attacker: {
+      creeps: [],
+      type: "ATTACKER"
+    },
+    defender: {
+      creeps: [],
+      type: "DEFENDER"
+    }
+  }
 
 }
