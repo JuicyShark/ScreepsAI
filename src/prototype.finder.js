@@ -1,5 +1,9 @@
 var config = require("config")
 
+/** @function findType
+    @param {string} type  type of creep you want to search for
+    @return {array} array of creeps
+    **/
 Room.prototype.findType = function(type) {
   var creeps = null
   creeps = this.find(FIND_MY_CREEPS, {
@@ -9,11 +13,13 @@ Room.prototype.findType = function(type) {
       }
     }
   });
-    //console.log(creeps)
-
   return creeps
 }
 
+/** @function filtertask
+    @param {string} typeGiven the type task to look for
+    @return {object}  task with highest priority
+    **/
 Room.prototype.filtertask = function(typeGiven) {
   this.memory.taskList.sort(function(a,b){
     if (a.priority < b.priority)
@@ -24,18 +30,17 @@ Room.prototype.filtertask = function(typeGiven) {
   })
   for (var i in this.memory.taskList){
      if(this.memory.taskList[i].typeNeeded == typeGiven){
-
       var  filteredTasks = this.memory.taskList[i]
         this.memory.taskList.splice(i, 1);
         return filteredTask
      }
   }
-
 }
 
 /** @function ConvertsToLocation
     @param {string} RoomName
-    @return {X:"", Y:""}*/
+    @return {X:"", Y:""}
+    **/
 Room.prototype.getRoomLocation = function(roomName) {
   let temp1 = [];
   let thisString = roomName.split("");
