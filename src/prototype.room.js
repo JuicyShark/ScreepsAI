@@ -68,7 +68,10 @@ Room.prototype.createNeeds = function() {
 //
 
   if (this.needBasicWorker()) {
-    spawn.spawnAllRounder()
+    if(this.findType("ALL_ROUND").length == 0){
+      spawn.spawnBasicAllRounder()
+    }else{
+    spawn.spawnAllRounder()}
   } else if (this.needUpgrader()) {
     console.log("Upgrader")
    spawn.spawnUpgrader()
@@ -77,9 +80,7 @@ Room.prototype.createNeeds = function() {
     } else if (this.needLorry()) {
       spawn.spawnLorry()
     }
-    else{
-      spawn.spawnAllRounder()
-    }
+
    /* else if (this.needBuilder()) {
     spawn.spawnBuilder()
   } else if (this.needRepairer()) {

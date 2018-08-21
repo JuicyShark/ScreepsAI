@@ -14,6 +14,24 @@ Room.prototype.findType = function(type) {
   return creeps
 }
 
+Room.prototype.filtertask = function(typeGiven) {
+  this.memory.taskList.sort(function(a,b){
+    if (a.priority < b.priority)
+      return -1;
+    if (a.priority > b.priority)
+      return 1;
+    return 0;
+  })
+  for (var i in this.memory.taskList){
+     if(this.memory.taskList[i].typeNeeded == typeGiven){
+
+      var  filteredTasks = this.memory.taskList[i]
+        this.memory.taskList.splice(i, 1);
+        return filteredTask
+     }
+  }
+
+}
 
 /** @function ConvertsToLocation
     @param {string} RoomName
@@ -39,13 +57,4 @@ Room.prototype.getRoomLocation = function(roomName) {
     y: outY
   }
   return output;
-}
-
-Room.prototype.checkAvaliableCreeps = function (creepType) {
-  if(this.memory.creepsByType == null) {
-
-  } else {
-
-    console.log(Yea)
-  }
 }

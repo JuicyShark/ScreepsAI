@@ -7,7 +7,7 @@ require('prototype.SorterMan')
 //require('colonyManager')
 require('prototype.flags')
 require('prototype.tower')
-require('taskManager')
+var taskManager = require('taskManager')
 
 // Turn off any of the below features by passing false.
 require('screeps-perf')({

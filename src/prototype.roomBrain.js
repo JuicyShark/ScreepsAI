@@ -57,7 +57,7 @@ Room.prototype.assignTasks = function() {
           let thisCreepType = chosenOne.memory.type
           var newTask = this.filtertask(thisCreepType)
           if(newTask != null || newTask != undefined) {
-            thisCreep.memory.task == newTask
+            chosenOne.memory.task == newTask
           }
         }
       }

@@ -8,6 +8,7 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, home, type, sourceI
   var testCreep = this.spawnCreep(bodyParts, name, {
     dryRun: true
   });
+  console.log(testCreep)
   if (testCreep == 0) {
     this.spawnCreep(bodyParts, name, {
       memory: {
@@ -44,8 +45,8 @@ Spawn.prototype.spawnClaimer = function(roomName, thisFlag) {
 
 
   Spawn.prototype.spawnBasicAllRounder = function() {
-        let myConfig = config.bodies.allRounder;
         var bodyParts = [WORK, MOVE, CARRY]
+        console.log("spawning with "+ bodyParts)
         this.spawnNewCreep(bodyParts, this.room.name, "ALL_ROUND",)
   }
 
