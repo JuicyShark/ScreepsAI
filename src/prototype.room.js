@@ -8,8 +8,8 @@ Room.prototype.tick = function() {
     if(!this.memory) {
       this.memoryInit();
       this.assignTasks();
-      this.initSource();
       this.initCreeps();
+      this.initSource();
       this.createNeeds();
       this.avaliableCreeps();
     }
@@ -22,13 +22,14 @@ Room.prototype.tick = function() {
       console.log(this.name + " Timer has been reset")
     }
     if (this.memory.timer % 15 == 0) {
-
+      console.log("ASSIGN TIME")
         this.assignTasks();
     }
     if (this.memory.timer % 30 == 0) {
-      this.initSource();
       this.initCreeps();
+      this.initSource();
       this.createNeeds();
+      this.constantTasks();
       //this.avaliableCreeps();
     }
     // load things needed each tick without if statement
@@ -60,17 +61,24 @@ Room.prototype.avaliableCreeps = function () {
 Room.prototype.createNeeds = function() {
   var spawns = this.find(FIND_MY_SPAWNS)
   var spawn = spawns[0];
+  /*if(this.needBasicWorker()){
+    spawn.spawnAllRounder
+  }
+*/
+//
+
   if (this.needBasicWorker()) {
-    spawn.spawnHarvester("n/a", "n/a")
-  }else if (this.needContainerMiner()) {
+    spawn.spawnAllRounder()
+  } else if (this.needUpgrader()) {
+    console.log("Upgrader")
+   spawn.spawnUpgrader()
+ } else if (this.needContainerMiner()) {
       spawn.spawnContainerMiner()
     } else if (this.needLorry()) {
-      let longDistance = false
-      spawn.spawnLorry(longDistance) // false meaning long distance or not
+
+      spawn.spawnLorry()
     }
-   else if (this.needUpgrader()) {
-    spawn.spawnUpgrader()
-  } else if (this.needBuilder()) {
+   /* else if (this.needBuilder()) {
     spawn.spawnBuilder()
   } else if (this.needRepairer()) {
     spawn.spawnRepairer()
@@ -83,7 +91,7 @@ Room.prototype.createNeeds = function() {
     let roomName = theReturned[0]
     let flag = theReturned[1]
     spawn.spawnHarvester(roomName, flag.name)
-  } else {
+  }*/ else {
     console.log("Needs have been Met!")
     console.log(this.energyAvailable + "/" + this.energyCapacityAvailable + " Is the energy Capacity of the room")
   }
@@ -95,26 +103,20 @@ Room.prototype.createNeeds = function() {
 /*Legend can go in config file? */
 Room.prototype.initCreeps = function() {
   if(!this.memory.creepsByType){
-    this.memory.creepsByType = config.creepTypes
-
+    this.memory.creepsByType = config.defaultMem.creepTypes
   }
   let output = [];
+
   for(var i in this.memory.creepsByType){
     let list = this.memory.creepsByType[i]
+    list.creeps = []
     let findCreeps = this.findType(list.type)
     for(var a in findCreeps) {
       var thisCreep = Game.getObjectById(findCreeps[a].id)
       if(thisCreep instanceof Creep) {
         if(thisCreep.memory.type == list.type) {
-          let creepFound = false;
-          for(var o in list.creeps) {
-              if(thisCreep.id == list.creeps[o]){
-                creepFound = true;
-              }
-            }
-            if(creepFound == false){
               list.creeps.push(thisCreep.id)
-            }
+
           }
     }
     }
@@ -164,7 +166,9 @@ Room.prototype.initSource = function() {
   for (let source of this.find(FIND_SOURCES)) {
     if (!this.memory.sourceNodes[source.id]) {
       this.memory.sourceNodes[source.id] = {
-        id: source.id
+        id: source.id,
+        miner: "waiting",
+        taskInit: false
       }
     }
     this.memory.sourceNodes[source.id].miner = "waiting"
@@ -174,14 +178,14 @@ Room.prototype.initSource = function() {
     //console.log("MINERS" + miners)
     //miners[i].memory.task[0].details.sourceId == source.id
     for(i in miners) {
+      if(miners[i] instanceof Creep) {
       if(miners[i].memory.task[0]) {
         if(miners[i].memory.task[0].details.sourceId == source.id) {
 
         this.memory.sourceNodes[source.id].miner = miners[i].id;
         }
-      } else if(!miners[i].memory.task[0]) {
-
-        }
+      }
+    }
     }
     if (!this.memory.sourceNodes[source.id].miner) {
       this.memory.sourceNodes[source.id].miner = "waiting"
@@ -237,14 +241,12 @@ Room.prototype.initStructures = function() {
       if(this.structures[i].structureType == "extension"){
         mem.Extensions.push(this.structures[i].id)
       }
-    }
-/*
+      if(this.structures[i].structureType == STRUCTURE_ROAD) {
+        mem.Roads.push(this.structures[i].id)
+      }
 
-    this.memory.structureIDs = config.defaultMem.RoomStructureMem;
-    let mem = this.memory.structureIDs;
+    }
     mem.controller.id = this.controller.id;
-    mem.Extensions =
-    mem.Towers */
   }
 }
 

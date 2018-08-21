@@ -1,5 +1,6 @@
 require("prototype.spawn")
 require("prototype.finder")
+var _ = require('lodash');
 var config = require("config")
 
 
@@ -44,37 +45,69 @@ Room.prototype.createTask = function(name,  typeNeeded, priority, details) {
 }
 
 Room.prototype.assignTasks = function() {
+  var needTask = []
+  var gotTask = []
+  var tooManyTask = []
 
- var builders = this.checkAvaliableCreeps("BUILDER");
- if (builders != null){
-   for(var i in builders){
-     var builder = builders[i]
-     if(builders[i] instanceof Creep){
-         var newTask = this.filterTasks("BUILD")
-         builders[i].memory.task.push(newTask)
-     }
-   }
- }
- var miners = this.checkAvaliableCreeps("CONTAINER_MINER");
- if(miners != null){
-   for(var i in miners){
-     var miner = miners[i]
-     if(miner instanceof Creep){
-         var newTask = this.filterTasks("CONTAINER_MINE")
-         miner.memory.task.push(newTask)
-     }
-   }
- }
+  for(var i in this.memory.creepsByType){
+    let creepsBytype = this.memory.creepsByType[i]
+    for(var a in creepsBytype.creeps) {
+      let chosenOne = Game.getObjectById(creepsBytype.creeps[a])
+      if(chosenOne instanceof Creep) {
+        if(chosenOne.memory.task.length == 0 ){
+          needTask.push(chosenOne);
+        } else if (chosenOne.memory.task.length == 1) {
+          gotTask.push(chosenOne);
+        } else if (chosenOne.memory.task.length >= 2) {
+          tooManyTask.push(chosenOne);
+        }
+      }
+    }
+  }
+  if(needTask.length != 0) {
+    for(var o in needTask){
+      let thisCreep = needTask[o]
+      if(thisCreep instanceof Creep) {
+        let thisCreepType = thisCreep.memory.type
+        var newTask = this.filterTasks(thisCreepType)
+        if(newTask != null || newTask != undefined) {
+          thisCreep.memory.task.push(newTask)
+        }
+    }
+    }
+  } else if (needTask.length == 0) {
+    console.log("everyone working? " + gotTask.length)
+  }
+
 }
 
 Room.prototype.checkTask = function(type) {
 
 }
 
-Room.prototype.filterTasks = function(taskName) {
+Room.prototype.constantTasks = function() {
 
+  for (let i in this.memory.sourceNodes) {
+    if(this.memory.sourceNodes[i].taskInit == false){
+      details = {target: this.memory.sourceNodes[i].id}
+      this.createTask("HARVEST", "ALL_ROUND", 1, details)
+      this.memory.sourceNodes[i].taskInit = true;
+    }
+  }
+  if(this.memory.structureIDs.controller.taskInit == false) {
+    details = {target: this.memory.structureIDs.controller.id}
+    this.createTask("UPGRADE", "UPGRADER", 1, details)
+    this.memory.structureIDs.controller.taskInit = true;
+  }
+  if(this.memory.structureIDs.Containers.length >= 1){
+    details = {target: this.memory.structureIDs.Containers[0].id}
+    this.createTask("REPAIR", "ALL_ROUND", 4, details)
+  }
+}
+
+Room.prototype.filterTasks = function(typeGiven) {
   for (var i in this.memory.taskList){
-     if(this.memory.taskList[i].name == taskName){
+     if(this.memory.taskList[i].typeNeeded == typeGiven){
        //console.log(this.memory.taskList[i].name + " " + taskName)
       var  filteredTask = this.memory.taskList[i]
         this.memory.taskList.splice(i, 1);
@@ -105,15 +138,7 @@ Room.prototype.alertLevel = function() {
 }
 
 Room.prototype.processAsGuest = function() {
-  console.log("Im just a Guest here! " + this.name)
-  let roomFlags = this.find(FIND_FLAGS, {
-    filter: {
-      name: "HarvestSources"
-    }
-  });
-  if (roomFlags != undefined) {
-    console.log("FLAG!")
-  }
+
 }
 
 
@@ -143,16 +168,21 @@ Room.prototype.roomHarvesters = function() {
   return harvesters;
 }
 Room.prototype.needBasicWorker = function() {
-
-  if (this.roomMiners().length >= 2 && this.roomLorrys().length >= 2) {
-    return false;
-  } else if (this.roomHarvesters().length == null || this.roomHarvesters().length == 0) {
-    console.log("need worker")
-    return true;
-  } else if (this.needContainerMiner()) {
-    return false;
+  if(this.memory.creepsByType.allRound.creeps.length >= 3 && this.needContainerMiner() == true){
+    return false
   }
-
+  else if (this.memory.creepsByType.allRound.creeps.length > 4) {
+    return false
+  }
+  else if(this.memory.creepsByType.allRound.creeps.length <= 3 && this.needContainerMiner() == false){
+    return true
+  }
+  else if(this.memory.creepsByType.allRound.creeps.length <= 4 && this.level() <= 2) {
+    return true
+  }
+  else if(this.memory.creepsByType.allRound.creeps.length <= 6 && this.level() >= 3) {
+    return true
+  }
 }
 // Testing to only want harvesters if we dont have miners and lorrys around
 Room.prototype.roomLorrys = function() {
@@ -165,42 +195,16 @@ Room.prototype.roomLorrys = function() {
   return lorrys;
 }
 Room.prototype.needLorry = function() {
-  if (this.roomMiners().length >= 1 && this.roomLorrys().length < config.maxLorrys[this.level()]) {
-    return true
-  } else if (this.roomLorrys().length > config.maxLorrys[this.level()]) {
-    return false;
-  } else{
-    return false
-  }
-}
-Room.prototype.roomRepairers = function() {
-  let repairer = this.find(FIND_MY_CREEPS, {
-    filter: {
-      memory: {
-        role: "repairer"
-      }}
-  });
-  return repairer;
-}
-Room.prototype.needRepairer = function() {
-
-  if (this.roomRepairers().length <= config.maxRepairers[this.level()]) {
+  if (this.roomMiners().length >= 1 && this.roomLorrys().length <= 2 ) {
     return true
   }
 }
 
-Room.prototype.roomUpgraders = function () {
-  let roomUpgraders = this.find(FIND_MY_CREEPS, {
-    filter: {
-      memory: {
-        type: "UPGRADER"
-      }}
-    });
-  return roomUpgraders;
-}
 Room.prototype.needUpgrader = function() {
-  if (this.roomUpgraders().length <= config.maxUpgraders[this.level()]) {
-    return true
+  if(this.memory.creepsByType.upgrader.creeps.length >= 1 && this.memory.structureIDs.controller.taskInit == true){
+    return false;
+  } else if (this.memory.creepsByType.upgrader.creeps.length == 0) {
+    return true;
   }
 }
 
@@ -215,25 +219,27 @@ Room.prototype.roomBuilders = function() {
 }
 Room.prototype.needBuilder = function() {
 
-  if (this.roomBuilders().length <= config.maxBuilders[this.level()]) {
+  if (this.memory.constructionSites.length != 0 && this.roomBuilders().length < 1) {
     return true;
   }
 }
 Room.prototype.roomMiners = function() {
-  let miner = this.find(FIND_MY_CREEPS, {
-    filter: {
-      memory: {
-        type: "CONTAINER_MINER"
-      }}
-  });
-  return miner;
+  let minersObj = []
+  let miner = this.memory.creepsByType.containerMiner.creeps
+  for(let i in miner) {
+    let myMiner = Game.getObjectById(miner[i])
+    if(myMiner instanceof Creep) {
+      minersObj.push(myMiner)
+    }
+  }
+  return minersObj;
 }
 Room.prototype.needContainerMiner = function() {
 
   let output = [];
   let tempy = Object.keys(this.memory.sourceNodes)
   if(this.roomMiners().length >= tempy.length) {
-    console.log("MinerFalsy bc of sourcenode cap")
+    console.log("MinerFalsy bc of sourcenode cap" + this.roomMiners().length)
     return false
   }
   for (let i in this.memory.sourceNodes) {

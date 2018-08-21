@@ -18,15 +18,48 @@ module.exports = {
       username: "CrazedGod"
     },
     RoomStructureMem: {
-      controller : [
-        toBuild = [
-          Road = true
-        ]
-      ],
+      controller : {
+        id: "",
+        taskInit: false,
+        toBuild: {
+          Road: true
+        }
+      },
       Containers: [],
       Extensions: [],
       Spawns : [],
-      Towers: []
+      Towers: [],
+      Roads: []
+    },
+    creepTypes : {
+      allRound: {
+        creeps: [],
+        type: "ALL_ROUND"
+      },
+      containerMiner: {
+        creeps: [],
+        type: "CONTAINER_MINER"
+      },
+      upgrader: {
+        creeps: [],
+        type: "UPGRADER"
+      },
+      lorry:  {
+        creeps: [],
+        type: "LORRY"
+      },
+      claimer:  {
+        creeps: [],
+        type: "CLAIMER"
+      },
+      attacker: {
+        creeps: [],
+        type: "ATTACKER"
+      },
+      defender: {
+        creeps: [],
+        type: "DEFENDER"
+      }
     }
   },
   buildingLevels: {
@@ -97,7 +130,7 @@ module.exports = {
   bodies: {
     claimer: [CLAIM, MOVE, MOVE],
     default: [WORK, CARRY, MOVE],
-    harvester : {
+    allRounder : {
       bodyReturn: function(energyCap){
         if(energyCap > 500) {
           return 500
@@ -109,7 +142,7 @@ module.exports = {
         300: [WORK, WORK, CARRY, MOVE],
         350: [WORK, WORK, CARRY, CARRY, MOVE],
         400: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
-        450: [MOVE, MOVE, CARRY, CARRY, WORK, WORK],
+        450: [MOVE, MOVE, CARRY, CARRY, CARRY, WORK, WORK],
         500: [MOVE, MOVE, CARRY, CARRY, WORK, WORK, WORK]
       }
     },
@@ -168,39 +201,6 @@ module.exports = {
           500: [CARRY, CARRY, WORK, WORK, MOVE, MOVE, MOVE, MOVE]
         }
       },
-
-     builder: {
-       bodyReturn: function(energyCap) {
-          if(energyCap > 500) {
-           return 500
-          } else {
-            return energyCap
-          }
-        },
-        defaults: {
-          300: [CARRY, CARRY, MOVE, MOVE, WORK],
-          400: [CARRY, CARRY, MOVE, MOVE, WORK, WORK],
-          500: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK]
-        }
-     },
-
-     repairer: {
-       bodyReturn: function(energyCap) {
-          if(energyCap > 500) {
-           return 500
-          } else {
-            return energyCap
-          }
-        },
-        defaults:{
-            300: [CARRY, CARRY, WORK, MOVE, MOVE],
-            350: [CARRY, CARRY, CARRY, WORK, MOVE, MOVE],
-            400: [CARRY, CARRY, WORK, WORK, MOVE, MOVE],
-            500: [CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, WORK, WORK]
-        }
-      },
-
-
 
      defender: function(energy) {
        let outputArray = [];
@@ -298,36 +298,6 @@ containerGetEnergyLevels: {
     6: 800,
     7: 800,
     8: 1000
-  },
-  creepTypes : {
-    allRound: {
-      creeps: [],
-      type: "ALL_ROUND"
-    },
-    containerMiner: {
-      creeps: [],
-      type: "CONTAINER_MINER"
-    },
-    upgrader: {
-      creeps: [],
-      type: "UPGRADER"
-    },
-    lorry:  {
-      creeps: [],
-      type: "LORRY"
-    },
-    claimer:  {
-      creeps: [],
-      type: "CLAIMER"
-    },
-    attacker: {
-      creeps: [],
-      type: "ATTACKER"
-    },
-    defender: {
-      creeps: [],
-      type: "DEFENDER"
-    }
   }
 
 }

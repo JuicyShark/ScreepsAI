@@ -1,73 +1,24 @@
-var roles = {
-  harvester: require('role.harvester'),
-  upgrader: require('role.upgrader'),
-  builder: require('role.builder'),
-  repairer: require('role.repairer'),
-  claimer: require('role.claimer'),
-  miner: require('role.miner'),
-  lorry: require('role.lorry')
-}
-
+require("prototype.creepTasks")
 Creep.prototype.runRole = function() {
+  if(!this.memory.role){
+    this.runTask()
+
+  } else {
   roles[this.memory.role].run(this);
+  }
 };
 
-Creep.prototype.ourPath = function(destination) {
 
+Creep.prototype.ourPath = function(destination) {
+    var path = this.pos.findPathTo(destination, {serialize: true});
     if (Game.time % 4 === 0) {
-      //console.log("RESET TIME")
       delete this.memory.paths
     }
     if (!this.memory.paths) {
-    var path = this.pos.findPathTo(destination, {serialize: true});
-    /*let tempName = destination.id;
-    let temp1 = {
-      [destination.structureType]: {
-        [destination.id]: path
-      }
-    };*/
-    this.memory.paths = {};
-    this.memory.paths.myPath = path;
+    this.memory.path = path;
     }
-
-
-  this.moveByPath(this.memory.paths.myPath)
+  this.moveByPath(this.memory.path)
   }
-
-
-
-Creep.prototype.roleBuilder = function() {
-
-  if(this.memory.task[0] != null){
-  var  creepTask = this.memory.task[0].details.target
-    var thisTarget = Game.getObjectById(creepTask);
-
-  if (thisTarget != null) {
-    if (this.build(thisTarget) == ERR_NOT_IN_RANGE) {
-      this.ourPath(thisTarget)
-    }
-  } else{
-    console.log(this.name + ", Target is nowhere to be found. Removing task");
-    this.memory.task.shift();
-  }
-  }
-};
-
-Creep.prototype.roleRepairer = function(creep) {
-  var structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-    filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL
-  });
-  if (structure == undefined) {
-    structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-      filter: (s) => s.hits < s.hitsMax && s.structureType == STRUCTURE_WALL ||
-        s.structureType == STRUCTURE_CONTAINER ||
-        s.structureType == STRUCTURE_EXTENSION
-    });
-  }
-  if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
-    this.ourPath(structure);
-  }
-}
 
 Creep.prototype.deliver = function(container) {
   if (container != undefined) {
@@ -79,9 +30,10 @@ Creep.prototype.deliver = function(container) {
 
 
 Creep.prototype.findDeliveryTarget = function() {
-
+if(this.room.name == this.memory.home) {
   let target = null;
   let container = null;
+  let temp2 = [];
   if(this.room.energyAvailable != this.room.energyCapacityAvailable){
      container = this.pos.findClosestByPath(FIND_STRUCTURES, {
     filter: (s) => (s.structureType == STRUCTURE_SPAWN ||
@@ -94,24 +46,30 @@ Creep.prototype.findDeliveryTarget = function() {
               s.store[RESOURCE_ENERGY] != s.storeCapacity
 
 });
-    let temp2 = [];
+
+
     for(let i in this.room.memory.structureIDs.Containers) {
     if (this.room.memory.structureIDs.Containers[i] == temp1.id){
       temp2.push(temp1)
 
     }
   }
-  container = temp2[0]
+  let container = temp2[0]
+  }
   if (!container) {
     container = this.pos.findClosestByPath(FIND_STRUCTURES, {
       filter: (s) => s.structureType == STRUCTURE_TOWER &&
       s.energy < s.energyCapacity
     })
   }
-}
+
 target = container;
 if(target != null){
 this.deliver(Game.getObjectById(target.id));
+}
+}
+else if (this.room.name != this.memory.home) {
+  //console.log(this)
 }
 
 //console.log(container.id)
@@ -156,12 +114,109 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
   }
 
 }
+Creep.prototype.harvestTask = function() {
+
+  this.checkDeath();
+    if(this.room.name == this.memory.home) {
+  var taskSource = Game.getObjectById(this.memory.task[0].details.target)
+  if (this.carry.energy == 0) {
+    this.memory.working = "true";
+  }
+  if (this.memory.working == "false") {
+    this.findDeliveryTarget()
+  }
+  if (this.carry.energy != this.carryCapacity && this.memory.working == "true") {
+    if(this.harvest(taskSource) == ERR_NOT_IN_RANGE) {
+      this.ourPath(taskSource)
+    }
+   } else if (this.carry.energy == this.carryCapacity && this.memory.working == "true") {
+    this.memory.working = "false"
+  }
+} else if (this.room.name != this.memory.home) {
+  let getSpawn = Game.getObjectById(Memory.rooms[this.memory.home].structureIDs.Spawns[0])
+  this.ourPath(getSpawn)
+}
+}
+
+Creep.prototype.buildTask = function () {
+  this.checkDeath();
+  if (this.memory.working == "false") {
+    this.getEnergy(true, true)
+  } else if (this.memory.working == "true") {
+    var  creepTask = this.memory.task[0].details.target
+      var thisTarget = Game.getObjectById(creepTask);
+
+    if (thisTarget != null) {
+      if (this.build(thisTarget) == ERR_NOT_IN_RANGE) {
+        this.ourPath(thisTarget)
+      }
+    } else{
+      console.log(this.name + ", Target is nowhere to be found. Removing task");
+      this.memory.task.shift();
+    }
+  }
+  if (this.carry.energy == this.carryCapacity && this.memory.working == "false") {
+   this.memory.working = "true";
+ } else if (this.carry.energy == 0 && this.memory.working == "true"){
+   this.memory.working = "false";
+ }
+}
+
+Creep.prototype.upgradeTask = function() {
+  this.checkDeath();
+  if (this.carry.energy == this.carryCapacity) {
+    this.memory.working = "true";
+  }
+  if (this.carry.energy == 0) {
+    this.memory.working = "false";
+  }
+  if (this.carry.energy != this.carryCapacity && this.memory.working == "false") {
+    this.getEnergy(true, true)
+  }
+  if (this.carryCapacity != 0 && this.memory.working == "true") {
+    if (this.upgradeController(this.room.controller) == ERR_NOT_IN_RANGE) {
+      this.ourPath(this.room.controller);
+    }
+  }
+}
+
+Creep.prototype.repairTask = function() {
+  creep.checkDeath(creep)
+
+  if (this.carry.energy == this.carryCapacity) {
+    this.memory.working = "true";
+  }
+  if (this.carry.energy == 0) {
+    this.memory.working = "false";
+  }
+  if (this.carry.energy != 0 && this.memory.working == "true") {
+    var structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+      filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL
+    });
+    if (structure == undefined) {
+      structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+        filter: (s) => s.hits < s.hitsMax && s.structureType == STRUCTURE_WALL ||
+          s.structureType == STRUCTURE_CONTAINER ||
+          s.structureType == STRUCTURE_EXTENSION
+      });
+    }
+    if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
+      this.ourPath(structure);
+    }
+  } else if (this.memory.working == "false") {
+    this.getEnergy(true, true)
+  }
+}
+
 Creep.prototype.checkDeath = function(creep) {
-  if (creep.ticksToLive < 25) {
-    if (Game.time % 15 === 0) {
+  if (this.ticksToLive < 20) {
+    if(this.ticksToLive < 5) {
+    this.room.memory.taskList.unshift(this.memory.task[0]);
+    this.memory.task.shift();
+
       console.log("------------")
-      console.log("Hey there a " + creep.memory.role + ", " + creep.name + " is dying.");
+      console.log("Hey there " + creep.memory.type + ", " + creep.name + " is dying.");
       console.log("-----This was a CheckDeath Function-------")
     }
   }
-};
+}
