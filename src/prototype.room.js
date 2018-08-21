@@ -176,11 +176,11 @@ Room.prototype.initSource = function() {
     let miners = this.roomMiners()
 
     //console.log("MINERS" + miners)
-    //miners[i].memory.task[0].details.sourceId == source.id
+    //miners[i].memory.task.details.sourceId == source.id
     for(i in miners) {
       if(miners[i] instanceof Creep) {
-      if(miners[i].memory.task[0]) {
-        if(miners[i].memory.task[0].details.sourceId == source.id) {
+      if(miners[i].memory.task) {
+        if(miners[i].memory.task.details.sourceId == source.id) {
 
         this.memory.sourceNodes[source.id].miner = miners[i].id;
         }
@@ -288,32 +288,3 @@ Room.prototype.loadConstructionSites = function() {
     this.constructionSites[i] = (Game.getObjectById(this.memory.constructionSites[i]));
   }
 };
-
-
-
-
-/** @function ConvertsToLocation
-    @param {string} RoomName
-    @return {X:"", Y:""}*/
-Room.prototype.getRoomLocation = function(roomName) {
-  let temp1 = [];
-  let thisString = roomName.split("");
-  for (let i = 0; i < thisString.length; i++) {
-    let result = thisString[i];
-    if (result == "W" || result == "S") {
-      temp1.push("-")
-    } else if (result == "E" || result == "N") {
-      temp1.push("+")
-    } else {
-      temp1.push(result)
-    }
-  }
-  let temp2 = temp1.join("");
-  let outX = temp2.slice(0, 3);
-  let outY = temp2.slice(3, 6)
-  var output = {
-    x: outX,
-    y: outY
-  }
-  return output;
-}
