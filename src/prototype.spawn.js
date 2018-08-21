@@ -43,6 +43,12 @@ Spawn.prototype.spawnClaimer = function(roomName, thisFlag) {
   }
 
 
+  Spawn.prototype.spawnBasicAllRounder = function() {
+        let myConfig = config.bodies.allRounder;
+        var bodyParts = [WORK, MOVE, CARRY]
+        this.spawnNewCreep(bodyParts, this.room.name, "ALL_ROUND",)
+  }
+
 
 Spawn.prototype.spawnAllRounder = function() {
       let myConfig = config.bodies.allRounder;

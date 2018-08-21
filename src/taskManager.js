@@ -3,7 +3,8 @@ var tasks = require('tasks');
 var taskManager = {
 
   run: function(){
-    for(var room in Game.rooms){
+    for(var roomName in Game.rooms){
+      var room = Game.rooms[roomName];
       room.memory.availableCreeps = [];
     }
     for(var creep in Game.creeps){
@@ -11,7 +12,7 @@ var taskManager = {
         creep.room.memory.availableCreeps.push(creep.id)
       }
     }
-  }
+  },
 
   assignTasks: function(){
     for(var creepId in Game.rooms.availableCreeps){

@@ -75,8 +75,10 @@ Room.prototype.createNeeds = function() {
  } else if (this.needContainerMiner()) {
       spawn.spawnContainerMiner()
     } else if (this.needLorry()) {
-
       spawn.spawnLorry()
+    }
+    else{
+      spawn.spawnAllRounder()
     }
    /* else if (this.needBuilder()) {
     spawn.spawnBuilder()
