@@ -118,7 +118,7 @@ Creep.prototype.harvestTask = function() {
 
   this.checkDeath();
     if(this.room.name == this.memory.home) {
-  var taskSource = Game.getObjectById(this.memory.task.details.target)
+  var taskSource = Game.getObjectById(this.memory.task[0].details.target)
   if (this.carry.energy == 0) {
     this.memory.working = "true";
   }
@@ -143,7 +143,7 @@ Creep.prototype.buildTask = function () {
   if (this.memory.working == "false") {
     this.getEnergy(true, true)
   } else if (this.memory.working == "true") {
-    var  creepTask = this.memory.task.details.target
+    var  creepTask = this.memory.task[0].details.target
       var thisTarget = Game.getObjectById(creepTask);
 
     if (thisTarget != null) {
@@ -211,7 +211,7 @@ Creep.prototype.repairTask = function() {
 Creep.prototype.checkDeath = function(creep) {
   if (this.ticksToLive < 20) {
     if(this.ticksToLive < 5) {
-    this.room.memory.taskList.unshift(this.memory.task);
+    this.room.memory.taskList.unshift(this.memory.task[0]);
     this.memory.task.shift();
 
       console.log("------------")
