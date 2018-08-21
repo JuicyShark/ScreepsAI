@@ -161,13 +161,16 @@ Room.prototype.roomHarvesters = function() {
   let harvesters = this.find(FIND_MY_CREEPS, {
     filter: {
       memory: {
-        role: "harvester"
+        type: "ALL_ROUND"
       }
     }
   });
   return harvesters;
 }
 Room.prototype.needBasicWorker = function() {
+  if(this.memory.creepsByType.allRound.creeps.length == 0) {
+    return true
+  }
   if(this.memory.creepsByType.allRound.creeps.length >= 3 && this.needContainerMiner() == true){
     return false
   }
