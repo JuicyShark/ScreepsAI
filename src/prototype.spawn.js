@@ -8,7 +8,6 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, home, type, sourceI
   var testCreep = this.spawnCreep(bodyParts, name, {
     dryRun: true
   });
-  console.log(testCreep)
   if (testCreep == 0) {
     this.spawnCreep(bodyParts, name, {
       memory: {

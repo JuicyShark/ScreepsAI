@@ -12,6 +12,21 @@ var taskManager = {
       if(creep.memory.task == null){
         creep.room.memory.availableCreeps.push(creep.id)
       }
+
+        else if(creep.memory.task.name == "HARVEST") {
+          creep.harvestTask()
+        }
+      else if(creep.memory.task.name == "BUILD") {
+          creep.buildTask()
+        }
+        else if(creep.memory.task.name == "UPGRADE") {
+          creep.upgradeTask();
+        }
+        else if(creep.memory.task.name == "REPAIR") {
+          creep.repairTask();
+        }
+
+      }
     }
   },
 

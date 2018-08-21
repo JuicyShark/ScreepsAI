@@ -47,11 +47,6 @@ module.exports.loop = function() {
            tower.defend();
        }
 
-    // for each creeps run creep logic
-    for (let name in Game.creeps) {
-
-    //  Game.creeps[name].suicide();
-      Game.creeps[name].runRole();
-    }
+  
 })
 };
