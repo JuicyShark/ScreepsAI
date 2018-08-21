@@ -2,9 +2,9 @@ module.exports = {
   run: function(creep) {
     creep.checkDeath(creep)
 
-    if(creep.memory.task[0] != null || creep.memory.task[0] != undefined){
-      let container = creep.memory.task[0].details.target
-      let sourceId = creep.memory.task[0].details.sourceId
+    if(creep.memory.task != null || creep.memory.task != undefined){
+      let container = creep.memory.task.details.target
+      let sourceId = creep.memory.task.details.sourceId
       var source = Game.getObjectById(sourceId)
       var thisContainer = Game.getObjectById(container);
 

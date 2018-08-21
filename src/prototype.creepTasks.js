@@ -1,25 +1,25 @@
 
 Creep.prototype.checkForTask = function() {
   let task = this.memory.task
-  if(task.length == 0) {
-    return false;
-  } else if (task.length >= 1 && task[0] != null) {
+  if (task != null) {
     return true;
+  }else{
+    return false
   }
 }
 
 Creep.prototype.runTask = function() {
   if(this.checkForTask() == true){
-    if(this.memory.task[0].name == "HARVEST") {
+    if(this.memory.task.name == "HARVEST") {
       this.harvestTask()
     }
-    if(this.memory.task[0].name == "BUILD") {
+    if(this.memory.task.name == "BUILD") {
       this.buildTask()
     }
-    if(this.memory.task[0].name == "UPGRADE") {
+    if(this.memory.task.name == "UPGRADE") {
       this.upgradeTask();
     }
-    if(this.memory.task[0].name == "REPAIR") {
+    if(this.memory.task.name == "REPAIR") {
       this.repairTask();
     }
 

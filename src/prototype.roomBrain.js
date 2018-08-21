@@ -25,8 +25,8 @@ Room.prototype.createTask = function(name,  typeNeeded, priority, details) {
   var duplicateTask = null;
     for (var i in Game.creeps) {
       if( duplicateTask == true) break;
-      if (Game.creeps[i].memory.task[0] != null){
-        if(Game.creeps[i].memory.task[0].details.target == task.details.target){
+      if (Game.creeps[i].memory.task != null){
+        if(Game.creeps[i].memory.task.details.target == task.details.target){
 
              duplicateTask = true;
          }
@@ -46,7 +46,7 @@ Room.prototype.createTask = function(name,  typeNeeded, priority, details) {
 
 Room.prototype.assignTasks = function() {
   var needTask = []
-  var gotTask = []
+
   var tooManyTask = []
 
   for(var i in this.memory.creepsByType){
@@ -54,12 +54,8 @@ Room.prototype.assignTasks = function() {
     for(var a in creepsBytype.creeps) {
       let chosenOne = Game.getObjectById(creepsBytype.creeps[a])
       if(chosenOne instanceof Creep) {
-        if(chosenOne.memory.task.length == 0 ){
+        if(chosenOne.memory.task != null ){
           needTask.push(chosenOne);
-        } else if (chosenOne.memory.task.length == 1) {
-          gotTask.push(chosenOne);
-        } else if (chosenOne.memory.task.length >= 2) {
-          tooManyTask.push(chosenOne);
         }
       }
     }
@@ -76,7 +72,7 @@ Room.prototype.assignTasks = function() {
     }
     }
   } else if (needTask.length == 0) {
-    console.log("everyone working? " + gotTask.length)
+    console.log("everyone working? ")
   }
 
 }
