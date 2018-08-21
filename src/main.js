@@ -7,6 +7,7 @@ require('prototype.SorterMan')
 //require('colonyManager')
 require('prototype.flags')
 require('prototype.tower')
+require('taskManager')
 
 // Turn off any of the below features by passing false.
 require('screeps-perf')({
@@ -36,6 +37,8 @@ module.exports.loop = function() {
       var currentRoom = Game.rooms[roomName];
       currentRoom.runLogic()
     }
+        taskManager.run()
+        taskManager.assignTasks()
     // find all towers
        var towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER);
        // for each tower

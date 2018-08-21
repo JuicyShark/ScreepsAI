@@ -45,7 +45,6 @@ Room.prototype.createTask = function(name,  typeNeeded, priority, details) {
 }
 
 Room.prototype.assignTasks = function() {
-  var needTask = []
 
   var tooManyTask = []
 
@@ -54,26 +53,17 @@ Room.prototype.assignTasks = function() {
     for(var a in creepsBytype.creeps) {
       let chosenOne = Game.getObjectById(creepsBytype.creeps[a])
       if(chosenOne instanceof Creep) {
-        if(chosenOne.memory.task != null ){
-          needTask.push(chosenOne);
+        if(chosenOne.memory.task == null ){
+          let thisCreepType = chosenOne.memory.type
+          var newTask = this.filtertask(thisCreepType)
+          if(newTask != null || newTask != undefined) {
+            thisCreep.memory.task == newTask
+          }
         }
       }
     }
   }
-  if(needTask.length != 0) {
-    for(var o in needTask){
-      let thisCreep = needTask[o]
-      if(thisCreep instanceof Creep) {
-        let thisCreepType = thisCreep.memory.type
-        var newTask = this.filterTasks(thisCreepType)
-        if(newTask != null || newTask != undefined) {
-          thisCreep.memory.task.push(newTask)
-        }
-    }
-    }
-  } else if (needTask.length == 0) {
-    console.log("everyone working? ")
-  }
+
 
 }
 
@@ -101,7 +91,7 @@ Room.prototype.constantTasks = function() {
   }
 }
 
-Room.prototype.filterTasks = function(typeGiven) {
+Room.prototype.filtertask = function(typeGiven) {
   for (var i in this.memory.taskList){
      if(this.memory.taskList[i].typeNeeded == typeGiven){
        //console.log(this.memory.taskList[i].name + " " + taskName)
