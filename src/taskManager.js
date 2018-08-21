@@ -25,9 +25,7 @@ var taskManager = {
         else if(creep.memory.task.name == "REPAIR") {
           creep.repairTask();
         }
-
       }
-    }
   },
 
   assignTasks: function(){

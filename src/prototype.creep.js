@@ -203,9 +203,7 @@ Creep.prototype.repairTask = function() {
 Creep.prototype.checkDeath = function(creep) {
   if (this.ticksToLive < 20) {
     if(this.ticksToLive < 5) {
-    this.room.memory.taskList.unshift(this.memory.task);
-    this.memory.task.shift();
-
+  
       console.log("------------")
       console.log("Hey there " + creep.memory.type + ", " + creep.name + " is dying.");
       console.log("-----This was a CheckDeath Function-------")
