@@ -1,12 +1,4 @@
-require("prototype.creepTasks")
-Creep.prototype.runRole = function() {
-  if(!this.memory.role){
-    this.runTask()
 
-  } else {
-  roles[this.memory.role].run(this);
-  }
-};
 
 
 Creep.prototype.ourPath = function(destination) {

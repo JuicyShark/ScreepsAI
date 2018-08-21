@@ -91,19 +91,6 @@ Room.prototype.constantTasks = function() {
   }
 }
 
-Room.prototype.filtertask = function(typeGiven) {
-  for (var i in this.memory.taskList){
-     if(this.memory.taskList[i].typeNeeded == typeGiven){
-       //console.log(this.memory.taskList[i].name + " " + taskName)
-      var  filteredTask = this.memory.taskList[i]
-        this.memory.taskList.splice(i, 1);
-        return filteredTask
-     }
-  }
-
-}
-
-
 
 Room.prototype.isMine = function() {
   return this.controller && this.controller.my;
