@@ -35,7 +35,7 @@ var taskManager = {
         for(var i = 0; i < room.memory.availableCreeps.length; i++){
         var creepId = room.memory.availableCreeps[i]
       var creep = Game.getObjectById(creepId)
-      if(creep.spawning != true){
+      if(creep.spawning != true || creep.spawning != null){
       var task = creep.room.filtertask(creep.memory.type)
       creep.memory.task = task;
     }
