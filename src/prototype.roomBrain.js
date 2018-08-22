@@ -140,7 +140,7 @@ Room.prototype.needBasicWorker = function() {
   if(this.memory.creepsByType.allRound.creeps.length == 0) {
     return true
   }
-  if(this.memory.creepsByType.allRound.creeps.length >= 3 && this.needContainerMiner() == true){
+  else if(this.memory.creepsByType.allRound.creeps.length >= 3 && this.needContainerMiner() == true){
     return false
   }
   else if (this.memory.creepsByType.allRound.creeps.length > 4) {
@@ -166,10 +166,16 @@ Room.prototype.needLorry = function() {
 }
 
 Room.prototype.needUpgrader = function() {
-  if(this.memory.creepsByType.upgrader.creeps.length >= 3){
-    return false;
-  } else if (this.memory.creepsByType.upgrader.creeps.length <=2) {
-    return true;
+  let UpgraderMemCount = this.memory.creepsByType.upgrader.creeps.length;
+  if(this.level() >=3) {
+    if (UpgraderMemCount == 0 || UpgraderMemCount <= 2){
+      return true
+    }
+  }
+  else if (this.level() <=3) {
+    if(UpgraderMemCount == 0 && UpgraderMemCount <= 4){
+      return true
+    }
   }
 }
 Room.prototype.needContainerMiner = function() {
