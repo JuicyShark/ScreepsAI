@@ -57,6 +57,15 @@ module.exports = {
       }
     }
   },
+  taskPriorities: {
+    constructionSites: {
+      storage: 1,
+      container: 3,
+      tower: 5,
+      extension: 5,
+      road: 6
+    }
+  },
   buildingLevels: {
     sources: {
       Road: true,
@@ -72,55 +81,6 @@ module.exports = {
     1: 1,
     2: 9,
     3: 49
-  },
-  roleList: {
-    harvester: '',
-    miner: '',
-    builder: '',
-    lorry: '',
-    upgrader: '',
-    repairer: '',
-    roomPopulation: ''
-  },
-  maxUpgraders: {
-    1: 1,
-    2: 1,
-    3: 1,
-    4: 2,
-    5: 2,
-    6: 3,
-    7: 3,
-    8: 3
-  },
-  maxBuilders: {
-    1: 1,
-    2: 1,
-    3: 2,
-    4: 2,
-    5: 2,
-    6: 2,
-    7: 2,
-    8: 2
-  },
-  maxRepairers: {
-    1: 1,
-    2: 1,
-    3: 1,
-    4: 2,
-    5: 2,
-    6: 2,
-    7: 2,
-    8: 2
-  },
-  maxLorrys: {
-    1: 0,
-    2: 0,
-    3: 2,
-    4: 2,
-    5: 2,
-    6: 2,
-    7: 2,
-    8: 2
   },
   bodies: {
     claimer: [CLAIM, MOVE, MOVE],

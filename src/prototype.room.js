@@ -50,10 +50,10 @@ Room.prototype.createNeeds = function() {
     spawn.spawnAllRounder()}
   } else if (this.needUpgrader()) {
    spawn.spawnUpgrader()
+ } else if (this.needLorry()) {
+   spawn.spawnLorry()
  } else if (this.needContainerMiner()) {
       spawn.spawnContainerMiner()
-    } else if (this.needLorry()) {
-      spawn.spawnLorry()
     }/*
   else if (this.needSourceScouts()) {
     let theReturned = this.needSourceScouts()
@@ -221,13 +221,23 @@ Room.prototype.initConstructionSites = function() {
   this.constructionSites = this.find(FIND_CONSTRUCTION_SITES)
   for (let i in this.constructionSites) {
     this.memory.constructionSites[i] = this.constructionSites[i].id
-    this.initConstructionTasks(this.constructionSites[i].id )
+    this.initConstructionTasks(this.constructionSites[i] )
   }
 };
 
 Room.prototype.initConstructionTasks = function(constructionSite){
-  details = {target: constructionSite};
-  this.createTask("BUILD", "ALL_ROUND", 3, details)
+  let siteType = constructionSite.structureType
+
+  let priorityList = Object.entries(config.taskPriorities.constructionSites)
+  for(let i = 0;i < priorityList.length; i++){
+    let sortingType = priorityList[i]
+    if (siteType == sortingType[0]){
+      let selectedPriority = sortingType[1];
+      details = {target: constructionSite.id};
+      this.createTask("BUILD", "ALL_ROUND", selectedPriority, details)
+    }
+  }
+
 }
 Room.prototype.loadConstructionSites = function() {
   this.constructionSites = [];

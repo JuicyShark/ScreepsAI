@@ -111,7 +111,7 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
 Creep.prototype.checkDeath = function(creep) {
   if (this.ticksToLive < 20) {
       console.log("------------")
-      console.log("Hey there " + creep.memory.type + ", " + creep.name + " is dying.");
+      console.log("Hey there " + this.memory.type + ", " + this.name + " is dying.");
       console.log("-----This was a CheckDeath Function-------")
   }
 }

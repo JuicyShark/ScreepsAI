@@ -155,15 +155,20 @@ Room.prototype.needBasicWorker = function() {
 }
 // Testing to only want harvesters if we dont have miners and lorrys around
 Room.prototype.needLorry = function() {
-  if (this.memory.creepsByType.containerMiner.creeps.length >= 1 && this.memory.creepsByType.lorry.creeps.length <= 2 ) {
-    return true
+  if(this.memory.creepsByType.containerMiner.creeps.length == 0) {
+    return false
+  } else if (this.memory.creepsByType.containerMiner.creeps.length != 0) {
+    if (this.memory.creepsByType.lorry.creeps.length <= 2 ) {
+      return true
+    }
   }
+
 }
 
 Room.prototype.needUpgrader = function() {
-  if(this.memory.creepsByType.upgrader.creeps.length >= 1 && this.memory.structureIDs.controller.taskInit == true){
+  if(this.memory.creepsByType.upgrader.creeps.length >= 3){
     return false;
-  } else if (this.memory.creepsByType.upgrader.creeps.length == 0) {
+  } else if (this.memory.creepsByType.upgrader.creeps.length <=2) {
     return true;
   }
 }
