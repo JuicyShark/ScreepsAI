@@ -14,16 +14,16 @@ var taskManager = {
       }
 
         else if(creep.memory.task.name == "HARVEST") {
-          creep.harvestTask()
+          tasks.harvestTask(creep)
         }
       else if(creep.memory.task.name == "BUILD") {
-          creep.buildTask()
+          tasks.buildTask(creep)
         }
         else if(creep.memory.task.name == "UPGRADE") {
-          creep.upgradeTask();
+          tasks.upgradeTask(creep);
         }
         else if(creep.memory.task.name == "REPAIR") {
-          creep.repairTask();
+          tasks.repairTask(creep);
         }
       }
   },
@@ -35,8 +35,11 @@ var taskManager = {
         for(var i = 0; i < room.memory.availableCreeps.length; i++){
         var creepId = room.memory.availableCreeps[i]
       var creep = Game.getObjectById(creepId)
+      if(creep.spawning != true){
       var task = creep.room.filtertask(creep.memory.type)
-      creep.memory.task = task;}
+      creep.memory.task = task;
+    }
+    }
     }
   }
   }

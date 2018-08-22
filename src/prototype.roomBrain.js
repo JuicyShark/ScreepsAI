@@ -86,8 +86,10 @@ Room.prototype.constantTasks = function() {
     this.memory.structureIDs.controller.taskInit = true;
   }
   if(this.memory.structureIDs.Containers.length >= 1){
-    details = {target: this.memory.structureIDs.Containers[0].id}
-    this.createTask("REPAIR", "ALL_ROUND", 4, details)
+    for(let i in this.memory.structureIDs.Containers){
+      details = {target: this.memory.structureIDs.Containers[0].id}
+      this.createTask("REPAIR", "ALL_ROUND", 4, details)
+    }
   }
 }
 
@@ -130,16 +132,7 @@ Room.prototype.needSourceScouts = function() {
     return false;
   }
 }
-Room.prototype.roomHarvesters = function() {
-  let harvesters = this.find(FIND_MY_CREEPS, {
-    filter: {
-      memory: {
-        type: "ALL_ROUND"
-      }
-    }
-  });
-  return harvesters;
-}
+
 Room.prototype.needBasicWorker = function() {
   if(this.memory.creepsByType.allRound.creeps.length == 0) {
     return true
@@ -161,17 +154,8 @@ Room.prototype.needBasicWorker = function() {
   }
 }
 // Testing to only want harvesters if we dont have miners and lorrys around
-Room.prototype.roomLorrys = function() {
-  let lorrys = this.find(FIND_MY_CREEPS, {
-    filter: {
-      memory: {
-        role: "lorry"
-    }}
-  });
-  return lorrys;
-}
 Room.prototype.needLorry = function() {
-  if (this.roomMiners().length >= 1 && this.roomLorrys().length <= 2 ) {
+  if (this.memory.creepsByType.containerMiner.creeps.length >= 1 && this.memory.creepsByType.lorry.creeps.length <= 2 ) {
     return true
   }
 }
@@ -180,22 +164,6 @@ Room.prototype.needUpgrader = function() {
   if(this.memory.creepsByType.upgrader.creeps.length >= 1 && this.memory.structureIDs.controller.taskInit == true){
     return false;
   } else if (this.memory.creepsByType.upgrader.creeps.length == 0) {
-    return true;
-  }
-}
-
-Room.prototype.roomBuilders = function() {
-  let builder = this.find(FIND_MY_CREEPS, {
-    filter: {
-      memory: {
-        role: "builder"
-      }}
-  });
-  return builder;
-}
-Room.prototype.needBuilder = function() {
-
-  if (this.memory.constructionSites.length != 0 && this.roomBuilders().length < 1) {
     return true;
   }
 }

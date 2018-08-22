@@ -106,104 +106,12 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
   }
 
 }
-Creep.prototype.harvestTask = function() {
 
-  this.checkDeath();
-    if(this.room.name == this.memory.home) {
-  var taskSource = Game.getObjectById(this.memory.task.details.target)
-  if (this.carry.energy == 0) {
-    this.memory.working = "true";
-  }
-  if (this.memory.working == "false") {
-    this.findDeliveryTarget()
-  }
-  if (this.carry.energy != this.carryCapacity && this.memory.working == "true") {
-    if(this.harvest(taskSource) == ERR_NOT_IN_RANGE) {
-      this.ourPath(taskSource)
-    }
-   } else if (this.carry.energy == this.carryCapacity && this.memory.working == "true") {
-    this.memory.working = "false"
-  }
-} else if (this.room.name != this.memory.home) {
-  let getSpawn = Game.getObjectById(Memory.rooms[this.memory.home].structureIDs.Spawns[0])
-  this.ourPath(getSpawn)
-}
-}
-
-Creep.prototype.buildTask = function () {
-  this.checkDeath();
-  if (this.memory.working == "false") {
-    this.getEnergy(true, true)
-  } else if (this.memory.working == "true") {
-    var  creepTask = this.memory.task.details.target
-      var thisTarget = Game.getObjectById(creepTask);
-
-    if (thisTarget != null) {
-      if (this.build(thisTarget) == ERR_NOT_IN_RANGE) {
-        this.ourPath(thisTarget)
-      }
-    } else{
-      console.log(this.name + ", Target is nowhere to be found. Removing task");
-      this.memory.task.shift();
-    }
-  }
-  if (this.carry.energy == this.carryCapacity && this.memory.working == "false") {
-   this.memory.working = "true";
- } else if (this.carry.energy == 0 && this.memory.working == "true"){
-   this.memory.working = "false";
- }
-}
-
-Creep.prototype.upgradeTask = function() {
-  this.checkDeath();
-  if (this.carry.energy == this.carryCapacity) {
-    this.memory.working = "true";
-  }
-  if (this.carry.energy == 0) {
-    this.memory.working = "false";
-  }
-  if (this.carry.energy != this.carryCapacity && this.memory.working == "false") {
-    this.getEnergy(true, true)
-  }
-  if (this.carryCapacity != 0 && this.memory.working == "true") {
-    if (this.upgradeController(this.room.controller) == ERR_NOT_IN_RANGE) {
-      this.ourPath(this.room.controller);
-    }
-  }
-}
-
-Creep.prototype.repairTask = function() {
-  creep.checkDeath(creep)
-
-  if (this.carry.energy == this.carryCapacity) {
-    this.memory.working = "true";
-  }
-  if (this.carry.energy == 0) {
-    this.memory.working = "false";
-  }
-  if (this.carry.energy != 0 && this.memory.working == "true") {
-    var structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-      filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL
-    });
-    if (structure == undefined) {
-      structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-        filter: (s) => s.hits < s.hitsMax && s.structureType == STRUCTURE_WALL ||
-          s.structureType == STRUCTURE_CONTAINER ||
-          s.structureType == STRUCTURE_EXTENSION
-      });
-    }
-    if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
-      this.ourPath(structure);
-    }
-  } else if (this.memory.working == "false") {
-    this.getEnergy(true, true)
-  }
-}
 
 Creep.prototype.checkDeath = function(creep) {
   if (this.ticksToLive < 20) {
     if(this.ticksToLive < 5) {
-  
+
       console.log("------------")
       console.log("Hey there " + creep.memory.type + ", " + creep.name + " is dying.");
       console.log("-----This was a CheckDeath Function-------")
