@@ -53,7 +53,6 @@ Room.prototype.assignTasks = function() {
         if(chosenOne.memory.task == null ){
           let thisCreepType = chosenOne.memory.type
           var newTask = this.filtertask(thisCreepType)
-          console.log(JSON.stringify(newTask) + chosenOne.name)
           if(newTask != null || newTask != undefined) {
             chosenOne.memory.task == newTask
           }
@@ -70,8 +69,6 @@ Room.prototype.checkTask = function(type) {
 }
 
 Room.prototype.constantTasks = function() {
-  console.log("CONSTANTTASKS")
-
   for (let i in this.memory.sourceNodes) {
     let thisSourceID = this.memory.sourceNodes[i].id;
       if(this.memory.sourceNodes[i].container == ""){
@@ -90,12 +87,10 @@ Room.prototype.constantTasks = function() {
     this.createTask("UPGRADE", "UPGRADER", 1, details)
   }
   if(this.memory.structureIDs.Spawns.length >= 1){
-    console.log("SPAWNS: " + this.memory.structureIDs.Spawns.length)
       details = {target: this.memory.structureIDs.Spawns[0] }
       this.createTask("REPAIR", "ALL_ROUND", 2, details)
     }
     if(this.memory.structureIDs.Towers.length >= 1){
-      console.log("TOWERS: " + this.memory.structureIDs.Towers.length)
         details = {target: this.memory.structureIDs.Towers[0] }
         this.createTask("REPAIR", "ALL_ROUND", 1, details)
       }

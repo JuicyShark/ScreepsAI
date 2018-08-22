@@ -20,7 +20,6 @@ Room.prototype.tick = function() {
       console.log(this.name + " Timer has been reset")
     }
     if (this.memory.timer % 15 == 0) {
-      console.log("ASSIGN TIME")
         this.assignTasks();
     }
     if (this.memory.timer % 30 == 0) {
