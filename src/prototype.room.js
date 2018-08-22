@@ -11,13 +11,11 @@ Room.prototype.tick = function() {
       this.initCreeps();
       this.initSource();
       this.createNeeds();
-      this.avaliableCreeps();
     }
 
     if (!this.memory.timer || this.memory.timer % 60 === 0) {
       this.memory.timer = -1;
       this.memoryInit();
-
       this.memory.timer = 60;
       console.log(this.name + " Timer has been reset")
     }
@@ -30,12 +28,10 @@ Room.prototype.tick = function() {
       this.initSource();
       this.createNeeds();
       this.constantTasks();
-      //this.avaliableCreeps();
     }
     // load things needed each tick without if statement
     this.loadSource();
     this.loadConstructionSites();
-    //this.avaliableCreeps();
 
 
     --this.memory.timer;
@@ -45,50 +41,21 @@ Room.prototype.tick = function() {
     this.processAsGuest();
   }
 }
-
-
-Room.prototype.avaliableCreeps = function () {
-  var creepTypes = this.memory.creepsByType
-  for(var i in creepTypes) {
-      if(creepTypes[i].creeps.length >= 1) {
-        console.log(JSON.stringify(creepTypes[i]))
-      }
-  }
-}
-
-
-
 Room.prototype.createNeeds = function() {
   var spawns = this.find(FIND_MY_SPAWNS)
   var spawn = spawns[0];
-  /*if(this.needBasicWorker()){
-    spawn.spawnAllRounder
-  }
-*/
-//
-
   if (this.needBasicWorker()) {
     if(this.findType("ALL_ROUND").length == 0){
       spawn.spawnBasicAllRounder()
     }else{
     spawn.spawnAllRounder()}
   } else if (this.needUpgrader()) {
-    console.log("Upgrader")
    spawn.spawnUpgrader()
  } else if (this.needContainerMiner()) {
       spawn.spawnContainerMiner()
     } else if (this.needLorry()) {
       spawn.spawnLorry()
-    }
-
-   /* else if (this.needBuilder()) {
-    spawn.spawnBuilder()
-  } else if (this.needRepairer()) {
-    spawn.spawnRepairer()
-  } else if (this.needDefender()) {
-    spawn.spawnDefender()
-  }
-
+    }/*
   else if (this.needSourceScouts()) {
     let theReturned = this.needSourceScouts()
     let roomName = theReturned[0]
@@ -170,34 +137,13 @@ Room.prototype.initSource = function() {
     if (!this.memory.sourceNodes[source.id]) {
       this.memory.sourceNodes[source.id] = {
         id: source.id,
-        miner: "waiting",
-        taskInit: false
       }
     }
-    this.memory.sourceNodes[source.id].miner = "waiting"
     this.memory.hostileSpawns = this.find(STRUCTURE_KEEPER_LAIR);
-    let miners = this.roomMiners()
-
-    //console.log("MINERS" + miners)
-    //miners[i].memory.task.details.sourceId == source.id
-    for(i in miners) {
-      if(miners[i] instanceof Creep) {
-      if(miners[i].memory.task) {
-        if(miners[i].memory.task.details.sourceId == source.id) {
-
-        this.memory.sourceNodes[source.id].miner = miners[i].id;
-        }
-      }
-    }
-    }
-    if (!this.memory.sourceNodes[source.id].miner) {
-      this.memory.sourceNodes[source.id].miner = "waiting"
-    }
     if (!this.memory.sourceNodes[source.id].toBuild) {
       this.memory.sourceNodes[source.id].toBuild = config.buildingLevels.sources;
     }
     if (!this.memory.sourceNodes[source.id].container) {
-
       let containers = source.pos.findInRange(FIND_STRUCTURES, 1, {
        filter: (s) => s.structureType === STRUCTURE_CONTAINER
       });
@@ -282,7 +228,6 @@ Room.prototype.initConstructionSites = function() {
 
 Room.prototype.initConstructionTasks = function(constructionSite){
   details = {target: constructionSite};
-
   this.createTask("BUILD", "ALL_ROUND", 3, details)
 }
 Room.prototype.loadConstructionSites = function() {

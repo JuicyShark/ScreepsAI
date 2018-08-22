@@ -12,7 +12,6 @@ var taskManager = {
       if(creep.memory.task == null){
         creep.room.memory.availableCreeps.push(creep.id)
       }
-
         else if(creep.memory.task.name == "HARVEST") {
           tasks.harvestTask(creep)
         }
@@ -39,9 +38,11 @@ var taskManager = {
         for(var i = 0; i < room.memory.availableCreeps.length; i++){
         var creepId = room.memory.availableCreeps[i]
       var creep = Game.getObjectById(creepId)
-      if(creep.spawning != true || creep != null){
+      if(creep != null){
+      if(creep.spawning != true){
       var task = creep.room.filtertask(creep.memory.type)
       creep.memory.task = task;
+    }
     }
     }
     }

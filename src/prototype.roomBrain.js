@@ -4,9 +4,6 @@ var _ = require('lodash');
 var config = require("config")
 
 
-//Work in progress and not applied anywhere yet
-
-
 /** @function createTask
     @param {string} name  // String name of the task,     example: HARVEST
     @param {string} id  //      please do this   var id = details.target + i + Game.time .... ensure ID is unique
@@ -25,7 +22,7 @@ Room.prototype.createTask = function(name,  typeNeeded, priority, details) {
   var duplicateTask = null;
     for (var i in Game.creeps) {
       if( duplicateTask == true) break;
-      if (Game.creeps[i].memory.task != null){
+      if (Game.creeps[i].memory.task != null || Game.creeps[i].memory.task != undefined){
         if(Game.creeps[i].memory.task.details.target == task.details.target){
 
              duplicateTask = true;
@@ -56,6 +53,7 @@ Room.prototype.assignTasks = function() {
         if(chosenOne.memory.task == null ){
           let thisCreepType = chosenOne.memory.type
           var newTask = this.filtertask(thisCreepType)
+          console.log(JSON.stringify(newTask) + chosenOne.name)
           if(newTask != null || newTask != undefined) {
             chosenOne.memory.task == newTask
           }
@@ -72,26 +70,36 @@ Room.prototype.checkTask = function(type) {
 }
 
 Room.prototype.constantTasks = function() {
+  console.log("CONSTANTTASKS")
 
   for (let i in this.memory.sourceNodes) {
-    if(this.memory.sourceNodes[i].taskInit == false){
-      details = {target: this.memory.sourceNodes[i].id}
-      this.createTask("HARVEST", "ALL_ROUND", 1, details)
-      this.memory.sourceNodes[i].taskInit = true;
+    let thisSourceID = this.memory.sourceNodes[i].id;
+      if(this.memory.sourceNodes[i].container == ""){
+        let details = { target: thisSourceID }
+        if(thisSourceID != null){
+        this.createTask("HARVEST", "ALL_ROUND", 1, details)}
+    } else if (this.memory.sourceNodes[i].container != "") {
+        let thisSourceContainer = this.memory.sourceNodes[i].container;
+        let details = { target: thisSourceContainer, sourceId: thisSourceID}
+        this.createTask("CONTAINER_MINE", "CONTAINER_MINER", 1, details )
     }
   }
-  if(this.memory.structureIDs.controller.taskInit == false) {
-    details = {target: this.memory.structureIDs.controller.id}
+
+  if(this.memory.structureIDs.controller.id != "") {
+    details = { target: this.memory.structureIDs.controller.id }
     this.createTask("UPGRADE", "UPGRADER", 1, details)
-    this.memory.structureIDs.controller.taskInit = true;
   }
-  if(this.memory.structureIDs.Containers.length >= 1){
-    for(let i in this.memory.structureIDs.Containers){
-      details = {target: this.memory.structureIDs.Containers[0].id}
-      this.createTask("REPAIR", "ALL_ROUND", 4, details)
+  if(this.memory.structureIDs.Spawns.length >= 1){
+    console.log("SPAWNS: " + this.memory.structureIDs.Spawns.length)
+      details = {target: this.memory.structureIDs.Spawns[0] }
+      this.createTask("REPAIR", "ALL_ROUND", 2, details)
     }
-  }
-}
+    if(this.memory.structureIDs.Towers.length >= 1){
+      console.log("TOWERS: " + this.memory.structureIDs.Towers.length)
+        details = {target: this.memory.structureIDs.Towers[0] }
+        this.createTask("REPAIR", "ALL_ROUND", 1, details)
+      }
+    }
 
 
 Room.prototype.isMine = function() {
@@ -146,10 +154,7 @@ Room.prototype.needBasicWorker = function() {
   else if(this.memory.creepsByType.allRound.creeps.length <= 3 && this.needContainerMiner() == false){
     return true
   }
-  else if(this.memory.creepsByType.allRound.creeps.length <= 4 && this.level() <= 2) {
-    return true
-  }
-  else if(this.memory.creepsByType.allRound.creeps.length <= 6 && this.level() >= 3) {
+  else if(this.memory.creepsByType.allRound.creeps.length <= 6 && this.level() >= 5) {
     return true
   }
 }
@@ -167,42 +172,21 @@ Room.prototype.needUpgrader = function() {
     return true;
   }
 }
-Room.prototype.roomMiners = function() {
-  let minersObj = []
-  let miner = this.memory.creepsByType.containerMiner.creeps
-  for(let i in miner) {
-    let myMiner = Game.getObjectById(miner[i])
-    if(myMiner instanceof Creep) {
-      minersObj.push(myMiner)
-    }
-  }
-  return minersObj;
-}
 Room.prototype.needContainerMiner = function() {
-
-  let output = [];
-  let tempy = Object.keys(this.memory.sourceNodes)
-  if(this.roomMiners().length >= tempy.length) {
-    console.log("MinerFalsy bc of sourcenode cap" + this.roomMiners().length)
-    return false
-  }
+  let output = []
   for (let i in this.memory.sourceNodes) {
+    let thisSourceID = this.memory.sourceNodes[i].id;
+      if(this.memory.sourceNodes[i].container == ""){
 
-    let thisSource = this.memory.sourceNodes[i];
-    if(thisSource.miner == "waiting" && thisSource.container != "") {
-      output.push(thisSource)
+    } else if (this.memory.sourceNodes[i].container != "") {
+        output.push(thisSourceID)
     }
   }
-    if (output.length != 0) {
-      let selectedSource = output.pop()
-      if (selectedSource.container != "") {
-      details = {target: selectedSource.container, sourceId: selectedSource.id}
-      this.createTask("CONTAINER_MINE", "CONTAINER_MINER", 1, details )
-      return true
-      }
-    } else if (output.length == 0) {
-      return false
-    }
+  if(this.memory.creepsByType.containerMiner.creeps.length >= output.length){
+    return false
+  } else if (this.memory.creepsByType.containerMiner.creeps.length <= output.length) {
+    return true
+  }
 }
 
 Room.prototype.needDefender = function() {

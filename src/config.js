@@ -1,22 +1,16 @@
 module.exports = {
   defaultMem: {
     colonyMem: {
-      bases: {
-
-      },
-
-      outpost: {
-
-      },
-    otherRooms: {
-
-    },
+      bases: {},
+      outpost: {},
+      otherRooms: {},
       enemys: {}
-    },
+      },
     allies: {
       username: "Juicy-shark",
       username: "CrazedGod"
     },
+
     RoomStructureMem: {
       controller : {
         id: "",
@@ -31,6 +25,7 @@ module.exports = {
       Towers: [],
       Roads: []
     },
+
     creepTypes : {
       allRound: {
         creeps: [],

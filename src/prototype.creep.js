@@ -99,7 +99,7 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
 
   // if no container was found
   if (container == null && getFromSource == true) {
-    var source = this.pos.findClosestByPath(FIND_SOURCES_ACTIVE);
+    var source = this.pos.findClosestByPath(FIND_SOURCES);
     if (this.harvest(source) == ERR_NOT_IN_RANGE) {
       this.ourPath(source);
     }
@@ -110,11 +110,8 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
 
 Creep.prototype.checkDeath = function(creep) {
   if (this.ticksToLive < 20) {
-    if(this.ticksToLive < 5) {
-
       console.log("------------")
       console.log("Hey there " + creep.memory.type + ", " + creep.name + " is dying.");
       console.log("-----This was a CheckDeath Function-------")
-    }
   }
 }
