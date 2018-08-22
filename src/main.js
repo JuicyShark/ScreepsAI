@@ -35,6 +35,16 @@ module.exports.loop = function() {
     //Loop through all rooms your creeps/structures are in
     for (let roomName in Game.rooms) {
       var currentRoom = Game.rooms[roomName];
+
+      if(!Memory.KodiesReset){
+        Memory.KodiesReset = false;
+      }
+      if(Memory.KodiesReset == false){
+        console.log("KODIES SPECIAL RESET!")
+        currentRoom.memory = {}
+        Memory.KodiesReset = true;
+      }
+
       currentRoom.runLogic()
     }
         taskManager.run()
@@ -47,6 +57,6 @@ module.exports.loop = function() {
            tower.defend();
        }
 
-  
+
 })
 };

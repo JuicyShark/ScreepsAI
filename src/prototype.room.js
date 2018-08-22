@@ -4,6 +4,7 @@ require("prototype.roomBrain")
 require("prototype.finder")
 
 Room.prototype.tick = function() {
+
   if (this.isMine()) {
     if(!this.memory) {
       this.memoryInit();
@@ -11,6 +12,7 @@ Room.prototype.tick = function() {
       this.initCreeps();
       this.initSource();
       this.createNeeds();
+      this.contantTasks();
     }
 
     if (!this.memory.timer || this.memory.timer % 60 === 0) {
