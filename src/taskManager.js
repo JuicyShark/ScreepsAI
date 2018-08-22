@@ -25,6 +25,10 @@ var taskManager = {
         else if(creep.memory.task.name == "REPAIR") {
           tasks.repairTask(creep);
         }
+        else if(creep.memory.task.name == "CONTAINER_MINE") {
+          var miner = require('role.miner')
+          miner.run(creep)
+        }
       }
   },
 
