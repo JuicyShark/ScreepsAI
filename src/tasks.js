@@ -87,7 +87,7 @@ var tasks = {
         }
       } else{
         console.log(creep.name + ", Target is nowhere to be found. Removing task");
-        creep.memory.task = [];
+        creep.memory.task = null;
       }
     }
     if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "false") {
