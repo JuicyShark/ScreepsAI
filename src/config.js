@@ -23,7 +23,8 @@ module.exports = {
       Extensions: [],
       Spawns : [],
       Towers: [],
-      Roads: []
+      Roads: [],
+      needsRepair: []
     },
 
     creepTypes : {
