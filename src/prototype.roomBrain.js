@@ -74,14 +74,8 @@ Room.prototype.constantTasks = function() {
       //for (var i = 0; i < this.memory.sourceNodes.length; i++) {
       let thisSourceID = this.memory.sourceNodes[i].id;
       if (this.memory.sourceNodes[i].container == null) {
-        var subTarget =   Game.getObjectById(thisSourceID).pos.findClosestByRange(FIND_STRUCTURES, {
-                    filter: (s) =>
-                        s.structureType == STRUCTURE_SPAWN || s.structureType == STRUCTURE_EXTENSION &&
-                          s.energy < s.energyCapacity
-          });
         let details = {
-          target: thisSourceID,
-          subTarget: subTarget.id
+          target: thisSourceID
         }
         if (thisSourceID != null) {
           this.createTask("HARVEST", "ALL_ROUND", 1, details)
@@ -97,15 +91,8 @@ Room.prototype.constantTasks = function() {
     })
 
     if (this.memory.structureIDs.controller.id != null) {
-      var subTarget =   constructionSite.pos.findClosestByRange(FIND_STRUCTURES, {
-                  filter: (s) =>
-                      s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE &&
-                        s.getEnergyPercentage() >= 1
-
-        });
       details = {
-        target: this.memory.structureIDs.controller.id,
-        subTarget: subTarget.id
+        target: this.memory.structureIDs.controller.id
       }
       this.createTask("UPGRADE", "UPGRADER", 1, details)
     }
@@ -115,15 +102,8 @@ Room.prototype.constantTasks = function() {
           return i.needsRepair(true);
         }
       })) {
-        var subTarget =   s.pos.findClosestByRange(FIND_STRUCTURES, {
-                    filter: (c) =>
-                        c.structureType == STRUCTURE_CONTAINER || c.structureType == STRUCTURE_STORAGE &&
-                          c.getEnergyPercentage() >= 1
-
-          });
         var details = {
-          target: s.id,
-          subTarget: subTarget.id
+          target: s.id
         }
       if (!s instanceof StructureWall && !s instanceof StructureRampart) {
         let task = this.createTask('REPAIR', "ALL_ROUND", 2, details);
