@@ -243,8 +243,16 @@ Room.prototype.initConstructionTasks = function(constructionSite) {
     let sortingType = priorityList[i]
     if (siteType == sortingType[0]) {
       let selectedPriority = sortingType[1];
+      var subTarget =   constructionSite.pos.findClosestByRange(FIND_STRUCTURES, {
+                  filter: (s) =>
+                      s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE &&
+                        s.getEnergyPercentage() >= 1
+
+        });
+
       details = {
-        target: constructionSite.id
+        target: constructionSite.id,
+        subTarget: subTarget.id
       };
       this.createTask("BUILD", "ALL_ROUND", selectedPriority, details)
     }
