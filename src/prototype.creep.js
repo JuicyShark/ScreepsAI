@@ -40,10 +40,9 @@ if(this.room.name == this.memory.home) {
 });
 
 
-    for(let i in this.room.memory.structureIDs.Containers) {
+    for(var i = 0; i < this.room.memory.structureIDs.Containers; i++) {
     if (this.room.memory.structureIDs.Containers[i] == temp1.id){
       temp2.push(temp1)
-
     }
   }
   let container = temp2[0]
@@ -75,9 +74,7 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
   var config = require("config")
   /**  @type {STRUCTURE_CONTAINER} **/
   let container;
-  var miner = this.room.find(FIND_MY_CREEPS, {
-    filter: {memory: {role: "miner"} }
-});
+
 
     let droppedEnergy = this.pos.findInRange(FIND_DROPPED_RESOURCES, 2)
     if (droppedEnergy != null) {

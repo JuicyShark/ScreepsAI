@@ -28,7 +28,7 @@ Room.prototype.filtertask = function(typeGiven) {
       return 1;}
     return 0;
   })
-  for (var i in this.memory.taskList){
+  for (var i = 0; i < this.memory.taskList; i++){
      if(this.memory.taskList[i].typeNeeded == typeGiven){
       var filteredTask = this.memory.taskList[i]
         this.memory.taskList.splice(i, 1);
