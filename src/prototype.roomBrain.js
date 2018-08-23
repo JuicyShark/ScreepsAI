@@ -193,14 +193,14 @@ Room.prototype.constantTasks = function() {
     }
     Room.prototype.needContainerMiner = function() {
       let output = []
-      Object.keys(this.memory.sourceNodes).forEach(i => {
+      for (var i = 0; i < this.memory.sourceNodes.length; i++) {
         let thisSourceID = this.memory.sourceNodes[i].id;
         if (this.memory.sourceNodes[i].container == null) {
 
         } else if (this.memory.sourceNodes[i].container != null) {
           output.push(thisSourceID)
         }
-      })
+      }
       if (this.memory.creepsByType.containerMiner.creeps.length >= output.length) {
         return false
       } else if (this.memory.creepsByType.containerMiner.creeps.length <= output.length) {
