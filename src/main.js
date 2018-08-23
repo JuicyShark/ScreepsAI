@@ -17,7 +17,7 @@ require('screeps-perf')({
   optimizePathFinding: false
 });
 const profiler = require('screeps-profiler');
-
+ 
 profiler.enable();
 module.exports.loop = function() {
   profiler.wrap(function() {
