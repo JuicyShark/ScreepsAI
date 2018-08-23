@@ -12,7 +12,9 @@ var tasks = {
       creep.memory.working = "false";
     }
     if (creep.carry.energy != creep.carryCapacity && creep.memory.working == "false") {
-      creep.getEnergy(true, true)
+    //  creep.getEnergy(true, true)
+    var subTarget = Game.getObjectById(this.memory.task.details.subTarget)
+    creep.travelTo(subTarget);
     }
     if (creep.carryCapacity != 0 && creep.memory.working == "true") {
       if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
@@ -45,7 +47,9 @@ var tasks = {
         creep.travelTo(structure);
       }
     } else if (creep.memory.working == "false") {
-      creep.getEnergy(true, true)
+      //creep.getEnergy(true, true)
+      var subTarget = Game.getObjectById(this.memory.task.details.subTarget)
+      creep.travelTo(subTarget);
     }
   },
 
@@ -58,7 +62,9 @@ var tasks = {
       creep.memory.working = "true";
     }
     if (creep.memory.working == "false") {
-      creep.findDeliveryTarget()
+    //  creep.findDeliveryTarget()
+    var subTarget = Game.getObjectById(this.memory.task.details.subTarget)
+    creep.travelTo(subTarget);
     }
     if (creep.carry.energy != creep.carryCapacity && creep.memory.working == "true") {
       if(creep.harvest(taskSource) == ERR_NOT_IN_RANGE) {
@@ -76,7 +82,9 @@ var tasks = {
   buildTask: function (creep) {
     creep.checkDeath();
     if (creep.memory.working == "false") {
-      creep.getEnergy(true, true)
+    //  creep.getEnergy(true, true)
+    var subTarget = Game.getObjectById(this.memory.task.details.subTarget)
+    creep.travelTo(subTarget);
     } else if (creep.memory.working == "true") {
       var  creepTask = creep.memory.task.details.target
         var creepTarget = Game.getObjectById(creepTask);
