@@ -1,4 +1,3 @@
-
 require('prototype.spawn')
 require('prototype.room')
 require('prototype.creep')
@@ -20,31 +19,29 @@ const profiler = require('screeps-profiler');
 profiler.enable();
 module.exports.loop = function() {
   profiler.wrap(function() {
-  // Clean dead creeps from memory RIP fellow conrades
-   for(var i = 0; i < Memory.creeps.length; i++){
-    if (Memory.creeps[i] == undefined) {
-      delete  Memory.creeps[i];
-    }
-  }
-     Object.keys(Game.flags).forEach(i => {
+    // Clean dead creeps from memory RIP fellow conrades
+    Object.keys(Memory.creeps).forEach(i => {
+      if (Game.creeps[i] == undefined) {
+        delete Memory.creeps[i];
+      }
+    })
+    Object.keys(Game.flags).forEach(i => {
       var currentFlag = Game.flags[i];
       currentFlag.tick();
     })
 
     //Loop through all rooms your creeps/structures are in
-     Object.keys(Game.rooms).forEach(roomName => {
+    Object.keys(Game.rooms).forEach(roomName => {
       Game.rooms[roomName].runLogic()
     })
-        taskManager.run()
-        taskManager.assignTasks()
+    taskManager.run()
+    taskManager.assignTasks()
     // find all towers
-       var towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER);
-       // for each tower
-       for (let tower of towers) {
-           // run tower logic
-           tower.defend();
-       }
-
-
-})
+    var towers = _.filter(Game.structures, s => s.structureType == STRUCTURE_TOWER);
+    // for each tower
+    for (let tower of towers) {
+      // run tower logic
+      tower.defend();
+    }
+  })
 };
