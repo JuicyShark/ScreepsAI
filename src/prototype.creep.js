@@ -1,14 +1,11 @@
 Creep.prototype.ourPath = function(destination) {
+if(this.memory.task.path == null){
   var path = this.pos.findPathTo(destination, {
     serialize: true
   });
-  if (Game.time % 4 === 0) {
-    delete this.memory.paths
-  }
-  if (!this.memory.paths) {
-    this.memory.path = path;
-  }
-  this.moveByPath(this.memory.path)
+  this.memory.task.path = path;
+}
+  this.moveByPath(this.memory.task.path)
 }
 
 Creep.prototype.deliver = function(container) {

@@ -9,9 +9,7 @@ Room.prototype.tick = function() {
     if (!this.memory) {
       this.memoryInit();
       this.initCreeps();
-      this.initSource();
       this.createNeeds();
-
       this.contantTasks();
       this.assignTasks();
     }
@@ -22,9 +20,10 @@ Room.prototype.tick = function() {
       this.memory.timer = 60;
       console.log(this.name + " Timer has been reset")
     }
-    this.initCreeps();
-    this.loadSource();
+  this.loadSource();
     if (this.memory.timer % 15 == 0) {
+
+      this.initCreeps();
       this.assignTasks();
     }
     if (this.memory.timer % 30 == 0) {

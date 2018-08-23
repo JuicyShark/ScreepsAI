@@ -102,9 +102,8 @@ Room.prototype.constantTasks = function() {
           return i.needsRepair(true);
         }
       })) {
-        console.log(s.pos)
         var details = {
-          target: s.pos
+          target: s.id
         }
       if (!s instanceof StructureWall && !s instanceof StructureRampart) {
         let task = this.createTask('REPAIR', "ALL_ROUND", 2, details);
