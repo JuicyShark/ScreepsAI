@@ -1,17 +1,8 @@
-Creep.prototype.ourPath = function(destination) {
-if(this.memory.task.path == null){
-  var path = this.pos.findPathTo(destination, {
-    serialize: true
-  });
-  this.memory.task.path = path;
-}
-  this.moveByPath(this.memory.task.path)
-}
 
 Creep.prototype.deliver = function(container) {
   if (container != undefined) {
     if (this.transfer(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-      this.ourPath(container)
+      this.travelTo(container)
     }
   }
 }
@@ -79,7 +70,7 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
   }
   if (container != undefined) {
     if (this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-      this.ourPath(container);
+      this.travelTo(container);
       this.memory.oldTarget == container
     }
   }
@@ -88,7 +79,7 @@ Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
   if (container == null && getFromSource == true) {
     var source = this.pos.findClosestByPath(FIND_SOURCES);
     if (this.harvest(source) == ERR_NOT_IN_RANGE) {
-      this.ourPath(source);
+      this.travelTo(source);
     }
   }
 }

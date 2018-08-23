@@ -16,7 +16,7 @@ var tasks = {
     }
     if (creep.carryCapacity != 0 && creep.memory.working == "true") {
       if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-        creep.ourPath(creep.room.controller);
+        creep.travelTo(creep.room.controller);
       }
     }
   }},
@@ -42,7 +42,7 @@ var tasks = {
         });
       }
       if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
-        creep.ourPath(structure);
+        creep.travelTo(structure);
       }
     } else if (creep.memory.working == "false") {
       creep.getEnergy(true, true)
@@ -62,14 +62,14 @@ var tasks = {
     }
     if (creep.carry.energy != creep.carryCapacity && creep.memory.working == "true") {
       if(creep.harvest(taskSource) == ERR_NOT_IN_RANGE) {
-        creep.ourPath(taskSource)
+        creep.travelTo(taskSource)
       }
      } else if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "true") {
       creep.memory.working = "false"
     }
   } else if (creep.room.name != creep.memory.home) {
     let getSpawn = Game.getObjectById(Memory.rooms[creep.memory.home].structureIDs.Spawns[0])
-    creep.ourPath(getSpawn)
+    creep.travelTo(getSpawn)
   }
 },
 
@@ -83,7 +83,7 @@ var tasks = {
 
       if (creepTarget != null) {
         if (creep.build(creepTarget) == ERR_NOT_IN_RANGE) {
-          creep.ourPath(creepTarget)
+          creep.travelTo(creepTarget)
         }
       } else{
         console.log(creep.name + ", Target is nowhere to be found. Removing task");

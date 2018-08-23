@@ -7,6 +7,7 @@ require('prototype.SorterMan')
 require('prototype.structures')
 require('prototype.flags')
 require('prototype.tower')
+var Traveler = require('Traveler');
 var taskManager = require('taskManager')
 
 // Turn off any of the below features by passing false.

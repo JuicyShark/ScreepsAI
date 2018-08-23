@@ -22,7 +22,7 @@ module.exports = {
     } else if (creep.room.name == creep.memory.targetRoom) {
 
       if (creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-        creep.ourPath(creep.room.controller);
+        creep.travelTo(creep.room.controller);
       }
 
     }

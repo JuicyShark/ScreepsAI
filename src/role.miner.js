@@ -10,7 +10,7 @@ module.exports = {
 
       if (thisContainer != null) {
         if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-          creep.ourPath(thisContainer)
+          creep.travelTo(thisContainer)
         }
       }
     }

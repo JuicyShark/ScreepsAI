@@ -13,7 +13,7 @@ module.exports = {
     }
     if (creep.carryCapacity != 0 && creep.memory.working == "true") {
       if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-        creep.ourPath(creep.room.controller);
+        creep.travelTo(creep.room.controller);
       }
     }
   }
