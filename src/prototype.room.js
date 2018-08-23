@@ -26,7 +26,6 @@ Room.prototype.tick = function() {
     }
     if (this.memory.timer % 30 == 0) {
       this.initCreeps();
-      this.initSource();
       this.createNeeds();
       this.constantTasks();
     }
@@ -43,7 +42,7 @@ Room.prototype.tick = function() {
   }
 }
 Room.prototype.createNeeds = function() {
-  var spawns = this.find(FIND_MY_SPAWNS)
+  var spawns = this.memory.structureIDs.Spawns
   var spawn = spawns[0];
   if (this.needBasicWorker()) {
     if(this.findType("ALL_ROUND").length == 0){
@@ -78,11 +77,11 @@ Room.prototype.initCreeps = function() {
   }
   let output = [];
 
-  for(var i in this.memory.creepsByType){
+  for(var i = 0; i < this.memory.creepsByType; i++){
     let list = this.memory.creepsByType[i]
     list.creeps = []
     let findCreeps = this.findType(list.type)
-    for(var a in findCreeps) {
+    for(var a = 0; a < findCreeps; a++) {
       var thisCreep = Game.getObjectById(findCreeps[a].id)
       if(thisCreep instanceof Creep) {
         if(thisCreep.memory.type == list.type) {
@@ -91,9 +90,6 @@ Room.prototype.initCreeps = function() {
           }
     }
     }
-    //console.log(list.type + " " + output)
-    //list.creeps = output;
-
   }
 }
 
@@ -104,6 +100,7 @@ Room.prototype.memoryInit = function() {
   this.initStructures();
   this.initContainers();
   this.initConstructionSites();
+  this.initSource();
 }
 
 Room.prototype.level = function() {
@@ -134,7 +131,7 @@ Room.prototype.initSource = function() {
   if (!this.memory.sourceNodes) {
     this.memory.sourceNodes = {}
   }
-  for (let source of this.find(FIND_SOURCES)) {
+  for (var source = 0; source < this.find(FIND_SOURCES); source++) {
     if (!this.memory.sourceNodes[source.id]) {
       this.memory.sourceNodes[source.id] = {
         id: source.id,
@@ -160,12 +157,11 @@ Room.prototype.initSource = function() {
 
 Room.prototype.loadSource = function() {
   this.sourceNodes = {};
-  for (let id in this.memory.sourceNodes) {
-
+  for (var id = 0; id < this.memory.sourceNodes; id++) {
     this.sourceNodes[id] = Game.getObjectById(id)
   }
   this.hostileSpawns = [];
-  for (let i in this.memory.hostileSpawns) {
+  for (var i = 0; i < this.memory.hostileSpawns; i++) {
     this.hostileSpawns[i] = Game.getObjectById(i.id)
   }
 }
@@ -181,7 +177,7 @@ Room.prototype.initStructures = function() {
     this.structures = this.find(FIND_MY_STRUCTURES);
     this.memory.structureIDs = config.defaultMem.RoomStructureMem;
     let mem = this.memory.structureIDs;
-    for (let i in this.structures) {
+    for (var i = 0; i < this.structures; i++) {
       if(this.structures[i].structureType == "tower"){
         mem.Towers.push(this.structures[i].id)
       }
@@ -194,7 +190,6 @@ Room.prototype.initStructures = function() {
       if(this.structures[i].structureType == STRUCTURE_ROAD) {
         mem.Roads.push(this.structures[i].id)
       }
-
     }
     mem.controller.id = this.controller.id;
   }
@@ -207,7 +202,7 @@ Room.prototype.initContainers = function() {
     }
   });
   if (containers) {
-    for (let i in containers) {
+    for (var i = 0; i < containers; i++) {
       if (containers[i] instanceof StructureContainer) {
         this.memory.structureIDs.Containers[i] = containers[i].id
       } else {
@@ -218,10 +213,18 @@ Room.prototype.initContainers = function() {
   }
 }
 
+Room.prototype.loadContainers = function() {
+  this.containers = [];
+  for (var id = 0; id < this.memory.structureIDs.Containers; id++) {
+    this.containers[id] = (Game.getObjectById(this.memory.structureIDs.Containers[id]));
+
+  }
+}
+
 Room.prototype.initConstructionSites = function() {
   this.memory.constructionSites = [];
   this.constructionSites = this.find(FIND_CONSTRUCTION_SITES)
-  for (let i in this.constructionSites) {
+  for (var i = 0; i < this.constructionSites; i++) {
     this.memory.constructionSites[i] = this.constructionSites[i].id
     this.initConstructionTasks(this.constructionSites[i] )
   }
@@ -231,7 +234,7 @@ Room.prototype.initConstructionTasks = function(constructionSite){
   let siteType = constructionSite.structureType
 
   let priorityList = Object.entries(config.taskPriorities.constructionSites)
-  for(let i = 0;i < priorityList.length; i++){
+  for(let i = 0; i < priorityList.length; i++){
     let sortingType = priorityList[i]
     if (siteType == sortingType[0]){
       let selectedPriority = sortingType[1];
@@ -243,7 +246,7 @@ Room.prototype.initConstructionTasks = function(constructionSite){
 }
 Room.prototype.loadConstructionSites = function() {
   this.constructionSites = [];
-  for (let i in this.memory.constructionSites) {
+  for (var i = 0; i < this.memory.constructionSites; i++) {
     this.constructionSites[i] = (Game.getObjectById(this.memory.constructionSites[i]));
   }
 };
