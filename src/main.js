@@ -21,25 +21,20 @@ profiler.enable();
 module.exports.loop = function() {
   profiler.wrap(function() {
   // Clean dead creeps from memory RIP fellow conrades
-  for (var name = 0; name < Memory.creeps; name++) {
-    if (Game.creeps[name] == undefined) {
-      delete Memory.creeps[name];
+   for(var i = 0; i < Memory.creeps.length; i++){
+    if (Memory.creeps[i] == undefined) {
+      delete  Memory.creeps[i];
     }
   }
-    for(var i = 0; i < Game.flags; i++) {
+     Object.keys(Game.flags).forEach(i => {
       var currentFlag = Game.flags[i];
       currentFlag.tick();
-
-    }
+    })
 
     //Loop through all rooms your creeps/structures are in
-    for (var roomName = 0; roomName < Game.rooms; roomName++) {
-      var currentRoom = Game.rooms[roomName];
-
-
-
-      currentRoom.runLogic()
-    }
+     Object.keys(Game.rooms).forEach(roomName => {
+      Game.rooms[roomName].runLogic()
+    })
         taskManager.run()
         taskManager.assignTasks()
     // find all towers

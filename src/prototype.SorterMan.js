@@ -3,6 +3,7 @@ if (!(SorterMan)) {
 }
 
 SorterMan.prototype.sortComplete = function() {
+
   if (!this.memory.sortComplete || this.memory.sortComplete == false) {
     return false
   }
@@ -45,7 +46,7 @@ SorterMan.prototype.sortRoom = function() {
 }
 
 SorterMan.prototype.checkRoadToSource = function(){
-  for(var i = 0;  i <  this.memory.sourceNodes; i++){
+  for(var i = 0;  i <  this.memory.sourceNodes.length; i++){
     if(!this.memory.sourceNodes[i].toBuild.Road) {
       return
     }
@@ -72,33 +73,4 @@ SorterMan.prototype.createRoadToController = function() {
     this.createRoadway(ObjectIDA, ObjectIDB)
     }
   }
-}
-
-/** @function ConvertsToLocation
-    @param {string} RoomName
-    @return {X:"", Y:""}
-*/
-Room.prototype.getRoomLocation = function (roomName) {
-      let temp1 = [];
-      let thisString = roomName.split("");
-      for (let i = 0; i < thisString.length; i++) {
-        let result = thisString[i];
-        if(result == "W" || result == "S") {
-          temp1.push("-")
-        }
-        else if (result == "E" || result == "N") {
-          temp1.push("+")
-        }
-        else {
-          temp1.push(result)
-        }
-      }
-      let temp2 = temp1.join("");
-      let outX = temp2.slice(0,3);
-      let outY = temp2.slice(3,6)
-      var output = {
-        x: outX,
-        y: outY
-      }
-      return output;
 }

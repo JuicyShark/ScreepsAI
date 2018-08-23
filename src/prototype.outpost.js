@@ -52,7 +52,6 @@ Outpost.prototype.createRoadway = function(ObjectIDA, ObjectIDB) {
             console.log("Construction que too large.. The numSitesLeft should solve this... needs fixing +!+!+!+!+")
           }
           else if (constructGo == -7 || constructGo == -10) {
-            //console.log("Nope")
           }
           if (path[path.length] === constructionAdded.length) {
             var spawns = this.find(FIND_MY_SPAWNS)

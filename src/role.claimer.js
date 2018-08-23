@@ -6,7 +6,6 @@ module.exports = {
 
     if(creep.memory.targetRoom == "NoTarget" || creep.memory.targetRoom == null){
         for(var i in Memory.flags) {
-          //console.log(JSON.stringify(Memory.flags[i]))
           if(Memory.flags[i].name == "HarvestSources" && Memory.flags[i].needScout == true){
             temp1.push(Memory.flags[i].room)
             temp2 = Memory.flags[i]

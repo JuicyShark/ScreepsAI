@@ -21,7 +21,7 @@ Room.prototype.createTask = function(name,  typeNeeded, priority, details) {
   }
   var duplicateTask = null;
 
-    for (var i = 0; i < Game.creeps; i++) {
+    for (var i = 0; i < Game.creeps.length; i++) {
       if( duplicateTask == true) break;
       if (Game.creeps[i].memory.task != null || Game.creeps[i].memory.task != undefined){
         if(Game.creeps[i].memory.task.details.target == task.details.target){
@@ -30,7 +30,7 @@ Room.prototype.createTask = function(name,  typeNeeded, priority, details) {
          }
        }
     }
-    for (var i = 0; i < this.memory.taskList; i++) {
+    for (var i = 0; i < this.memory.taskList.length; i++) {
       if( duplicateTask == true) break;
       if ( this.memory.taskList[i].details.target == task.details.target){
            duplicateTask = true;
@@ -46,9 +46,9 @@ Room.prototype.assignTasks = function() {
 
   var tooManyTask = []
 
-  for(var i = 0; i < this.memory.creepsByType; i++){
+  for(var i = 0; i < this.memory.creepsByType.length; i++){
     let creepsBytype = this.memory.creepsByType[i]
-    for(var a = 0; a < creepsBytype.creeps; a++) {
+    for(var a = 0; a < creepsBytype.creeps.length; a++) {
       let chosenOne = Game.getObjectById(creepsBytype.creeps[a])
       if(chosenOne instanceof Creep) {
         if(chosenOne.memory.task == null ){
@@ -70,7 +70,7 @@ Room.prototype.checkTask = function(type) {
 }
 
 Room.prototype.constantTasks = function() {
-  for (var i = 0; i < this.memory.sourceNodes; i++) {
+  for (var i = 0; i < this.memory.sourceNodes.length; i++) {
     let thisSourceID = this.memory.sourceNodes[i].id;
       if(this.memory.sourceNodes[i].container == ""){
         let details = { target: thisSourceID }
@@ -124,7 +124,7 @@ Room.prototype.processAsGuest = function() {
 
 Room.prototype.needSourceScouts = function() {
   let scoutRoomFlags = [];
-  for (var i = 0; i < Memory.flags; i++) {
+  for (var i = 0; i < Memory.flags.length; i++) {
     if (Memory.flags[i].needScout) {
       scoutRoomFlags.push(Memory.flags[i].id)
       scoutRoomFlags.push(Memory.flags[i])
@@ -181,7 +181,7 @@ Room.prototype.needUpgrader = function() {
 }
 Room.prototype.needContainerMiner = function() {
   let output = []
-  for (var i = 0; i < this.memory.sourceNodes; i++) {
+  for (var i = 0; i < this.memory.sourceNodes.length; i++) {
     let thisSourceID = this.memory.sourceNodes[i].id;
       if(this.memory.sourceNodes[i].container == ""){
 

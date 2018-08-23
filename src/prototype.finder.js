@@ -21,19 +21,21 @@ Room.prototype.findType = function(type) {
     @return {object}  task with highest priority
     **/
 Room.prototype.filtertask = function(typeGiven) {
-  this.memory.taskList.sort(function(a,b){
-    if (a.priority < b.priority){
-      return -1;}
-    if (a.priority > b.priority){
-      return 1;}
+  this.memory.taskList.sort(function(a, b) {
+    if (a.priority < b.priority) {
+      return -1;
+    }
+    if (a.priority > b.priority) {
+      return 1;
+    }
     return 0;
   })
-  for (var i = 0; i < this.memory.taskList; i++){
-     if(this.memory.taskList[i].typeNeeded == typeGiven){
+  for (var i = 0; i < this.memory.taskList.length; i++) {
+    if (this.memory.taskList[i].typeNeeded == typeGiven) {
       var filteredTask = this.memory.taskList[i]
-        this.memory.taskList.splice(i, 1);
-        return filteredTask;
-     }
+    this.memory.taskList.splice(i, 1);
+      return filteredTask;
+    }
   }
 }
 
