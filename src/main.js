@@ -21,29 +21,22 @@ profiler.enable();
 module.exports.loop = function() {
   profiler.wrap(function() {
   // Clean dead creeps from memory RIP fellow conrades
-  for (let name in Memory.creeps) {
+  for (var name = 0; name < Memory.creeps; name++) {
     if (Game.creeps[name] == undefined) {
       delete Memory.creeps[name];
     }
   }
-    for(var i in Game.flags) {
+    for(var i = 0; i < Game.flags; i++) {
       var currentFlag = Game.flags[i];
       currentFlag.tick();
 
     }
 
     //Loop through all rooms your creeps/structures are in
-    for (let roomName in Game.rooms) {
+    for (var roomName = 0; roomName < Game.rooms; roomName++) {
       var currentRoom = Game.rooms[roomName];
 
-      if(!Memory.KodiesReset){
-        Memory.KodiesReset = false;
-      }
-      if(Memory.KodiesReset == false){
-        console.log("KODIES SPECIAL RESET!")
-        currentRoom.memory = {}
-        Memory.KodiesReset = true;
-      }
+
 
       currentRoom.runLogic()
     }

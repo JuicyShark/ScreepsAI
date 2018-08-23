@@ -45,7 +45,7 @@ SorterMan.prototype.sortRoom = function() {
 }
 
 SorterMan.prototype.checkRoadToSource = function(){
-  for(let i in this.memory.sourceNodes){
+  for(var i = 0;  i <  this.memory.sourceNodes; i++){
     if(!this.memory.sourceNodes[i].toBuild.Road) {
       return
     }
