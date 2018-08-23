@@ -43,7 +43,7 @@ Room.prototype.tick = function() {
 }
 Room.prototype.createNeeds = function() {
   var spawns = this.memory.structureIDs.Spawns
-  var spawn = spawns[0];
+  var spawn = Game.getObjectById(spawns[0]);
   if (this.needBasicWorker()) {
     if(this.findType("ALL_ROUND").length == 0){
       spawn.spawnBasicAllRounder()
