@@ -70,20 +70,21 @@ Room.prototype.checkTask = function(type) {
 }
 
 Room.prototype.constantTasks = function() {
-  for (var i = 0; i < this.memory.sourceNodes.length; i++) {
+  Object.keys(this.memory.sourceNodes).forEach(i => {
+  //for (var i = 0; i < this.memory.sourceNodes.length; i++) {
     let thisSourceID = this.memory.sourceNodes[i].id;
-      if(this.memory.sourceNodes[i].container == ""){
+      if(this.memory.sourceNodes[i].container == null){
         let details = { target: thisSourceID }
         if(thisSourceID != null){
         this.createTask("HARVEST", "ALL_ROUND", 1, details)}
-    } else if (this.memory.sourceNodes[i].container != "") {
+    } else if (this.memory.sourceNodes[i].container != null) {
         let thisSourceContainer = this.memory.sourceNodes[i].container;
         let details = { target: thisSourceContainer, sourceId: thisSourceID}
         this.createTask("CONTAINER_MINE", "CONTAINER_MINER", 1, details )
     }
-  }
+  })
 
-  if(this.memory.structureIDs.controller.id != "") {
+  if(this.memory.structureIDs.controller.id != null) {
     details = { target: this.memory.structureIDs.controller.id }
     this.createTask("UPGRADE", "UPGRADER", 1, details)
   }
@@ -183,9 +184,9 @@ Room.prototype.needContainerMiner = function() {
   let output = []
   for (var i = 0; i < this.memory.sourceNodes.length; i++) {
     let thisSourceID = this.memory.sourceNodes[i].id;
-      if(this.memory.sourceNodes[i].container == ""){
+      if(this.memory.sourceNodes[i].container == null){
 
-    } else if (this.memory.sourceNodes[i].container != "") {
+    } else if (this.memory.sourceNodes[i].container != null) {
         output.push(thisSourceID)
     }
   }

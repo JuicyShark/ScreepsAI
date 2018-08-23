@@ -11,17 +11,19 @@ Room.prototype.tick = function() {
       this.initCreeps();
       this.initSource();
       this.createNeeds();
-      this.assignTasks();
+
       this.contantTasks();
+      this.assignTasks();
     }
-    this.initCreeps();
-    this.loadSource();
+
     if (!this.memory.timer || this.memory.timer % 60 === 0) {
       this.memory.timer = -1;
       this.memoryInit();
       this.memory.timer = 60;
       console.log(this.name + " Timer has been reset")
     }
+    this.initCreeps();
+    this.loadSource();
     if (this.memory.timer % 15 == 0) {
       this.assignTasks();
     }
@@ -154,7 +156,7 @@ Room.prototype.initSource = function() {
         filter: (s) => s.structureType === STRUCTURE_CONTAINER
       });
       if (containers.length == 0) {
-        this.memory.sourceNodes[source.id].container = ""
+        this.memory.sourceNodes[source.id].container = null;
       } else {
         this.memory.sourceNodes[source.id].container = containers[0].id;
       }
@@ -163,14 +165,14 @@ Room.prototype.initSource = function() {
 }
 
 Room.prototype.loadSource = function() {
-  this.sourceNodes = {};
-  for (var id = 0; id < this.memory.sourceNodes.length; id++) {
+  this.sourceNodes = []
+  Object.keys(this.memory.sourceNodes).forEach(id => {
     this.sourceNodes[id] = Game.getObjectById(id)
-  }
+  })
   this.hostileSpawns = [];
 
   for (var i = 0; i < this.memory.hostileSpawns.length; i++) {
-    this.hostileSpawns[i] = Game.getObjectById(i.id)
+    this.hostileSpawns[i] = Game.getObjectById(this.hostileSpawns[i].id)
   }
 }
 
