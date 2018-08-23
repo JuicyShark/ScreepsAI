@@ -20,7 +20,8 @@ Room.prototype.createTask = function(name,  typeNeeded, priority, details) {
     details: details
   }
   var duplicateTask = null;
-    for (var i in Game.creeps) {
+
+    for (var i = 0; i < Game.creeps; i++) {
       if( duplicateTask == true) break;
       if (Game.creeps[i].memory.task != null || Game.creeps[i].memory.task != undefined){
         if(Game.creeps[i].memory.task.details.target == task.details.target){
@@ -29,7 +30,7 @@ Room.prototype.createTask = function(name,  typeNeeded, priority, details) {
          }
        }
     }
-    for (var i in this.memory.taskList) {
+    for (var i = 0; i < this.memory.taskList; i++) {
       if( duplicateTask == true) break;
       if ( this.memory.taskList[i].details.target == task.details.target){
            duplicateTask = true;
@@ -45,9 +46,9 @@ Room.prototype.assignTasks = function() {
 
   var tooManyTask = []
 
-  for(var i in this.memory.creepsByType){
+  for(var i = 0; i < this.memory.creepsByType; i++){
     let creepsBytype = this.memory.creepsByType[i]
-    for(var a in creepsBytype.creeps) {
+    for(var a = 0; a < creepsBytype.creeps; a++) {
       let chosenOne = Game.getObjectById(creepsBytype.creeps[a])
       if(chosenOne instanceof Creep) {
         if(chosenOne.memory.task == null ){
@@ -69,7 +70,7 @@ Room.prototype.checkTask = function(type) {
 }
 
 Room.prototype.constantTasks = function() {
-  for (let i in this.memory.sourceNodes) {
+  for (var i = 0; i < this.memory.sourceNodes; i++) {
     let thisSourceID = this.memory.sourceNodes[i].id;
       if(this.memory.sourceNodes[i].container == ""){
         let details = { target: thisSourceID }
@@ -123,7 +124,7 @@ Room.prototype.processAsGuest = function() {
 
 Room.prototype.needSourceScouts = function() {
   let scoutRoomFlags = [];
-  for (i in Memory.flags) {
+  for (var i = 0; i < Memory.flags; i++) {
     if (Memory.flags[i].needScout) {
       scoutRoomFlags.push(Memory.flags[i].id)
       scoutRoomFlags.push(Memory.flags[i])
@@ -180,7 +181,7 @@ Room.prototype.needUpgrader = function() {
 }
 Room.prototype.needContainerMiner = function() {
   let output = []
-  for (let i in this.memory.sourceNodes) {
+  for (var i = 0; i < this.memory.sourceNodes; i++) {
     let thisSourceID = this.memory.sourceNodes[i].id;
       if(this.memory.sourceNodes[i].container == ""){
 
