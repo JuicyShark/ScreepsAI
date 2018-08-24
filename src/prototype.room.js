@@ -223,7 +223,7 @@ Room.prototype.loadContainers = function() {
   this.containers = [];
   for (var id = 0; id < this.memory.structureIDs.Containers.length; id++) {
     this.containers[id] = (Game.getObjectById(this.memory.structureIDs.Containers[id]));
-    container.energyPercent = container.getEnergyPercentage()
+     this.containers[id].energyPercent =  this.containers[id].getEnergyPercentage()
   }
 }
 

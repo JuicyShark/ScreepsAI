@@ -18,10 +18,10 @@ Room.prototype.findType = function(type) {
 Room.prototype.findMostFullContainer = function(){
   this.containers.sort(function(a,b){
     if (a.energyPercent < b.energyPercent) {
-      return -1;
+      return 1;
     }
     if (a.energyPercent > b.energyPercent) {
-      return 1;
+      return -1;
     }
     return 0;
   })
