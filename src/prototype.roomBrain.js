@@ -20,16 +20,33 @@ Room.prototype.createTask = function(name, typeNeeded, priority, details) {
     details: details
   }
   var duplicateTask = null;
-
-  for (var i = 0; i < Game.creeps.length; i++) {
+  for(let i in Game.creeps) {
+    if (Game.creeps[i] instanceof Creep){
+      if (duplicateTask == true){break;}
+      else {
+        if (Game.creeps[i].memory.task != null || Game.creeps[i].memory.task != undefined) {
+        if (Game.creeps[i].memory.task.details.target == task.details.target) {
+          duplicateTask = true;
+        }
+      }
+    }
+    }
+    }
+/*  for (var i = 0; i < Object.keys(Game.creeps).length; i++) {
+    console.log("HEREEEE")
+    if(Object.keys(Game.creeps)[i] instanceof Creep){
+    console.log("CREEP " + Object.keys(Game.creeps)[i].name)
     if (duplicateTask == true) break;
     if (Game.creeps[i].memory.task != null || Game.creeps[i].memory.task != undefined) {
+      console.log(task.name +" PASSED FIRST")
       if (Game.creeps[i].memory.task.details.target == task.details.target) {
+        console.log(task.name)
 
         duplicateTask = true;
       }
     }
-  }
+    }
+  }*/
   for (var i = 0; i < this.memory.taskList.length; i++) {
     if (duplicateTask == true) break;
     if (this.memory.taskList[i].details.target == task.details.target) {
