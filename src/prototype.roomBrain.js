@@ -24,11 +24,12 @@ Room.prototype.createTask = function(name, typeNeeded, priority, details) {
     if (Game.creeps[i] instanceof Creep){
       if (duplicateTask == true){break;}
       else {
+        if(Game.creeps[i].spawning != true){
         if (Game.creeps[i].memory.task != null || Game.creeps[i].memory.task != undefined) {
         if (Game.creeps[i].memory.task.details.target == task.details.target) {
           duplicateTask = true;
         }
-      }
+      }}
     }
     }
     }
@@ -59,37 +60,15 @@ Room.prototype.createTask = function(name, typeNeeded, priority, details) {
   }
 }
 
-Room.prototype.assignTasks = function() {
-
-  var tooManyTask = []
-
-  for (var i = 0; i < this.memory.creepsByType.length; i++) {
-    let creepsBytype = this.memory.creepsByType[i]
-    for (var a = 0; a < creepsBytype.creeps.length; a++) {
-      let chosenOne = Game.getObjectById(creepsBytype.creeps[a])
-      if (chosenOne instanceof Creep) {
-        if (chosenOne.memory.task == null) {
-          let thisCreepType = chosenOne.memory.type
-          var newTask = this.filtertask(thisCreepType)
-          if (newTask != null || newTask != undefined) {
-            chosenOne.memory.task == newTask
-          }
-        }
-      }
-    }
-  }
-
-
-}
-
 Room.prototype.constantTasks = function() {
-    Object.keys(this.memory.sourceNodes).forEach(i => {
-      //for (var i = 0; i < this.memory.sourceNodes.length; i++) {
-      let thisSourceID = this.memory.sourceNodes[i].id;
-      if (this.memory.sourceNodes[i] != null) {
 
-      if (this.memory.sourceNodes[i].container != null) {
-        let thisSourceContainer = this.memory.sourceNodes[i].container;
+      for (var i = 0; i < Object.keys(this.memory.sourceNodes).length; i++) {
+      let thisSourceID = Object.values(this.memory.sourceNodes)[i].id;
+      if (Object.keys(this.memory.sourceNodes)[i] != null) {
+
+
+      if (Object.values(this.memory.sourceNodes)[i].container != null || Object.keys(this.memory.sourceNodes)[i].container != undefined) {
+        let thisSourceContainer = Object.values(this.memory.sourceNodes)[i].container;
         let details = {
           target: thisSourceContainer,
           sourceId: thisSourceID
@@ -97,18 +76,19 @@ Room.prototype.constantTasks = function() {
         this.createTask("CONTAINER_MINE", "CONTAINER_MINER", 1, details)
         }
 
-        let details = {
+
+      let details1 = {
           target: thisSourceID
         }
-        this.createTask("HARVEST", "ALL_ROUND", 1, details)
+        this.createTask("HARVEST", "ALL_ROUND", 1, details1)
 
     }
-  })
+  }
 
     if (this.memory.structureIDs.controller.id != null) {
-
-      if(this.memory.availableCreeps.length != 0) {
-      if(Game.getObjectById(this.memory.availableCreeps[0]).memory.type == "UPGRADER") {
+      let creep = Game.getObjectById(this.memory.availableCreeps[0])
+      if(creep != null) {
+      if(creep.memory.type == "UPGRADER") {
         details = {
             target: this.memory.availableCreeps[0]
           }
@@ -122,11 +102,11 @@ Room.prototype.constantTasks = function() {
           return i.needsRepair(true);
         }
       })) {
-        var details = {
+        let details = {
           target: s.id
         }
       if (!s instanceof StructureWall && !s instanceof StructureRampart) {
-        let task = this.createTask('REPAIR', "ALL_ROUND", 2, details);
+        let task = this.createTask('REPAIR', "ALL_ROUND", 3, details);
       } else {
 
         let task = this.createTask('REPAIR', "ALL_ROUND", 4, details);
@@ -201,29 +181,29 @@ Room.prototype.constantTasks = function() {
 
     Room.prototype.needUpgrader = function() {
       let UpgraderMemCount = this.memory.creepsByType.upgrader.creeps.length;
-      if (this.level() >= 3) {
+      if (this.level() >= 5) {
         if (UpgraderMemCount == 0 || UpgraderMemCount <= 2) {
           return true
         }
-      } else if (this.level() <= 3) {
-        if (UpgraderMemCount == 0 && UpgraderMemCount <= 4) {
+      } else if (this.level() <= 4) {
+        if (UpgraderMemCount == 0 && UpgraderMemCount <= 2) {
           return true
         }
       }
     }
     Room.prototype.needContainerMiner = function() {
       let output = []
-      for (var i = 0; i < this.memory.sourceNodes.length; i++) {
-        let thisSourceID = this.memory.sourceNodes[i].id;
-        if (this.memory.sourceNodes[i].container == null) {
+      for (var i = 0; i < Object.keys(this.memory.sourceNodes).length; i++) {
+        let thisSourceID = Object.values(this.memory.sourceNodes)[i].id;
+        if (Object.values(this.memory.sourceNodes)[i].container == null) {
 
-        } else if (this.memory.sourceNodes[i].container != null) {
+        } else if (Object.values(this.memory.sourceNodes)[i].container != null) {
           output.push(thisSourceID)
         }
       }
       if (this.memory.creepsByType.containerMiner.creeps.length >= output.length) {
         return false
-      } else if (this.memory.creepsByType.containerMiner.creeps.length <= output.length) {
+      } else if (this.memory.creepsByType.containerMiner.creeps.length < output.length) {
         return true
       }
     }
