@@ -20,8 +20,9 @@ var taskManager = {
       } else if (creep.memory.task.name == "REPAIR") {
         tasks.repairTask(creep);
       } else if (creep.memory.task.name == "CONTAINER_MINE") {
-        var miner = require('role.miner')
-        miner.run(creep)
+        tasks.minerTask(creep);
+      } else if (creep.memory.task.name == "LORRY") {
+        tasks.lorryTask(creep);
       }
     })
   },
@@ -36,6 +37,7 @@ var taskManager = {
           if (creep != null) {
             if (creep.spawning != true) {
               var task = creep.room.filtertask(creep.memory.type)
+              //console.log(creep.memory.type)
               creep.memory.task = task;
             }
           }

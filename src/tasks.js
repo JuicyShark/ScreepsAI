@@ -35,8 +35,7 @@ var tasks = {
       var structure = Game.getObjectById(creep.memory.task.details.target);
       if (structure.needsRepair() == false || structure.needsRepair() == null) {
         console.log(structure.needsRepair())
-        console.log("REPAIR CREEP KICKEN ITEM")
-        creep.memory.task = null;
+        delete creep.memory.task
       }
       else if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
         creep.travelTo(structure);
@@ -91,6 +90,40 @@ var tasks = {
      creep.memory.working = "true";
    } else if (creep.carry.energy == 0 && creep.memory.working == "true"){
      creep.memory.working = "false";
+   }
+ },
+
+ lorryTask: function (creep) {
+   creep.checkDeath(creep)
+
+   if (creep.memory.working == "false") {
+     creep.getEnergy(true, false)
+   }
+   if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "false") {
+     creep.memory.working = "true";
+   }
+   if (creep.carry.energy == 0 && creep.memory.working == "true") {
+     creep.memory.working = "false";
+   }
+   if (creep.memory.working == "true") {
+     creep.findDeliveryTarget(creep.memory.oldTarget)
+   }
+ },
+
+ minerTask: function (creep) {
+   creep.checkDeath(creep)
+
+   if(creep.memory.task != null || creep.memory.task != undefined){
+     let container = creep.memory.task.details.target
+     let sourceId = creep.memory.task.details.sourceId
+     var source = Game.getObjectById(sourceId)
+     var thisContainer = Game.getObjectById(container);
+
+     if (thisContainer != null) {
+       if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
+         creep.travelTo(thisContainer)
+       }
+     }
    }
  },
 
