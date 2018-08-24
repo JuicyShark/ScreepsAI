@@ -65,7 +65,11 @@ Room.prototype.constantTasks = function() {
       for (var i = 0; i < Object.keys(this.memory.sourceNodes).length; i++) {
       let thisSourceID = Object.values(this.memory.sourceNodes)[i].id;
       if (Object.keys(this.memory.sourceNodes)[i] != null) {
-
+        let details1 = {
+            target: thisSourceID
+          }
+          this.createTask("HARVEST", "ALL_ROUND", 1, details1)
+              
 
       if (Object.values(this.memory.sourceNodes)[i].container != null || Object.keys(this.memory.sourceNodes)[i].container != undefined) {
         let thisSourceContainer = Object.values(this.memory.sourceNodes)[i].container;
@@ -75,13 +79,6 @@ Room.prototype.constantTasks = function() {
         }
         this.createTask("CONTAINER_MINE", "CONTAINER_MINER", 1, details)
         }
-
-
-      let details1 = {
-          target: thisSourceID
-        }
-        this.createTask("HARVEST", "ALL_ROUND", 1, details1)
-
     }
   }
 
@@ -157,7 +154,9 @@ Room.prototype.constantTasks = function() {
     Room.prototype.needBasicWorker = function() {
       if (this.memory.creepsByType.allRound.creeps.length == 0) {
         return true
-      }  else if (this.memory.creepsByType.allRound.creeps.length >= 3 && this.needContainerMiner() == true) {
+      }  else if (this.memory.creepsByType.allRound.creeps.length <= 3) {
+        return true
+      } else if (this.memory.creepsByType.allRound.creeps.length >= 3 && this.needContainerMiner() == true) {
         return false
       } else if (this.memory.creepsByType.allRound.creeps.length > 4) {
         return false
@@ -169,10 +168,10 @@ Room.prototype.constantTasks = function() {
     }
     // Testing to only want harvesters if we dont have miners and lorrys around
     Room.prototype.needLorry = function() {
-      if (this.memory.creepsByType.containerMiner.creeps.length == 0) {
+      if (Object.keys(this.findType("CONTAINER_MINER")).length == 0) {
         return false
-      } else if (this.memory.creepsByType.containerMiner.creeps.length != 0) {
-        if (this.memory.creepsByType.lorry.creeps.length <= 2) {
+      } else if (Object.keys(this.findType("CONTAINER_MINER")).length >= 1) {
+        if (Object.keys(this.findType("LORRY")).length <= 2) {
           return true
         }
       }

@@ -34,7 +34,6 @@ var tasks = {
     if (creep.carry.energy != 0 && creep.memory.working == "true") {
       var structure = Game.getObjectById(creep.memory.task.details.target);
       if (structure.needsRepair() == false || structure.needsRepair() == null) {
-        console.log(structure.needsRepair())
         delete creep.memory.task
       }
       else if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
