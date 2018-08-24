@@ -36,7 +36,7 @@ var tasks = {
       if (structure.needsRepair() == false || structure.needsRepair() == null) {
         console.log(structure.needsRepair())
         console.log("REPAIR CREEP KICKEN ITEM")
-        creep.memory.task = {};
+        creep.memory.task = null;
       }
       else if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
         creep.travelTo(structure);
