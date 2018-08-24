@@ -65,15 +65,12 @@ Room.prototype.assignTasks = function() {
 
 }
 
-Room.prototype.checkTask = function(type) {
-
-}
 
 Room.prototype.constantTasks = function() {
     Object.keys(this.memory.sourceNodes).forEach(i => {
       //for (var i = 0; i < this.memory.sourceNodes.length; i++) {
       let thisSourceID = this.memory.sourceNodes[i].id;
-      if (this.memory.sourceNodes[i].container == null) {
+      if (this.memory.sourceNodes[i].container == null ) {
         let details = {
           target: thisSourceID
         }

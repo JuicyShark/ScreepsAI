@@ -20,20 +20,21 @@ Room.prototype.tick = function() {
       this.memory.timer = 60;
       console.log(this.name + " Timer has been reset")
     }
-  this.loadSource();
-    if (this.memory.timer % 15 == 0) {
+    // load things needed each tick without if statement
+     this.loadSource();
+    this.loadContainers();
+    this.loadConstructionSites();
+
+    if (this.memory.timer % 14 == 0) {
 
       this.initCreeps();
       this.assignTasks();
     }
-    if (this.memory.timer % 30 == 0) {
+    if (this.memory.timer % 27 == 0) {
 
       this.createNeeds();
       this.constantTasks();
     }
-    // load things needed each tick without if statement
-
-    this.loadConstructionSites();
 
 
     --this.memory.timer;
@@ -48,7 +49,7 @@ Room.prototype.createNeeds = function() {
   if (spawns.length > 0) {
     var spawn = Game.getObjectById(spawns[0]);
     if (this.needBasicWorker()) {
-      if (this.findType("ALL_ROUND").length == 0) {
+      if (this.memory.creepsByType.allRound.creeps.length == 0) {
         spawn.spawnBasicAllRounder()
       } else {
         spawn.spawnAllRounder()
@@ -222,7 +223,7 @@ Room.prototype.loadContainers = function() {
   this.containers = [];
   for (var id = 0; id < this.memory.structureIDs.Containers.length; id++) {
     this.containers[id] = (Game.getObjectById(this.memory.structureIDs.Containers[id]));
-
+    container.energyPercent = container.getEnergyPercentage()
   }
 }
 

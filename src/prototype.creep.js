@@ -52,32 +52,22 @@ Creep.prototype.findDeliveryTarget = function() {
     @param {bool} getFromContainer
     @param {bool} getFromSource */
 Creep.prototype.getEnergy = function(getFromContainer, getFromSource) {
-  var config = require("config")
   /**  @type {STRUCTURE_CONTAINER} **/
   let container;
 
-
-  let droppedEnergy = this.pos.findInRange(FIND_DROPPED_RESOURCES, 2)
-  if (droppedEnergy != null) {
-    this.pickup(droppedEnergy[0])
-  }
-
   if (getFromContainer == true) {
-    container = this.pos.findClosestByPath(FIND_STRUCTURES, {
-      filter: (s) => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) &&
-        s.store[RESOURCE_ENERGY] > config.containerGetEnergyLevels[this.room.level()]
-    });
+    container = this.room.findMostFullContainer()
   }
   if (container != undefined) {
     if (this.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
       this.travelTo(container);
-      this.memory.oldTarget == container
     }
   }
 
   // if no container was found
   if (container == null && getFromSource == true) {
-    var source = this.pos.findClosestByPath(FIND_SOURCES);
+    var sources = _.sortBy(this.sourceNodes, s => this.pos.getRangeTo(s))
+    var source = sources[0]
     if (this.harvest(source) == ERR_NOT_IN_RANGE) {
       this.travelTo(source);
     }
