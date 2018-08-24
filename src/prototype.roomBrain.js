@@ -82,33 +82,39 @@ Room.prototype.assignTasks = function() {
 
 }
 
-
 Room.prototype.constantTasks = function() {
     Object.keys(this.memory.sourceNodes).forEach(i => {
       //for (var i = 0; i < this.memory.sourceNodes.length; i++) {
       let thisSourceID = this.memory.sourceNodes[i].id;
-      if (this.memory.sourceNodes[i].container == null ) {
-        let details = {
-          target: thisSourceID
-        }
-        if (thisSourceID != null) {
-          this.createTask("HARVEST", "ALL_ROUND", 1, details)
-        }
-      } else if (this.memory.sourceNodes[i].container != null) {
+      if (this.memory.sourceNodes[i] != null) {
+
+      if (this.memory.sourceNodes[i].container != null) {
         let thisSourceContainer = this.memory.sourceNodes[i].container;
         let details = {
           target: thisSourceContainer,
           sourceId: thisSourceID
         }
         this.createTask("CONTAINER_MINE", "CONTAINER_MINER", 1, details)
-      }
-    })
+        }
+
+        let details = {
+          target: thisSourceID
+        }
+        this.createTask("HARVEST", "ALL_ROUND", 1, details)
+
+    }
+  })
 
     if (this.memory.structureIDs.controller.id != null) {
-      details = {
-        target: this.memory.structureIDs.controller.id
+
+      if(this.memory.availableCreeps.length != 0) {
+      if(Game.getObjectById(this.memory.availableCreeps[0]).memory.type == "UPGRADER") {
+        details = {
+            target: this.memory.availableCreeps[0]
+          }
+          this.createTask("UPGRADE", "UPGRADER", 1, details)
       }
-      this.createTask("UPGRADE", "UPGRADER", 1, details)
+    }
     }
 
     for (var s of this.find(FIND_STRUCTURES, {
@@ -171,11 +177,11 @@ Room.prototype.constantTasks = function() {
     Room.prototype.needBasicWorker = function() {
       if (this.memory.creepsByType.allRound.creeps.length == 0) {
         return true
-      } else if (this.memory.creepsByType.allRound.creeps.length >= 3 && this.needContainerMiner() == true) {
+      }  else if (this.memory.creepsByType.allRound.creeps.length >= 3 && this.needContainerMiner() == true) {
         return false
       } else if (this.memory.creepsByType.allRound.creeps.length > 4) {
         return false
-      } else if (this.memory.creepsByType.allRound.creeps.length <= 3 && this.needContainerMiner() == false) {
+      } else if (this.memory.creepsByType.allRound.creeps.length <= 4 && this.needContainerMiner() == false) {
         return true
       } else if (this.memory.creepsByType.allRound.creeps.length <= 6 && this.level() >= 5) {
         return true

@@ -2,8 +2,6 @@
 var tasks = {
 
   upgradeTask: function(creep) {
-
-    if(creep.memory.task.name == "UPGRADE"){
     creep.checkDeath();
     if (creep.carry.energy == creep.carryCapacity) {
       creep.memory.working = "true";
@@ -19,7 +17,7 @@ var tasks = {
         creep.travelTo(creep.room.controller);
       }
     }
-  }},
+  },
 
   repairTask: function(creep) {
     creep.checkDeath(creep)
@@ -27,25 +25,23 @@ var tasks = {
     if (creep.carry.energy == creep.carryCapacity) {
       creep.memory.working = "true";
     }
+    if (creep.memory.working == "false") {
+      creep.getEnergy(true, true)
+    }
     if (creep.carry.energy == 0) {
       creep.memory.working = "false";
     }
     if (creep.carry.energy != 0 && creep.memory.working == "true") {
-      var structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-        filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL
-      });
-      if (structure == undefined) {
-        structure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-          filter: (s) => s.hits < s.hitsMax && s.structureType == STRUCTURE_WALL ||
-            s.structureType == STRUCTURE_CONTAINER ||
-            s.structureType == STRUCTURE_EXTENSION
-        });
+      var structure = Game.getObjectById(creep.memory.task.details.target);
+      if (structure.needsRepair() == false || structure.needsRepair() == null) {
+        console.log(structure.needsRepair())
+        console.log("REPAIR CREEP KICKEN ITEM")
+        creep.memory.task = {};
       }
-      if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
+      else if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
         creep.travelTo(structure);
       }
-    } else if (creep.memory.working == "false") {
-      creep.getEnergy(true, true)
+
     }
   },
 
@@ -96,7 +92,17 @@ var tasks = {
    } else if (creep.carry.energy == 0 && creep.memory.working == "true"){
      creep.memory.working = "false";
    }
-  }
+ },
+
+ attackTask: function (creep) {
+   creep.checkDeath();
+   if(creep.memory.working == "false") {
+     var  creepTask = creep.memory.task.details.target
+
+   } else if (creep.memory.working == "true"){
+
+   }
+ }
 
 }
 
