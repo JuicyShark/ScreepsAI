@@ -2,7 +2,7 @@ require('prototype.creepBuilder'),
 require('nameGen')
 var config = require("config")
 
-StructureSpawn.prototype.spawnNewCreep = function(bodyParts, home, type, sourceId, task = null) {
+StructureSpawn.prototype.spawnNewCreep = function(bodyParts, home, type, task = null) {
 
   var name = this.nameGen();
   var testCreep = this.spawnCreep(bodyParts, name, {
@@ -14,8 +14,7 @@ StructureSpawn.prototype.spawnNewCreep = function(bodyParts, home, type, sourceI
         working: "false",
         home: home,
         type: type,
-        task: task,
-        sourceId: sourceId
+        task: task
       }
     });
     console.log("Spawning a " + type + ", named " + name);
@@ -46,14 +45,14 @@ Spawn.prototype.spawnClaimer = function(roomName, thisFlag) {
   Spawn.prototype.spawnBasicAllRounder = function() {
         var bodyParts = [WORK, MOVE, CARRY]
         console.log("spawning with "+ bodyParts)
-        this.spawnNewCreep(bodyParts, this.room.name, "ALL_ROUND",)
+        this.spawnNewCreep(bodyParts, this.room.name, "ALL_ROUND")
   }
 
 
 Spawn.prototype.spawnAllRounder = function() {
       let myConfig = config.bodies.allRounder;
       var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.room.energyCapacityAvailable)]
-      this.spawnNewCreep(bodyParts, this.room.name, "ALL_ROUND",)
+      this.spawnNewCreep(bodyParts, this.room.name, "ALL_ROUND")
 }
 
 Spawn.prototype.spawnContainerMiner = function() {
@@ -62,14 +61,10 @@ Spawn.prototype.spawnContainerMiner = function() {
     this.spawnNewCreep(bodyParts, this.room.name, "CONTAINER_MINER")
 }
 
-Spawn.prototype.spawnLorry = function(longDistance) {
-  if (longDistance == false) {
-
+Spawn.prototype.spawnLorry = function() {
       let myConfig = config.bodies.lorry;
       var bodyParts = myConfig.defaults[myConfig.bodyReturn(this.room.energyCapacityAvailable)]
       this.spawnNewCreep(bodyParts, this.room.name, "LORRY")
-
-  }
 }
 
 Spawn.prototype.spawnUpgrader = function() {
