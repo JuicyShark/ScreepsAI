@@ -119,6 +119,9 @@ var tasks = {
      var thisContainer = Game.getObjectById(container);
 
      if (thisContainer != null) {
+       if(creep.pos != thisContainer.pos) {
+         creep.travelTo(thisContainer)
+       }
        if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
          creep.travelTo(thisContainer)
        }
