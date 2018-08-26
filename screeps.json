@@ -1,0 +1,27 @@
+{
+  "main": {
+    "token": "a709eff2-2055-406b-9701-959fd61a5c4f",
+    "protocol": "https",
+    "hostname": "screeps.com",
+    "port": 443,
+    "path": "/",
+    "branch": "main"
+  },
+  "sim": {
+    "token": "a709eff2-2055-406b-9701-959fd61a5c4f",
+    "protocol": "https",
+    "hostname": "screeps.com",
+    "port": 443,
+    "path": "/",
+    "branch": "sim"
+  },
+  "pserver": {
+    "email": "username",
+    "password": "Password",
+    "protocol": "http",
+    "hostname": "1.2.3.4",
+    "port": 21025,
+    "path": "/",
+    "branch": "main"
+  }
+}
