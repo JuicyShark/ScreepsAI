@@ -34,7 +34,7 @@ var tasks = {
     if (creep.carry.energy != 0 && creep.memory.working == "true") {
       var structure = Game.getObjectById(creep.memory.task.details.target);
       if (structure.needsRepair() == false || structure.needsRepair() == null) {
-        delete creep.memory.task
+        creep.shakeTask();
       }
       else if (creep.repair(structure) == ERR_NOT_IN_RANGE && structure != undefined) {
         creep.travelTo(structure);
@@ -46,7 +46,6 @@ var tasks = {
   harvestTask: function(creep) {
 
     creep.checkDeath();
-      if(creep.room.name == creep.memory.home) {
     var taskSource = Game.getObjectById(creep.memory.task.details.target)
     if (creep.carry.energy == 0) {
       creep.memory.working = "true";
@@ -61,10 +60,7 @@ var tasks = {
      } else if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "true") {
       creep.memory.working = "false"
     }
-  } else if (creep.room.name != creep.memory.home) {
-    let getSpawn = Game.getObjectById(Memory.rooms[creep.memory.home].structureIDs.Spawns[0])
-    creep.travelTo(getSpawn)
-  }
+
 },
 
   buildTask: function (creep) {
@@ -81,8 +77,7 @@ var tasks = {
         }
       } else{
         console.log(creep.name + ", Target is nowhere to be found. Removing task");
-        creep.memory.task = null;
-        creep.room.memory.avaliableCreeps.push(creep.id)
+        creep.shakeTask();
       }
     }
     if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "false") {
@@ -94,9 +89,10 @@ var tasks = {
 
  lorryTask: function (creep) {
    creep.checkDeath(creep)
-
+if(creep.memory.task != null || creep.memory.task != undefined){
+  let container = creep.memory.task.details.target
    if (creep.memory.working == "false") {
-     creep.getEnergy(true, false)
+     creep.containerCollection()
    }
    if (creep.carry.energy == creep.carryCapacity && creep.memory.working == "false") {
      creep.memory.working = "true";
@@ -105,8 +101,9 @@ var tasks = {
      creep.memory.working = "false";
    }
    if (creep.memory.working == "true") {
-     creep.findDeliveryTarget(creep.memory.oldTarget)
+     creep.findDeliveryTarget()
    }
+ }
  },
 
  minerTask: function (creep) {

@@ -88,8 +88,8 @@ module.exports = {
     default: [WORK, CARRY, MOVE],
     allRounder : {
       bodyReturn: function(energyCap){
-        if(energyCap > 500) {
-          return 500
+        if(energyCap > 450) {
+          return 350
         } else {
           return energyCap
         }
@@ -125,8 +125,8 @@ module.exports = {
       },
      lorry: {
         bodyReturn: function(energyCap) {
-          if(energyCap > 600) {
-           return 600
+          if(energyCap > 450) {
+           return 400
           } else {
             return energyCap
           }

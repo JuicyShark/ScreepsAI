@@ -1,13 +1,12 @@
 
 Flag.prototype.flagTick = function() {
   this.initFlagMem()
-  this.longDistanceMining()
+  //this.longDistanceMining()
 }
 
 Flag.prototype.initFlagMem = function() {
-  if (!this.memory.colours) {
-
-
+  if (!this.memory.name) {
+    this.memory = {}
     this.memory.name = this.name;
     this.memory.room = this.pos.roomName;
     this.memory.roomPos = [];
@@ -16,11 +15,15 @@ Flag.prototype.initFlagMem = function() {
     flagColours.push(this.secondaryColor)
     this.memory.colours = flagColours;
 
-    if (this.name == "ClaimRoom") {
-      this.memory.hasClaimer = false;
-    }
-    if (this.memory.name == "HarvestSources") {
-      this.memory.needScout = true;
+    if (this.name == "idleFlag") {
+      this.memory.creepsIdle = {}
+      this.memory.desiredIdleCreeps = {
+        brawler: 0,
+        rangedAttacker: 0,
+        medic: 0
+      }
+      this.memory.attackTasks = []
+      this.memory.status = {}
     }
     else {
       this.memory.needScout = false;

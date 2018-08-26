@@ -17,7 +17,7 @@ require('screeps-perf')({
   optimizePathFinding: false
 });
 const profiler = require('screeps-profiler');
- 
+
 profiler.enable();
 module.exports.loop = function() {
   profiler.wrap(function() {
@@ -29,7 +29,7 @@ module.exports.loop = function() {
     })
     Object.keys(Game.flags).forEach(i => {
       var currentFlag = Game.flags[i];
-      currentFlag.tick();
+    //  currentFlag.flagTick();
     })
 
     //Loop through all rooms your creeps/structures are in

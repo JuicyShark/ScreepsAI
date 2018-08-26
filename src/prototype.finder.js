@@ -15,18 +15,7 @@ Room.prototype.findType = function(type) {
   });
   return creeps
 }
-Room.prototype.findMostFullContainer = function(){
-  this.containers.sort(function(a,b){
-    if (a.energyPercent < b.energyPercent) {
-      return 1;
-    }
-    if (a.energyPercent > b.energyPercent) {
-      return -1;
-    }
-    return 0;
-  })
-  return this.containers[0]
-  }
+
 /** @function filtertask
     @param {string} typeGiven the type task to look for
     @return {object}  task with highest priority
