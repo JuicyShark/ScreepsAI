@@ -20,7 +20,7 @@ Room.prototype.tick = function() {
       this.constantTasks();
       this.createNeeds();
     }
-    // load things needed each tick without if statement
+   this.loadContainers();
     this.loadConstructionSites();
   //  console.log("YEP")
 
@@ -205,22 +205,25 @@ Room.prototype.saveLog = function(type) {
     }
   }
 }
+
 Room.prototype.loadSource = function() {
   this.sourceNodes = []
   Object.keys(this.memory.sourceNodes).forEach(id => {
-    this.sourceNodes[id] = Game.getObjectById(id)
+    this.sourceNodes.push(Game.getObjectById(id))
   })
   this.hostileSpawns = [];
   for (var i = 0; i < this.memory.hostileSpawns.length; i++) {
-    this.hostileSpawns[i] = Game.getObjectById(this.hostileSpawns[i].id)
+    this.hostileSpawns.push(Game.getObjectById(this.hostileSpawns[i].id))
   }
 }
+
 Room.prototype.loadContainers = function() {
   this.containers = [];
   for (var id = 0; id < this.memory.structureIDs.Containers.length; id++) {
     this.containers[id] = (Game.getObjectById(this.memory.structureIDs.Containers[id]));
   }
 }
+
 Room.prototype.loadConstructionSites = function() {
   this.constructionSites = [];
   for (var i = 0; i < this.memory.constructionSites.length; i++) {

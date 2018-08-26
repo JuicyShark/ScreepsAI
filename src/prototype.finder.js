@@ -38,6 +38,18 @@ Room.prototype.filtertask = function(typeGiven) {
     }
   }
 }
+Room.prototype.findMostFullContainer = function(){
+  this.containers.sort(function(a,b){
+    if (a.energyPercent < b.energyPercent) {
+      return 1;
+    }
+    if (a.energyPercent > b.energyPercent) {
+      return -1;
+    }
+    return 0;
+  })
+  return this.containers[0]
+  }
 
 /** @function ConvertsToLocation
     @param {string} RoomName
