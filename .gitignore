@@ -5,3 +5,4 @@ dist
 screeps.json
 screeps.json
 .idea/workspace.xml
+*.xml

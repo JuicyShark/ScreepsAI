@@ -7,9 +7,12 @@ interface CreepMemory {
   room: string;
   working: boolean;
   type: string;
-
+  _trav: object
 }
 
+interface RoomMemory{
+  avoid: number;
+}
 interface Memory {
   uuid: number;
   log: any;
