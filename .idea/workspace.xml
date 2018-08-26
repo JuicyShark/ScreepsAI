@@ -2,72 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e54d9d6-ecfc-439e-882b-d40bee6a047a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Config/SublimeCodeIntel.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/ConstructionSite.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Creep.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Flag.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Game.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Global/Constants.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Memory.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Mineral.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Nuke.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Order.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/OwnedStructure.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/PathFinder.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/RawMemory.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Readme.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Resource.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Room.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/RoomObject.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/RoomPosition.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/RoomVisual.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Source.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structure.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureContainer.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureController.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureExtension.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureExtractor.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureKeeperLair.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureLab.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureLink.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureNuker.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureObserver.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructurePortal.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructurePowerBank.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructurePowerSpawn.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureRampart.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureRoad.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureSpawn.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureStorage.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureTerminal.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureTower.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/Structures/StructureWall.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/TODO.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScreepsAutocomplete/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Traveler.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/colonyManager.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/nameGen.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prototype.SorterMan.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prototype.creep.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prototype.creepBuilder.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prototype.finder.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prototype.flags.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prototype.outpost.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prototype.room.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prototype.roomBrain.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prototype.spawn.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prototype.structures.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prototype.tower.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screeps-perf.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screeps-profiler.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/taskManager.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tasks.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -112,13 +48,13 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gitignore" value="19" />
-          <entry key="ts" value="1" />
+          <entry key="ts" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="19" />
-          <entry key="TypeScript" value="1" />
+          <entry key="TypeScript" value="6" />
         </counts>
       </usages-collector>
     </session>
@@ -130,11 +66,44 @@
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="60">
-              <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+              <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+              <folding>
+                <element signature="e#0#48#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/utils/ErrorMapper.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/types.d.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="11" selection-start-line="5" selection-end-line="6" />
             </state>
           </provider>
         </entry>
@@ -142,17 +111,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rollup.config.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="30" column="3" selection-start-line="30" selection-start-column="3" selection-end-line="30" selection-end-column="3" />
+            <state relative-caret-position="360">
+              <caret line="28" column="36" selection-start-line="26" selection-start-column="14" selection-end-line="28" selection-end-column="36" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tsconfig.json">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/screeps.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
-              <caret line="18" column="1" lean-forward="true" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+            <state relative-caret-position="30">
+              <caret line="2" column="50" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -168,6 +142,7 @@
         <option value="$PROJECT_DIR$/src/main.js" />
         <option value="$PROJECT_DIR$/src/types.d.ts" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/src/main.ts" />
       </list>
     </option>
   </component>
@@ -203,6 +178,11 @@
             <path>
               <item name="Cryptwo-Screeps-Code" type="b2602c69:ProjectViewProjectNode" />
               <item name="Cryptwo-Screeps-Code" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Cryptwo-Screeps-Code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Cryptwo-Screeps-Code" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -244,20 +224,15 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="779000" />
+    <option name="totallyTimeSpent" value="1009000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="900" y="378" width="1400" height="1000" extended-state="0" />
+    <frame x="16" y="23" width="1693" height="1617" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24945612" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20574163" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="TypeScript" weight="0.32929516" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Terminal" visible="true" weight="0.32929516" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32929516" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -265,6 +240,11 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="TypeScript" order="9" weight="0.32929516" />
+      <window_info anchor="bottom" id="Terminal" order="10" visible="true" weight="0.19606557" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -277,11 +257,16 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main.js" />
     <entry file="file://$PROJECT_DIR$/src/main.ts">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
@@ -304,8 +289,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/types.d.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="1" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+        <state relative-caret-position="75">
+          <caret line="5" column="11" selection-start-line="5" selection-end-line="6" />
         </state>
       </provider>
     </entry>
@@ -314,22 +299,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/rollup.config.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="30" column="3" selection-start-line="30" selection-start-column="3" selection-end-line="30" selection-end-column="3" />
+        <state relative-caret-position="360">
+          <caret line="28" column="36" selection-start-line="26" selection-start-column="14" selection-end-line="28" selection-end-column="36" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/screeps.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="1" lean-forward="true" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+        <state relative-caret-position="30">
+          <caret line="2" column="50" selection-start-line="2" selection-start-column="50" selection-end-line="2" selection-end-column="50" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
-          <caret line="4" lean-forward="true" selection-start-line="4" selection-end-line="4" />
+          <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
         </state>
       </provider>
     </entry>
