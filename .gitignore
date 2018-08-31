@@ -3,7 +3,6 @@ src/config.js
 node_modules
 dist
 screeps.json
-screeps.json
 .idea/workspace.xml
 *.xml
 .vscode
