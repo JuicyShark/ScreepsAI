@@ -1,4 +1,3 @@
-import { roomBrain } from "prototypes/prototype.roomBrain";
 
 function checkRoomString(roomName:string | Room): any {
     let room: Room;
@@ -10,6 +9,7 @@ function checkRoomString(roomName:string | Room): any {
     }
     
 }
+
 
 
 //exports below
@@ -29,14 +29,6 @@ export function roomTick(roomName:string | Room): any {
     --room.memory.timer
 }
 
-export function processAsMine(roomName: string | Room): any 
-{
-    if(0 == 2){
-        roomTick(roomName)
-    } else {
-        return false
-    }
-    }
 export function processAsGuest(roomName: string | Room):any 
 {
     let room = checkRoomString(roomName)
@@ -51,9 +43,12 @@ export function isMine(roomName: string | Room): Boolean
     return room.controller.my; 
 
 }
+export function name():any {
+
+}
 export function alertLevel(roomName: string | Room): Number
 {
-    let room: Room;
+   /* let room: Room;
     if(typeof roomName === 'string'){
         room = Game.rooms[roomName]
     }else{
@@ -61,6 +56,6 @@ export function alertLevel(roomName: string | Room): Number
     }
     if(room.find(FIND_HOSTILE_CREEPS) !== null){
         return 1
-    }
+    }*/
     return 0
 }

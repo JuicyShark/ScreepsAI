@@ -6,3 +6,6 @@ screeps.json
 screeps.json
 .idea/workspace.xml
 *.xml
+.vscode
+.rpt2_cache
+.idea

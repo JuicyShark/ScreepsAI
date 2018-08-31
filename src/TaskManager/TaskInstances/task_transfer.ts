@@ -1,5 +1,5 @@
 import {Task} from '../Task';
-import {EnergyStructure, isEnergyStructure, isStoreStructure, StoreStructure} from '../utilities/helpers';
+import {EnergyStructure, isEnergyStructure, isStoreStructure, StoreStructure} from '../../utils/helperFunctions';
 
 export type transferTargetType =
 	EnergyStructure

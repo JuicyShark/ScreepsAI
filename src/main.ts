@@ -1,42 +1,47 @@
 import { ErrorMapper } from "./utils/ErrorMapper";
 import './prototypes/prototypes';
 import { Tasks } from "./TaskManager/Tasks";
-import * as M from "./memory"
-import * as roomManager from "roomManager";
+import * as M from "Memory"
+import * as roomManager from "roomManagment/roomManager";
+import {isIVM} from "./utils/helperFunctions";
+import {log} from "./console/log"
+import './prototypes/RoomObject'; // RoomObject
+import './prototypes/RoomPosition'; // RoomPosition
 
-import { StructureTower } from "prototypes/prototype.tower";
-
-const profiler = require('screeps-profiler');
+export const profiler = require('screeps-profiler');
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 profiler.enable();
     
  function memoryInit(){
    console.log("Initing Main Memory");
-   
-   delete Memory.flags
-   delete Memory.spawns
-   delete Memory.rooms
-   delete Memory.creeps
-   
-  const mem = M.m();
-  mem.creeps = {}
-  mem.rooms = {}
-  mem.uuid = 0
+ 
  }
-
- function mainLoop()
- {
-  profiler.wrap(function() 
-  {
-    if(M.m().memVersion === undefined || M.m().memVersion !== M.memVersion)
-   {
-     memoryInit();
-   }
-if(!M.m().uuid || M.m().uuid > 1000)
-{
-  M.m().uuid = 0
+// Decide whether to run this tick
+function handler(): void {
+if (!isIVM()){
+  log.warning(`Cryptwo Screeps  requires isolated-VM to run. Change settings at screeps.com/a/#!/account/runtime`)
+  return
+}if(Game.cpu.bucket < 500){
+  log.warning(`CPU bucket is critically low (${Game.cpu.bucket}) - suspending for 5 ticks`);
+  Memory.suspend = 4;
+  return
+}else {
+  if(Memory.suspend != undefined){
+    if(Memory.suspend > 0){
+      log.info(`Operation suspended for ${Memory.suspend} more ticks`);
+      return
+    } else {
+      delete Memory.suspend
+    }
+  }
+  mainLoop();
 }
+}
+
+ function mainLoop(){
+  profiler.wrap(function() {
+
     //Loop through all rooms your creeps/structures are in
     for (const i in Game.rooms){
       const rM: any = roomManager
@@ -63,5 +68,6 @@ if(!M.m().uuid || M.m().uuid > 1000)
     }
   }
     export const loop = ErrorMapper.wrapLoop(() => {
+        mainLoop();
 
 });

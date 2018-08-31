@@ -1,7 +1,7 @@
 /* This is the withdrawal task for non-energy resources. */
 
 import {Task} from '../Task';
-import {EnergyStructure, isEnergyStructure, isStoreStructure, StoreStructure} from '../utilities/helpers';
+import {EnergyStructure, isEnergyStructure, isStoreStructure, StoreStructure} from '../../utils/helperFunctions';
 
 export type withdrawTargetType =
 	EnergyStructure

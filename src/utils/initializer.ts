@@ -24,6 +24,7 @@ import {deref, derefRoomPosition} from './helperFunctions';
 import {TaskInvalid} from '../TaskManager/TaskInstances/task_invalid';
 import {TaskTransferAll} from '../TaskManager/TaskInstances/task_transferAll';
 import {TaskWithdrawAll, withdrawAllTargetType} from '../TaskManager/TaskInstances/task_withdrawAll';
+import {profiler} from '../main'
 
 
 export function initializeTask(protoTask: protoTask): Task{
@@ -110,3 +111,4 @@ export function initializeTask(protoTask: protoTask): Task{
 	// Return it
 	return task;
 }
+profiler.registerFN(initializeTask, 'initializeTask');
