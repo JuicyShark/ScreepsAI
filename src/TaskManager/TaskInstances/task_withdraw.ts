@@ -1,7 +1,7 @@
 /* This is the withdrawal task for non-energy resources. */
 
 import {Task} from '../Task';
-import {EnergyStructure, isEnergyStructure, isStoreStructure, StoreStructure} from '../../utils/helperFunctions';
+import {EnergyStructure, isEnergyStructure, isStoreStructure, StoreStructure} from '../../declarations/typeGuards';
 
 export type withdrawTargetType =
 	EnergyStructure
@@ -14,8 +14,8 @@ export type withdrawTargetType =
 export class TaskWithdraw extends Task {
 
 	static taskName = 'withdraw';
-	target: withdrawTargetType;
-	data: {
+	target!: withdrawTargetType;
+	data!: {
 		resourceType: ResourceConstant,
 		amount: number | undefined,
 	};

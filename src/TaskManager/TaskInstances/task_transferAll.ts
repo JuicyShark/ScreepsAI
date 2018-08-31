@@ -6,9 +6,9 @@ export type transferAllTargetType = StructureStorage | StructureTerminal | Struc
 export class TaskTransferAll extends Task {
 
 	static taskName = 'transferAll';
-	target: transferAllTargetType;
+	target!: transferAllTargetType;
 
-	data: {
+	data!: {
 		skipEnergy?: boolean;
 	};
 

@@ -5,7 +5,7 @@ export type buildTargetType = ConstructionSite;
 
 export class TaskBuild extends Task {
     static taskName = 'build';
-    target: buildTargetType;
+    target!: buildTargetType;
 
     constructor(target: buildTargetType, options = {} as TaskOptions){
         super(TaskBuild.taskName, target, options);

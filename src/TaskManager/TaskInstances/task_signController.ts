@@ -5,8 +5,8 @@ export type signControllerTargetType = StructureController;
 export class TaskSignController extends Task {
 
 	static taskName = 'signController';
-	target: signControllerTargetType;
-	data: {
+	target!: signControllerTargetType;
+	data!: {
 		signature: string;
 	};
 

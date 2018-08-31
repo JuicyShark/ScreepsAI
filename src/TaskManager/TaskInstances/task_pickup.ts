@@ -5,7 +5,7 @@ export type pickupTargetType = Resource;
 export class TaskPickup extends Task {
 
 	static taskName = 'pickup';
-	target: pickupTargetType;
+	target!: pickupTargetType;
 
 	constructor(target: pickupTargetType, options = {} as TaskOptions) {
 		super(TaskPickup.taskName, target, options);

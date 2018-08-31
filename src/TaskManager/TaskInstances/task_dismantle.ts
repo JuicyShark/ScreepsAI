@@ -6,7 +6,7 @@ export type dismantleTargetType = Structure;
 
 export class TaskDismantle extends Task {
 	static taskName = 'dismantle';
-	target: dismantleTargetType;
+	target!: dismantleTargetType;
 
 	constructor(target: dismantleTargetType, options = {} as TaskOptions) {
 		super(TaskDismantle.taskName, target, options);

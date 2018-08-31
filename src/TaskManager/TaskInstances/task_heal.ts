@@ -5,7 +5,7 @@ export type healTargetType = Creep;
 export class TaskHeal extends Task {
 
 	static taskName = 'heal';
-	target: healTargetType;
+	target!: healTargetType;
 
 	constructor(target: healTargetType, options = {} as TaskOptions) {
 		super(TaskHeal.taskName, target, options);

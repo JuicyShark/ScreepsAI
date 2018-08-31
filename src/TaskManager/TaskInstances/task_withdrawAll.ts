@@ -6,7 +6,7 @@ export type withdrawAllTargetType = StructureStorage | StructureTerminal | Struc
 export class TaskWithdrawAll extends Task {
 
 	static taskName = 'withdrawAll';
-	target: withdrawAllTargetType;
+	target!: withdrawAllTargetType;
 
 	constructor(target: withdrawAllTargetType, options = {} as TaskOptions) {
 		super(TaskWithdrawAll.taskName, target, options);

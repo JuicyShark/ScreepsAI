@@ -5,7 +5,7 @@ export type upgradeTargetType = StructureController;
 export class TaskUpgrade extends Task {
 
 	static taskName = 'upgrade';
-	target: upgradeTargetType;
+	target!: upgradeTargetType;
 
 	constructor(target: upgradeTargetType, options = {} as TaskOptions) {
 		super(TaskUpgrade.taskName, target, options);

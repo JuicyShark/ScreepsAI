@@ -5,7 +5,7 @@ export type repairTargetType = Structure;
 export class TaskRepair extends Task {
 
 	static taskName = 'repair';
-	target: repairTargetType;
+	target!: repairTargetType;
 
 	constructor(target: repairTargetType, options = {} as TaskOptions) {
 		super(TaskRepair.taskName, target, options);

@@ -1,23 +1,11 @@
-Object.defineProperty(RoomPosition.prototype, 'print', {
-	get() {
-		return '<a href="#!/room/' + Game.shard.name + '/' + this.roomName + '">[' + this.roomName + ', ' + this.x + ', ' + this.y + ']</a>';
+Object.defineProperty(RoomPosition.prototype, 'isEdge', { // if the position is at the edge of a room
+	get: function () {
+		return this.x == 0 || this.x == 49 || this.y == 0 || this.y == 49;
 	},
-	configurable: true,
-});
-Object.defineProperty(RoomPosition.prototype, 'roomCoords', {
-	get         : function () {
-		let parsed = /^[WE]([0-9]+)[NS]([0-9]+)$/.exec(this.roomName);
-		let x = parseInt(parsed![1], 10);
-		let y = parseInt(parsed![2], 10);
-		if (this.roomName.includes('W')) x = -x;
-		if (this.roomName.includes('N')) y = -y;
-		return {x: x, y: y} as Coord;
-	},
-	configurable: true,
 });
 
 Object.defineProperty(RoomPosition.prototype, 'neighbors', {
-	get         : function () {
+	get: function () {
 		let adjPos: RoomPosition[] = [];
 		for (let dx of [-1, 0, 1]) {
 			for (let dy of [-1, 0, 1]) {
@@ -31,6 +19,27 @@ Object.defineProperty(RoomPosition.prototype, 'neighbors', {
 			}
 		}
 		return adjPos;
-	},
-	configurable: true,
+	}
 });
+
+RoomPosition.prototype.isPassible = function (ignoreCreeps = false): boolean {
+	// Is terrain passable?
+	if (Game.map.getTerrainAt(this) == 'wall') return false;
+	if (this.isVisible) {
+		// Are there creeps?
+		if (ignoreCreeps == false && this.lookFor(LOOK_CREEPS).length > 0) return false;
+		// Are there structures?
+		let impassibleStructures = _.filter(this.lookFor(LOOK_STRUCTURES), function (this:any, s: Structure) {
+			return this.structureType != STRUCTURE_ROAD &&
+				   s.structureType != STRUCTURE_CONTAINER &&
+				   !(s.structureType == STRUCTURE_RAMPART && ((<StructureRampart>s).my ||
+															  (<StructureRampart>s).isPublic));
+		});
+		return impassibleStructures.length == 0;
+	}
+	return true;
+};
+
+RoomPosition.prototype.availableNeighbors = function (ignoreCreeps = false): RoomPosition[] {
+	return _.filter(this.neighbors, pos => pos.isPassible(ignoreCreeps));
+};

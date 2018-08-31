@@ -1,6 +1,7 @@
 // Room prototypes - commonly used room properties and methods
 
-let MY_USERNAME:string = "myNameEventually"
+
+import {MY_USERNAME} from "settings";
 
 // Logging =============================================================================================================
 Object.defineProperty(Room.prototype, 'print', {

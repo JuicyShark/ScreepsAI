@@ -1,5 +1,5 @@
 import {Task} from '../Task';
-import {EnergyStructure, isEnergyStructure, isStoreStructure, StoreStructure} from '../../utils/helperFunctions';
+import {EnergyStructure, isEnergyStructure, isStoreStructure, StoreStructure} from '../../declarations/typeGuards';
 
 export type transferTargetType =
 	EnergyStructure
@@ -13,8 +13,8 @@ export class TaskTransfer extends Task {
 
 	static taskName = 'transfer';
 
-	target: transferTargetType;
-	data: {
+	target!: transferTargetType;
+	data!: {
 		resourceType: ResourceConstant
 		amount: number | undefined
 	};

@@ -108,41 +108,6 @@ interface Game {
   };
 }
 
-interface TaskSettings {
-	targetRange: number;
-  workOffRoad: boolean;
-  oneShot: boolean;
-}
-
-interface TaskOptions {
-  blind?: boolean;
-  nextPos?: protoPos;
-	moveOptions: TravelToOptions; 
-}
-
-interface TaskData {
-	quiet?: boolean;
-	resourceType?: string;
-	amount?: number;
-	signature?: string;
-	skipEnergy?: boolean;
-}
-
-//protoTask is basic task
-interface protoTask{
-  name: string;
-  _creep: {
-    name: string;
-  };
-  _target: {
-    ref: string;
-    _pos: protoPos;
-  }
-  _parent: protoTask | null;
-  options: TaskOptions;
-  data: TaskData;
-  tick: number;
-}
 interface ITask extends protoTask{
   settings: TaskSettings;
   proto: protoTask;
@@ -189,7 +154,7 @@ interface protoPos {
 }
 interface Room {
   print:string;
-  owner: string | undefined;
+  owner: string | undefined
   // Cached structures
 	tombstones: Tombstone[];
 	drops: { [resourceType: string]: Resource[] };
@@ -286,7 +251,7 @@ interface RoomPosition {
   isEdge: boolean;
   roomCoords: Coord;
   isPassible(ignoreCreeps?: boolean): boolean;
-  isVisible: Boolean;
+  isVisible: boolean;
   neighbors: RoomPosition[];
   availableNeighbors(ignoreCreeps?: boolean): RoomPosition[];
   findClosestByLimitedRange<T>(objects: T[] | RoomPosition[], rangeLimit: number,
@@ -363,6 +328,3 @@ interface TravelState {
 }
 
 
-
-type Coord = {x: number, y: number};
-type HasPos = {pos: RoomPosition}

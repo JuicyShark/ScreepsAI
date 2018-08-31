@@ -5,7 +5,7 @@ export type fortifyTargetType = StructureWall | StructureRampart;
 export class TaskFortify extends Task {
 
 	static taskName = 'fortify';
-	target: fortifyTargetType;
+	target!: fortifyTargetType;
 
 	constructor(target: fortifyTargetType, options = {} as TaskOptions) {
 		super(TaskFortify.taskName, target, options);

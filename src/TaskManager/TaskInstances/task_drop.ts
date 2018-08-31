@@ -7,8 +7,8 @@ export type dropTargetType = { pos: RoomPosition } | RoomPosition;
 export class TaskDrop extends Task {
 
 	static taskName = 'drop';
-	target: null;
-	data: {
+	target!: null;
+	data!: {
 		resourceType: ResourceConstant
 		amount: number | undefined
 	};
