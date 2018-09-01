@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
-    "module": "esnext",
-    "lib": ["esnext"],
-    "target": "es2017",
+    "allowJs": true,
+    "module": "commonjs",
+    "target": "es6",
     "moduleResolution": "Node",
     "outDir": "dist",
     "baseUrl": "src/",
-    "sourceMap": true,
+    "sourceMap": false,
     "strict": false,
+    "strictPropertyInitialization": false,
     "experimentalDecorators": true,
     "noImplicitReturns": false,
+    "noImplicitThis": false,
     "allowSyntheticDefaultImports": true,
     "allowUnreachableCode": false
   },

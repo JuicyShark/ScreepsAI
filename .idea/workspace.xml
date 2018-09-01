@@ -2,32 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e54d9d6-ecfc-439e-882b-d40bee6a047a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screeps.json" beforeDir="false" afterPath="$PROJECT_DIR$/screeps.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TaskManager/Task.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/Task.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_attack.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_attack.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_build.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_build.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_claim.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_claim.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_dismantle.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_dismantle.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_drop.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_drop.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_fortify.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_fortify.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_getRenewed.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_getRenewed.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_harvest.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_harvest.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_heal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_heal.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_meleeAttack.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_meleeAttack.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_pickup.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_pickup.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_rangedAttack.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_rangedAttack.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_repair.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_repair.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_signController.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_signController.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_transfer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_transfer.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_transferAll.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_transferAll.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_upgrade.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_upgrade.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_withdraw.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_withdraw.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_withdrawAll.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/TaskManager/TaskInstances/task_withdrawAll.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/brain/colonyBrain.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/brain/colonyBrain.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/colony.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/colony.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console/Console.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console/globals.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/console/log.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/declarations/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/declarations/index.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/declarations/memory.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/declarations/memory.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/declarations/prototypes.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/declarations/prototypes.d.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/prototypes/prototypes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/prototypes/prototypes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/initializer.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/initializer.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/memory.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/prototypes/Creep.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/prototypes/Creep.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/prototypes/RoomObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/prototypes/RoomObject.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/settings.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/settings.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/ErrorMapper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/ErrorMapper.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/caching.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/helperFunctions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/helperFunctions.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -43,6 +34,7 @@
     <session id="33671065">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.opened" value="2" />
@@ -99,8 +91,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/settings.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
+            <state relative-caret-position="90">
+              <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -108,8 +100,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/types.d.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2235">
-              <caret line="149" column="2" selection-start-line="149" selection-start-column="2" selection-end-line="149" selection-end-column="2" />
+            <state relative-caret-position="1710">
+              <caret line="114" column="2" selection-start-line="114" selection-start-column="2" selection-end-line="114" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -118,7 +110,7 @@
         <entry file="file://$PROJECT_DIR$/src/TaskManager/TaskInstances/task_build.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="315">
-              <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+              <caret line="21" column="5" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -134,35 +126,13 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/TaskManager/Task.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1301">
-              <caret line="120" column="5" selection-start-line="120" selection-start-column="5" selection-end-line="120" selection-end-column="5" />
+            <state relative-caret-position="1331">
+              <caret line="122" column="5" selection-start-line="122" selection-start-column="5" selection-end-line="122" selection-end-column="5" />
               <folding>
                 <element signature="e#0#52#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/prototypes/prototypes.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="3" column="25" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dist/main.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2348">
-              <caret line="3187" column="21" selection-start-line="3187" selection-end-line="3187" selection-end-column="21" />
-              <folding>
-                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -295,12 +265,12 @@
       <option name="presentableId" value="Default" />
       <updated>1535254216122</updated>
       <workItem from="1535254217833" duration="779000" />
-      <workItem from="1535720554573" duration="1295000" />
+      <workItem from="1535720554573" duration="1666000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2304000" />
+    <option name="totallyTimeSpent" value="2675000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="438" y="23" width="1693" height="1617" extended-state="0" />
@@ -381,19 +351,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/settings.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dist/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2348">
-          <caret line="3187" column="21" selection-start-line="3187" selection-end-line="3187" selection-end-column="21" />
-          <folding>
-            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="90">
+          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
         </state>
       </provider>
     </entry>
@@ -408,15 +367,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/types.d.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2235">
-          <caret line="149" column="2" selection-start-line="149" selection-start-column="2" selection-end-line="149" selection-end-column="2" />
+        <state relative-caret-position="1710">
+          <caret line="114" column="2" selection-start-line="114" selection-start-column="2" selection-end-line="114" selection-end-column="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/TaskManager/TaskInstances/task_build.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
-          <caret line="21" column="5" lean-forward="true" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+          <caret line="21" column="5" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -429,20 +388,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TaskManager/Task.ts">
+    <entry file="file://$PROJECT_DIR$/src/prototypes/prototypes.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1301">
-          <caret line="120" column="5" selection-start-line="120" selection-start-column="5" selection-end-line="120" selection-end-column="5" />
+        <state relative-caret-position="435">
+          <caret line="30" column="74" lean-forward="true" selection-start-line="30" selection-start-column="74" selection-end-line="30" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="293">
+          <caret line="3050" column="13" lean-forward="true" selection-start-line="3050" selection-start-column="13" selection-end-line="3050" selection-end-column="13" />
           <folding>
-            <element signature="e#0#52#0" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/prototypes/prototypes.ts">
+    <entry file="file://$PROJECT_DIR$/src/TaskManager/Task.ts">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="3" column="25" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
+        <state relative-caret-position="1331">
+          <caret line="122" column="5" selection-start-line="122" selection-start-column="5" selection-end-line="122" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

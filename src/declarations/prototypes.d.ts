@@ -6,7 +6,9 @@ interface Creep {
 }
 
 interface ConstructionSite {
-	isWalkable: boolean;
+  
+    isWalkable: boolean;
+    
 }
 
 interface Flag {

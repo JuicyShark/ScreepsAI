@@ -1,3 +1,8 @@
+import {LogisticsNetwork} from './logistics/logisticsNetwork';
+import {Cartographer, ROOMTYPE_CONTROLLER, ROOMTYPE_SOURCEKEEPER} from '../utils/Cartographer';
+import {derefCoords,  minBy} from '../utils/helperFunctions';
+import {RoomBrain} from './roomBrain'
+
 export class ColonyBrain {
     colony: Colony;
     directives: Directive[];
@@ -38,8 +43,6 @@ if (Game.time % 250 == 2 * this.colony.id) {
     let numRemotes = numSources - this.colony.room.sources.length;
     if (numRemotes < Colony.settings.remoteSourcesByLevel[this.colony.level]) {
         // Possible outposts are controller rooms not already reserved or owned
-        log.debug(`Calculating colonies for ${this.colony.room.print}...`);
-        log.debug(`Rooms in range 2: ${Cartographer.findRoomsInRange(this.colony.room.name, 2)}`);
         let possibleOutposts = _.filter(Cartographer.findRoomsInRange(this.colony.room.name, 2), roomName =>
             Cartographer.roomType(roomName) == ROOMTYPE_CONTROLLER
             && !_.any(Game.cache.outpostFlags,

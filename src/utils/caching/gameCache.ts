@@ -1,13 +1,18 @@
 
 // Caches targets every tick to allow for RoomObject.targetedBy property
-
-export class TargetCache {
+export class GameCache {
+    creepsByColony: { [colonyName: string]: Creep[] };
     targets: { [ref: string]: string[] };
     tick: number;
 
     constructor() {
+        this.creepsByColony = {}
         this.targets = {};
         this.tick = Game.time
+    }
+
+    private cacheCreepsByColony() {
+        this.creepsByColony = _.groupBy(Game.creeps, creep => creep.memory.colony) as { [colName: string]: Creep[] };
     }
     // Generates a hash table for targets: key: TargetRef, val: targeting creep names
     private cacheTargets() {
@@ -28,12 +33,17 @@ export class TargetCache {
     // Check that there is an up-to-date target cache
     static checkCache() {
         if (!(Game.TargetCache && Game.TargetCache.tick == Game.time)) {
-            Game.TargetCache = new TargetCache();
+            Game.TargetCache = new GameCache();
             Game.TargetCache.build();
         }
     }
     // Build the target cache
     build() {
+        this.cacheCreepsByColony();
+        this.cacheTargets();
+    }
+    refresh() {
+        this.cacheCreepsByColony();
         this.cacheTargets();
     }
 }

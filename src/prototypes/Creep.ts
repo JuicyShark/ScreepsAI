@@ -1,6 +1,8 @@
 // This binds a getter/setter creep.task property
 import {initializeTask} from '../utils/initializer';
-import {TargetCache} from '../utils/caching';
+import {GameCache} from 'utils/caching/gameCache';
+
+
 Object.defineProperty(Creep.prototype, 'task', {
 	get() {
 		if (!this._task) {
@@ -11,7 +13,7 @@ Object.defineProperty(Creep.prototype, 'task', {
 	},
 	set(task: ITask | null) {
 		// check that there is an up-to-date target cache
-		TargetCache.checkCache();
+		GameCache.checkCache();
 		// Unregister target from old task if applicable
 		let oldProtoTask = this.memory.task as protoTask;
 		if (oldProtoTask) {
@@ -63,3 +65,4 @@ Object.defineProperty(Creep.prototype, 'inRampart', {
 	},
 	configurable: true,
 });
+

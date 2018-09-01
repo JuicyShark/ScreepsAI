@@ -1,4 +1,4 @@
-
+import 'utils/Traveler';
 import './prototypes/Creep';
 import './prototypes/Room';
 import './prototypes/RoomObject'; // RoomObject
@@ -9,7 +9,6 @@ import { RoleHarvester } from './testRoles/harvester'
 import { RoleUpgrader } from './testRoles/upgrader'
 import { ErrorMapper } from "./utils/ErrorMapper";
 import { isIVM } from "./utils/helperFunctions";
-import { log } from "console/log";
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
@@ -21,16 +20,16 @@ function memoryInit() {
 // Decide whether to run this tick
 function handler(): void {
   if (!isIVM()) {
-    log.warning(`Cryptwo Screeps  requires isolated-VM to run. Change settings at screeps.com/a/#!/account/runtime`)
+    console.log(`Cryptwo Screeps  requires isolated-VM to run. Change settings at screeps.com/a/#!/account/runtime`)
     return
   } if (Game.cpu.bucket < 500) {
-    log.warning(`CPU bucket is critically low (${Game.cpu.bucket}) - suspending for 5 ticks`);
+    console.log(`CPU bucket is critically low (${Game.cpu.bucket}) - suspending for 5 ticks`);
     Memory.suspend = 4;
     return
   } else {
     if (Memory.suspend != undefined) {
       if (Memory.suspend > 0) {
-        log.info(`Operation suspended for ${Memory.suspend} more ticks`);
+        console.log(`Operation suspended for ${Memory.suspend} more ticks`);
         return
       } else {
         delete Memory.suspend

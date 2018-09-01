@@ -35,3 +35,34 @@ export function isIVM(): boolean {
 export function getCacheExpiration(timeout: number, offset = 5): number {
 	return Game.time + timeout + Math.round((Math.random() * offset * 2) - offset);
 }
+export function derefCoords(coordName: string, roomName: string): RoomPosition {
+	let [x, y] = coordName.split(':');
+	return new RoomPosition(parseInt(x, 10), parseInt(y, 10), roomName);
+}
+export function minBy<T>(objects: T[], iteratee: ((obj: T) => number | false)): T | undefined {
+	let minObj: T | undefined = undefined;
+	let minVal = Infinity;
+	let val: number | false;
+	for (let i in objects) {
+		val = iteratee(objects[i]);
+		if (val !== false && val < minVal) {
+			minVal = val;
+			minObj = objects[i];
+		}
+	}
+	return minObj;
+}
+
+export function maxBy<T>(objects: T[], iteratee: ((obj: T) => number | false)): T | undefined {
+	let maxObj: T | undefined = undefined;
+	let maxVal = -Infinity;
+	let val: number | false;
+	for (let i in objects) {
+		val = iteratee(objects[i]);
+		if (val !== false && val > maxVal) {
+			maxVal = val;
+			maxObj = objects[i];
+		}
+	}
+	return maxObj;
+}

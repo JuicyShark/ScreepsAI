@@ -1,6 +1,8 @@
 
 interface Memory {
-	strategist?: any;
+    strategist?: any;
+    CrypMind: {};
+    colonies: { [name: string]: any };
 	creeps: { [name: string]: CreepMemory; };
 	flags: { [name: string]: FlagMemory; };
 	rooms: { [name: string]: RoomMemory; };
@@ -36,7 +38,8 @@ interface StatsMemory {
 
 interface CreepMemory {
 	role: string;
-	task: protoTask | null;
+    task: protoTask | null;
+    colony: string;
 	data: {
 		origin: string;
 	};

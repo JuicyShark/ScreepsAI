@@ -1,4 +1,4 @@
-import { TargetCache } from "utils/caching";
+import { GameCache } from "utils/caching/gameCache";
 
 // RoomObject prototypes
 Object.defineProperty(RoomObject.prototype, 'ref', { // reference object; see globals.deref (which includes Creep)
@@ -10,7 +10,7 @@ Object.defineProperty(RoomObject.prototype, 'ref', { // reference object; see gl
 
 Object.defineProperty(RoomObject.prototype, 'targetedBy', { // List of creep names with tasks targeting this object
 	get         : function () {
-         TargetCache.checkCache()
+         GameCache.checkCache()
          return _.map(Game.TargetCache.targets[this.ref], name => Game.creeps[name]);
 	},
 	configurable: true,

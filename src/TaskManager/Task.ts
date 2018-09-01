@@ -194,13 +194,15 @@ export abstract class Task implements ITask {
 	}
 
 	moveToTarget(range = this.settings.targetRange): number {
-		return this.creep.travelTo(this.targetPos, {range: range});	
+		console.log("#1", this.creep)
+		return this.creep.travelTo(this.targetPos);	
 	}
 
 	/* Moves to the next position on the agenda if specified - call this in some tasks after work() is completed */
 	moveToNextPos(): number | undefined {
 		if (this.options.nextPos) {
 			let nextPos = derefRoomPosition(this.options.nextPos);
+			console.log("#2", this.creep)
 			return this.creep.travelTo(nextPos); 
 		}
 	}
