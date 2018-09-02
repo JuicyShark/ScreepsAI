@@ -1,13 +1,13 @@
 // All structure prototypes
 // General structure prototypes ========================================================================================
-import {MY_USERNAME} from '../settings';
+import { MY_USERNAME } from 'config';
 
 Object.defineProperty(Structure.prototype, 'isWalkable', {
 	get() {
 		return this.structureType == STRUCTURE_ROAD ||
-			   this.structureType == STRUCTURE_CONTAINER ||
-			   (this.structureType == STRUCTURE_RAMPART && (<StructureRampart>this.my ||
-															<StructureRampart>this.isPublic));
+			this.structureType == STRUCTURE_CONTAINER ||
+			(this.structureType == STRUCTURE_RAMPART && (<StructureRampart>this.my ||
+				<StructureRampart>this.isPublic));
 	},
 	configurable: true,
 });
@@ -35,21 +35,21 @@ Object.defineProperty(StructureContainer.prototype, 'isEmpty', { // if this cont
 
 // Controller prototypes ===============================================================================================
 Object.defineProperty(StructureController.prototype, 'reservedByMe', {
-	get         : function () {
+	get: function () {
 		return this.reservation && this.reservation.username == MY_USERNAME;
 	},
 	configurable: true,
 });
 
 Object.defineProperty(StructureController.prototype, 'signedByMe', {
-	get         : function () {
+	get: function () {
 		return this.sign && this.sign.text == Memory.settings.signature && Game.time - this.sign.time < 250000;
 	},
 	configurable: true,
 });
 
 Object.defineProperty(StructureController.prototype, 'signedByScreeps', {
-	get         : function () {
+	get: function () {
 		return this.sign && this.sign.username == 'Screeps';
 	},
 	configurable: true,

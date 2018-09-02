@@ -1,0 +1,3 @@
+interface StructureController {
+    needsReserving: any;
+}

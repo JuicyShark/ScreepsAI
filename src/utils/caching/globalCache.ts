@@ -1,6 +1,6 @@
 import {getCacheExpiration} from '../helperFunctions';
 
-const CACHE_TIMEOUT = 50;
+const CACHE_TIMEOUT = 20;
 const SHORT_CACHE_TIMEOUT = 10;
 
 export class GlobalCache { 

@@ -1,94 +1,61 @@
-import 'utils/Traveler';
-import './prototypes/Creep';
-import './prototypes/Room';
-import './prototypes/RoomObject'; // RoomObject
-import './prototypes/RoomPosition'; // RoomPosition
-import './prototypes/RoomStructures';
-import './prototypes/Structures';
-import { RoleHarvester } from './testRoles/harvester'
-import { RoleUpgrader } from './testRoles/upgrader'
-import { ErrorMapper } from "./utils/ErrorMapper";
-import { isIVM } from "./utils/helperFunctions";
+import { ErrorMapper } from "utils/ErrorMapper";
+import { isIVM } from "utils/helperFunctions";
+import * as config from "config";
+import * as showMaster from "ShowMaster/ShowMaster";
+import 'prototypes/Room';
+import 'prototypes/Creep';
+import 'prototypes/RoomObject'; // RoomObject
+import 'prototypes/RoomPosition'; // RoomPosition
+import 'prototypes/RoomStructures';
+import 'prototypes/Structures';
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
+function runTimer(): void {
+  if (!Memory.timer || Memory.timer == 0) {
+    Memory.timer = 60;
+  }
 
-function memoryInit() {
-  console.log("Initing Main Memory");
+  if (Memory.suspend != true) {
+    //If not Suspended then organise
+    showMaster.organiseTimes()
+
+  }
+  console.log("Timer " + Memory.timer)
+  --Memory.timer;
 
 }
-// Decide whether to run this tick
+function suspendCode(): Boolean {
+
+  if (Game.cpu.bucket < config.minBucket) {
+    console.log("Checking Bucket! " + Game.cpu.bucket)
+    return true;
+  }
+  else if (Game.cpu.bucket > config.safeBucketLimit) {
+    return false;
+  }
+  else {
+    return false;
+  }
+
+}
 function handler(): void {
+  //checks if IsolatedVirtualMachine
   if (!isIVM()) {
     console.log(`Cryptwo Screeps  requires isolated-VM to run. Change settings at screeps.com/a/#!/account/runtime`)
+    console.log("DoIt")
     return
-  } if (Game.cpu.bucket < 500) {
-    console.log(`CPU bucket is critically low (${Game.cpu.bucket}) - suspending for 5 ticks`);
-    Memory.suspend = 4;
-    return
-  } else {
-    if (Memory.suspend != undefined) {
-      if (Memory.suspend > 0) {
-        console.log(`Operation suspended for ${Memory.suspend} more ticks`);
-        return
-      } else {
-        delete Memory.suspend
-      }
-    }
-    mainLoop();
   }
+  //suspendCode?
+  Memory.suspend = suspendCode()
+  //runTimer
+  runTimer()
 }
 
-function mainLoop() {
 
 
-  //Loop through all rooms your creeps/structures are in
-  for (const i in Game.rooms) {
-
-    let spawn = Game.spawns['Spawn1'];
-    let creeps = _.values(Game.creeps) as Creep[];
-
-    // Separate creeps by role
-    let harvesters = _.filter(creeps, creep => creep.name.includes('Harvester'));
-    let upgraders = _.filter(creeps, creep => creep.name.includes('Upgrader'));
-    let patrollers = _.filter(creeps, creep => creep.name.includes('Patroller'));
-
-    // Spawn creeps as needed
-    if (harvesters.length < 3) {
-      spawn.spawnCreep([WORK, CARRY, MOVE], 'Harvester' + Game.time);
-    } else if (upgraders.length < 2) {
-      spawn.spawnCreep([WORK, CARRY, MOVE], 'Upgrader' + Game.time);
-    } else if (patrollers.length < 1) {
-      spawn.spawnCreep([MOVE], 'Patroller' + Game.time);
-    }
-
-    // Handle all roles, assigning each creep a new task if they are currently idle
-    for (let harvester of harvesters) {
-      if (harvester.isIdle) {
-        RoleHarvester.newTask(harvester);
-      }
-    }
-    for (let upgrader of upgraders) {
-      if (upgrader.isIdle) {
-        RoleUpgrader.newTask(upgrader);
-      }
-    }
-
-
-    // Now that all creeps have their tasks, execute everything
-    for (let creep of creeps) {
-      creep.run();
-    }
-  }
-
-  for (const i in Memory.creeps) {
-    if (!Game.creeps[i]) {
-      delete Memory.creeps[i];
-    }
-  }
-};
-
+//GameLoop
 export const loop = ErrorMapper.wrapLoop(() => {
-  mainLoop();
+  handler();
 
 });

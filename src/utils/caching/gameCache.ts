@@ -1,8 +1,10 @@
 
 // Caches targets every tick to allow for RoomObject.targetedBy property
-export class GameCache {
+export class GameCache implements ICache {
+
     creepsByColony: { [colonyName: string]: Creep[] };
     targets: { [ref: string]: string[] };
+    outpostFlags: Flag[];
     tick: number;
 
     constructor() {

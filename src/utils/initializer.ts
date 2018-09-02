@@ -1,39 +1,39 @@
 // import tasks
-import {Task} from '../TaskManager/Task';
-import {attackTargetType, TaskAttack} from '../TaskManager/TaskInstances/task_attack';
-import {buildTargetType, TaskBuild} from '../TaskManager/TaskInstances/task_build';
-import {claimTargetType, TaskClaim} from '../TaskManager/TaskInstances/task_claim';
-import {dismantleTargetType, TaskDismantle} from '../TaskManager/TaskInstances/task_dismantle';
-import {fortifyTargetType, TaskFortify} from '../TaskManager/TaskInstances/task_fortify';
-import {getRenewedTargetType, TaskGetRenewed} from '../TaskManager/TaskInstances/task_getRenewed';
-import {goToTargetType, TaskGoTo} from '../TaskManager/TaskInstances/task_goTo';
-import {goToRoomTargetType, TaskGoToRoom} from '../TaskManager/TaskInstances/task_goToRoom';
-import {harvestTargetType, TaskHarvest} from '../TaskManager/TaskInstances/task_harvest';
-import {healTargetType, TaskHeal} from '../TaskManager/TaskInstances/task_heal';
-import {meleeAttackTargetType, TaskMeleeAttack} from '../TaskManager/TaskInstances/task_meleeAttack';
-import {pickupTargetType, TaskPickup} from '../TaskManager/TaskInstances/task_pickup';
-import {rangedAttackTargetType, TaskRangedAttack} from '../TaskManager/TaskInstances/task_rangedAttack';
-import {TaskWithdraw, withdrawTargetType} from '../TaskManager/TaskInstances/task_withdraw';
-import {repairTargetType, TaskRepair} from '../TaskManager/TaskInstances/task_repair';
-import {reserveTargetType, TaskReserve} from '../TaskManager/TaskInstances/task_reserve';
-import {signControllerTargetType, TaskSignController} from '../TaskManager/TaskInstances/task_signController';
-import {TaskTransfer, transferTargetType} from '../TaskManager/TaskInstances/task_transfer';
-import {TaskUpgrade, upgradeTargetType} from '../TaskManager/TaskInstances/task_upgrade';
-import {dropTargetType, TaskDrop} from '../TaskManager/TaskInstances/task_drop';
-import {deref, derefRoomPosition} from './helperFunctions';
-import {TaskInvalid} from '../TaskManager/TaskInstances/task_invalid';
-import {TaskTransferAll} from '../TaskManager/TaskInstances/task_transferAll';
-import {TaskWithdrawAll, withdrawAllTargetType} from '../TaskManager/TaskInstances/task_withdrawAll';
+import { Task } from '../taskManager/Task';
+import { attackTargetType, TaskAttack } from '../taskManager/TaskInstances/task_attack';
+import { buildTargetType, TaskBuild } from '../taskManager/TaskInstances/task_build';
+import { claimTargetType, TaskClaim } from '../taskManager/TaskInstances/task_claim';
+import { dismantleTargetType, TaskDismantle } from '../taskManager/TaskInstances/task_dismantle';
+import { fortifyTargetType, TaskFortify } from '../taskManager/TaskInstances/task_fortify';
+import { getRenewedTargetType, TaskGetRenewed } from '../taskManager/TaskInstances/task_getRenewed';
+import { goToTargetType, TaskGoTo } from '../taskManager/TaskInstances/task_goTo';
+import { goToRoomTargetType, TaskGoToRoom } from '../taskManager/TaskInstances/task_goToRoom';
+import { harvestTargetType, TaskHarvest } from '../taskManager/TaskInstances/task_harvest';
+import { healTargetType, TaskHeal } from '../taskManager/TaskInstances/task_heal';
+import { meleeAttackTargetType, TaskMeleeAttack } from '../taskManager/TaskInstances/task_meleeAttack';
+import { pickupTargetType, TaskPickup } from '../taskManager/TaskInstances/task_pickup';
+import { rangedAttackTargetType, TaskRangedAttack } from '../taskManager/TaskInstances/task_rangedAttack';
+import { TaskWithdraw, withdrawTargetType } from '../taskManager/TaskInstances/task_withdraw';
+import { repairTargetType, TaskRepair } from '../taskManager/TaskInstances/task_repair';
+import { reserveTargetType, TaskReserve } from '../taskManager/TaskInstances/task_reserve';
+import { signControllerTargetType, TaskSignController } from '../taskManager/TaskInstances/task_signController';
+import { TaskTransfer, transferTargetType } from '../taskManager/TaskInstances/task_transfer';
+import { TaskUpgrade, upgradeTargetType } from '../taskManager/TaskInstances/task_upgrade';
+import { dropTargetType, TaskDrop } from '../taskManager/TaskInstances/task_drop';
+import { deref, derefRoomPosition } from './helperFunctions';
+import { TaskInvalid } from '../taskManager/TaskInstances/task_invalid';
+import { TaskTransferAll } from '../taskManager/TaskInstances/task_transferAll';
+import { TaskWithdrawAll, withdrawAllTargetType } from '../taskManager/TaskInstances/task_withdrawAll';
 
 
-export function initializeTask(protoTask: protoTask): Task{
-    // retrieve data from protoTask
-    let taskName = protoTask.name // name should be build for TaskBuild
-    let target = deref(protoTask._target.ref);
-    let task: Task;
+export function initializeTask(protoTask: protoTask): Task {
+	// retrieve data from protoTask
+	let taskName = protoTask.name // name should be build for TaskBuild
+	let target = deref(protoTask._target.ref);
+	let task: Task;
 
-    // create a task object of the correct type
-    switch (taskName) {
+	// create a task object of the correct type
+	switch (taskName) {
 		case TaskAttack.taskName:
 			task = new TaskAttack(target as attackTargetType);
 			break;
@@ -104,8 +104,8 @@ export function initializeTask(protoTask: protoTask): Task{
 			console.log(`Invalid task name: ${taskName}! task.creep: ${protoTask._creep.name}. Deleting from memory!`);
 			task = new TaskInvalid(target as any);
 			break;
-    }
-   // Set the task proto to what is in memory
+	}
+	// Set the task proto to what is in memory
 	task.proto = protoTask;
 	// Return it
 	return task;

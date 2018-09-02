@@ -1,5 +1,5 @@
-import {initializeTask} from '../utils/initializer';
-import {deref, derefRoomPosition} from '../utils/helperFunctions';
+import { initializeTask } from '../utils/initializer';
+import { deref, derefRoomPosition } from '../utils/helperTask';
 
 export type targetType = { ref: string, pos: RoomPosition }; // overwrite this variable in derived classes to specify more precise typing
 /* An abstract class for encapsulating creep actions. This generalizes the concept of "do action X to thing Y until
@@ -32,15 +32,15 @@ export abstract class Task implements ITask {
 		};
 		if (target) { // Handles edge cases like when you're done building something and target disappears
 			this._target = {
-				ref : target.ref,
+				ref: target.ref,
 				_pos: target.pos,
 			};
 		} else {
 			this._target = {
-				ref : '',
+				ref: '',
 				_pos: {
-					x       : -1,
-					y       : -1,
+					x: -1,
+					y: -1,
 					roomName: '',
 				}
 			};
@@ -49,12 +49,12 @@ export abstract class Task implements ITask {
 		this.settings = {
 			targetRange: 1,			// range at which you can perform action
 			workOffRoad: false,		// whether work() should be performed off road
-			oneShot    : false, 	// remove this task once work() returns OK, regardless of validity
-			timeout    : Infinity, 	// task becomes invalid after this long
-			blind      : true,  	// don't require vision of target unless in room
+			oneShot: false, 	// remove this task once work() returns OK, regardless of validity
+			timeout: Infinity, 	// task becomes invalid after this long
+			blind: true,  	// don't require vision of target unless in room
 		};
 		_.defaults(options, {
-			blind      : false,
+			blind: false,
 			moveOptions: {},
 		});
 		this.tick = Game.time;
@@ -66,13 +66,13 @@ export abstract class Task implements ITask {
 
 	get proto(): protoTask {
 		return {
-			name   : this.name,
-			_creep : this._creep,
+			name: this.name,
+			_creep: this._creep,
 			_target: this._target,
 			_parent: this._parent,
 			options: this.options,
-			data   : this.data,
-			tick   : this.tick,
+			data: this.data,
+			tick: this.tick,
 		};
 	}
 
@@ -195,7 +195,7 @@ export abstract class Task implements ITask {
 
 	moveToTarget(range = this.settings.targetRange): number {
 		console.log("#1", this.creep)
-		return this.creep.travelTo(this.targetPos);	
+		return this.creep.moveTo(this.targetPos);
 	}
 
 	/* Moves to the next position on the agenda if specified - call this in some tasks after work() is completed */
@@ -203,7 +203,7 @@ export abstract class Task implements ITask {
 		if (this.options.nextPos) {
 			let nextPos = derefRoomPosition(this.options.nextPos);
 			console.log("#2", this.creep)
-			return this.creep.travelTo(nextPos); 
+			return this.creep.moveTo(nextPos);
 		}
 	}
 
@@ -215,7 +215,7 @@ export abstract class Task implements ITask {
 	}
 
 	// Execute this task each tick. Returns nothing unless work is done.
-	run(): number | undefined {
+	run(): number | null {
 		if (this.creep.pos.inRangeTo(this.targetPos, this.settings.targetRange) && !this.creep.pos.isEdge) {
 			if (this.settings.workOffRoad) {
 				// Move to somewhere nearby that isn't on a road
@@ -258,7 +258,7 @@ export abstract class Task implements ITask {
 		}
 
 
-		 return creep.travelTo(pos);
+		return creep.moveTo(pos);
 	}
 
 	// Task to perform when at the target
