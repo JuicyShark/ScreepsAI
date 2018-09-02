@@ -3,6 +3,7 @@ import * as config from "config";
 import * as roomMaster from '../ShowMaster/roomMaster';
 import { runCreeps } from '../ShowMaster/creepMaster';
 
+
 function initMemory(): void {
     if (!Memory.Colonies) {
         Memory.Colonies = config.defaultColoniesMem()

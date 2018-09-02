@@ -12,6 +12,7 @@ export function shotCaller(): void {
         let room = Memory.Colonies.ColonyRooms[index];
         delegateToSpawns(this[value[0]])
         creepMaster.setCreepTasks()
+
     }, Game.rooms);
 
     //return
@@ -23,15 +24,22 @@ export function delegateToSpawns(room: Room): void {
     // Separate creeps by role
     let workers = _.filter(creeps, creep => creep.name.includes('Worker'));
     let upgraders = _.filter(creeps, creep => creep.name.includes('Upgrader'));
+    let builders = _.filter(creeps, creep => creep.name.includes('Builder'));
     let lorrys = _.filter(creeps, creep => creep.name.includes('lorry'));
     let patrollers = _.filter(creeps, creep => creep.name.includes('Patroller'));
     let spawn: StructureSpawn | null = Game.getObjectById(creepMaster.retreiveSpawnIDs(room)[0]);
     // Spawn creeps as needed
     if (spawn != null) {
-        if (workers.length < 3) {
-            spawn.spawnCreep([WORK, CARRY, MOVE], 'Worker' + Game.time);
+        let name: string;
+        if (workers.length < 2) {
+            name = 'Worker' + Game.time;
+            spawn.spawnNewCreep([WORK, CARRY, MOVE], name);
         } else if (upgraders.length < 2) {
-            spawn.spawnCreep([WORK, CARRY, MOVE], 'Upgrader' + Game.time);
+            name = 'Upgrader' + Game.time;
+            spawn.spawnNewCreep([WORK, CARRY, MOVE], name);
+        } else if (builders.length < 2) {
+            name = 'Builder' + Game.time;
+            spawn.spawnNewCreep([WORK, CARRY, MOVE], name);
         } else { console.log("All Spawned") }
     }
 

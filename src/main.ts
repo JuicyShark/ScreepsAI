@@ -8,6 +8,8 @@ import 'prototypes/RoomObject'; // RoomObject
 import 'prototypes/RoomPosition'; // RoomPosition
 import 'prototypes/RoomStructures';
 import 'prototypes/Structures';
+import 'prototypes/Spawn';
+
 
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
@@ -26,9 +28,11 @@ function runTimer(): void {
 
 }
 function suspendCode(): Boolean {
+  console.log(Game.cpu.getUsed() + " Used")
 
   if (Game.cpu.bucket < config.minBucket) {
     console.log("Checking Bucket! " + Game.cpu.bucket)
+    console.log(Game.cpu.limit + " | tickLim " + Game.cpu.tickLimit)
     return true;
   }
   else if (Game.cpu.bucket > config.safeBucketLimit) {

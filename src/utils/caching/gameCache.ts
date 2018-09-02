@@ -22,13 +22,11 @@ export class GameCache implements ICache {
         for (let i in Game.creeps) {
             let creep = Game.creeps[i];
             let task = creep.memory.task;
-
+            // Perform a faster, primitive form of _.map(creep.task.manifest, task => task.target.ref)
             while (task) {
-                if (!this.targets[task._target.ref]) {
-                    this.targets[task._target.ref] = [];
-                    this.targets[task._target.ref].push(creep.name)
-                    task = task._parent;
-                }
+                if (!this.targets[task._target.ref]) this.targets[task._target.ref] = [];
+                this.targets[task._target.ref].push(creep.name);
+                task = task._parent;
             }
         }
     }

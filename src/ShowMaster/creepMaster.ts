@@ -1,6 +1,7 @@
 
 import { RoleHarvester } from '../testRoles/harvester';
 import { RoleUpgrader } from '../testRoles/upgrader';
+import { RoleBuilder } from '../testRoles/builder';
 
 export function runCreeps(): void {
     let creeps = _.values(Game.creeps) as Creep[];
@@ -15,6 +16,7 @@ export function setCreepTasks(): void {
     // Separate creeps by role
     let workers = _.filter(creeps, creep => creep.name.includes('Worker'));
     let upgraders = _.filter(creeps, creep => creep.name.includes('Upgrader'));
+    let builders = _.filter(creeps, creep => creep.name.includes('Builder'));
     let lorrys = _.filter(creeps, creep => creep.name.includes('lorry'));
     let patrollers = _.filter(creeps, creep => creep.name.includes('Patroller'));
     //let spawn: StructureSpawn = Game.getObjectById(retreiveSpawnIDs(room)[0]);
@@ -29,6 +31,11 @@ export function setCreepTasks(): void {
     for (let upgrader of upgraders) {
         if (upgrader.isIdle) {
             RoleUpgrader.newTask(upgrader);
+        }
+    }
+    for (let builder of builders) {
+        if (builder.isIdle) {
+            RoleBuilder.newTask(builder);
         }
     }
 
