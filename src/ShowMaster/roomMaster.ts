@@ -27,7 +27,7 @@ export function delegateToSpawns(room: Room): void {
     let builders = _.filter(creeps, creep => creep.name.includes('Builder'));
     let lorrys = _.filter(creeps, creep => creep.name.includes('Lorry'));
     let patrollers = _.filter(creeps, creep => creep.name.includes('Patroller'));
-    let spawn: StructureSpawn | null = Game.getObjectById(creepMaster.retreiveSpawnIDs(room)[0]);
+    let spawn: StructureSpawn | null = room.spawns[0];
     // Spawn creeps as needed
     if (spawn != null) {
         let type: string;
@@ -74,10 +74,17 @@ export function queToSpawn(spawn: StructureSpawn, spawnTask: spawnTask): any {
     return spawn.spawnNewCreep(spawnTask.body, spawnTask.type, spawnTask.room)
 
 }
-export function initStructures(roomName: string): any {
+
+// Room Structures Prototype should be saving structures as room prototypes example:
+// testRoom.spawns = list of spawns available to that room
+// testRoom.spawns[0] should return the first spawn object in the said room
+
+/*export function initStructures(roomName: string): any {
     let MemPath = Memory.Colonies.ColonyRooms;
     let room = Game.rooms[roomName]
-    if (MemPath[roomName].structureIDs.controller.id == "") {
+    console.log(room, MemPath[roomName])
+    if (MemPath[roomName].structureIDs === undefined || MemPath[roomName].structureIDs.container === undefined || MemPath[roomName].structureIDs.controller.id === undefined) {
+        MemPath[roomName].structureIDs = [];
         room.structures = room.find(FIND_MY_STRUCTURES);
         let mem = MemPath[roomName].structureIDs;
         for (var i = 0; i < room.structures.length; i++) {
@@ -101,4 +108,4 @@ export function initStructures(roomName: string): any {
         }
         mem.controller.id = room.controller.id;
     }
-}
+}*/

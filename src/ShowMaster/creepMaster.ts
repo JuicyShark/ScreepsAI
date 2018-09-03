@@ -49,7 +49,8 @@ export function setCreepTasks(): void {
 
 }
 
-export function retreiveSpawnIDs(room: Room): string[] {
+// Commented reason for removal under initSturctures
+/*export function retreiveSpawnIDs(room: Room): string[] {
     let output: string[] = [];
     var ColonyRooms = Object.keys(Memory.Colonies.ColonyRooms)
     ColonyRooms.forEach(element => {
@@ -67,4 +68,4 @@ export function retreiveSpawnIDs(room: Room): string[] {
 
     //returns  an array with up to 3 spawn structure IDs
     return output
-}
+}*/

@@ -7,7 +7,7 @@ export class RoleUpgrader {
         if (creep.carry.energy > 0) {
             creep.task = Tasks.upgrade(creep.room.controller!); // assumes creep in in room with controller
         } else {
-            creep.task = Tasks.harvest(creep.room.find(FIND_SOURCES)[0])
+            creep.task = Tasks.harvest(creep.room.sources[0])
         }
     }
 

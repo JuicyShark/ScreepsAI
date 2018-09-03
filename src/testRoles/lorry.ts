@@ -1,6 +1,5 @@
 import { Tasks } from '../taskManager/Tasks'
 
-
 export class RoleLorry {
 
 
@@ -8,7 +7,7 @@ export class RoleLorry {
         if (creep.memory.task != null || creep.memory.task != undefined) {
             if (creep.carry.energy < creep.carryCapacity || creep.carry.energy != creep.carryCapacity) {
                 // Harvest from an empty source if there is one, else pick any source
-                let floorStuff = creep.room.find(FIND_DROPPED_RESOURCES);
+                let floorStuff = creep.room.droppedEnergy;
                 let unattendedSource = _.filter(floorStuff, floorStuff => floorStuff.targetedBy.length == 0)[0];
                 if (unattendedSource != null) {
                     creep.task = Tasks.pickup(unattendedSource);
@@ -22,7 +21,7 @@ export class RoleLorry {
                 */}
             }
             else {
-                let spawn = creep.pos.findClosestByRange(FIND_MY_SPAWNS);
+                let spawn = creep.room.spawns[0]
                 if (spawn != undefined) {
                     creep.task = Tasks.transfer(spawn);
                 }
