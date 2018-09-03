@@ -11,36 +11,39 @@ export function runCreeps(): void {
     }
 }
 
-export function setCreepTasks(): void {
-
-    let creeps = _.values(Game.creeps) as Creep[];
-    // Separate creeps by role
-    let harvesters = _.filter(creeps, creep => creep.name.includes('Harvester'));
-    let upgraders = _.filter(creeps, creep => creep.name.includes('Upgrader'));
-    let builders = _.filter(creeps, creep => creep.name.includes('Builder'));
-    let lorrys = _.filter(creeps, creep => creep.name.includes('Lorry'));
-    let patrollers = _.filter(creeps, creep => creep.name.includes('Patroller'));
-
+export function setCreepTasks(colony) {
 
     // Handle all roles, assigning each creep a new task if they are currently idle
-    for (let harvester of harvesters) {
-        if (harvester.isIdle) {
-            RoleHarvester.newTask(harvester);
+    if (colony.creepsByRole["Harvester"] != null) {
+        let harvesters = colony.creepsByRole["Harvester"];
+        for (let harvester of harvesters) {
+            if (harvester.isIdle) {
+                RoleHarvester.newTask(harvester);
+            }
         }
     }
-    for (let upgrader of upgraders) {
-        if (upgrader.isIdle) {
-            RoleUpgrader.newTask(upgrader);
+    if (colony.creepsByRole["Upgrader"] != null) {
+        let upgraders = colony.creepsByRole["Upgrader"];
+        for (let upgrader of upgraders) {
+            if (upgrader.isIdle) {
+                RoleUpgrader.newTask(upgrader);
+            }
         }
     }
-    for (let builder of builders) {
-        if (builder.isIdle) {
-            RoleBuilder.newTask(builder);
+    if (colony.creepsByRole["Builder"] != null) {
+        let builders = colony.creepsByRole["Builder"];
+        for (let builder of builders) {
+            if (builder.isIdle) {
+                RoleBuilder.newTask(builder);
+            }
         }
     }
-    for (let lorry of lorrys) {
-        if (lorry.isIdle) {
-            RoleLorry.newTask(lorry);
+    if (colony.creepsByRole["Lorry"] != null) {
+        let lorrys = colony.creepsByRole["Lorry"];
+        for (let lorry of lorrys) {
+            if (lorry.isIdle) {
+                RoleLorry.newTask(lorry);
+            }
         }
     }
 }
