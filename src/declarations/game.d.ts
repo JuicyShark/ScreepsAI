@@ -6,3 +6,8 @@ interface Game {
     };
     cache: ICache;
 }
+
+declare class GameChanger {
+
+}
+type Colonies = Colony[];

@@ -99,6 +99,7 @@ interface RoomMemory {
     ctrl?: SavedController | undefined;
     mnrl: SavedMineral | undefined;
     SKlairs?: SavedRoomObject[];
+    outposts: string[];
     importantStructs?: {
         // Positions of important structures relevant to sieges
         towers: string[];

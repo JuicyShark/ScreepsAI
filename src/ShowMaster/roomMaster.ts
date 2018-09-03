@@ -14,7 +14,8 @@ import { Colony } from '../Colony'
 export function shotCaller(): void {
     var ColonyRooms = Object.entries(Memory.Colonies.ColonyRooms)
     ColonyRooms.forEach(function (value: [string, {}], index: number, array: [string, {}][]): void {
-        var colony = new Colony(1, this[value[0]].name, []);
+        global.colony = new Colony(1, this[value[0]].name, []);
+        var colony = global.colony;
         delegateToSpawns(colony)
         creepMaster.setCreepTasks(colony)
     }, Game.rooms);

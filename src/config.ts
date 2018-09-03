@@ -38,15 +38,17 @@ export function defaultColoniesMem(): Object {
     let myRooms, controllerLevel;
     for (const i in Game.rooms) {
         let room = Game.rooms[i]
+        let roomOutposts = room.memory.outposts;
         let roomName: string = room.name
         console.log(room.my + " my room test ")
-        if (room.controller != undefined && room.my === true) {
+        if (room.controller != undefined && room.my === true && room.spawns != undefined) {
             controllerLevel = room.controller.level;
         }
         myRooms = {
             [roomName]: {
-                spawns: getSpawns(room),
-                RoomLevel: [controllerLevel]
+                spawns: room.spawns,
+                RoomLevel: [controllerLevel],
+                outposts: roomOutposts
             }
         }
     }
@@ -57,15 +59,4 @@ export function defaultColoniesMem(): Object {
     }
 }
 
-export function getSpawns(room: Room): string {
-    var spawns = room.spawns;
-    let output: string[] = []
-    spawns.forEach(function (value: StructureSpawn, index: number, array: StructureSpawn[]) {
-        if (spawns[index] != null) {
-            output.push(spawns[index].id);
-        }
-
-    })
-    return output[0];
-}
 

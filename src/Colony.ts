@@ -10,6 +10,13 @@ interface ColonyMemory {
 const defaultColonyMemory: ColonyMemory = {
 
 }
+export function createBaseColony(): void {
+  for (var i in Game.rooms) {
+    var room = Game.rooms[i];
+    global.BaseColony = new Colony(1, room.name, room.memory.outposts);
+    break;
+  }
+}
 
 export class Colony {
   memory: ColonyMemory;

@@ -10,10 +10,11 @@ import { isIVM } from "utils/helperFunctions";
 import * as config from "config";
 import * as showMaster from "ShowMaster/ShowMaster";
 import profiler from './utils/screeps-profiler';
+import { createBaseColony } from './Colony'
 
 
 profiler.enable();
-
+createBaseColony();
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 
@@ -38,8 +39,6 @@ function runTimer(): void {
 }
 function suspendCode(): Boolean {
   console.log(Game.cpu.getUsed().toString().slice(0, 6) + "/" + Game.cpu.limit + " Used")
-
-
   if (Game.cpu.bucket < config.minBucket) {
     console.log("Checking Bucket! " + Game.cpu.bucket)
     console.log(Game.cpu.limit + " | tickLim " + Game.cpu.tickLimit)
@@ -51,8 +50,6 @@ function suspendCode(): Boolean {
   else {
     return false;
   }
-
-
 }
 function handler(): void {
   //checks if IsolatedVirtualMachine
