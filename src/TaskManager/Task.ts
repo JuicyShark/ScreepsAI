@@ -194,7 +194,6 @@ export abstract class Task implements ITask {
 	}
 
 	moveToTarget(range = this.settings.targetRange): number {
-		console.log("#1", this.creep)
 		return this.creep.moveTo(this.targetPos);
 	}
 
@@ -202,7 +201,6 @@ export abstract class Task implements ITask {
 	moveToNextPos(): number | undefined {
 		if (this.options.nextPos) {
 			let nextPos = derefRoomPosition(this.options.nextPos);
-			console.log("#2", this.creep)
 			return this.creep.moveTo(nextPos);
 		}
 	}

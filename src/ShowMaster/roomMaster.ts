@@ -1,26 +1,27 @@
 import * as creepMaster from '../ShowMaster/creepMaster';
-import * as config from "config"
-
+import * as magicianMaster from '../ShowMaster/magicianMaster';
+import { Colony } from '../Colony'
 
 
 //Exports Below
+/*export function delegateTimeSlots(room: Room): void {
+    if(room.playerHostiles != undefined) {
+
+    }
+    //getRoomNeedsInPriority
+}*/
+
 export function shotCaller(): void {
-
-
     var ColonyRooms = Object.entries(Memory.Colonies.ColonyRooms)
     ColonyRooms.forEach(function (value: [string, {}], index: number, array: [string, {}][]): void {
-        let room = Memory.Colonies.ColonyRooms[index];
+        var test = new Colony(1, this[value[0]].name, []);
         delegateToSpawns(this[value[0]])
         creepMaster.setCreepTasks()
-
     }, Game.rooms);
-
-    //return
 }
 
 export function delegateToSpawns(room: Room): void {
-
-    let creeps = _.values(Game.creeps) as Creep[];
+    let creeps = room.creeps as Creep[];
     // Separate creeps by role
     let harvesters = _.filter(creeps, creep => creep.name.includes('Harvester'));
     let upgraders = _.filter(creeps, creep => creep.name.includes('Upgrader'));
@@ -74,38 +75,3 @@ export function queToSpawn(spawn: StructureSpawn, spawnTask: spawnTask): any {
     return spawn.spawnNewCreep(spawnTask.body, spawnTask.type, spawnTask.room)
 
 }
-
-// Room Structures Prototype should be saving structures as room prototypes example:
-// testRoom.spawns = list of spawns available to that room
-// testRoom.spawns[0] should return the first spawn object in the said room
-
-/*export function initStructures(roomName: string): any {
-    let MemPath = Memory.Colonies.ColonyRooms;
-    let room = Game.rooms[roomName]
-    console.log(room, MemPath[roomName])
-    if (MemPath[roomName].structureIDs === undefined || MemPath[roomName].structureIDs.container === undefined || MemPath[roomName].structureIDs.controller.id === undefined) {
-        MemPath[roomName].structureIDs = [];
-        room.structures = room.find(FIND_MY_STRUCTURES);
-        let mem = MemPath[roomName].structureIDs;
-        for (var i = 0; i < room.structures.length; i++) {
-            if (room.structures[i].structureType == "tower") {
-                mem.Towers.push(room.structures[i].id)
-            }
-            if (room.structures[i].structureType == "spawn") {
-                mem.Spawns.push(room.structures[i].id)
-            }
-            if (room.structures[i].structureType == "extension") {
-                mem.Extensions.push(room.structures[i].id)
-            }
-            if (room.structures[i].structureType == "road") {
-                mem.Roads.push(room.structures[i].id)
-            }
-            if (room.structures[i].structureType == "container") {
-                if (room.structures[i] instanceof StructureContainer) {
-                    MemPath[roomName].structureIDs.Containers.push(room.structures[i].id)
-                }
-            }
-        }
-        mem.controller.id = room.controller.id;
-    }
-}*/

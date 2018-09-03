@@ -23,9 +23,12 @@ interface RoomPosition {
 }
 interface Room {
     print: string;
+    my: boolean;
     owner: string | undefined
     // Cached structures
     tombstones: Tombstone[];
+    creeps: Creep[];
+    creepsByRole: { [roleName: string]: Creep[] };
     drops: { [resourceType: string]: Resource[] };
     droppedEnergy: Resource[];
     droppedPower: Resource[];

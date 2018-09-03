@@ -14,7 +14,20 @@ function getUsername(): string {
 }
 
 export const MY_USERNAME: string = getUsername();
+export function MY_ALLY(): string {
+    let Team: [string, string] = [
+        "Juicy-Shark",
+        "CrazedGod"
+    ]
+    let MY_ALLY: string;
+    Team.forEach(function (usr) {
+        if (usr != MY_USERNAME) {
+            MY_ALLY = usr;
+        }
+    })
 
+    return MY_ALLY
+}
 //CPU BUCKET LIMITS
 export const minBucket: number = 3000;
 export const safeBucketLimit: number = 8000;
@@ -26,7 +39,8 @@ export function defaultColoniesMem(): Object {
     for (const i in Game.rooms) {
         let room = Game.rooms[i]
         let roomName: string = room.name
-        if (room.controller != undefined) {
+        console.log(room.my + " my room test ")
+        if (room.controller != undefined && room.my === true) {
             controllerLevel = room.controller.level;
         }
         myRooms = {
@@ -44,7 +58,7 @@ export function defaultColoniesMem(): Object {
 }
 
 export function getSpawns(room: Room): string {
-    let spawns = room.find(FIND_MY_SPAWNS);
+    var spawns = room.spawns;
     let output: string[] = []
     spawns.forEach(function (value: StructureSpawn, index: number, array: StructureSpawn[]) {
         if (spawns[index] != null) {
@@ -54,3 +68,4 @@ export function getSpawns(room: Room): string {
     })
     return output[0];
 }
+

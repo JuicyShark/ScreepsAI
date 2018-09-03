@@ -18,9 +18,8 @@ export function setCreepTasks(): void {
     let harvesters = _.filter(creeps, creep => creep.name.includes('Harvester'));
     let upgraders = _.filter(creeps, creep => creep.name.includes('Upgrader'));
     let builders = _.filter(creeps, creep => creep.name.includes('Builder'));
-    let lorrys = _.filter(creeps, creep => creep.name.includes('lorry'));
+    let lorrys = _.filter(creeps, creep => creep.name.includes('Lorry'));
     let patrollers = _.filter(creeps, creep => creep.name.includes('Patroller'));
-    //let spawn: StructureSpawn = Game.getObjectById(retreiveSpawnIDs(room)[0]);
 
 
     // Handle all roles, assigning each creep a new task if they are currently idle
@@ -44,28 +43,4 @@ export function setCreepTasks(): void {
             RoleLorry.newTask(lorry);
         }
     }
-
-
-
 }
-
-// Commented reason for removal under initSturctures
-/*export function retreiveSpawnIDs(room: Room): string[] {
-    let output: string[] = [];
-    var ColonyRooms = Object.keys(Memory.Colonies.ColonyRooms)
-    ColonyRooms.forEach(element => {
-        let roomSpawns = Memory.Colonies.ColonyRooms[element].structureIDs.Spawns
-        let checkSpawns = Object.values(roomSpawns).forEach(function (value: {}, index: number, array: {}[]): void {
-            if (roomSpawns[index] == "" || roomSpawns[index] == "null") {
-                //console.log("SpawnNothing! " + roomSpawns[index])
-            }
-            else {
-                //console.log("YAS BOI " + roomSpawns[index])
-                output.push(roomSpawns[index])
-            }
-        });
-    });
-
-    //returns  an array with up to 3 spawn structure IDs
-    return output
-}*/

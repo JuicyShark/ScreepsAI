@@ -33,6 +33,7 @@ interface IGlobalCache {
 }
 
 interface ICache {
+    creepsByColony: { [colonyName: string]: Creep[] };
     targets: { [ref: string]: string[] };
     outpostFlags: Flag[];
     build(): void;
