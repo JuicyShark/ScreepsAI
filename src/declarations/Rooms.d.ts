@@ -58,6 +58,9 @@ interface Room {
     sources: Source[];
     mineral: Mineral | undefined;
     constructionSites: ConstructionSite[];
+    initStructures: any;
+    structures: any;
+    initContainers: any;
 }
 interface SavedRoomObject {
     c: string; 	// coordinate name

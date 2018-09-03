@@ -1,6 +1,5 @@
 // Room prototypes - commonly used room properties and methods
 
-
 import { MY_USERNAME } from "config";
 
 // Logging =============================================================================================================

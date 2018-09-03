@@ -2,6 +2,7 @@
 import { RoleHarvester } from '../testRoles/harvester';
 import { RoleUpgrader } from '../testRoles/upgrader';
 import { RoleBuilder } from '../testRoles/builder';
+import { RoleLorry } from '../testRoles/lorry';
 
 export function runCreeps(): void {
     let creeps = _.values(Game.creeps) as Creep[];
@@ -14,7 +15,7 @@ export function setCreepTasks(): void {
 
     let creeps = _.values(Game.creeps) as Creep[];
     // Separate creeps by role
-    let workers = _.filter(creeps, creep => creep.name.includes('Worker'));
+    let harvesters = _.filter(creeps, creep => creep.name.includes('Harvester'));
     let upgraders = _.filter(creeps, creep => creep.name.includes('Upgrader'));
     let builders = _.filter(creeps, creep => creep.name.includes('Builder'));
     let lorrys = _.filter(creeps, creep => creep.name.includes('lorry'));
@@ -23,9 +24,9 @@ export function setCreepTasks(): void {
 
 
     // Handle all roles, assigning each creep a new task if they are currently idle
-    for (let worker of workers) {
-        if (worker.isIdle) {
-            RoleHarvester.newTask(worker);
+    for (let harvester of harvesters) {
+        if (harvester.isIdle) {
+            RoleHarvester.newTask(harvester);
         }
     }
     for (let upgrader of upgraders) {
@@ -38,6 +39,11 @@ export function setCreepTasks(): void {
             RoleBuilder.newTask(builder);
         }
     }
+    for (let lorry of lorrys) {
+        if (lorry.isIdle) {
+            RoleLorry.newTask(lorry);
+        }
+    }
 
 
 
@@ -47,7 +53,7 @@ export function retreiveSpawnIDs(room: Room): string[] {
     let output: string[] = [];
     var ColonyRooms = Object.keys(Memory.Colonies.ColonyRooms)
     ColonyRooms.forEach(element => {
-        let roomSpawns = Memory.Colonies.ColonyRooms[element].spawns
+        let roomSpawns = Memory.Colonies.ColonyRooms[element].structureIDs.Spawns
         let checkSpawns = Object.values(roomSpawns).forEach(function (value: {}, index: number, array: {}[]): void {
             if (roomSpawns[index] == "" || roomSpawns[index] == "null") {
                 //console.log("SpawnNothing! " + roomSpawns[index])

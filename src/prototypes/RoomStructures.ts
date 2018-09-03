@@ -1,17 +1,17 @@
 // Intra- and inter-tick structure caching, adapted from semperRabbit's IVM module
 
-import {getCacheExpiration} from '../utils/helperFunctions';
+import { getCacheExpiration } from '../utils/helperFunctions';
 
 var roomStructureIDs: { [roomName: string]: { [structureType: string]: string[] } } = {};
 var roomStructuresExpiration: { [roomName: string]: number } = {};
 
 const multipleList = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_ROAD, STRUCTURE_WALL,
 	STRUCTURE_RAMPART, STRUCTURE_KEEPER_LAIR, STRUCTURE_PORTAL, STRUCTURE_LINK,
-    STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_CONTAINER, STRUCTURE_POWER_BANK
+	STRUCTURE_TOWER, STRUCTURE_LAB, STRUCTURE_CONTAINER, STRUCTURE_POWER_BANK
 ];
 
 const singleList = [
-        STRUCTURE_OBSERVER, STRUCTURE_POWER_SPAWN, STRUCTURE_EXTRACTOR, STRUCTURE_NUKER
+	STRUCTURE_OBSERVER, STRUCTURE_POWER_SPAWN, STRUCTURE_EXTRACTOR, STRUCTURE_NUKER
 ];
 
 const notRepairable: string[] = [STRUCTURE_KEEPER_LAIR, STRUCTURE_PORTAL, STRUCTURE_POWER_BANK];
@@ -22,21 +22,21 @@ Room.prototype._refreshStructureCache = function () {
 		|| Game.time > roomStructuresExpiration[this.name]) {
 		roomStructuresExpiration[this.name] = getCacheExpiration(50);
 		roomStructureIDs[this.name] = _.mapValues(_.groupBy(this.find(FIND_STRUCTURES),
-															(s: Structure) => s.structureType),
-												  (structures: Structure[]) => _.map(structures, s => s.id));
+			(s: Structure) => s.structureType),
+			(structures: Structure[]) => _.map(structures, s => s.id));
 	}
 };
 
 multipleList.forEach(function (type) {
 	Object.defineProperty(Room.prototype, type + 's', {
-		get         : function () {
+		get: function () {
 			if (this['_' + type + 's']) {
 				return this['_' + type + 's'];
 			} else {
 				this._refreshStructureCache();
 				if (roomStructureIDs[this.name][type]) {
 					return this['_' + type + 's'] = _.compact(_.map(roomStructureIDs[this.name][type],
-																	Game.getObjectById));
+						Game.getObjectById));
 				} else {
 					return this['_' + type + 's'] = [];
 				}
@@ -48,7 +48,7 @@ multipleList.forEach(function (type) {
 
 singleList.forEach(function (type) {
 	Object.defineProperty(Room.prototype, type, {
-		get         : function () {
+		get: function () {
 			if (this['_' + type]) {
 				return this['_' + type];
 			} else {
@@ -101,7 +101,7 @@ Object.defineProperty(Room.prototype, 'repairables', {
 			this._refreshStructureCache();
 			if (roomStructureIDs[this.name]['repairables']) {
 				return this._repairables = _.compact(_.map(roomStructureIDs[this.name]['repairables'],
-														   Game.getObjectById));
+					Game.getObjectById));
 			} else {
 				let repairables: Structure[] = [];
 				for (let structureType of singleList) {
@@ -131,4 +131,6 @@ Object.defineProperty(Room.prototype, 'walls', {
 	},
 	configurable: true,
 });
+
+
 

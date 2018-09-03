@@ -15,7 +15,7 @@ export class RoleHarvester {
                 creep.task = Tasks.harvest(sources[0]);
             }
         } else {
-            let spawn = creep.pos.findClosestByRange(FIND_MY_SPAWNS);
+            let spawn = Memory.Colonies.ColonyRoom[creep.pos.roomName].structureIDs.Spawns[0];
             if (spawn != undefined) {
                 creep.task = Tasks.transfer(spawn);
             }
