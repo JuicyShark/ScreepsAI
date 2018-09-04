@@ -1,4 +1,4 @@
-import { nameGen } from "../utils/nameGen";
+import { nameGen } from "utils/personality/nameGen";
 StructureSpawn.prototype.spawnNewCreep = function (bodyParts: any, role: string, home: string): void {
 
     let newName = nameGen(role);

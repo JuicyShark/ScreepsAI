@@ -21,6 +21,13 @@ Object.defineProperty(RoomPosition.prototype, 'neighbors', {
 		return adjPos;
 	}
 });
+Object.defineProperty(RoomPosition.prototype, 'coordName', { // name, but without the roomName
+	get: function () {
+		return this.x + ':' + this.y;
+	},
+	configurable: true,
+});
+
 
 RoomPosition.prototype.isPassible = function (ignoreCreeps = false): boolean {
 	// Is terrain passable?
@@ -29,11 +36,11 @@ RoomPosition.prototype.isPassible = function (ignoreCreeps = false): boolean {
 		// Are there creeps?
 		if (ignoreCreeps == false && this.lookFor(LOOK_CREEPS).length > 0) return false;
 		// Are there structures?
-		let impassibleStructures = _.filter(this.lookFor(LOOK_STRUCTURES), function (this:any, s: Structure) {
+		let impassibleStructures = _.filter(this.lookFor(LOOK_STRUCTURES), function (this: any, s: Structure) {
 			return this.structureType != STRUCTURE_ROAD &&
-				   s.structureType != STRUCTURE_CONTAINER &&
-				   !(s.structureType == STRUCTURE_RAMPART && ((<StructureRampart>s).my ||
-															  (<StructureRampart>s).isPublic));
+				s.structureType != STRUCTURE_CONTAINER &&
+				!(s.structureType == STRUCTURE_RAMPART && ((<StructureRampart>s).my ||
+					(<StructureRampart>s).isPublic));
 		});
 		return impassibleStructures.length == 0;
 	}
@@ -42,4 +49,9 @@ RoomPosition.prototype.isPassible = function (ignoreCreeps = false): boolean {
 
 RoomPosition.prototype.availableNeighbors = function (ignoreCreeps = false): RoomPosition[] {
 	return _.filter(this.neighbors, pos => pos.isPassible(ignoreCreeps));
+};
+RoomPosition.prototype.findClosestByLimitedRange = function <T>(objects: T[] | RoomPosition[], rangeLimit: number,
+	opts?: { filter: any | string; }): T | undefined {
+	let objectsInRange = this.findInRange(objects, rangeLimit, opts);
+	return this.findClosestByRange(objectsInRange, opts);
 };

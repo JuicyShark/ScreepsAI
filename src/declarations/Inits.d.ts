@@ -26,7 +26,7 @@ interface IGlobalCache {
     structures: { [key: string]: Structure[] };
     numbers: { [key: string]: number };
     lists: { [key: string]: any[] };
-    costMatrices: { [key: string]: CostMatrix };
+    costMatrixes: { [key: string]: CostMatrix };
     roomPositions: { [key: string]: RoomPosition | undefined };
     things: { [key: string]: undefined | HasID | HasID[] };
     // objects: { [key: string]: Object };

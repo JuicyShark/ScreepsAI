@@ -11,10 +11,13 @@ import * as config from "config";
 import * as showMaster from "ShowMaster/ShowMaster";
 import profiler from './utils/screeps-profiler';
 import { createBaseColony } from './Colony'
+import { RoomBrain } from './ShowMaster/roomMaster';
 
 
 profiler.enable();
-createBaseColony();
+if (Game.colonies === undefined) {
+  createBaseColony();
+}
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 
@@ -59,14 +62,25 @@ function handler(): void {
   }
   //suspendCode?
   Memory.suspend = suspendCode()
-  //runTimer
-  runTimer()
+  if (Memory.suspend === false) {
+    //runTimer
+    main()
+
+  }
+  for (const name in Memory.creeps) {
+    if (!(name in Game.creeps)) {
+      delete Memory.creeps[name];
+    }
+  }
 }
 
-
-
+function main(): void {
+  runTimer()
+  RoomBrain.run();
+}
 //GameLoop
 export const loop = ErrorMapper.wrapLoop(() => {
+
   profiler.wrap(handler);
 
 });

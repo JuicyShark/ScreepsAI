@@ -215,3 +215,46 @@ Object.defineProperty(Room.prototype, 'droppedPower', {
     configurable: true,
 });
 
+//Kodies Movein shit
+
+Room.prototype.createRoomTask = function (roomTask: RoomTask) {
+    var roomTask: RoomTask = {
+        name: roomTask.name,
+        roomOrder: roomTask.roomOrder,
+        priority: roomTask.priority,
+        details: roomTask.details
+    };
+    var duplicateTask: any = null;
+
+    for (var i = 0; i < Memory.Colonies.ColonyRooms[i].taskList.length; i++) {
+        if (duplicateTask == true) {
+            break;
+        }
+        if (Memory.Colonies.ColonyRooms[i].taskList[i].details == roomTask.details) {
+            duplicateTask = true;
+
+        }
+    }
+    if (duplicateTask != true) {
+        Memory.Colonies.ColonyRooms[i].taskList.push(roomTask)
+    }
+}
+
+Room.prototype.filterRoomTask = function (roomOrder: string): any {
+    this.memory.taskList.sort(function (a, b): number {
+        if (a.priority < b.priority) {
+            return -1;
+        }
+        if (a.priority > b.priority) {
+            return 1;
+        }
+        return 0;
+    })
+    for (var i = 0; i < this.memory.taskList.length; i++) {
+        if (Memory.Colonies.ColonyRooms[this].taskList[i].roomOrder == roomOrder) {
+            var filteredTask = this.memory.taskList[i]
+            Memory.Colonies.ColonyRooms[this].taskList.splice(i, 1);
+            return filteredTask;
+        }
+    }
+}

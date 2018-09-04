@@ -6,7 +6,7 @@ declare namespace NodeJS {
 		_cache: IGlobalCache;
 
 		__VERSION__: string;
-
+		BaseColony: Colony;
 		print(...args: any[]): void;
 
 		deref(ref: string): RoomObject | null;

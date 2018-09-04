@@ -3,17 +3,12 @@ export function getAllColonies() {
 
 }
 
-interface ColonyMemory {
-
-}
-
-const defaultColonyMemory: ColonyMemory = {
-
-}
 export function createBaseColony(): void {
+  Game.colonies = [];
   for (var i in Game.rooms) {
     var room = Game.rooms[i];
-    global.BaseColony = new Colony(1, room.name, room.memory.outposts);
+    var BaseColony = new Colony(1, room.name, room.memory.outposts);
+    Game.colonies.push(BaseColony)
     break;
   }
 }
@@ -35,7 +30,6 @@ export class Colony {
     this.id = id;
     this.name = roomName;
     this.ref = roomName;
-
     this.build(roomName, outposts)
   }
 

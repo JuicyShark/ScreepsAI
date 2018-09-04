@@ -10,7 +10,7 @@ export class RoleBuilder {
             if (unattendedSource) {
                 creep.task = Tasks.harvest(unattendedSource);
             } else {
-                creep.task = Tasks.harvest(sources[0]);
+                creep.task = Tasks.withdraw(creep.room.containers[0], RESOURCE_ENERGY, creep.carryCapacity - creep.carry.energy)
             }
         } else {
             let site = creep.room.constructionSites[0]

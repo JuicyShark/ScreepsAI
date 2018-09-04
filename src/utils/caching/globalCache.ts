@@ -1,11 +1,11 @@
-import {getCacheExpiration} from '../helperFunctions';
+import { getCacheExpiration } from '../helperFunctions';
 
 const CACHE_TIMEOUT = 20;
 const SHORT_CACHE_TIMEOUT = 10;
 
-export class GlobalCache { 
+export class GlobalCache {
 	static structures<T extends Structure>(saver: { ref: string }, key: string, callback: () => T[],
-										   timeout = CACHE_TIMEOUT): T[] {
+		timeout = CACHE_TIMEOUT): T[] {
 		const cacheKey = saver.ref + 's' + key;
 		if (!_cache.structures[cacheKey] || Game.time > _cache.expiration[cacheKey]) {
 			// Recache if new entry or entry is expired
@@ -15,7 +15,7 @@ export class GlobalCache {
 			// Refresh structure list by ID if not already done on current tick
 			if ((_cache.accessed[cacheKey] || 0) < Game.time) {
 				_cache.structures[cacheKey] = _.compact(_.map(_cache.structures[cacheKey],
-															  s => Game.getObjectById(s.id))) as Structure[];
+					s => Game.getObjectById(s.id))) as Structure[];
 				_cache.accessed[cacheKey] = Game.time;
 			}
 		}
@@ -56,24 +56,24 @@ export class GlobalCache {
 	}
 
 	static costMatrix(roomName: string, key: string, callback: () => CostMatrix,
-					  timeout = SHORT_CACHE_TIMEOUT): CostMatrix {
+		timeout = SHORT_CACHE_TIMEOUT): CostMatrix {
 		const cacheKey = roomName + 'm' + key;
-		if (_cache.costMatrices[cacheKey] == undefined || Game.time > _cache.expiration[cacheKey]) {
+		if (_cache.costMatrixes[cacheKey] == undefined || Game.time > _cache.expiration[cacheKey]) {
 			// Recache if new entry or entry is expired
-			_cache.costMatrices[cacheKey] = callback();
+			_cache.costMatrixes[cacheKey] = callback();
 			_cache.expiration[cacheKey] = getCacheExpiration(timeout, Math.ceil(timeout / 10));
 		}
-		return _cache.costMatrices[cacheKey];
+		return _cache.costMatrixes[cacheKey];
 	}
 
 	static costMatrixRecall(roomName: string, key: string): CostMatrix | undefined {
 		let cacheKey = roomName + ':' + key;
-		return _cache.costMatrices[cacheKey];
+		return _cache.costMatrixes[cacheKey];
 	}
 
 	static set<T extends HasRef, K extends keyof T>(thing: T, key: K,
-													callback: () => (T[K] & (undefined | HasID | HasID[])),
-													timeout = CACHE_TIMEOUT): void {
+		callback: () => (T[K] & (undefined | HasID | HasID[])),
+		timeout = CACHE_TIMEOUT): void {
 		const cacheKey = thing.ref + '$' + key;
 		if (!_cache.things[cacheKey] || Game.time > _cache.expiration[cacheKey]) {
 			// Recache if new entry or entry is expired
@@ -84,7 +84,7 @@ export class GlobalCache {
 			if ((_cache.accessed[cacheKey] || 0) < Game.time) {
 				if (_.isArray(_cache.things[cacheKey])) {
 					_cache.things[cacheKey] = _.compact(_.map(_cache.things[cacheKey] as HasID[],
-															  s => Game.getObjectById(s.id))) as HasID[];
+						s => Game.getObjectById(s.id))) as HasID[];
 				} else {
 					_cache.things[cacheKey] = Game.getObjectById((<HasID>_cache.things[cacheKey]).id) as HasID;
 				}

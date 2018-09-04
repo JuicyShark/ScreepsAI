@@ -1,5 +1,10 @@
 type HasPos = { pos: RoomPosition }
-
+interface RoomTask {
+    name: string;
+    roomOrder: any;
+    priority: number;
+    details: Object;
+}
 interface RoomCoord {
     x: number;
     y: number;
@@ -22,6 +27,8 @@ interface RoomPosition {
         opts?: { filter: any | string; }): T | undefined;
 }
 interface Room {
+    createRoomTask: any;
+    filterRoomTask: any;
     print: string;
     my: boolean;
     owner: string | undefined
@@ -64,6 +71,7 @@ interface Room {
     initStructures: any;
     structures: any;
     initContainers: any;
+    executeRoom();
 }
 interface SavedRoomObject {
     c: string; 	// coordinate name
@@ -110,6 +118,10 @@ interface RoomMemory {
         ramparts: string[];
     } | undefined;
     expiration?: number;
+    prevPositions?: { [creepID: string]: protoPos };
+    lastSeen: number;
+    queue: any;
+
 }
 interface RoomObject {
     print: string;

@@ -5,6 +5,7 @@ interface Game {
         build(): void;
     };
     cache: ICache;
+    colonies: Colony[];
 }
 
 declare class GameChanger {

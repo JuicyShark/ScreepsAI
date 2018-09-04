@@ -1,4 +1,13 @@
+global.brain = {
+    stats: {},
+    main: {},
+};
 
+global.config = {
+    profiler: {
+        enabled: true
+    }
+}
 /**
  * Your username - you shouldn't need to change this.
  */
@@ -34,21 +43,24 @@ export const safeBucketLimit: number = 8000;
 
 //COLONIES STRUCTURE SETUP
 export function defaultColoniesMem(): Object {
+    function roomSpawnIDs(roomSpawns: StructureSpawn[]) {
+        let output: any = [];
+        roomSpawns.forEach(spawn => { output.push(spawn.id) })
+        return output;
+    }
 
     let myRooms, controllerLevel;
     for (const i in Game.rooms) {
         let room = Game.rooms[i]
-        let roomOutposts = room.memory.outposts;
         let roomName: string = room.name
-        console.log(room.my + " my room test ")
         if (room.controller != undefined && room.my === true && room.spawns != undefined) {
             controllerLevel = room.controller.level;
         }
         myRooms = {
             [roomName]: {
-                spawns: room.spawns,
+                spawns: roomSpawnIDs(room.spawns),
                 RoomLevel: [controllerLevel],
-                outposts: roomOutposts
+                outposts: room.memory.outposts
             }
         }
     }
