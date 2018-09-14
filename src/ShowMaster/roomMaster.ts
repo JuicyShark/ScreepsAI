@@ -244,7 +244,7 @@ export class RoomBrain {
         if (upgraders == undefined || upgraders.length < 1) {
             madeToOrder("Upgrader", room, null)
         }
-        if (builders == undefined || builders.length < 1) {
+        if (builders == undefined || builders.length < 4) {
             madeToOrder("Builder", room, null)
         }
 

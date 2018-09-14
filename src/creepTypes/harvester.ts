@@ -17,6 +17,9 @@ export class Harvester {
                 }
 
             }
+            else {
+                creep.task = Tasks.withdraw(unattendedContainer, RESOURCE_ENERGY, creep.carryCapacity - creep.carry.energy)
+            }
         }
         else if (creep.carry.energy == creep.carryCapacity) {
             let spawn = Game.rooms[creep.memory.home].spawns[0];
@@ -25,7 +28,9 @@ export class Harvester {
                 creep.task = Tasks.transfer(spawn);
             }
             else {
-
+                if (creep.room.controller.targetedBy.length == 0) {
+                    creep.task = Tasks.upgrade(Game.rooms[creep.memory.home].controller)
+                }
                 let containers = creep.room.containers;
                 let storage = creep.room.storage;
                 let extensions = creep.room.extensions;
