@@ -8,7 +8,7 @@ export class Harvester {
         if (creep.carry.energy == 0) {
             var unattendedContainer = _.filter(creep.room.containers, container => container.isEmpty != true && container.targetedBy.length <= 1)[0];
             if (unattendedContainer == null) {
-                let unattendedSource = _.filter(creep.room.sources, source => source.targetedBy.length <= 1)[1];
+                let unattendedSource = _.filter(creep.room.sources, source => source.targetedBy.length <= 1)[0];
                 if (!(!unattendedSource)) {
                     creep.task = Tasks.harvest(unattendedSource)
                 } else {
@@ -31,14 +31,10 @@ export class Harvester {
                 if (creep.room.controller.targetedBy.length == 0) {
                     creep.task = Tasks.upgrade(Game.rooms[creep.memory.home].controller)
                 }
-                let containers = creep.room.containers;
+
                 let storage = creep.room.storage;
                 let extensions = creep.room.extensions;
-
-                if (containers.length != 0) {
-                    creep.task = Tasks.transfer(containers[0]);
-                }
-                else if (storage != undefined) {
+                if (storage != undefined) {
                     creep.task = Tasks.transfer(storage);
                 }
                 else if (extensions.length != 0) {
