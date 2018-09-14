@@ -9,7 +9,7 @@ declare class Colony {
     rooms: Room[];
     pos: RoomPosition;
     creeps: Creep[];// Creeps bound to the colony
-    creepsByRole: { [roleName: string]: Creep[] };// Creeps hashed by their role name
+    creepsByType: { [typeName: string]: Creep[] };// Creeps hashed by their role name
     build(roomName: string, outposts: string[]): void;
 }
 

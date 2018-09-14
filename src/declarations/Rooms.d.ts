@@ -35,7 +35,7 @@ interface Room {
     // Cached structures
     tombstones: Tombstone[];
     creeps: Creep[];
-    creepsByRole: { [roleName: string]: Creep[] };
+    creepsByType: { [roleName: string]: Creep[] };
     drops: { [resourceType: string]: Resource[] };
     droppedEnergy: Resource[];
     droppedPower: Resource[];
@@ -72,6 +72,10 @@ interface Room {
     structures: any;
     initContainers: any;
     executeRoom();
+    queToSpawn(spawn: StructureSpawn, spawnTask: spawnTask);
+    spawnList: any[];
+    roomType: string;
+    isOutpost: Boolean | null;
 }
 interface SavedRoomObject {
     c: string; 	// coordinate name
@@ -121,6 +125,8 @@ interface RoomMemory {
     prevPositions?: { [creepID: string]: protoPos };
     lastSeen: number;
     queue: any;
+    timer: number;
+    suspended: boolean;
 
 }
 interface RoomObject {

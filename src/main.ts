@@ -8,38 +8,17 @@ import 'prototypes/Spawn';
 import { ErrorMapper } from "utils/ErrorMapper";
 import { isIVM } from "utils/helperFunctions";
 import * as config from "config";
-import * as showMaster from "ShowMaster/ShowMaster";
 import profiler from './utils/screeps-profiler';
-import { createBaseColony } from './Colony'
+import { checkColonys } from './Colony'
 import { RoomBrain } from './ShowMaster/roomMaster';
+import { setCreepTasks } from './ShowMaster/creepMaster';
 
 
 profiler.enable();
-if (Game.colonies === undefined) {
-  createBaseColony();
-}
+
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 
-function runTimer(): void {
-
-  if (!Memory.timer || Memory.timer == 0) {
-    Memory.timer = 60;
-  }
-
-
-
-  if (Memory.suspend != true) {
-    //If not Suspended then organise
-
-
-    showMaster.organiseTimes();
-
-    console.log("Timer " + Memory.timer)
-    --Memory.timer;
-
-  }
-}
 function suspendCode(): Boolean {
   console.log(Game.cpu.getUsed().toString().slice(0, 6) + "/" + Game.cpu.limit + " Used")
   if (Game.cpu.bucket < config.minBucket) {
@@ -62,10 +41,8 @@ function handler(): void {
   }
   //suspendCode?
   Memory.suspend = suspendCode()
-  if (Memory.suspend === false) {
-    //runTimer
+  if (Memory.suspend != true) {
     main()
-
   }
   for (const name in Memory.creeps) {
     if (!(name in Game.creeps)) {
@@ -75,8 +52,35 @@ function handler(): void {
 }
 
 function main(): void {
-  runTimer()
-  RoomBrain.run();
+  if (Game.colonies == undefined || Game.colonies === null) {
+    //console.log("ITS UNDEFINED")
+    Game.colonies = [];
+    if (!Memory.Colonies) {
+      Memory.Colonies = [];
+    }
+    //console.log(JSON.stringify(Game.colonies))
+    checkColonys();
+    //console.log(Game.colonies + " After")
+    //console.log(Game.colonies.length + " IS LENGTH OF COLONIES")
+  }
+
+
+  if (Game.colonies.length >= 1) {
+    RoomBrain.run();
+    for (let i in Game.colonies) {
+      let Colony = Game.colonies[i];
+      console.log("====")
+      console.log("Colony ID: " + Colony.id)
+      console.log("Colony Name: " + Colony.name)
+      setCreepTasks(Colony)
+      RoomBrain.runTimer(Colony)
+    }
+
+  } else {
+    console.log("Nothings good with the Colonies ATM D:")
+    console.log("Colony Object :" + JSON.stringify(Game.colonies))
+  }
+
 }
 //GameLoop
 export const loop = ErrorMapper.wrapLoop(() => {

@@ -59,7 +59,7 @@ export function defaultColoniesMem(): Object {
         myRooms = {
             [roomName]: {
                 spawns: roomSpawnIDs(room.spawns),
-                RoomLevel: [controllerLevel],
+                RoomLevel: controllerLevel,
                 outposts: room.memory.outposts
             }
         }
@@ -69,6 +69,37 @@ export function defaultColoniesMem(): Object {
         ColonySize: 1,
         ColonyRooms: myRooms
     }
+}
+
+
+export var creepTypes: string[] = [
+    "Harvester",
+    "Builder",
+    "Upgrader",
+    "Miner",
+    "Lorry"
+]
+export var roomTypes: string[] = [
+    "ColonyHub",
+    "Basic",
+    "Spawner",
+    "Highway",
+    "Outpost"
+]
+
+export function configCreepTypes(type: string): string {
+
+    let creepTypeSelected: string = "";
+    if (creepTypeSelected != "") {
+        return creepTypeSelected
+    }
+    creepTypes.forEach(function (value: string, index: number, array: string[]) {
+        if (value == type) {
+            creepTypeSelected = value;
+
+        }
+    })
+
 }
 
 

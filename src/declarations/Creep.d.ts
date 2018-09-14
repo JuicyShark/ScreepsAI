@@ -14,4 +14,5 @@ interface CreepMemory {
     type: string;
     _trav: object;
     colony: string;
+    home: string;
 }

@@ -1,6 +1,7 @@
 import * as creepMaster from '../ShowMaster/creepMaster';
 import { getCacheExpiration, derefRoomPosition } from '../utils/helperFunctions';
 import { Colony } from '../Colony'
+import { configCreepTypes, creepTypes, roomTypes } from 'config'
 import { ConversationStarter } from '../utils/personality/creepConversation'
 
 
@@ -45,67 +46,17 @@ export function handleExternalRoom(room: Room) {
     }
 }
 
-export function shotCaller(): void {
-    for (var i in Game.colonies) {
-        var colony = Game.colonies[i]
-        delegateToSpawns(colony)
-        creepMaster.setCreepTasks(colony)
-        //ConversationStarter(colony.rooms[0]);
-    }
-}
-
 export function delegateToSpawns(colony: Colony): void {
     // Separate creeps by role
-    let harvesters: Creep[] | undefined = colony.creepsByRole.Harvester;
-    let upgraders: Creep[] | undefined = colony.creepsByRole.Upgrader;
-    let builders: Creep[] | undefined = colony.creepsByRole.Builder;
-    let lorrys: Creep[] | undefined = colony.creepsByRole.Lorry;
+    var harvesters: Creep[] | undefined = colony.creepsByType.Harvester;
+    var upgraders: Creep[] | undefined = colony.creepsByType.Upgrader;
+    var builders: Creep[] | undefined = colony.creepsByType.Builder;
+    var lorrys: Creep[] | undefined = colony.creepsByType.Lorry;
+
     //let patrollers: Creep[] | undefined = colony.creepsByRole.Patroller;
     let spawn: StructureSpawn | null = colony.room.spawns[0];
     // Spawn creeps as needed
-    if (spawn != null) {
-        let type: string;
-        let spawnTask;
-        if (harvesters == undefined || harvesters.length < 1) {
-            type = 'Harvester';
-            spawnTask = {
-                type: type,
-                body: [WORK, CARRY, MOVE],
-                room: spawn.room.name
-            }
-            queToSpawn(spawn, spawnTask)
-        } else if (upgraders == undefined || upgraders.length < 3) {
-            type = 'Upgrader';
-            spawnTask = {
-                type: type,
-                body: [WORK, CARRY, MOVE],
-                room: spawn.room.name
-            }
-            queToSpawn(spawn, spawnTask)
-        } else if (builders == undefined || builders.length < 1) {
-            type = 'Builder';
-            spawnTask = {
-                type: type,
-                body: [WORK, CARRY, MOVE],
-                room: spawn.room.name
-            }
-            queToSpawn(spawn, spawnTask);
-        } else if (lorrys == undefined || lorrys.length < 1) {
-            type = 'Lorry';
-            spawnTask = {
-                type: type,
-                body: [CARRY, CARRY, MOVE],
-                room: spawn.room.name
-            }
-            queToSpawn(spawn, spawnTask);
-        } else { console.log("All Spawned") }
-    }
 
-}
-
-export function queToSpawn(spawn: StructureSpawn, spawnTask: spawnTask): any {
-
-    return spawn.spawnNewCreep(spawnTask.body, spawnTask.type, spawnTask.room)
 
 }
 
@@ -117,10 +68,10 @@ export class RoomBrain {
     /* Records all info for permanent room objects, e.g. sources, controllers, etc. */
     private static recordPermanentObjects(room: Room): void {
         let savedSources: SavedSource[] = [];
-        console.log(`${room.sources}`)
+        //console.log(`${room.sources}`)
         for (let source of room.sources) {
             let container = source.pos.findClosestByLimitedRange(room.containers, 2);
-            console.log(`${container}`)
+            //console.log(`${container}`)
             savedSources.push({
                 c: source.pos.coordName,
                 contnr: container ? container.pos.coordName : undefined
@@ -177,9 +128,142 @@ export class RoomBrain {
         }
     }
 
+    static runTimer(Colony: Colony): void {
+        var room: Room = Colony.room
+
+        if (!room.memory.timer || room.memory.timer == 0) {
+            room.memory.timer = 60;
+        }
+
+        //needAlertLevelLogic
+
+        if (room.memory.timer % 6 === 0) {
+
+            //dothangs
+            //maybs spawn thangs
+
+        }
+        if (room.memory.timer % 12 === 0) {
+            this.spawnTaskChecker(room)
+        }
+        //do things every roomTick
+        console.log("Current spawnList :" + "===" + JSON.stringify(room.spawnList, null, " ") + "====")
+        //console.log(JSON.stringify(room.creepsByType.harvesters) + " CREEPS")
+        creepMaster.runCreeps()
+
+
+        console.log(room.name + " Timer: " + room.memory.timer)
+        room.memory.timer--
+    }
+
+    static spawnTaskChecker(room: Room) {
+        if (room.energyAvailable == room.energyCapacityAvailable) {
+            for (let i in room.spawns) {
+                if (room.spawns[i] instanceof StructureSpawn) {
+                    var isSpawning = room.spawns[i].spawning;
+                    if (isSpawning == null || isSpawning == undefined) {
+                        if (room.spawnList != undefined && room.spawnList.length != 0) {
+                            let spawnTask: spawnTask = Object.entries(room.spawnList)[0][1]
+                            room.spawns[i].spawnNewCreep(spawnTask)
+                            break;
+
+                        }
+                        else if (room.spawnList != undefined && room.spawnList.length == 0) {
+                            console.log("hello, im a free spawn!! :D")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static spawnTaskAssigner(room: Room): void {
+        if (room.energyAvailable == room.energyCapacityAvailable) {
+            this.spawnerGo(room)
+        }
+
+
+    }
+
+    static spawnerGo(room: Room): void {
+        var defaultBod = ["work", "carry", "move"];
+
+        //madeToOrder Will take anything that isnt "" or undefined including lowerCase thangs
+        function madeToOrder(type: string, room: Room, outpost: string | null): void {
+            if (type != undefined) {
+                var spawnTask: spawnTask = {
+                    gameTime: Game.time,
+                    type: type,
+                    body: defaultBod,
+                    Destination: room.name,
+                    CreatedBy: room.name
+                }
+                if (outpost != null) {
+                    spawnTask.Destination = outpost;
+                }
+
+            }
+            //here we check to see if the type is an actual type ready for deployment. (in the config file)
+            if (type == configCreepTypes(type)) {
+                spawnTask.type = type;
+                spawnTask.Destination = room.name;
+            }
+            if (spawnTask != undefined) {
+                //Pushes the spawnTask to the que
+                room.spawns[0].addToQue(spawnTask)
+            }
+
+        }
+        var thisColony = function (): Colony {
+
+            if (Game.colonies == undefined || Game.colonies.length == 0) {
+                return
+            }
+            else {
+                //let output: | undefined;
+                for (let i in Game.colonies) {
+                    if (Game.colonies[i].name == room.name) {
+                        return Game.colonies[i]
+                    }
+
+                }
+            }
+
+        }
+        var harvesters: Creep[] | undefined = thisColony().creepsByType.Harvester
+        var upgraders: Creep[] | undefined = thisColony().creepsByType.Upgrader
+        var builders: Creep[] | undefined = thisColony().creepsByType.Builder
+
+        if (room.creeps.length == 0) {
+            madeToOrder("Harvester", room, null)
+        }
+
+        if (harvesters != undefined && harvesters.length < room.sources.length) {
+            madeToOrder("Harvester", room, null)
+        }
+        if (upgraders == undefined || upgraders.length < 1) {
+            madeToOrder("Upgrader", room, null)
+        }
+        if (builders == undefined || builders.length < 1) {
+            madeToOrder("Builder", room, null)
+        }
+
+        //kodie flesh this out..
+
+    }
+
+    static runType(room: Room, roomType: string) {
+        if (roomType == "ColonyHub") {
+            this.spawnTaskAssigner(room)
+        }
+
+
+    }
+
     static run(): void {
         for (let name in Game.rooms) {
             const room = Game.rooms[name];
+            let roomType = room.roomType
 
             // Record location of permanent objects in room and recompute score as needed
             if (!room.memory.expiration || Game.time > room.memory.expiration) {
@@ -189,6 +273,14 @@ export class RoomBrain {
                 let recacheTime = room.owner ? OWNED_RECACHE_TIME : RECACHE_TIME;
                 room.memory.expiration = getCacheExpiration(recacheTime, 250);
             }
+
+            //checking for type of room
+            for (let i in roomTypes) {
+                if (roomType == roomTypes[i]) {
+                    this.runType(room, roomTypes[i])
+                }
+            }
+            //what else can we put in here?
 
         }
     }

@@ -1,5 +1,5 @@
 import { initializeTask } from '../utils/initializer';
-import { TargetCache } from '../utils/caching/task_cache';
+import { TargetCache } from '../utils/caching/gameCache';
 
 Object.defineProperty(Creep.prototype, 'task', {
     get() {

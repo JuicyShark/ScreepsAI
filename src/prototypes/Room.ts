@@ -41,6 +41,35 @@ Object.defineProperty(Room.prototype, 'signedByMe', {
     configurable: true,
 });
 
+//KODIES STUFF
+Object.defineProperty(Room.prototype, 'roomType', {
+    get() {
+        var colony = Game.colonies[0]
+        if (colony != undefined && colony.name != undefined) {
+            if (this.name == colony.name) {
+                return "ColonyHub"
+            }
+        }
+        else if (Game.colonies.length == 0) {
+            return "ColonyHub"
+        }
+        else {
+            return "Outpost"
+        }
+    },
+    configurable: true,
+})
+Object.defineProperty(Room.prototype, 'isOutpost', {
+    get(): Boolean {
+
+        if (this.roomType == "Outpost") {
+            return true
+        } else { return false }
+
+    },
+    configurable: true,
+})
+
 // Room properties: creeps =============================================================================================
 
 // Creeps physically in the room
@@ -54,8 +83,21 @@ Object.defineProperty(Room.prototype, 'creeps', {
     configurable: true,
 });
 
+//Kodie Shit---------------
+
+Room.prototype.spawnList = [];
+
+Object.defineProperty(Room.prototype, 'creepsByType', {
+    get() {
+        let output = _.groupBy(this.creeps, function (creep: Creep) { return creep.memory.type });
+        return output
 
 
+
+    },
+    configurable: true,
+
+})
 
 // Room properties: hostiles ===========================================================================================
 
@@ -239,7 +281,7 @@ Room.prototype.createRoomTask = function (roomTask: RoomTask) {
         Memory.Colonies.ColonyRooms[i].taskList.push(roomTask)
     }
 }
-
+/*
 Room.prototype.filterRoomTask = function (roomOrder: string): any {
     this.memory.taskList.sort(function (a, b): number {
         if (a.priority < b.priority) {
@@ -257,4 +299,4 @@ Room.prototype.filterRoomTask = function (roomOrder: string): any {
             return filteredTask;
         }
     }
-}
+}*/

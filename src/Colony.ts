@@ -3,14 +3,46 @@ export function getAllColonies() {
 
 }
 
-export function createBaseColony(): void {
-  Game.colonies = [];
-  for (var i in Game.rooms) {
-    var room = Game.rooms[i];
-    var BaseColony = new Colony(1, room.name, room.memory.outposts);
-    Game.colonies.push(BaseColony)
-    break;
+
+export function checkColonys(): void {
+
+  let myRooms = Object.values(Game.rooms);
+  const gameColony = Game.colonies;
+  console.log(myRooms.length + " RoomLength")
+
+  for (var i = 0; i < myRooms.length; i++) {
+
+    var room = Game.rooms[myRooms[i].name];
+    console.log(room.name + " " + room.roomType + " " + room.spawnList.length)
+    var roomType = room.roomType;
+    var isOutpost = room.isOutpost;
+    var NextColonyID: number = Game.colonies.length + 1
+
+    //first Colony Setup. AKA First Room?
+    if (Game.colonies.length == 0) {
+      //What do with first Colony
+      var BaseColony = new Colony(NextColonyID, room.name, room.memory.outposts);
+      gameColony.push(BaseColony)
+      if (Memory.Colonies.length == 0) {
+        Memory.Colonies.push(
+          {
+            ID: NextColonyID,
+            roomName: room.name
+          })
+      }
+      break;
+
+    }
+    else if (NextColonyID == 2 && Game.colonies.length == 1) {
+      //Check if its an outpost.
+      console.log(room.name + " Outpost?")
+    }
+
+
   }
+
+  // highway, spawner, outpost, basic
+
 }
 
 export class Colony {
@@ -24,7 +56,7 @@ export class Colony {
   rooms: Room[];
   pos: RoomPosition;
   creeps: Creep[];// Creeps bound to the colony
-  creepsByRole: { [roleName: string]: Creep[] };// Creeps hashed by their role name
+  creepsByType: { [typeName: string]: Creep[] };// Creeps hashed by their role name
 
   constructor(id: number, roomName: string, outposts: string[]) {
     this.id = id;
@@ -39,7 +71,6 @@ export class Colony {
     this.outposts = _.compact(_.map(outposts, outpost => Game.rooms[outpost]))
     this.rooms = [this.room].concat(this.outposts)
     this.creeps = Game.rooms[roomName].creeps || [];
-    this.creepsByRole = _.groupBy(this.creeps, creep => creep.memory.role);
-
+    this.creepsByType = _.groupBy(this.creeps, creep => creep.memory.type);
   }
 }
