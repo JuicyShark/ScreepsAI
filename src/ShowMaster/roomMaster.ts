@@ -114,6 +114,7 @@ export class RoomBrain {
 
   }
 
+
   static runTimer(Colony: Colony): void {
     var room: Room = Colony.room
 
@@ -125,7 +126,6 @@ export class RoomBrain {
     if (!room.memory.timer || room.memory.timer == 0) {
       room.memory.timer = 60;
     }
-
     //needAlertLevelLogic
 
     if (room.memory.timer % 12 === 0) {
@@ -160,29 +160,39 @@ export class RoomBrain {
 
 
   static spawnTaskChecker(room: Room) {
-    if (room.energyAvailable == room.energyCapacityAvailable) {
-      for (let i in room.spawns) {
-        if (room.spawns[i] instanceof StructureSpawn) {
-          var isSpawning = room.spawns[i].spawning;
-          if (isSpawning == null || isSpawning == undefined) {
-            if (room.spawnList != undefined && room.spawnList.length != 0) {
-              let spawnTask: spawnTask = Object.entries(room.spawnList)[0][1]
-              room.spawns[i].spawnNewCreep(spawnTask)
-              break;
 
-            }
-            else if (room.spawnList != undefined && room.spawnList.length == 0) {
-              // console.log("hello, im a free spawn!! :D")
-            }
+    for (let i in room.spawns) {
+      if (room.spawns[i] instanceof StructureSpawn) {
+        var isSpawning = room.spawns[i].spawning;
+        if (isSpawning == null || isSpawning == undefined) {
+          if (room.spawnList != undefined && room.spawnList.length != 0) {
+            let spawnTask: spawnTask = Object.entries(room.spawnList)[0][1]
+            room.spawns[i].spawnNewCreep(spawnTask)
+            break;
+
+          }
+          else if (room.spawnList != undefined && room.spawnList.length == 0) {
+            room.memLog = ("Not Spawning " + room.name)
           }
         }
       }
     }
+
   }
 
 
   static spawnerGo(room: Room): void {
-    var defaultBod = ["work", "carry", "move"];
+    var defaultBod: string[];
+
+    if (room.energyCapacityAvailable == 300) {
+      defaultBod = ["work", "work", "carry", "move"];
+    }
+    else if (room.energyCapacityAvailable == 350 && room.creeps.length >= 1) {
+      defaultBod = ["work", "work", "carry", "carry", "move"];
+    }
+    else if (room.creeps.length == 0) {
+      defaultBod = ["work", "work", "carry", "move"]
+    }
     var thisColony = function (): Colony {
 
       if (Game.colonies == undefined || Game.colonies.length == 0) {
@@ -282,9 +292,7 @@ export class RoomBrain {
 
 
   static spawnTaskAssigner(room: Room): void {
-    if (room.energyAvailable == room.energyCapacityAvailable) {
-      this.spawnerGo(room)
-    }
+    this.spawnerGo(room)
   }
 
 
