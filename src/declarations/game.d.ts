@@ -12,3 +12,4 @@ declare class GameChanger {
 
 }
 type Colonies = Colony[];
+

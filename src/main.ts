@@ -1,4 +1,5 @@
 import 'prototypes/Room';
+import 'prototypes/Sources';
 import 'prototypes/Creep';
 import 'prototypes/RoomObject'; // RoomObject
 import 'prototypes/RoomPosition'; // RoomPosition

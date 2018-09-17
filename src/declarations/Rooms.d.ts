@@ -11,6 +11,7 @@ interface RoomCoord {
     xDir: string;
     yDir: string;
 }
+
 interface RoomPosition {
     get: any;
     print: string;
@@ -27,6 +28,7 @@ interface RoomPosition {
         opts?: { filter: any | string; }): T | undefined;
 }
 interface Room {
+    memLog(): void;
     createRoomTask: any;
     filterRoomTask: any;
     print: string;
@@ -50,6 +52,8 @@ interface Room {
     ramparts: StructureRampart[];
     walkableRamparts: StructureRampart[];
     barriers: (StructureWall | StructureRampart)[];
+    hostileStructures: Structure[];
+    _hostileStructures: Structure[];
     //storageUnits: StorageUnit[];
     keeperLairs: StructureKeeperLair[];
     portals: StructurePortal[];
@@ -71,11 +75,29 @@ interface Room {
     initStructures: any;
     structures: any;
     initContainers: any;
+    //Extras
+    flags: Flag[];
+    _flags: Flag[];
     executeRoom();
     queToSpawn(spawn: StructureSpawn, spawnTask: spawnTask);
     spawnList: any[];
     roomType: string;
     isOutpost: Boolean | null;
+    hostiles: Creep[];
+    _hostiles: Creep[];
+    invaders: Creep[];
+    _invaders: Creep[];
+    sourceKeepers: Creep[];
+    _sourceKeepers: Creep[];
+    playerHostiles: Creep[];
+    _playerHostiles: Creep[];
+    dangerousHostiles: Creep[];
+    _dangerousHostiles: Creep[];
+    dangerousPlayerHostiles: Creep[];
+    _dangerousPlayerHostiles: Creep[];
+    fleeDefaults: Creep[];
+    _fleeDefaults: Creep[];
+
 }
 interface SavedRoomObject {
     c: string; 	// coordinate name
@@ -83,6 +105,7 @@ interface SavedRoomObject {
 
 interface SavedSource extends SavedRoomObject {
     contnr: string | undefined;
+    miner: boolean | undefined;
 }
 
 interface SavedController extends SavedRoomObject {
@@ -127,7 +150,6 @@ interface RoomMemory {
     queue: any;
     timer: number;
     suspended: boolean;
-
 }
 interface RoomObject {
     print: string;
@@ -135,5 +157,6 @@ interface RoomObject {
     ref: string;
     targetedBy: Creep[];
     serialize: any;
+
 
 }

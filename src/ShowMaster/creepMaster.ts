@@ -3,6 +3,7 @@ import { Harvester } from '../creepTypes/harvester';
 import { Upgrader } from '../creepTypes/upgrader';
 import { Builder } from '../creepTypes/builder';
 import { Lorry } from '../creepTypes/lorry';
+import { Miner } from '../creepTypes/miner';
 import { Colony } from '../Colony';
 
 // set up how testRoles var will be set up. role is how it can be identified and
@@ -14,6 +15,7 @@ let creepTypes = {
     ["Harvester"]: Harvester,
     ["Upgrader"]: Upgrader,
     ["Builder"]: Builder,
+    ["Miner"]: Miner,
     ["Lorry"]: Lorry
 }
 

@@ -11,6 +11,28 @@ Object.defineProperty(Room.prototype, 'print', {
     configurable: true,
 });
 
+Object.defineProperty(Room.prototype, 'memLog', {
+    get() {
+        if (!this.memory.log) {
+            this.memory.log = [];
+        }
+        return this.memory.log;
+    },
+    set(log) {
+
+        if (typeof log === "string") {
+            let temp = { [Game.time]: log }
+            this.memory.log.push(temp)
+        }
+        else if (typeof log !== "string") {
+            let temp = { [Game.time]: JSON.stringify(log) }
+            this.memory.log.push(temp)
+        }
+
+    },
+    configurable: true,
+})
+
 // Room properties =====================================================================================================
 
 Object.defineProperty(Room.prototype, 'my', {
@@ -211,8 +233,7 @@ Object.defineProperty(Room.prototype, 'flags', {
     configurable: true,
 });
 
-// Room properties: structures =========================================================================================
-
+// Room properties: structures =========================================================================================)
 Object.defineProperty(Room.prototype, 'constructionSites', {
     get() {
         if (!this._constructionSites) {
@@ -258,7 +279,6 @@ Object.defineProperty(Room.prototype, 'droppedPower', {
 });
 
 //Kodies Movein shit
-
 Room.prototype.createRoomTask = function (roomTask: RoomTask) {
     var roomTask: RoomTask = {
         name: roomTask.name,

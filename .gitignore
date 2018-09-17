@@ -86,3 +86,13 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+#Rest
+docs/README.md
+docs/SUMMARY.md
+docs/.gitbook/assets/authenticating-1.png
+docs/.gitbook/assets/authenticating-2.png
+docs/.gitbook/assets/authenticating-3.png
+docs/.gitbook/assets/authenticating-4.png
+docs/.gitbook/assets/deploying-2.png
+screeps.json

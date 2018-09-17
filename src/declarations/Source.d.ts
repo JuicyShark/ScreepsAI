@@ -1,0 +1,3 @@
+interface Source {
+    hasContainer(): boolean
+}

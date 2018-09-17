@@ -3,6 +3,7 @@ interface StructureSpawn {
     spawnNewCreep: any;
 }
 interface spawnTask {
+    memory: any;
     CreatedBy: string;
     gameTime: number;
     type: string;

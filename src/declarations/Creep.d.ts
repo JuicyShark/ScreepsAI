@@ -7,7 +7,6 @@ interface Creep {
     nextDirection: number;
 }
 interface CreepMemory {
-    role: string;
     room: string;
     working: boolean;
     task: protoTask | null;
@@ -15,4 +14,5 @@ interface CreepMemory {
     _trav: object;
     colony: string;
     home: string;
+    myContainer: string;
 }
