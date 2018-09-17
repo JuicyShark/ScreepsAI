@@ -74,5 +74,5 @@ export class Harvester {
         }
         creep.task = Tasks.chain(thisCreepsTasks)
     }
-
 }
+

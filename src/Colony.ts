@@ -8,7 +8,6 @@ export function checkColonys(): void {
 
   let myRooms = Object.values(Game.rooms);
   const gameColony = Game.colonies;
-
   for (var i = 0; i < myRooms.length; i++) {
     var room = Game.rooms[myRooms[i].name];
     var NextColonyID: number = Game.colonies.length + 1
@@ -28,7 +27,6 @@ export function checkColonys(): void {
     }
     else if (NextColonyID == 2 && Game.colonies.length == 1) {
       //Check if its an outpost.
-
     }
   }
   // highway, spawner, outpost, basic
