@@ -23,6 +23,24 @@ Source.prototype.hasContainer = function () {
     return false;
   }
 };
+StructureContainer.prototype.hasMiner = function () {
+  var anyMiners: Creep[] | undefined = this.pos.findClosestByLimitedRange(this.room.creepsByType.Miner)
+  if (anyMiners != undefined || anyMiners.length >= 1) {
+    return true;
+  }
+  else {
+    if (this.targetedBy != null && this.targetedBy.length != 0) {
+      this.targetedBy.forEach(function (creep: Creep) {
+        if (creep.memory.type == "Miner") {
+          return true
+        }
+      })
+    }
+    else {
+      return false
+    }
+  }
+}
 RoomObject.prototype.serialize = function (): protoRoomObject {
   let pos: protoPos = {
     x: this.pos.x,

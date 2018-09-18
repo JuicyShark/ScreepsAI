@@ -1,7 +1,24 @@
 // Room prototypes - commonly used room properties and methods
 
-import { MY_USERNAME } from "config";
-import { MY_ALLY } from "config";
+import { MY_USERNAME, MY_ALLY, creepPriority } from "config";
+
+//roomTask Class
+
+export class RoomTask {
+    name: string;
+    roomOrder: string;
+    priority: number;
+    details: Object;
+
+    constructor(taskName: string, roomOrder, priority, details) {
+        this.name = taskName;
+        this.roomOrder = roomOrder;
+        this.details = details;
+        this.priority = priority
+
+    }
+}
+
 
 // Logging =============================================================================================================
 Object.defineProperty(Room.prototype, 'print', {
@@ -20,7 +37,10 @@ Object.defineProperty(Room.prototype, 'memLog', {
     },
     set(log) {
 
+
+
         if (typeof log === "string") {
+
             let temp = { [Game.time]: log }
             this.memory.log.push(temp)
         }
@@ -28,7 +48,7 @@ Object.defineProperty(Room.prototype, 'memLog', {
             let temp = { [Game.time]: JSON.stringify(log) }
             this.memory.log.push(temp)
         }
-
+        return this.memory.log
     },
     configurable: true,
 })
@@ -64,6 +84,7 @@ Object.defineProperty(Room.prototype, 'signedByMe', {
 });
 
 //KODIES STUFF
+Room.prototype.taskList! = [];
 Object.defineProperty(Room.prototype, 'roomType', {
     get() {
         var colony = Game.colonies[0]
@@ -106,8 +127,6 @@ Object.defineProperty(Room.prototype, 'creeps', {
 });
 
 //Kodie Shit---------------
-
-Room.prototype.spawnList = [];
 
 Object.defineProperty(Room.prototype, 'creepsByType', {
     get() {
@@ -279,31 +298,32 @@ Object.defineProperty(Room.prototype, 'droppedPower', {
 });
 
 //Kodies Movein shit
+
 Room.prototype.createRoomTask = function (roomTask: RoomTask) {
-    var roomTask: RoomTask = {
-        name: roomTask.name,
-        roomOrder: roomTask.roomOrder,
-        priority: roomTask.priority,
-        details: roomTask.details
-    };
+    /* var roomTask: RoomTask = {
+         name: roomTask.name,
+         roomOrder: roomTask.roomOrder,
+         priority: roomTask.priority,
+         details: roomTask.details
+     };*/
     var duplicateTask: any = null;
 
-    for (var i = 0; i < Memory.Colonies.ColonyRooms[i].taskList.length; i++) {
+    for (var i = 0; i < this.taskList.length; i++) {
         if (duplicateTask == true) {
             break;
         }
-        if (Memory.Colonies.ColonyRooms[i].taskList[i].details == roomTask.details) {
+        if (this.taskList[i].details == roomTask.details) {
             duplicateTask = true;
 
         }
     }
     if (duplicateTask != true) {
-        Memory.Colonies.ColonyRooms[i].taskList.push(roomTask)
+        this.taskList.push(roomTask)
     }
 }
-/*
+
 Room.prototype.filterRoomTask = function (roomOrder: string): any {
-    this.memory.taskList.sort(function (a, b): number {
+    this.taskList.sort(function (a, b): number {
         if (a.priority < b.priority) {
             return -1;
         }
@@ -312,11 +332,11 @@ Room.prototype.filterRoomTask = function (roomOrder: string): any {
         }
         return 0;
     })
-    for (var i = 0; i < this.memory.taskList.length; i++) {
-        if (Memory.Colonies.ColonyRooms[this].taskList[i].roomOrder == roomOrder) {
-            var filteredTask = this.memory.taskList[i]
-            Memory.Colonies.ColonyRooms[this].taskList.splice(i, 1);
+    for (var i = 0; i < this.taskList.length; i++) {
+        if (this.taskList[i].roomOrder == roomOrder) {
+            var filteredTask = this.taskList[i]
+            this.taskList.splice(i, 1);
             return filteredTask;
         }
     }
-}*/
+}

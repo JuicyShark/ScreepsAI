@@ -1,3 +1,3 @@
 interface Source {
-    hasContainer(): boolean
+    hasContainer(): boolean;
 }

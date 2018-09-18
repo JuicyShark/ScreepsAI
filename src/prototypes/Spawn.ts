@@ -1,31 +1,55 @@
 import { nameGen } from "utils/personality/nameGen";
-StructureSpawn.prototype.spawnNewCreep = function (spawnTask: spawnTask): void {
+
+export class SpawnTask {
+
+  CreatedBy: string;
+  type: string;
+  body: string[];
+  memory: any;
+
+
+  constructor(CreatedBy: string, type: string, body: string[]) {
+    this.CreatedBy = CreatedBy;
+    this.type = type;
+    this.body = body;
+    this.memory = {
+      type: type,
+      home: CreatedBy
+    }
+  }
+}
+
+StructureSpawn.prototype.spawnNewCreep = function (spawnTask: SpawnTask): void {
 
   let newName = nameGen(spawnTask.type);
   var testCreep = this.spawnCreep(spawnTask.body, newName, {
     dryRun: true
   });
-  if (testCreep == 0) {
-    this.spawnCreep(spawnTask.body, newName + Game.time, {
-      memory: {
-        type: spawnTask.type,
-        home: spawnTask.Destination
-      }
-    });
-    console.log("Spawning a " + spawnTask.type + ", named " + newName);
-    this.room.spawnList.splice(0)
-  } else if (this.spawning) {
-    console.log("Spawning " + newName);
-  } else {
 
-    console.log("Spawn waiting with " + spawnTask.type)
+  if (testCreep == 0) {
+
+    this.spawnCreep(spawnTask.body, newName + Game.time, { memory: spawnTask.memory });
+
+    this.room.memLog = ("Spawning a " + spawnTask.type + ", named " + newName);
+    console.log("About to remove the task!")
+    this.room.memlog = this.room.taskList;
+    this.room.taskList.splice(this.room.taskList.indexOf(spawnTask), 1)
+    this.room.memlog = this.room.taskList;
+    console.log("REMOVED")
   }
 };
 
+
+
+//StructureSpawn.prototype.
+
+
+
+/*
 StructureSpawn.prototype.addToQue = function (newRoomTask: spawnTask): Boolean {
   let roomSpawnQue = Game.rooms[newRoomTask.CreatedBy].spawnList;
   let body = newRoomTask.body;
-  if (!body || body == null) {
+  if (!body || body === null) {
     body = ["move", "carry", "work"]
   }
   var duplicateTask: Boolean = null;
@@ -50,7 +74,7 @@ StructureSpawn.prototype.addToQue = function (newRoomTask: spawnTask): Boolean {
     roomSpawnQue.push(newRoomTask)
     return true;
   }
-}
+}*/
 export class SpawnBrain {
 
 }

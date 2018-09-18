@@ -1,9 +1,10 @@
 
-import { Harvester } from '../creepTypes/harvester';
+import { GeneralHand } from '../creepTypes/generalhand';
 import { Upgrader } from '../creepTypes/upgrader';
 import { Builder } from '../creepTypes/builder';
 import { Lorry } from '../creepTypes/lorry';
 import { Miner } from '../creepTypes/miner';
+import { Patroller } from '../creepTypes/patroller';
 import { Colony } from '../Colony';
 
 // set up how testRoles var will be set up. role is how it can be identified and
@@ -12,10 +13,11 @@ interface creepTypes {
     [type: string]: any;
 }
 let creepTypes = {
-    ["Harvester"]: Harvester,
+    ["GeneralHand"]: GeneralHand,
     ["Upgrader"]: Upgrader,
     ["Builder"]: Builder,
     ["Miner"]: Miner,
+    ["Patroller"]: Patroller,
     ["Lorry"]: Lorry
 }
 

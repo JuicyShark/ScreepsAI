@@ -1,9 +1,17 @@
 type HasPos = { pos: RoomPosition }
-interface RoomTask {
+
+//changed from interface to class
+declare class RoomTask {
     name: string;
-    roomOrder: any;
+    roomOrder: string;
     priority: number;
     details: Object;
+    constructor(name: string, roomOrder: string, priority: number, details: Object)
+
+
+}
+interface RoomTask {
+
 }
 interface RoomCoord {
     x: number;
@@ -28,9 +36,10 @@ interface RoomPosition {
         opts?: { filter: any | string; }): T | undefined;
 }
 interface Room {
-    memLog(): void;
+    memLog: any;
     createRoomTask: any;
     filterRoomTask: any;
+    taskList: any;
     print: string;
     my: boolean;
     owner: string | undefined
@@ -79,8 +88,6 @@ interface Room {
     flags: Flag[];
     _flags: Flag[];
     executeRoom();
-    queToSpawn(spawn: StructureSpawn, spawnTask: spawnTask);
-    spawnList: any[];
     roomType: string;
     isOutpost: Boolean | null;
     hostiles: Creep[];
@@ -97,6 +104,7 @@ interface Room {
     _dangerousPlayerHostiles: Creep[];
     fleeDefaults: Creep[];
     _fleeDefaults: Creep[];
+    _tempLog: any;
 
 }
 interface SavedRoomObject {
@@ -150,6 +158,7 @@ interface RoomMemory {
     queue: any;
     timer: number;
     suspended: boolean;
+    log: [];
 }
 interface RoomObject {
     print: string;
@@ -157,6 +166,7 @@ interface RoomObject {
     ref: string;
     targetedBy: Creep[];
     serialize: any;
+    hasMiner(): boolean;
 
 
 }

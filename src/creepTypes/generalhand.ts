@@ -1,7 +1,7 @@
 import { Tasks } from '../TaskManager/Tasks'
 
 
-export class Harvester {
+export class GeneralHand {
 
     private static depositTask(creep: Creep, thisCreepsTasks: any): any {
         let spawn = Game.rooms[creep.memory.home].spawns[0];
@@ -10,22 +10,9 @@ export class Harvester {
             thisCreepsTasks.push(Tasks.transfer(spawn));
             return thisCreepsTasks
         }
-        else {
-            let storage = creep.room.storage;
+        else if (spawn.room.energyAvailable != spawn.room.energyCapacityAvailable) {
             let extensions = creep.room.extensions;
-            //If you have no Upgraders targeting the upgrader  the harvester will do so.
-            if (creep.room.controller.targetedBy.length == 0 && creep.room.creepsByType.Upgrader == undefined) {
-                thisCreepsTasks.push(Tasks.upgrade(Game.rooms[creep.memory.home].controller))
-                return thisCreepsTasks
-            }
-
-
-            else if (storage != undefined) {
-                thisCreepsTasks.push(Tasks.transfer(storage));
-                return thisCreepsTasks
-
-            }
-            else if (extensions.length != 0) {
+            if (extensions.length != 0) {
                 let temp: any;
                 for (let i in extensions) {
                     if (extensions[i].energy != extensions[i].energyCapacity) {
@@ -37,7 +24,43 @@ export class Harvester {
                     thisCreepsTasks.push(Tasks.transfer(temp));
                     return thisCreepsTasks
                 }
+                else {
+                    var repairables = creep.room.repairables;
+                    var repairMe: any;
+                    if (repairables != undefined) {
+                        for (let i = 0; i < repairables.length; i++) {
 
+                            if (repairables[i].structureType == "spawn") {
+                                continue;
+                            }
+
+                            if (repairables[i].hits < repairables[i].hitsMax && repairables[i].targetedBy.length <= 2) {
+
+                                repairMe = repairables[i];
+                                break;
+                            }
+                        }
+
+                        thisCreepsTasks.push(Tasks.repair(repairMe))
+                    }
+                }
+
+
+            }
+        }
+        else {
+            let storage = creep.room.storage;
+
+            //If you have no Upgraders targeting the upgrader  the harvester will do so.
+            if (creep.room.controller.targetedBy.length == 0 && creep.room.creepsByType.Upgrader == undefined) {
+                thisCreepsTasks.push(Tasks.upgrade(Game.rooms[creep.memory.home].controller))
+                return thisCreepsTasks
+            }
+
+
+            else if (storage != undefined) {
+                thisCreepsTasks.push(Tasks.transfer(storage));
+                return thisCreepsTasks
 
             }
             else {
@@ -81,4 +104,3 @@ export class Harvester {
         creep.task = Tasks.chain(thisCreepsTasks)
     }
 }
-
