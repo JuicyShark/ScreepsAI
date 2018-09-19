@@ -76,7 +76,7 @@ export var creepTypes: string[] = [
   "Lorry",
   "Patroller"
 ]
-export function creepPriority(type): any {
+export function creepPriority(type: string): number {
   let temp = [
     {
       type: "GeneralHand",
@@ -110,10 +110,11 @@ export function creepPriority(type): any {
       if (value.type == type) {
         output = value.priority
       }
-      if (output != null) {
-        return output
-      }
+
     })
+    if (output != null) {
+      return output
+    }
   }
 }
 export var roomTypes: string[] = [

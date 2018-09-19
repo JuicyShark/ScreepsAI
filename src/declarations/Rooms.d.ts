@@ -5,8 +5,8 @@ declare class RoomTask {
     name: string;
     roomOrder: string;
     priority: number;
-    details: Object;
-    constructor(name: string, roomOrder: string, priority: number, details: Object)
+    details: any;
+    constructor(name: string, roomOrder: string, priority: number, details: Object | SpawnTask)
 
 
 }
@@ -36,6 +36,7 @@ interface RoomPosition {
         opts?: { filter: any | string; }): T | undefined;
 }
 interface Room {
+    checkandSpawn(): void
     memLog: any;
     createRoomTask: any;
     filterRoomTask: any;

@@ -3,6 +3,7 @@ import { getCacheExpiration, derefRoomPosition } from '../utils/helperFunctions'
 import { Colony } from '../Colony'
 import { configCreepTypes, creepBodySizes, creepPriority, roomTypes } from 'config'
 import { ConversationStarter } from '../utils/personality/creepConversation'
+import { SpawnTask } from "../prototypes/Spawn"
 
 export function handleMyRoom(room: Room) {
   if (!Memory.username) {
@@ -126,7 +127,7 @@ export class RoomBrain {
 
     }
     if (room.memory.timer % 9 === 0) {
-      //used to spawn thangs here
+      room.checkandSpawn()
     }
     //do things every roomTick
     // console.log("Current spawnList :" + "===" + JSON.stringify(room.spawnList, null, " ") + "====")
@@ -148,9 +149,8 @@ export class RoomBrain {
 
 
   static spawnerGo(room: Room): void {
-
+    //returns the Colony Obj. Just a hotfixy i hope :D It works for now, bc we have 1 room D:
     var thisColony = function (): Colony {
-
       if (Game.colonies == undefined || Game.colonies.length == 0) {
         return
       }
@@ -160,42 +160,9 @@ export class RoomBrain {
           if (Game.colonies[i].name == room.name) {
             return Game.colonies[i]
           }
-
         }
       }
-
     }
-
-    //madeToOrder Will take anything that isnt "" or undefined including lowerCase thangs
-    function madeToOrder(type: string, room: Room, opts: any | null): void {
-
-      let defaultBod: string[] = creepBodySizes(type, room)
-      let spawnTask = {
-        CreatedBy: room.name,
-        home: room.name,
-        type: type,
-        body: defaultBod,
-        memory: null
-      }
-
-
-      if (type != undefined) {
-        let roomTask: RoomTask = {
-          name: (Game.time + "SpawnTask"),
-          roomOrder: "SpawnTask",
-          priority: creepPriority(type),
-          details: spawnTask
-        }
-
-        if (roomTask != undefined || roomTask != null) {
-          room.createRoomTask(roomTask)
-        }
-
-      }
-
-    }
-
-
     var generalCreeps: Creep[] | undefined = thisColony().creepsByType.GeneralHand
     var upgraders: Creep[] | undefined = thisColony().creepsByType.Upgrader
     var builders: Creep[] | undefined = thisColony().creepsByType.Builder
@@ -203,53 +170,97 @@ export class RoomBrain {
     var lorrys: Creep[] | undefined = thisColony().creepsByType.Lorry
     var patrollers: Creep[] | undefined = thisColony().creepsByType.Patroller
 
-    if (room.creeps.length == 0 || generalCreeps == undefined) {
-      madeToOrder("GeneralHand", room, null)
-    }
-
-    if (generalCreeps != undefined && generalCreeps.length < (room.sources.length - 1)) {
-      madeToOrder("GeneralHand", room, null)
-    }
-    if (room.containers.length != 0 && miners != undefined && miners.length <= (room.sources.length - 1)) {
-      if (room.containers[0].targetedBy.length >= 1) {
-
-      }
-      room.sources.forEach(function (source: Source, index: number, array: Source[]) {
-        if (source.hasContainer() == true) {
-          let Container = source.pos.findClosestByLimitedRange(room.containers, 2)
-          let Miner: Creep | undefined = source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 1)
-
-          if (Miner == undefined && Container.targetedBy.length <= 1) {
-            let ContainerID = source.pos.findClosestByLimitedRange(room.containers, 2).id
-            let options = {
-              memory: {
-                myContainer: ContainerID
-              }
-            }
-            madeToOrder("Miner", room, options)
-          }
-
-
-        }
-      })
-
-    }
-
     let flags: Flag[] = _.values(Game.flags);
-
     let patrolFlag: boolean = false;
     let i = 0;
-
-    while (i < flags.length) {
+    for (let i = 0; i < flags.length; i++) {
       if (flags[i].name == "Patroll") {
         patrolFlag = true;
       }
-      i++
     }
+
+
+    //madeToOrder Will take anything that isnt "" or undefined including lowerCase thangs
+    function creepOrder(type: string, room: Room, opts: any | null): void {
+      var spawnerTask: null | SpawnTask = null;
+
+      let defaultBod: string[] = creepBodySizes(type, room)
+      spawnerTask = new SpawnTask(room.name, type, defaultBod);
+      /*{
+        CreatedBy: room.name,
+        type: type,
+        body: defaultBod,
+        memory: {
+          type: type,
+          home: room.name
+        }
+      }*/
+
+      if (type != undefined) {
+        //if Type is not undefined then do the do
+        let roomTask: RoomTask = {
+          name: (Game.time + "SpawnTask"),
+          roomOrder: "SpawnTask",
+          priority: creepPriority(type),
+          details: spawnerTask
+        }
+
+        if (roomTask != undefined || roomTask != null) {
+          //create the roomTask
+          room.createRoomTask(roomTask)
+        }
+
+      }
+
+    }
+
+    //function for Container Miners bc its alot of messy shit rn
+    function ContainerMiners(): void {
+      if (room.containers.length != 0 && miners != undefined && miners.length <= (room.sources.length - 1)) {
+        if (room.containers[0].targetedBy.length >= 1) {
+
+        }
+        room.sources.forEach(function (source: Source, index: number, array: Source[]) {
+          if (source.hasContainer() == true) {
+            let Container = source.pos.findClosestByLimitedRange(room.containers, 2)
+            let Miner: Creep | undefined = source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 1)
+
+            if (Miner == undefined && Container.targetedBy.length <= 1) {
+              let ContainerID = source.pos.findClosestByLimitedRange(room.containers, 2).id
+              let options = {
+                memory: {
+                  myContainer: ContainerID
+                }
+              }
+              creepOrder("Miner", room, options)
+            }
+          }
+        })
+      }
+    }
+
+    if (room.creeps.length == 0 || generalCreeps == undefined) {
+      creepOrder("GeneralHand", room, null)
+    }
+    else if (generalCreeps != undefined || generalCreeps.length < (room.controller.level * 2)) {
+      creepOrder("GeneralHand", room, null)
+    }
+
+    else if (builders != undefined && builders.length < (room.controller.level)) {
+      creepOrder("Builder", room, null)
+    }
+
+    ContainerMiners()
+
+    if (upgraders != undefined && upgraders.length < (room.controller.level)) {
+      creepOrder("Builder", room, null)
+    }
+
+
 
     if (patrolFlag == true) {
       if (patrollers == undefined || patrollers.length <= 3) {
-        madeToOrder("Patroller", room, null)
+        creepOrder("Patroller", room, null)
       }
     }
     //kodie flesh this out..

@@ -8,7 +8,7 @@ export class RoomTask {
     name: string;
     roomOrder: string;
     priority: number;
-    details: Object;
+    details: any;
 
     constructor(taskName: string, roomOrder, priority, details) {
         this.name = taskName;
@@ -299,6 +299,19 @@ Object.defineProperty(Room.prototype, 'droppedPower', {
 
 //Kodies Movein shit
 
+Room.prototype.checkandSpawn = function () {
+    if (this.taskList.length != 0) {
+        var CurrentTask = this.filterRoomTask("SpawnTask")
+
+        if (CurrentTask != null) {
+            if (CurrentTask.details.body != undefined) {
+                this.spawns[0].spawnNewCreep(CurrentTask.details)
+            }
+        }
+
+    }
+}
+
 Room.prototype.createRoomTask = function (roomTask: RoomTask) {
     /* var roomTask: RoomTask = {
          name: roomTask.name,
@@ -306,13 +319,13 @@ Room.prototype.createRoomTask = function (roomTask: RoomTask) {
          priority: roomTask.priority,
          details: roomTask.details
      };*/
-    var duplicateTask: any = null;
+    var duplicateTask: Boolean | null;
 
     for (var i = 0; i < this.taskList.length; i++) {
         if (duplicateTask == true) {
             break;
         }
-        if (this.taskList[i].details == roomTask.details) {
+        if (this.taskList[i].details.type == roomTask.details.type) {
             duplicateTask = true;
 
         }
@@ -323,6 +336,7 @@ Room.prototype.createRoomTask = function (roomTask: RoomTask) {
 }
 
 Room.prototype.filterRoomTask = function (roomOrder: string): any {
+    let output: RoomTask | null;
     this.taskList.sort(function (a, b): number {
         if (a.priority < b.priority) {
             return -1;
@@ -336,7 +350,9 @@ Room.prototype.filterRoomTask = function (roomOrder: string): any {
         if (this.taskList[i].roomOrder == roomOrder) {
             var filteredTask = this.taskList[i]
             this.taskList.splice(i, 1);
-            return filteredTask;
+            output = filteredTask;
         }
     }
+    return output
+
 }

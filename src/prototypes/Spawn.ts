@@ -7,7 +7,6 @@ export class SpawnTask {
   body: string[];
   memory: any;
 
-
   constructor(CreatedBy: string, type: string, body: string[]) {
     this.CreatedBy = CreatedBy;
     this.type = type;
@@ -15,9 +14,10 @@ export class SpawnTask {
     this.memory = {
       type: type,
       home: CreatedBy
-    }
+    };
   }
 }
+
 
 StructureSpawn.prototype.spawnNewCreep = function (spawnTask: SpawnTask): void {
 
@@ -31,11 +31,6 @@ StructureSpawn.prototype.spawnNewCreep = function (spawnTask: SpawnTask): void {
     this.spawnCreep(spawnTask.body, newName + Game.time, { memory: spawnTask.memory });
 
     this.room.memLog = ("Spawning a " + spawnTask.type + ", named " + newName);
-    console.log("About to remove the task!")
-    this.room.memlog = this.room.taskList;
-    this.room.taskList.splice(this.room.taskList.indexOf(spawnTask), 1)
-    this.room.memlog = this.room.taskList;
-    console.log("REMOVED")
   }
 };
 
