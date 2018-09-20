@@ -1,9 +1,7 @@
 import * as creepMaster from '../ShowMaster/creepMaster';
-import { getCacheExpiration, derefRoomPosition } from '../utils/helperFunctions';
-import { Colony } from '../Colony'
-import { configCreepTypes, creepBodySizes, creepPriority, roomTypes } from 'config'
-import { ConversationStarter } from '../utils/personality/creepConversation'
-import { SpawnTask, SpawnBrain } from "../prototypes/Spawn"
+import { getCacheExpiration } from '../utils/helperFunctions';
+import { roomTypes } from 'config'
+import { SpawnBrain } from "../prototypes/Spawn"
 
 export function handleMyRoom(room: Room) {
   if (!Memory.username) {
