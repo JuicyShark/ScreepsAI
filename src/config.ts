@@ -74,8 +74,20 @@ export var creepTypes: string[] = [
   "Upgrader",
   "Miner",
   "Lorry",
-  "Patroller"
+  "Patroller",
+  "Defender",
+  "Attacker"
 ]
+export const tempGeneralCreepsMAX = {
+  1: 8,
+  2: 7,
+  3: 7,
+  4: 6,
+  5: 6,
+  6: 6,
+  7: 5,
+  8: 5
+}
 export function creepPriority(type: string): number {
   let temp = [
     {
@@ -101,6 +113,14 @@ export function creepPriority(type: string): number {
     {
       type: "Patroller",
       priority: 2
+    },
+    {
+      type: "Defender",
+      priority: 1
+    },
+    {
+      type: "Attacker",
+      priority: 1
     }
   ]
 
@@ -117,6 +137,7 @@ export function creepPriority(type: string): number {
     }
   }
 }
+
 export var roomTypes: string[] = [
   "ColonyHub",
   "Basic",
@@ -127,6 +148,9 @@ export var roomTypes: string[] = [
 
 function createBody(type: string, room: Room): string[] {
   var energy = room.energyCapacityAvailable
+  if (room.creeps.length == 0) {
+    energy = 300;
+  }
   //creating a balanced body
   if (
     type == "GeneralHand" || type == "Upgrader" || type == "Builder") {
@@ -171,9 +195,12 @@ function createBody(type: string, room: Room): string[] {
     return body;
   }
   if (type == "Patroller") {
-    var numberOfParts = Math.floor(energy / 100);
-    numberOfParts = Math.min(numberOfParts, Math.floor(50 / 4));
+    var numberOfParts = Math.floor(energy / 150);
     var body: string[] = [];
+    for (let i = 0; i < numberOfParts; i++) {
+      body.push("move");
+    }
+    numberOfParts = Math.floor(energy / 150)
     for (let i = 0; i < numberOfParts; i++) {
       body.push("attack");
     }
@@ -182,12 +209,6 @@ function createBody(type: string, room: Room): string[] {
     }
     for (let i = 0; i < numberOfParts; i++) {
       body.push("tough");
-    }
-
-    numberOfParts = Math.floor(energy / 50)
-    numberOfParts = Math.min(numberOfParts, Math.floor((50 - numberOfWorkParts * 1) / 1));
-    for (let i = 0; i < numberOfParts; i++) {
-      body.push("move");
     }
     return body;
 
@@ -200,6 +221,50 @@ function createBody(type: string, room: Room): string[] {
     }
     for (let i = 0; i < numberOfParts; i++) {
       body.push("move");
+    }
+    return body;
+
+  }
+  if (type == "Attacker") {
+    var numberOfParts = Math.floor(energy / 200);
+    var body: string[] = [];
+    for (let i = 0; i < numberOfParts; i++) {
+      body.push("move");
+    }
+    numberOfParts = Math.floor(energy / 200)
+    for (let i = 0; i < numberOfParts; i++) {
+      body.push("attack");
+    }
+    for (let i = 0; i < numberOfParts; i++) {
+      body.push("tough");
+    }
+    for (let i = 0; i < numberOfParts; i++) {
+      body.push("tough");
+    }
+    for (let i = 0; i < numberOfParts; i++) {
+      body.push("ranged_attack");
+    }
+    return body;
+
+  }
+  if (type == "Defender") {
+    var numberOfParts = Math.floor(energy / 200);
+    var body: string[] = [];
+    for (let i = 0; i < numberOfParts; i++) {
+      body.push("move");
+    }
+    numberOfParts = Math.floor(energy / 200)
+    for (let i = 0; i < numberOfParts; i++) {
+      body.push("attack");
+    }
+    for (let i = 0; i < numberOfParts; i++) {
+      body.push("tough");
+    }
+    for (let i = 0; i < numberOfParts; i++) {
+      body.push("tough");
+    }
+    for (let i = 0; i < numberOfParts; i++) {
+      body.push("ranged_attack");
     }
     return body;
 

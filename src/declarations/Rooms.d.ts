@@ -88,7 +88,7 @@ interface Room {
     //Extras
     flags: Flag[];
     _flags: Flag[];
-    executeRoom();
+    executeRoom: any;
     roomType: string;
     isOutpost: Boolean | null;
     hostiles: Creep[];
@@ -159,7 +159,7 @@ interface RoomMemory {
     queue: any;
     timer: number;
     suspended: boolean;
-    log: [];
+    log: Object[];
 }
 interface RoomObject {
     print: string;

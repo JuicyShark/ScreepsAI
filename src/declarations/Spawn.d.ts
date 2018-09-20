@@ -1,12 +1,18 @@
+declare class SpawnTask {
 
-interface spawnTaskMem extends SpawnTask {
-    home: string;
+    CreatedBy: string;
     type: string;
     body: string[];
+    memory: spawnTaskMem | null;
+    constructor(CreatedBy: string, tyoe: string, body: string[])
+}
+interface spawnTaskMem {
+    home: string;
+    type: string;
 
 }
-interface spawnTaskMemOpts extends spawnTaskMem {
-    Destination: string | null;
+interface spawnTaskMemOpts {
+    destination: string | null;
     myContainer: string | null
 }
 

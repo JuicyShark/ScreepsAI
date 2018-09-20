@@ -74,7 +74,26 @@ function main(): void {
       console.log("Colony ID: " + Colony.id)
       console.log("Colony Name: " + Colony.name)
       setCreepTasks(Colony)
-      RoomBrain.runTimer(Colony)
+      //executing Main Room
+      for (let ii in Game.rooms) {
+        if (Game.rooms[ii].name == Colony.room.name) {
+          Game.rooms[ii].executeRoom()
+          continue;
+        } else {
+          if (Game.rooms[ii].my == false) {
+            let found: boolean = false;
+            Colony.outposts.forEach(function (room: Room) {
+              if (room == Game.rooms[ii]) {
+                found = true;
+              }
+            })
+            if (found != false) {
+              Colony.outposts.push(Game.rooms[ii])
+            }
+
+          }
+        }
+      }
     }
 
   } else {

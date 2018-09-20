@@ -1,6 +1,7 @@
 // Room prototypes - commonly used room properties and methods
 
 import { MY_USERNAME, MY_ALLY, creepPriority } from "config";
+import { RoomBrain } from "ShowMaster/roomMaster";
 
 //roomTask Class
 
@@ -299,16 +300,29 @@ Object.defineProperty(Room.prototype, 'droppedPower', {
 
 //Kodies Movein shit
 
+Room.prototype.executeRoom = function (): void {
+
+    if (this.my == true) {
+        RoomBrain.runTimer(this);
+    }
+    else {
+
+    }
+
+}
+
 Room.prototype.checkandSpawn = function () {
-    if (this.taskList.length != 0) {
-        var CurrentTask = this.filterRoomTask("SpawnTask")
+    if (this.my == true) {
+        if (this.taskList.length != 0) {
+            var CurrentTask = this.filterRoomTask("SpawnTask")
 
-        if (CurrentTask != null) {
-            if (CurrentTask.details.body != undefined) {
-                this.spawns[0].spawnNewCreep(CurrentTask.details)
+            if (CurrentTask != null) {
+                if (CurrentTask.details.body != undefined) {
+                    this.spawns[0].spawnNewCreep(CurrentTask.details)
+                }
             }
-        }
 
+        }
     }
 }
 
