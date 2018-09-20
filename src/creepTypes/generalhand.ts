@@ -65,11 +65,11 @@ export class GeneralHand {
     }
     private static harvestTask(creep: Creep, thisCreepsTasks: any): void {
         //looks for Container with 200 Energy or more and with no more than 2 creeps (including miner)
-        var unattendedContainer = _.filter(creep.room.containers, container => container.isEmpty != true && container.energy > 200 && container.targetedBy.length <= 1)[0];
+        var unattendedContainer = _.filter(creep.room.containers, container => container.isEmpty != true && container.energy > 200)[0];
         //if it is null
         if (unattendedContainer == null) {
             //Find a source with no more than 3 creeps harvesting -- hard cap so source doesnt get overloaded.
-            let unattendedSource = _.filter(creep.room.sources, source => source.targetedBy.length <= 2);
+            let unattendedSource = _.filter(creep.room.sources, source => source.targetedBy.length <= 2 && source.hasMiner() == false);
             if (!(!unattendedSource[0])) {
                 thisCreepsTasks.push(Tasks.harvest(unattendedSource[0]));
                 this.depositTask(creep, thisCreepsTasks)
