@@ -25,7 +25,7 @@ Source.prototype.hasContainer = function () {
 };
 StructureContainer.prototype.hasMiner = function () {
   var anyMiners: Creep[] | undefined = this.pos.findClosestByLimitedRange(this.room.creepsByType.Miner)
-  if (anyMiners != undefined || anyMiners.length >= 1) {
+  if (anyMiners != null && anyMiners.length >= 1) {
     return true;
   }
   else {

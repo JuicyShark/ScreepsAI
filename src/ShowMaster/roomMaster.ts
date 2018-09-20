@@ -60,7 +60,7 @@ export class RoomBrain {
       savedSources.push({
         c: source ? source.pos.coordName : undefined,
         contnr: container ? container.pos.coordName : undefined,
-        miner: container ? container.hasMiner() : undefined
+        miner: container ? container.hasMiner() : null
 
       });
     }

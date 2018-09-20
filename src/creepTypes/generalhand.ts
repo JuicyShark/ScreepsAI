@@ -87,10 +87,10 @@ export class GeneralHand {
     static newTask(creep: Creep): void {
         let thisCreepsTasks: any = []
 
-        if (creep.carry.energy != creep.carryCapacity) {
+        if (creep.carry.energy == 0) {
             this.harvestTask(creep, thisCreepsTasks)
         }
-        else if (creep.carry.energy == creep.carryCapacity) {
+        else if (creep.carry.energy != 0) {
             this.depositTask(creep, thisCreepsTasks)
         }
 
