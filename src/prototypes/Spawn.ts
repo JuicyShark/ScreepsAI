@@ -39,9 +39,7 @@ StructureSpawn.prototype.spawnNewCreep = function (spawnTask: SpawnTask): void {
   });
 
   if (testCreep == 0) {
-
     this.spawnCreep(spawnTask.body, newName + Game.time, { memory: spawnTask.memory });
-
     this.room.memLog = ("Spawning a " + spawnTask.type + ", named " + newName);
   }
 };
@@ -122,7 +120,7 @@ export class SpawnBrain {
 
   private static ContainerMiners(room: Room, c: any): void {
 
-    if (room.containers.length != 0 && c.miners != undefined && c.miners.length <= (room.sources.length - 1)) {
+    if (room.containers.length != 0 && c.miners == undefined || room.containers.length != 0 && c.miners.length <= (room.sources.length - 1)) {
       if (room.containers[0].targetedBy.length >= 1) {
 
       }
@@ -175,13 +173,13 @@ export class SpawnBrain {
       SpawnBrain.creepBuilder("GeneralHand", room, null)
     }
     else if (c.generalCreeps == undefined || c.generalCreeps.length < (tempGeneralCreepsMAX[room.controller.level])) {
+      this.ContainerMiners(room, c)
       SpawnBrain.creepBuilder("GeneralHand", room, null)
     }
     else if (c.builders == undefined || c.builders != undefined && c.builders.length < (room.controller.level)) {
       SpawnBrain.creepBuilder("Builder", room, null)
     }
     else {
-      this.ContainerMiners(room, c)
 
       if (room.controller.level >= 3) {
         if (c.upgraders == undefined || c.upgraders != undefined && c.upgraders.length < (room.controller.level)) {

@@ -92,7 +92,7 @@ export function creepPriority(type: string): number {
   let temp = [
     {
       type: "GeneralHand",
-      priority: 2
+      priority: 3
     },
     {
       type: "Builder",
@@ -100,7 +100,7 @@ export function creepPriority(type: string): number {
     },
     {
       type: "Upgrader",
-      priority: 3
+      priority: 4
     },
     {
       type: "Miner",
@@ -108,7 +108,7 @@ export function creepPriority(type: string): number {
     },
     {
       type: "Lorry",
-      priority: 2
+      priority: 4
     },
     {
       type: "Patroller",
@@ -116,11 +116,11 @@ export function creepPriority(type: string): number {
     },
     {
       type: "Defender",
-      priority: 1
+      priority: 2
     },
     {
       type: "Attacker",
-      priority: 1
+      priority: 2
     }
   ]
 
@@ -170,28 +170,25 @@ function createBody(type: string, room: Room): string[] {
   }
 
   if (type == "Miner") {
-    if (energy == 300) {
-      var numberOfWorkParts = 2;
+    let bodyReturn = function (energy) {
+      if (energy < 500) {
+        return 300
+      } else {
+        return energy
+      }
     }
-    else {
-      var numberOfWorkParts = (energy / 200)
+    let Minerdefaults = {
+      300: [WORK, WORK, MOVE],
+      500: [WORK, WORK, WORK, WORK, MOVE],
+      550: [WORK, WORK, WORK, WORK, WORK, MOVE],
+      600: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
+      650: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
+      700: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
+      750: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE]
     }
-    // create a body with the specified number of WORK parts and one MOVE part per non-MOVE part
-    var body: string[] = [];
-    for (let i = 0; i < numberOfWorkParts; i++) {
-      body.push("work");
-    }
-    // 150 = 100 (cost of WORK) + 50 (cost of MOVE)
-    energy -= 150 * numberOfWorkParts;
 
-    var numberOfParts = Math.floor(energy / 100);
-    numberOfParts = Math.min(numberOfParts, Math.floor((50 - numberOfWorkParts * 2) / 2));
-    for (let i = 0; i < numberOfParts; i++) {
-      body.push("carry");
-    }
-    for (let i = 0; i < numberOfParts + numberOfWorkParts; i++) {
-      body.push("move");
-    }
+    body = Minerdefaults[bodyReturn(energy)]
+
     return body;
   }
   if (type == "Patroller") {
@@ -215,7 +212,7 @@ function createBody(type: string, room: Room): string[] {
   }
   if (type == "Lorry") {
     var numberOfParts = Math.floor(energy / 100);
-    numberOfParts = Math.min(numberOfParts, Math.floor((50 - numberOfWorkParts * 2) / 2));
+    numberOfParts = Math.min(numberOfParts, Math.floor(100 / 2));
     for (let i = 0; i < numberOfParts; i++) {
       body.push("carry");
     }
