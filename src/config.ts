@@ -24,7 +24,7 @@ function getUsername(): string {
 
 export const MY_USERNAME: string = getUsername();
 export function MY_ALLY(): string {
-  let Team: [string, string] = [
+  let Team: string[] = [
     "Juicy-Shark",
     "CrazedGod"
   ]
@@ -76,17 +76,18 @@ export var creepTypes: string[] = [
   "Lorry",
   "Patroller",
   "Defender",
-  "Attacker"
+  "Attacker",
+  "Scout"
 ]
 export const tempGeneralCreepsMAX = {
-  1: 8,
-  2: 7,
-  3: 7,
-  4: 6,
-  5: 6,
-  6: 6,
-  7: 5,
-  8: 5
+  1: 5,
+  2: 5,
+  3: 5,
+  4: 4,
+  5: 4,
+  6: 4,
+  7: 4,
+  8: 4
 }
 export function creepPriority(type: string): number {
   let temp = [
@@ -121,6 +122,10 @@ export function creepPriority(type: string): number {
     {
       type: "Attacker",
       priority: 2
+    },
+    {
+      type: "Scout",
+      priority: 3
     }
   ]
 
@@ -191,7 +196,14 @@ function createBody(type: string, room: Room): string[] {
 
     return body;
   }
+  if (type == "Scout") {
+    body = ["move"]
+    return body;
+  }
   if (type == "Patroller") {
+    if (energy >= 300) {
+      energy = 300
+    }
     var numberOfParts = Math.floor(energy / 150);
     var body: string[] = [];
     for (let i = 0; i < numberOfParts; i++) {

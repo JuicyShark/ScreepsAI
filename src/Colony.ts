@@ -26,6 +26,9 @@ export function checkColonys(): void {
       break;
     }
     else if (NextColonyID == 2 && Game.colonies.length == 1) {
+      if (room.isOutpost == true) {
+        gameColony[0].outposts.push(room)
+      }
       //Check if its an outpost.
     }
   }

@@ -11,7 +11,7 @@ import * as config from "config";
 import profiler from './utils/screeps-profiler';
 import { checkColonys } from './Colony'
 import { RoomBrain } from './ShowMaster/roomMaster';
-import { setCreepTasks } from './ShowMaster/creepMaster';
+import { setCreepTasks, runCreeps } from './ShowMaster/creepMaster';
 
 
 profiler.enable();
@@ -66,30 +66,30 @@ function main(): void {
 
 
   if (Game.colonies.length >= 1) {
-    RoomBrain.run();
     for (let i in Game.colonies) {
-      let Colony = Game.colonies[i];
-      console.log("====")
-      console.log("Colony ID: " + Colony.id)
-      console.log("Colony Name: " + Colony.name)
+      var Colony = Game.colonies[i];
       setCreepTasks(Colony)
-      //executing Main Room
-      for (let ii in Game.rooms) {
-        if (Game.rooms[ii].name == Colony.room.name) {
-          Game.rooms[ii].executeRoom()
-          continue;
-        } else {
-          if (Game.rooms[ii].my == false) {
-            let found: boolean = false;
-            Colony.outposts.forEach(function (room: Room) {
-              if (room == Game.rooms[ii]) {
-                found = true;
-              }
-            })
-            if (found != false) {
-              Colony.outposts.push(Game.rooms[ii])
-            }
+      runCreeps()
 
+      //executing Main Room
+      var gameRooms: Room[] = Object.values(Game.rooms)
+      for (let ii = 0; ii < gameRooms.length; ii++) {
+        var room = Game.rooms[gameRooms[ii].name]
+        if (room.name == Colony.room.name) {
+          room.handleMyRoom(room)
+          // continue;
+        } else {
+          var found: boolean = false;
+          Colony.outposts.forEach(function (outpostRoom: Room) {
+            if (outpostRoom.name == room.name) {
+              found = true;
+            }
+          })
+          if (found == false) {
+            room.executeRoom()
+            if (room.isOutpost == true) {
+              Colony.outposts.push(room)
+            }
           }
         }
       }

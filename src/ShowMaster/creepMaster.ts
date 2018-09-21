@@ -6,6 +6,7 @@ import { Lorry } from '../creepTypes/lorry';
 import { Miner } from '../creepTypes/miner';
 import { Patroller } from '../creepTypes/patroller';
 import { Colony } from '../Colony';
+import { Scout } from 'creepTypes/scout';
 
 // set up how testRoles var will be set up. role is how it can be identified and
 // unsure what declaration other than any for seperate functions in classes
@@ -18,7 +19,8 @@ let creepTypes = {
     ["Builder"]: Builder,
     ["Miner"]: Miner,
     ["Patroller"]: Patroller,
-    ["Lorry"]: Lorry
+    ["Lorry"]: Lorry,
+    ["Scout"]: Scout
 }
 
 export function runCreeps(): void {

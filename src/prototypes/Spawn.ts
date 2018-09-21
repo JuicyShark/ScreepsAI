@@ -82,7 +82,7 @@ StructureSpawn.prototype.addToQue = function (newRoomTask: spawnTask): Boolean {
 }*/
 export class SpawnBrain {
 
-  private static thisColony(room: Room) {
+  static thisColony(room: Room) {
     if (Game.colonies == undefined || Game.colonies.length == 0) {
       return
     }
@@ -112,7 +112,8 @@ export class SpawnBrain {
       builders: this.thisColony(room).creepsByType.Builder,
       miners: this.thisColony(room).creepsByType.Miner,
       lorrys: this.thisColony(room).creepsByType.Lorry,
-      patrollers: this.thisColony(room).creepsByType.Patroller
+      patrollers: this.thisColony(room).creepsByType.Patroller,
+      scout: this.thisColony(room).creepsByType.Scout,
     }
     return creepTypesAlive
 
@@ -168,6 +169,34 @@ export class SpawnBrain {
 
   static spawnListChecker(room: Room) {
     var c = this.creepTypesDef(room)
+    var ScoutFlag: Flag[] | null = null;
+    var PatrollerFlag: Flag[] | null = null;
+    var roomFlags = Object.values(Game.flags).forEach(function (flag: Flag, index: number) {
+      if (flag.name == "Patroll" && flag.room.name == room.name || flag.name == "Patroll1" && flag.room.name == room.name) {
+        if (PatrollerFlag != null && PatrollerFlag.length >= 1) {
+          let found: true | null = null;
+          PatrollerFlag.forEach(function (flagi) { if (flagi.name == flag.name) { found = true } })
+          if (found == null) {
+            PatrollerFlag.push(flag);
+          }
+        } else {
+          PatrollerFlag.push(flag);
+        }
+      }
+      else if (flag.name == "Scout") {
+        if (ScoutFlag != null && ScoutFlag.length >= 1) {
+          let found: true | null = null;
+          ScoutFlag.forEach(function (flagi) { if (flagi.name == flag.name) { found = true } })
+          if (found == null) {
+            ScoutFlag.push(flag);
+          }
+        } else {
+          ScoutFlag = [];
+          ScoutFlag.push(flag);
+        }
+      }
+    })
+    var FoundFlag: Boolean | null = null;
 
     if (room.creeps.length == 0) {
       SpawnBrain.creepBuilder("GeneralHand", room, null)
@@ -188,6 +217,20 @@ export class SpawnBrain {
       }
 
     }
+
+    if (PatrollerFlag != null && PatrollerFlag.length >= 1 && c.patrollers == undefined || c.patrollers != undefined && c.patrollers.length <= 3) {
+      SpawnBrain.creepBuilder("Patroller", room, null)
+    }
+
+    if (ScoutFlag != null && ScoutFlag.length >= 1 && c.scout == null || c.scout != undefined && c.scout.length <= 1) {
+      let ScoutingNeeded = ScoutFlag.pop().pos.roomName;
+
+      /*SpawnBrain.creepBuilder("Scout", room, {
+        destination: ScoutingNeeded,
+        myContainer: null
+      })*/
+    }
+
 
   }
 

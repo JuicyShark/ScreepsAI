@@ -93,12 +93,12 @@ Object.defineProperty(Room.prototype, 'roomType', {
             if (this.name == colony.name) {
                 return "ColonyHub"
             }
+            else if (this.name != colony.name) {
+                return "Outpost"
+            }
         }
         else if (Game.colonies.length == 0) {
             return "ColonyHub"
-        }
-        else {
-            return "Outpost"
         }
     },
     configurable: true,
@@ -299,14 +299,59 @@ Object.defineProperty(Room.prototype, 'droppedPower', {
 });
 
 //Kodies Movein shit
+Room.prototype.handleMyRoom = function (): void {
+    if (!Memory.username) {
+        Memory.username = this.controller.owner.username;
+    }
+    this.memory.lastSeen = Game.time;
+    this.executeRoom()
+}
+Room.prototype.handleExternalRoom = function (): any {
+    if (!this.controller) {
+        const nameSplit = this.splitRoomName();
+        if (nameSplit[2] % 10 === 0 || nameSplit[4] % 10 === 0) {
+            return this.handleExternalHighwayRoom();
+        }
+    } else {
+
+        if (this.controller.owner != MY_ALLY) {
+            return this.handleOccupiedRoom();
+        }
+        if (this.controller.reservation && this.controller.reservation.username === Memory.username) {
+            return this.handleReservedRoom();
+        }
+    }
+    if (this.controller && !this.controller.reservation) {
+        if (this.handleUnreservedRoom()) {
+            return false;
+        }
+    }
+}
+Room.prototype.handleUnreservedRoom = function (): void {
+
+}
+Room.prototype.handleOccupiedRoom = function (): void {
+
+}
+Room.prototype.handleExternalHighwayRoom = function (): void {
+
+}
+Room.prototype.handleReservedRoom = function (): void {
+
+}
 
 Room.prototype.executeRoom = function (): void {
 
+    //records permanentObjs and refresh cache
+    RoomBrain.run(this)
+
     if (this.my == true) {
+        //Runs the timer. / will run priority thingy
         RoomBrain.runTimer(this);
     }
     else {
-
+        //runs externalRooms
+        this.handleExternalRoom()
     }
 
 }

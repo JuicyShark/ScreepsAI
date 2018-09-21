@@ -36,14 +36,23 @@ interface RoomPosition {
         opts?: { filter: any | string; }): T | undefined;
 }
 interface Room {
+    executeRoom: any;
+    handleMyRoom: any;
+    handleUnreservedRoom: any;
+    handleOccupiedRoom: any;
+    handleExternalHighwayRoom: any;
+    handleExternalRoom: any;
+    handleReservedRoom: any;
     checkandSpawn(): void
     memLog: any;
-    createRoomTask: any;
-    filterRoomTask: any;
-    taskList: any;
     print: string;
     my: boolean;
     owner: string | undefined
+    reservedByMe: any;
+    signedByMe: any;
+    roomType: string;
+    isOutpost: Boolean | null;
+
     // Cached structures
     tombstones: Tombstone[];
     creeps: Creep[];
@@ -88,11 +97,8 @@ interface Room {
     //Extras
     flags: Flag[];
     _flags: Flag[];
-    executeRoom: any;
-    roomType: string;
-    isOutpost: Boolean | null;
-    hostiles: Creep[];
-    _hostiles: Creep[];
+    hostiles: Creep[] | null;
+    _hostiles: Creep[] | null;
     invaders: Creep[];
     _invaders: Creep[];
     sourceKeepers: Creep[];
@@ -106,6 +112,10 @@ interface Room {
     fleeDefaults: Creep[];
     _fleeDefaults: Creep[];
     _tempLog: any;
+    //RoomTask
+    taskList: any;
+    createRoomTask: any;
+    filterRoomTask: any;
 
 }
 interface SavedRoomObject {

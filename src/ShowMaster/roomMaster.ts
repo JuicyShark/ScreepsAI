@@ -2,42 +2,7 @@ import * as creepMaster from '../ShowMaster/creepMaster';
 import { getCacheExpiration } from '../utils/helperFunctions';
 import { roomTypes } from 'config'
 import { SpawnBrain } from "../prototypes/Spawn"
-
-export function handleMyRoom(room: Room) {
-  if (!Memory.username) {
-    Memory.username = room.controller.owner.username;
-  }
-  room.memory.lastSeen = Game.time;
-  if (!room.memory.queue) {
-    room.memory.queue = [];
-  }
-
-  return room.executeRoom();
-
-}
-
-export function handleExternalRoom(room: Room) {
-  if (!this.controller) {
-    const nameSplit = this.splitRoomName();
-    if (nameSplit[2] % 10 === 0 || nameSplit[4] % 10 === 0) {
-      return this.handleExternalHighwayRoom();
-    }
-  } else {
-    if (this.controller.owner) {
-      return this.handleOccupiedRoom();
-    }
-    if (this.controller.reservation && this.controller.reservation.username === Memory.username) {
-      return this.handleReservedRoom();
-    }
-  }
-  if (this.controller && !this.controller.reservation) {
-    if (this.handleUnreservedRoom()) {
-      return false;
-    }
-  }
-}
-
-
+import { CombatBrain } from "../ShowMaster/combatBrain"
 
 const RECACHE_TIME = 2500;
 const OWNED_RECACHE_TIME = 1000;
@@ -104,12 +69,17 @@ export class RoomBrain {
 
     if (room.hostiles != undefined && room.hostiles.length >= 1) {
       //room.defend
+      CombatBrain.defendeRoom(room)
     }
 
 
     if (!room.memory.timer || room.memory.timer == 0) {
-      if (room.memory.log.length >= 30) {
+      if (room.memory.log != undefined && room.memory.log.length >= 30) {
         delete room.memory.log;
+        room.memory.log = [];
+      }
+      else if (room.memory.log == undefined) {
+        room.memory.log = [];
       }
       room.memory.timer = 60;
     }
@@ -124,8 +94,6 @@ export class RoomBrain {
     if (room.memory.timer % 13 === 0) {
       room.checkandSpawn()
     }
-
-    creepMaster.runCreeps()
 
     console.log(room.name + " Timer: " + room.memory.timer)
     room.memory.timer--
@@ -149,24 +117,20 @@ export class RoomBrain {
     }
   }
 
-  static run(): void {
-    for (let name in Game.rooms) {
-      const room = Game.rooms[name];
-      let roomType = room.roomType
+  static run(room: Room): void {
 
-      // Record location of permanent objects in room and recompute score as needed
-      if (!room.memory.expiration || Game.time > room.memory.expiration) {
-        this.recordPermanentObjects(room);
+    // Record location of permanent objects in room and recompute score as needed
+    if (!room.memory.expiration || Game.time > room.memory.expiration) {
+      this.recordPermanentObjects(room);
 
-        // Refresh cache
-        let recacheTime = room.owner ? OWNED_RECACHE_TIME : RECACHE_TIME;
-        room.memory.expiration = getCacheExpiration(recacheTime, 250);
-      }
-      if (!room.memLog) {
-        room.memLog
-      }
-      //what else can we put in here?
+      // Refresh cache
+      let recacheTime = room.owner ? OWNED_RECACHE_TIME : RECACHE_TIME;
+      room.memory.expiration = getCacheExpiration(recacheTime, 250);
     }
+
+
+    //what else can we put in here?
+
   }
 }
 
