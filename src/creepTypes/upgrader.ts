@@ -1,32 +1,11 @@
 import { Tasks } from '../TaskManager/Tasks'
+import { GeneralHand } from './generalhand';
 export class Upgrader {
 
 
     private static upgradeTask(creep: Creep, thisCreepsTasks: any): any {
 
         thisCreepsTasks.push(Tasks.upgrade(Game.rooms[creep.memory.home].controller))
-
-        return thisCreepsTasks
-
-    }
-
-    private static harvestTask(creep: Creep, thisCreepsTasks: any): any {
-        var unattendedContainer = _.filter(creep.room.containers, container => container.isEmpty != true && container.energy > 200 && container.targetedBy.length <= 2)[0];
-
-        if (unattendedContainer == null) {
-            let unattendedSource = _.filter(creep.room.sources, source => source.targetedBy.length <= 2)[0];
-
-            if (unattendedContainer == null) {
-                let unattendedSource = _.filter(creep.room.sources, source => source.targetedBy.length <= 4)[0];
-                thisCreepsTasks.push(Tasks.harvest(unattendedSource))
-
-            } else {
-                thisCreepsTasks.push(Tasks.harvest(unattendedSource))
-            }
-
-        } else {
-            thisCreepsTasks.push(Tasks.withdraw(unattendedContainer, RESOURCE_ENERGY, creep.carryCapacity - creep.carry.energy))
-        }
 
         return thisCreepsTasks
 
@@ -40,12 +19,21 @@ export class Upgrader {
             this.upgradeTask(creep, thisCreepsTasks)
 
         } else {
-
-            this.harvestTask(creep, thisCreepsTasks)
-
-
+            //looking for containers in range of 5
+            let nearContainer: StructureContainer | undefined = creep.pos.findClosestByLimitedRange(creep.room.containers, 5)
+            if (nearContainer != undefined) {
+                if (nearContainer.isEmpty != true) {
+                    thisCreepsTasks.push(Tasks.withdraw(nearContainer, RESOURCE_ENERGY, creep.carryCapacity - creep.carry.energy))
+                }
+            }
+            else {
+                GeneralHand.harvestTask(creep, thisCreepsTasks)
+            }
         }
-        creep.task = Tasks.chain(thisCreepsTasks)
+        if (thisCreepsTasks.length != 0) {
+
+            creep.task = Tasks.chain(thisCreepsTasks)
+        }
     }
 
 

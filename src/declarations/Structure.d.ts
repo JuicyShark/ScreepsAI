@@ -6,3 +6,6 @@ interface StructureContainer {
     isEmpty: boolean;
     energy: number;
 }
+interface StructureTower {
+    run: any;
+}

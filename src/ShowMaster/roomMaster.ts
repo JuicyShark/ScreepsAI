@@ -66,6 +66,10 @@ export class RoomBrain {
 
   static runTimer(room: Room): void {
 
+    if (room.towers != undefined && room.towers.length != 0) {
+      room.towers.forEach(tower => (tower.run()))
+    }
+
 
     if (room.hostiles != undefined && room.hostiles.length >= 1) {
       //room.defend

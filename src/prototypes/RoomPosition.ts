@@ -30,6 +30,7 @@ Object.defineProperty(RoomPosition.prototype, 'coordName', { // name, but withou
 
 RoomPosition.prototype.isPassible = function (ignoreCreeps = false): boolean {
   // Is terrain passable?
+  //  GAME.MAP.getTerrainAt IS TURNING INTO   Game.map.getRoomTerrain
   if (Game.map.getTerrainAt(this) == 'wall') return false;
   if (this.isVisible) {
     // Are there creeps?

@@ -84,10 +84,10 @@ export const tempGeneralCreepsMAX = {
   2: 5,
   3: 5,
   4: 4,
-  5: 4,
-  6: 4,
-  7: 4,
-  8: 4
+  5: 3,
+  6: 2,
+  7: 1,
+  8: 1
 }
 export function creepPriority(type: string): number {
   let temp = [
@@ -157,8 +157,7 @@ function createBody(type: string, room: Room): string[] {
     energy = 300;
   }
   //creating a balanced body
-  if (
-    type == "GeneralHand" || type == "Upgrader" || type == "Builder") {
+  if (type == "GeneralHand" || type == "Upgrader" || type == "Builder") {
     var numberOfParts = Math.floor(energy / 200);
     numberOfParts = Math.min(numberOfParts, Math.floor(50 / 3));
     var body: string[] = [];
@@ -175,9 +174,11 @@ function createBody(type: string, room: Room): string[] {
   }
 
   if (type == "Miner") {
-    let bodyReturn = function (energy) {
-      if (energy < 500) {
+    let bodyReturn = function (energy): number {
+      if (energy <= 500) {
         return 300
+      } else if (energy >= 750) {
+        return 750
       } else {
         return energy
       }

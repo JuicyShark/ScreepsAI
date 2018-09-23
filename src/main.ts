@@ -5,6 +5,7 @@ import 'prototypes/RoomPosition'; // RoomPosition
 import 'prototypes/RoomStructures';
 import 'prototypes/Structures';
 import 'prototypes/Spawn';
+import 'prototypes/tower'
 import { ErrorMapper } from "utils/ErrorMapper";
 import { isIVM } from "utils/helperFunctions";
 import * as config from "config";
@@ -105,5 +106,6 @@ function main(): void {
 export const loop = ErrorMapper.wrapLoop(() => {
 
   profiler.wrap(handler);
+
 
 });

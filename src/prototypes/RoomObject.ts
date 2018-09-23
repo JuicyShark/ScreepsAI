@@ -23,22 +23,25 @@ Source.prototype.hasContainer = function () {
     return false;
   }
 };
-StructureContainer.prototype.hasMiner = function () {
+Source.prototype.hasMiner = function () {
   var anyMiners: Creep[] | undefined = this.pos.findClosestByLimitedRange(this.room.creepsByType.Miner)
   if (anyMiners != null && anyMiners.length >= 1) {
     return true;
   }
   else {
-    if (this.targetedBy != null && this.targetedBy.length != 0) {
-      this.targetedBy.forEach(function (creep: Creep) {
-        if (creep.memory.type == "Miner") {
-          return true
-        }
-      })
-    }
-    else {
+    let found: boolean = false
+    this.targetedBy.forEach(function (creep: Creep) {
+      if (creep.memory.type == "Miner") {
+        found = true
+      }
+    })
+
+    if (found) {
+      return true
+    } else {
       return false
     }
+
   }
 }
 RoomObject.prototype.serialize = function (): protoRoomObject {
