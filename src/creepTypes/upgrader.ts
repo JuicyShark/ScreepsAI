@@ -22,7 +22,7 @@ export class Upgrader {
             //looking for containers in range of 5
             let nearContainer: StructureContainer | undefined = creep.pos.findClosestByLimitedRange(creep.room.containers, 5)
             if (nearContainer != undefined) {
-                if (nearContainer.isEmpty != true) {
+                if (nearContainer.energy > (creep.carryCapacity * 1.5)) {
                     thisCreepsTasks.push(Tasks.withdraw(nearContainer, RESOURCE_ENERGY, creep.carryCapacity - creep.carry.energy))
                 }
             }

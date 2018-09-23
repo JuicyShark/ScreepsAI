@@ -127,7 +127,7 @@ export class SpawnBrain {
           let Container = source.pos.findClosestByLimitedRange(room.containers, 2)
           let Miner: Creep | undefined = source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 1)
 
-          if (Miner == undefined && room.creepsByType.Miner.length != index) {
+          if (Miner == undefined && room.creepsByType.Miner == undefined && source.hasMiner() == false) {
             let ContainerID = source.pos.findClosestByLimitedRange(room.containers, 2).id
             let STMO: spawnTaskMemOpts = {
               destination: null,
@@ -198,7 +198,10 @@ export class SpawnBrain {
     if (room.creeps.length == 0) {
       SpawnBrain.creepBuilder("GeneralHand", room, null)
     }
-    else if (c.generalCreeps == undefined || c.generalCreeps.length < (tempGeneralCreepsMAX[room.controller.level])) {
+    else if (c.generalCreeps == undefined) {
+      SpawnBrain.creepBuilder("GeneralHand", room, null)
+    }
+    else if (c.generalCreeps.length < (tempGeneralCreepsMAX[room.controller.level])) {
       this.ContainerMiners(room, c)
       SpawnBrain.creepBuilder("GeneralHand", room, null)
     }

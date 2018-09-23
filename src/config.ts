@@ -144,17 +144,24 @@ export function creepPriority(type: string): number {
 }
 
 export var roomTypes: string[] = [
+  //Colony RoomTypes
   "ColonyHub",
   "Basic",
   "Spawner",
   "Highway",
-  "Outpost"
+  "Outpost",
+  //Other Room Types
+  "Enemy_Base",
+  "Enemy_Outpost",
+  "Ally_Base",
+  "Ally_Outpost",
+  "SKRoom"
 ]
 
 function createBody(type: string, room: Room): string[] {
   var energy = room.energyCapacityAvailable
-  if (room.creeps.length == 0) {
-    energy = 300;
+  if (room.creepsByType.GeneralHand == undefined || room.creeps.length == 0) {
+    energy = room.energyAvailable;
   }
   //creating a balanced body
   if (type == "GeneralHand" || type == "Upgrader" || type == "Builder") {

@@ -27,6 +27,11 @@ Source.prototype.hasMiner = function () {
   var anyMiners: Creep[] | undefined = this.pos.findClosestByLimitedRange(this.room.creepsByType.Miner)
   if (anyMiners != null && anyMiners.length >= 1) {
     return true;
+  } else if (this.room.creepsByType.Miner != undefined) {
+    var miner = this.room.creepsByType.Miner.forEach(creep => (creep.memory.myContainer == this.id))
+    if (miner) {
+      return true
+    }
   }
   else {
     let found: boolean = false

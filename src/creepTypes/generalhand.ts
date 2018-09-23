@@ -10,11 +10,8 @@ export class GeneralHand {
         let spawn = Game.rooms[creep.memory.home].spawns[0];
         let extensions = creep.room.extensions;
 
-        if (spawn.energy != spawn.energyCapacity) {
-            thisCreepsTasks.push(Tasks.transfer(spawn));
-            return thisCreepsTasks
-        }
-        else if (spawn.room.energyAvailable != spawn.room.energyCapacityAvailable) {
+
+        if (spawn.room.energyAvailable != spawn.room.energyCapacityAvailable) {
 
             if (extensions.length != 0) {
                 let temp: any = undefined;
@@ -28,6 +25,10 @@ export class GeneralHand {
                     thisCreepsTasks.push(Tasks.transfer(temp));
                     return thisCreepsTasks
                 }
+            }
+            else if (spawn.energy != spawn.energyCapacity) {
+                thisCreepsTasks.push(Tasks.transfer(spawn));
+                return thisCreepsTasks
             }
             else if (storage != undefined) {
                 thisCreepsTasks.push(Tasks.transfer(storage));
@@ -68,7 +69,7 @@ export class GeneralHand {
     }
     static harvestTask(creep: Creep, thisCreepsTasks: any): void {
         //looks for Container with 200 Energy or more and with no more than 2 creeps (including miner)
-        var minerContainer = _.filter(creep.room.containers, container => container.isEmpty != true || container.energy > (creep.carryCapacity * 2))[0];
+        var minerContainer = _.filter(creep.room.containers, container => container.energy > (creep.carryCapacity * 2))[0];
         //if it is null
         if (minerContainer == null) {
             //Find a source with no more than 3 creeps harvesting -- hard cap so source doesnt get overloaded.

@@ -93,9 +93,19 @@ Object.defineProperty(Room.prototype, 'roomType', {
             if (this.name == colony.name) {
                 return "ColonyHub"
             }
-            else if (this.name != colony.name) {
+            else if (this.name != colony.name && this.hostiles == undefined) {
                 return "Outpost"
             }
+            else if (this.hostiles != undefined && this.sourceKeepers.length >= 1) {
+                return "SKRoom"
+            }
+            else if (this.hostiles != undefined && this.hostileStructures.lengh <= 5 && this.playerHostiles.length >= 1) {
+                return "Enemy_Outpost"
+            }
+            else if (this.hostiles != undefined && this.hostileStructures.lengh >= 6 && this.playerHostiles.length >= 1) {
+                return "Enemy_Base"
+            }
+
         }
         else if (Game.colonies.length == 0) {
             return "ColonyHub"
