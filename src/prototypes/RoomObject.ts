@@ -24,30 +24,21 @@ Source.prototype.hasContainer = function () {
   }
 };
 Source.prototype.hasMiner = function () {
-  var anyMiners: Creep[] | undefined = this.pos.findClosestByLimitedRange(this.room.creepsByType.Miner)
-  if (anyMiners != null && anyMiners.length >= 1) {
-    return true;
-  } else if (this.room.creepsByType.Miner != undefined) {
-    var miner = this.room.creepsByType.Miner.forEach(creep => (creep.memory.myContainer == this.id))
-    if (miner) {
-      return true
+  var creepsByMiners: Creep[] | undefined = this.room.creepsByType.Miner;
+  var anyMiners: Creep | undefined = this.pos.findClosestByLimitedRange(creepsByMiners, 3)
+  var found: boolean = false
+  if (anyMiners != undefined) {
+    found = true;
+  } else if (anyMiners == undefined) {
+    if (creepsByMiners != undefined) {
+      creepsByMiners.forEach(function (creep: Creep) {
+        if (creep.memory.myContainer == this.id) {
+          found = true;
+        }
+      }, this)
     }
   }
-  else {
-    let found: boolean = false
-    this.targetedBy.forEach(function (creep: Creep) {
-      if (creep.memory.type == "Miner") {
-        found = true
-      }
-    })
-
-    if (found) {
-      return true
-    } else {
-      return false
-    }
-
-  }
+  return found
 }
 RoomObject.prototype.serialize = function (): protoRoomObject {
   let pos: protoPos = {

@@ -121,23 +121,22 @@ export class SpawnBrain {
 
   private static ContainerMiners(room: Room, c: any): void {
 
-    if (room.containers.length != 0 && c.miners == undefined || room.containers.length != 0 && c.miners.length <= (room.sources.length - 1)) {
-      room.sources.forEach(function (source: Source, index: number, array: Source[]) {
-        if (source.hasContainer() == true) {
-          let Container = source.pos.findClosestByLimitedRange(room.containers, 2)
-          let Miner: Creep | undefined = source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 1)
+    room.sources.forEach(function (source: Source, index: number, array: Source[]) {
+      if (source.hasContainer() == true) {
+        var ContainerID = source.pos.findClosestByLimitedRange(room.containers, 2).id
+        var Miner: Creep | undefined = source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 1)
 
-          if (Miner == undefined && room.creepsByType.Miner == undefined && source.hasMiner() == false) {
-            let ContainerID = source.pos.findClosestByLimitedRange(room.containers, 2).id
-            let STMO: spawnTaskMemOpts = {
-              destination: null,
-              myContainer: ContainerID
-            }
-            SpawnBrain.creepBuilder("Miner", room, STMO)
+        if (source.hasMiner() == false && Miner == undefined) {
+
+          let STMO: spawnTaskMemOpts = {
+            destination: null,
+            myContainer: ContainerID
           }
+          SpawnBrain.creepBuilder("Miner", room, STMO)
         }
-      })
-    }
+      }
+    })
+
   }
 
   static creepBuilder(type: string, room: Room, options: spawnTaskMemOpts | null): void {

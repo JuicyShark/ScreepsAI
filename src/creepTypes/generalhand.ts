@@ -1,5 +1,6 @@
 import { Tasks } from '../TaskManager/Tasks'
 import { Builder } from './builder';
+import { roomTypes } from 'config';
 
 
 export class GeneralHand {
@@ -9,9 +10,11 @@ export class GeneralHand {
         let towers: StructureTower[] | undefined = creep.room.towers
         let spawn = Game.rooms[creep.memory.home].spawns[0];
         let extensions = creep.room.extensions;
-
-
-        if (spawn.room.energyAvailable != spawn.room.energyCapacityAvailable) {
+        if (spawn.energy != spawn.energyCapacity) {
+            thisCreepsTasks.push(Tasks.transfer(spawn));
+            return thisCreepsTasks
+        }
+        else if (spawn.room.energyAvailable != spawn.room.energyCapacityAvailable) {
 
             if (extensions.length != 0) {
                 let temp: any = undefined;
@@ -26,16 +29,11 @@ export class GeneralHand {
                     return thisCreepsTasks
                 }
             }
-            else if (spawn.energy != spawn.energyCapacity) {
-                thisCreepsTasks.push(Tasks.transfer(spawn));
-                return thisCreepsTasks
-            }
             else if (storage != undefined) {
                 thisCreepsTasks.push(Tasks.transfer(storage));
                 return thisCreepsTasks
 
             }
-
 
         }
         else {
@@ -68,21 +66,30 @@ export class GeneralHand {
 
     }
     static harvestTask(creep: Creep, thisCreepsTasks: any): void {
-        //looks for Container with 200 Energy or more and with no more than 2 creeps (including miner)
-        var minerContainer = _.filter(creep.room.containers, container => container.energy > (creep.carryCapacity * 2))[0];
-        //if it is null
-        if (minerContainer == null) {
-            //Find a source with no more than 3 creeps harvesting -- hard cap so source doesnt get overloaded.
-            let unattendedSource = _.filter(creep.room.sources, source => source.hasContainer() == false);
-            if (unattendedSource[0]) {
-                thisCreepsTasks.push(Tasks.harvest(unattendedSource[0]));
+
+        if (creep.room.droppedEnergy.length != 0 && creep.room.droppedEnergy[0].amount >= creep.carryCapacity) {
+            thisCreepsTasks.push(Tasks.pickup(creep.room.droppedEnergy[0]))
+
+        } else {
+
+
+
+            //looks for Container with 200 Energy or more and with no more than 2 creeps (including miner)
+            var minerContainer = _.filter(creep.room.containers, container => container.energy > (creep.carryCapacity * 2))[0];
+            //if it is null
+            if (minerContainer == null) {
+                //Find a source with no more than 3 creeps harvesting -- hard cap so source doesnt get overloaded.
+                let unattendedSource = _.filter(creep.room.sources, source => source.hasContainer() == false);
+                if (unattendedSource[0]) {
+                    thisCreepsTasks.push(Tasks.harvest(unattendedSource[0]));
+                    //this.depositTask(creep, thisCreepsTasks)
+                }
+            }
+            else {
+                //or take it from the container
+                thisCreepsTasks.push(Tasks.withdraw(minerContainer, RESOURCE_ENERGY, creep.carryCapacity - creep.carry.energy))
                 //this.depositTask(creep, thisCreepsTasks)
             }
-        }
-        else {
-            //or take it from the container
-            thisCreepsTasks.push(Tasks.withdraw(minerContainer, RESOURCE_ENERGY, creep.carryCapacity - creep.carry.energy))
-            //this.depositTask(creep, thisCreepsTasks)
         }
     }
 
