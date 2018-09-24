@@ -86,7 +86,7 @@ export class GeneralHand {
             //if it is null
             if (minerContainer == null) {
                 //Find a source with no more than 3 creeps harvesting -- hard cap so source doesnt get overloaded.
-                let unattendedSource = _.filter(creep.room.sources, source => source.hasMiner() == false);
+                let unattendedSource = _.filter(creep.room.sources, source => source.hasMiner() == false && source.energy >= 10);
                 if (unattendedSource[0]) {
                     thisCreepsTasks.push(Tasks.harvest(unattendedSource[0]));
                     //this.depositTask(creep, thisCreepsTasks)
