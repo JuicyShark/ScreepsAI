@@ -14,7 +14,7 @@ export class RoomBrain {
     for (let source of room.sources) {
       let container = source.pos.findClosestByLimitedRange(room.containers, 2);
       let miners: boolean | undefined;
-      if (source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 2)) {
+      if (source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 1)) {
         miners = true
       } else {
         miners = undefined

@@ -119,14 +119,14 @@ export class SpawnBrain {
 
   }
 
-  private static ContainerMiners(room: Room, c: any): void {
+  private static ContainerMiners(room: Room): void {
 
     room.sources.forEach(function (source: Source, index: number, array: Source[]) {
       if (source.hasContainer() == true) {
         var ContainerID = source.pos.findClosestByLimitedRange(room.containers, 2).id
         var Miner: Creep | undefined = source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 1)
 
-        if (source.hasMiner() == false && Miner == undefined) {
+        if (source.hasMiner() == false || Miner == undefined) {
 
           let STMO: spawnTaskMemOpts = {
             destination: null,
@@ -200,15 +200,17 @@ export class SpawnBrain {
     else if (c.generalCreeps == undefined) {
       SpawnBrain.creepBuilder("GeneralHand", room, null)
     }
-    else if (c.generalCreeps.length < (tempGeneralCreepsMAX[room.controller.level])) {
-      this.ContainerMiners(room, c)
-      SpawnBrain.creepBuilder("GeneralHand", room, null)
-    }
-    else if (c.builders == undefined || c.builders != undefined && c.builders.length < (room.controller.level / 2)) {
-      SpawnBrain.creepBuilder("Builder", room, null)
-    }
     else {
 
+      if (c.generalCreeps.length < (tempGeneralCreepsMAX[room.controller.level])) {
+        SpawnBrain.creepBuilder("GeneralHand", room, null)
+      }
+      if (c.miners == undefined || c.miners.length <= (room.sources.length - 1)) {
+        this.ContainerMiners(room)
+      }
+      if (c.builders == undefined || c.builders != undefined && c.builders.length < (room.controller.level / 2)) {
+        SpawnBrain.creepBuilder("Builder", room, null)
+      }
       if (room.controller.level >= 3) {
         if (c.upgraders == undefined || c.upgraders != undefined && c.upgraders.length < (room.controller.level / 2)) {
           SpawnBrain.creepBuilder("Upgrader", room, null)

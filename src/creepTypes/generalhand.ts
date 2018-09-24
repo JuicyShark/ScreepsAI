@@ -19,7 +19,7 @@ export class GeneralHand {
             if (extensions.length != 0) {
                 let temp: any = undefined;
                 for (let i in extensions) {
-                    if (extensions[i].energy != extensions[i].energyCapacity && extensions[i].targetedBy.length == 0) {
+                    if (extensions[i].energy != extensions[i].energyCapacity && extensions[i].targetedBy.length <= 1) {
                         temp = extensions[i];
                         break;
                     }
@@ -29,11 +29,25 @@ export class GeneralHand {
                     return thisCreepsTasks
                 }
             }
-            else if (storage != undefined) {
-                thisCreepsTasks.push(Tasks.transfer(storage));
+        }
+        else if (towers != undefined && towers[0].energy != (towers[0].energyCapacity - 1)) {
+            var temp1: any = undefined;
+            for (let ii = 0; ii < towers.length; ii++) {
+                let thisTower = towers[ii];
+                if (thisTower.energy < thisTower.energyCapacity) {
+                    temp1 = thisTower;
+                    break;
+                }
+            }
+            if (temp1 != undefined) {
+                thisCreepsTasks.push(Tasks.transfer(temp1));
                 return thisCreepsTasks
 
             }
+        }
+        else if (storage != undefined) {
+            thisCreepsTasks.push(Tasks.transfer(storage));
+            return thisCreepsTasks
 
         }
         else {
@@ -45,22 +59,6 @@ export class GeneralHand {
             if (creep.room.controller.targetedBy.length <= 1 && creep.room.creepsByType.Upgrader == undefined) {
                 thisCreepsTasks.push(Tasks.upgrade(Game.rooms[creep.memory.home].controller))
                 return thisCreepsTasks
-            }
-
-            else if (towers != undefined && towers[0].energy != (towers[0].energyCapacity - 1)) {
-                let temp1: any = undefined;
-                for (let ii = 0; ii < towers.length; ii++) {
-                    let thisTower = towers[ii];
-                    if (thisTower.energy < thisTower.energyCapacity) {
-                        temp1 = thisTower;
-                        break;
-                    }
-                }
-                if (temp1 != undefined) {
-                    thisCreepsTasks.push(Tasks.transfer(temp1));
-                    return thisCreepsTasks
-
-                }
             }
         }
 
@@ -75,11 +73,20 @@ export class GeneralHand {
 
 
             //looks for Container with 200 Energy or more and with no more than 2 creeps (including miner)
-            var minerContainer = _.filter(creep.room.containers, container => container.energy > (creep.carryCapacity * 2))[0];
+            let miningContainers: StructureContainer[] = [];
+            var source = creep.room.sources.forEach(function (source) {
+                let anyCon: StructureContainer | undefined = source.pos.findClosestByLimitedRange(creep.room.containers, 1)
+                if (anyCon != undefined) {
+
+                    miningContainers.push(anyCon)
+                }
+            })
+            var minerContainer = _.filter(miningContainers, container => container.energy > (creep.carryCapacity * 2))[0];
+
             //if it is null
             if (minerContainer == null) {
                 //Find a source with no more than 3 creeps harvesting -- hard cap so source doesnt get overloaded.
-                let unattendedSource = _.filter(creep.room.sources, source => source.hasContainer() == false);
+                let unattendedSource = _.filter(creep.room.sources, source => source.hasMiner() == false);
                 if (unattendedSource[0]) {
                     thisCreepsTasks.push(Tasks.harvest(unattendedSource[0]));
                     //this.depositTask(creep, thisCreepsTasks)
@@ -88,7 +95,7 @@ export class GeneralHand {
             else {
                 //or take it from the container
                 thisCreepsTasks.push(Tasks.withdraw(minerContainer, RESOURCE_ENERGY, creep.carryCapacity - creep.carry.energy))
-                //this.depositTask(creep, thisCreepsTasks)
+
             }
         }
     }

@@ -18,7 +18,7 @@ export class Upgrader {
 
             this.upgradeTask(creep, thisCreepsTasks)
 
-        } else {
+        } else if (creep.carry.energy == 0 || creep.carry.energy <= creep.carryCapacity) {
             //looking for containers in range of 5
             let nearContainer: StructureContainer | undefined = creep.pos.findClosestByLimitedRange(creep.room.containers, 5)
             if (nearContainer != undefined) {
@@ -30,9 +30,17 @@ export class Upgrader {
                 GeneralHand.harvestTask(creep, thisCreepsTasks)
             }
         }
-        if (thisCreepsTasks.length != 0) {
+        if (thisCreepsTasks.length >= 2) {
 
             creep.task = Tasks.chain(thisCreepsTasks)
+        }
+        else if (thisCreepsTasks.length == 1) {
+            creep.task = thisCreepsTasks[0]
+        }
+        else {
+            GeneralHand.harvestTask(creep, thisCreepsTasks)
+            creep.task = thisCreepsTasks[0]
+
         }
     }
 
