@@ -64,4 +64,5 @@ export class Colony {
     this.creeps = Game.rooms[roomName].creeps || [];
     this.creepsByType = _.groupBy(this.creeps, creep => creep.memory.type);
   }
+
 }

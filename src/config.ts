@@ -160,7 +160,13 @@ export var roomTypes: string[] = [
 
 function createBody(type: string, room: Room): string[] {
   var energy = room.energyCapacityAvailable
-  if (room.creepsByType.GeneralHand == undefined || room.creeps.length == 0) {
+  if (room.creepsByType.GeneralHand == undefined || room.creeps.length <= 4) {
+    if (room.energyAvailable >= 500) {
+      energy = 300;
+    }
+    else {
+      energy = 200
+    }
     energy = room.energyAvailable;
   }
   //creating a balanced body

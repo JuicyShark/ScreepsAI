@@ -10,6 +10,7 @@ export class GeneralHand {
         let towers: StructureTower[] | undefined = creep.room.towers
         let spawn = Game.rooms[creep.memory.home].spawns[0];
         let extensions = creep.room.extensions;
+
         if (spawn.energy != spawn.energyCapacity) {
             thisCreepsTasks.push(Tasks.transfer(spawn));
             return thisCreepsTasks
@@ -30,13 +31,16 @@ export class GeneralHand {
                 }
             }
         }
-        else if (towers != undefined && towers[0].energy != (towers[0].energyCapacity - 1)) {
+        else if (towers != undefined) {
             var temp1: any = undefined;
             for (let ii = 0; ii < towers.length; ii++) {
                 let thisTower = towers[ii];
                 if (thisTower.energy < thisTower.energyCapacity) {
                     temp1 = thisTower;
                     break;
+                }
+                else {
+                    continue;
                 }
             }
             if (temp1 != undefined) {
@@ -45,7 +49,7 @@ export class GeneralHand {
 
             }
         }
-        else if (storage != undefined) {
+        else if (storage != undefined && storage.store.energy <= storage.storeCapacity) {
             thisCreepsTasks.push(Tasks.transfer(storage));
             return thisCreepsTasks
 
@@ -65,7 +69,7 @@ export class GeneralHand {
     }
     static harvestTask(creep: Creep, thisCreepsTasks: any): void {
 
-        if (creep.room.droppedEnergy.length != 0 && creep.room.droppedEnergy[0].amount >= creep.carryCapacity) {
+        if (creep.room.droppedEnergy.length != 0 && creep.room.droppedEnergy[0].amount >= (creep.carryCapacity / 3)) {
             thisCreepsTasks.push(Tasks.pickup(creep.room.droppedEnergy[0]))
 
         } else {
@@ -81,7 +85,7 @@ export class GeneralHand {
                     miningContainers.push(anyCon)
                 }
             })
-            var minerContainer = _.filter(miningContainers, container => container.energy > (creep.carryCapacity * 2))[0];
+            var minerContainer = _.filter(miningContainers, container => container.energy > (creep.carryCapacity * .5))[0];
 
             //if it is null
             if (minerContainer == null) {

@@ -59,12 +59,14 @@ export class RoomBrain {
     } else {
       room.memory.importantStructs = undefined;
     }
+    room.memory.roomPos = room.getRoomLocation(room.name)
     room.memory.tick = Game.time;
 
   }
 
 
   static runTimer(room: Room): void {
+    console.log(room.decodeRoomLocation(room.memory.roomPos))
 
     if (room.towers != undefined && room.towers.length != 0) {
       room.towers.forEach(tower => (tower.run()))
@@ -95,7 +97,7 @@ export class RoomBrain {
         }
       }
     }
-    if (room.memory.timer % 13 === 0) {
+    if (room.memory.timer % 16 === 0) {
       room.checkandSpawn()
     }
 

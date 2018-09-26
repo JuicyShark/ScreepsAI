@@ -36,6 +36,8 @@ interface RoomPosition {
         opts?: { filter: any | string; }): T | undefined;
 }
 interface Room {
+    decodeRoomLocation: any
+    getRoomLocation: any;
     executeRoom: any;
     handleMyRoom: any;
     handleUnreservedRoom: any;
@@ -169,6 +171,7 @@ interface RoomMemory {
     queue: any;
     timer: number;
     suspended: boolean;
+    roomPos: any;
     log: Object[];
 }
 interface RoomObject {

@@ -126,7 +126,7 @@ export class SpawnBrain {
         var ContainerID = source.pos.findClosestByLimitedRange(room.containers, 2).id
         var Miner: Creep | undefined = source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 1)
 
-        if (source.hasMiner() == false || Miner == undefined) {
+        if (source.hasMiner() == false || Miner == undefined && room.sources.length != (room.creepsByType.Miner.length + 1)) {
 
           let STMO: spawnTaskMemOpts = {
             destination: null,

@@ -425,3 +425,45 @@ Room.prototype.filterRoomTask = function (roomOrder: string): any {
     return output
 
 }
+
+Room.prototype.getRoomLocation = function (roomName): any {
+    let temp1 = [];
+    let thisString = roomName.split("");
+    for (let i = 0; i < thisString.length; i++) {
+        let result = thisString[i];
+        if (result == "W") {
+            temp1.push("!")
+        } else if (result == "S") {
+            temp1.push("$")
+        } else if (result == "E") {
+            temp1.push("@")
+        } else if (result == "N") {
+            temp1.push("#")
+        } else {
+            temp1.push(result)
+        }
+    }
+
+    var output: string[] | number[] = temp1
+    return output;
+}
+Room.prototype.decodeRoomLocation = function (roomPos: string[] | number[]) {
+    let temp1 = [];
+
+    for (let i = 0; i < roomPos.length; i++) {
+        let result = roomPos[i];
+        if (result == "!") {
+            temp1.push("W")
+        } else if (result == "$") {
+            temp1.push("S")
+        } else if (result == "@") {
+            temp1.push("E")
+        } else if (result == "#") {
+            temp1.push("N")
+        } else {
+            temp1.push(result)
+        }
+    }
+    let temp3: string = temp1.join("");
+    return temp3;
+}
