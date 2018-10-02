@@ -82,7 +82,7 @@ export class CombatBrain {
             let defenders: Creep[] | null = SpawnBrain.thisColony(room).creepsByType.Defender;
             if (generalCreeps != null) {
                 if (defenders == null || defenders.length <= neededDefenders) {
-                    SpawnBrain.creepBuilder("Defender", room, null)
+                    SpawnBrain.creepBuilder("Defender", room)
                 }
             }
         }

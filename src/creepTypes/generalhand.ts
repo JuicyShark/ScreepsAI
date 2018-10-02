@@ -5,37 +5,22 @@ import { roomTypes } from 'config';
 
 export class GeneralHand {
 
-    static depositTask(creep: Creep, thisCreepsTasks: any): any {
+    private static harvestStorage(creep: Creep, thisCreepsTasks: any): any {
         let storage: StructureStorage | undefined = creep.room.storage;
+        if (storage != undefined && creep.carry.energy == 0 && storage.store.energy >= creep.carryCapacity) {
+            thisCreepsTasks.push(Tasks.withdraw(storage));
+            return this.deposTower(creep, thisCreepsTasks)
+
+        }
+    }
+
+    private static deposTower(creep: Creep, thisCreepsTasks: any): any {
         let towers: StructureTower[] | undefined = creep.room.towers
-        let spawn = Game.rooms[creep.memory.home].spawns[0];
-        let extensions = creep.room.extensions;
-
-        if (spawn.energy != spawn.energyCapacity) {
-            thisCreepsTasks.push(Tasks.transfer(spawn));
-            return thisCreepsTasks
-        }
-        else if (spawn.room.energyAvailable != spawn.room.energyCapacityAvailable) {
-
-            if (extensions.length != 0) {
-                let temp: any = undefined;
-                for (let i in extensions) {
-                    if (extensions[i].energy != extensions[i].energyCapacity && extensions[i].targetedBy.length <= 1) {
-                        temp = extensions[i];
-                        break;
-                    }
-                }
-                if (temp != undefined) {
-                    thisCreepsTasks.push(Tasks.transfer(temp));
-                    return thisCreepsTasks
-                }
-            }
-        }
-        else if (towers != undefined) {
+        if (towers != undefined) {
             var temp1: any = undefined;
             for (let ii = 0; ii < towers.length; ii++) {
                 let thisTower = towers[ii];
-                if (thisTower.energy < thisTower.energyCapacity) {
+                if (thisTower.energy < (thisTower.energyCapacity - 100) && thisTower.targetedBy.length == 0) {
                     temp1 = thisTower;
                     break;
                 }
@@ -44,32 +29,103 @@ export class GeneralHand {
                 }
             }
             if (temp1 != undefined) {
-                thisCreepsTasks.push(Tasks.transfer(temp1));
-                return thisCreepsTasks
-
+                return thisCreepsTasks.push(Tasks.transfer(temp1));
             }
         }
-        else if (storage != undefined && storage.store.energy <= storage.storeCapacity) {
+    }
+    /** if storage found and not at capacity returns thisCreepsTasks
+     *
+     */
+
+    private static depositStorage(creep: Creep, thisCreepsTasks: any): any {
+        let storage: StructureStorage | undefined = creep.room.storage;
+        if (storage != undefined && storage.store.energy <= storage.storeCapacity) {
             thisCreepsTasks.push(Tasks.transfer(storage));
             return thisCreepsTasks
 
         }
-        else {
-            var repairables = creep.room.repairables;
-            var closestDamagedStructure = creep.pos.findClosestByRange(FIND_STRUCTURES, { filter: (s: Structure) => s.hits < s.hitsMax && s.structureType != STRUCTURE_ROAD });
-            var repairMe: Structure<StructureConstant> | null;
+    }
+    /**
+     * Deposits into extensions that no ones else is targeting as long as they have 50 energy.
+     */
 
+    private static depositExtensions(creep: Creep, thisCreepsTasks: any): any {
+        let extensions = creep.room.extensions;
+        let temp: any = [];
+        var carryCount = creep.carry.energy;
+
+        if (extensions.length != 0) {
+            extensions.forEach(function (exten, index, array) {
+                if (exten.energy != exten.energyCapacity && exten.targetedBy.length == 0) {
+                    temp.push(exten)
+                }
+            })
+            for (let i = 0; i < temp.length; i++) {
+                if (carryCount <= 49) {
+                    break;
+                } else {
+                    thisCreepsTasks.push(Tasks.transfer(temp[i]))
+                    carryCount -= 50
+                }
+            }
+            return thisCreepsTasks
+        }
+
+    }
+
+    /**
+ * Deposits into the creeps Home room Spawns - havnt tested multiple spawns as of yet but logic is sound?
+ */
+    private static depositSpawns(creep: Creep, thisCreepsTasks: any): any {
+        let spawns = Game.rooms[creep.memory.home].spawns;
+
+        spawns.forEach(function (spawn: StructureSpawn, index: number, array: StructureSpawn[]) {
+            if (array.length == 1) {
+                if (spawn.energy != spawn.energyCapacity && spawn.targetedBy.length < 2) {
+                    thisCreepsTasks.push(Tasks.transfer(spawn));
+
+                }
+            }
+            else {
+                if (spawn.energy != spawn.energyCapacity && spawn.targetedBy.length < 2) {
+                    thisCreepsTasks.push(Tasks.transfer(spawn));
+                }
+            }
+        })
+
+
+        return thisCreepsTasks
+    }
+
+
+    static depositTask(creep: Creep, thisCreepsTasks: any): any {
+        let storage: StructureStorage | undefined = creep.room.storage;
+        if (creep.room.energyAvailable != creep.room.energyCapacityAvailable) {
+            this.depositSpawns(creep, thisCreepsTasks)
+            if (thisCreepsTasks.length == 0) {
+                this.depositExtensions(creep, thisCreepsTasks)
+            }
+            return thisCreepsTasks
+        }
+        else {
             //If you have no Upgraders targeting the upgrader  the harvester will do so.
             if (creep.room.controller.targetedBy.length <= 1 && creep.room.creepsByType.Upgrader == undefined) {
                 thisCreepsTasks.push(Tasks.upgrade(Game.rooms[creep.memory.home].controller))
                 return thisCreepsTasks
+            }
+            else {
+                this.deposTower(creep, thisCreepsTasks)
+
+                if (thisCreepsTasks.length == 0) {
+                    this.depositStorage(creep, thisCreepsTasks)
+                }
             }
         }
 
     }
     static harvestTask(creep: Creep, thisCreepsTasks: any): void {
 
-        if (creep.room.droppedEnergy.length != 0 && creep.room.droppedEnergy[0].amount >= (creep.carryCapacity / 3)) {
+        if (creep.room.droppedEnergy.length != 0 && creep.room.droppedEnergy[0].amount >= (creep.carryCapacity / 2)) {
             thisCreepsTasks.push(Tasks.pickup(creep.room.droppedEnergy[0]))
 
         } else {
@@ -85,7 +141,7 @@ export class GeneralHand {
                     miningContainers.push(anyCon)
                 }
             })
-            var minerContainer = _.filter(miningContainers, container => container.energy > (creep.carryCapacity * .5))[0];
+            var minerContainer = _.filter(miningContainers, container => container.energy > (creep.carryCapacity * 2))[0];
 
             //if it is null
             if (minerContainer == null) {
@@ -103,18 +159,32 @@ export class GeneralHand {
             }
         }
     }
-
-
-
-    static newTask(creep: Creep): void {
-        let thisCreepsTasks: any = []
-
+    /** Checks creeps energy and does things
+     *
+     * @param creep Creep
+     * @param thisCreepsTasks Array of Tasks
+     */
+    private static harvesterRun(creep, thisCreepsTasks): any {
         if (creep.carry.energy == 0) {
             this.harvestTask(creep, thisCreepsTasks)
         }
         else if (creep.carry.energy != 0 || creep.carry.energy == creep.carryCapacity) {
             this.depositTask(creep, thisCreepsTasks)
         }
+
+        if (thisCreepsTasks.length != 0) {
+            return thisCreepsTasks
+        } else if (thisCreepsTasks.length == 0) {
+
+        }
+    }
+
+
+
+    static newTask(creep: Creep): void {
+        let thisCreepsTasks: any = []
+
+        this.harvesterRun(creep, thisCreepsTasks)
 
 
         if (thisCreepsTasks.length >= 1) {

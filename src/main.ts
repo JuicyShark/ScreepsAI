@@ -11,8 +11,7 @@ import { isIVM } from "utils/helperFunctions";
 import * as config from "config";
 import profiler from './utils/screeps-profiler';
 import { checkColonys } from './Colony'
-import { RoomBrain } from './ShowMaster/roomMaster';
-import { setCreepTasks, runCreeps } from './ShowMaster/creepMaster';
+
 
 
 profiler.enable();
@@ -69,31 +68,7 @@ function main(): void {
   if (Game.colonies.length >= 1) {
     for (let i in Game.colonies) {
       var Colony = Game.colonies[i];
-      setCreepTasks(Colony)
-      runCreeps()
-
-      //executing Main Room
-      var gameRooms: Room[] = Object.values(Game.rooms)
-      for (let ii = 0; ii < gameRooms.length; ii++) {
-        var room = Game.rooms[gameRooms[ii].name]
-        if (room.name == Colony.room.name) {
-          room.handleMyRoom(room)
-          // continue;
-        } else {
-          var found: boolean = false;
-          Colony.outposts.forEach(function (outpostRoom: Room) {
-            if (outpostRoom.name == room.name) {
-              found = true;
-            }
-          })
-          if (found == false) {
-            room.executeRoom()
-            if (room.isOutpost == true) {
-              Colony.outposts.push(room)
-            }
-          }
-        }
-      }
+      Colony.run()
     }
 
   } else {

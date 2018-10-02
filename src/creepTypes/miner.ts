@@ -5,17 +5,7 @@ export class Miner {
 
     static newTask(creep: Creep): void {
 
-        var containerSource = creep.room.sources.forEach(function (source) {
-            if (source.hasMiner() == false) {
-                let anyCon: StructureContainer | undefined = source.pos.findClosestByLimitedRange(creep.room.containers, 1)
-                if (anyCon != undefined) {
 
-                    if (!creep.memory.myContainer) {
-                        creep.memory.myContainer = anyCon.id;
-                    }
-                }
-            }
-        })
 
 
 
@@ -25,6 +15,7 @@ export class Miner {
             if (creep.pos.x != container.pos.x && creep.pos.y != container.pos.y) {
                 creep.task = Tasks.goTo(container)
 
+
             }
             else if (creep.pos.x == container.pos.x && creep.pos.y == container.pos.y) {
 
@@ -33,6 +24,22 @@ export class Miner {
                     creep.task = Tasks.harvest(temp)
                 }
             }
+        } else {
+
+            for (let i = 0; i < creep.room.sources.length; i++) {
+                let thisSource = creep.room.sources[i]
+                let anyCon: StructureContainer | undefined = thisSource.pos.findClosestByLimitedRange(creep.room.containers, 1)
+                if (anyCon != undefined) {
+                    if (thisSource.hasMiner() == false) {
+                        if (anyCon.targetedBy.length == 0) {
+                            creep.memory.myContainer = anyCon.id;
+                        }
+                    }
+                }
+
+
+            }
+
         }
     }
 

@@ -66,19 +66,13 @@ export class RoomBrain {
 
 
   static runTimer(room: Room): void {
-    console.log(room.decodeRoomLocation(room.memory.roomPos))
-
     if (room.towers != undefined && room.towers.length != 0) {
       room.towers.forEach(tower => (tower.run()))
     }
-
-
     if (room.hostiles != undefined && room.hostiles.length >= 1) {
       //room.defend
       CombatBrain.defendeRoom(room)
     }
-
-
     if (!room.memory.timer || room.memory.timer == 0) {
       if (room.memory.log != undefined && room.memory.log.length >= 30) {
         delete room.memory.log;
@@ -118,9 +112,6 @@ export class RoomBrain {
     if (room.roomType == "ColonyHub") {
       SpawnBrain.spawnListChecker(room)
     }
-    else if (room.roomType == "Outpost") {
-
-    }
   }
 
   static run(room: Room): void {
@@ -134,7 +125,7 @@ export class RoomBrain {
       room.memory.expiration = getCacheExpiration(recacheTime, 250);
     }
 
-
+    this.runTimer(room)
     //what else can we put in here?
 
   }

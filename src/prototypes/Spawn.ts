@@ -8,25 +8,16 @@ export class SpawnTask {
   body: string[];
   memory: any;
 
-  constructor(CreatedBy: string, type: string, body: string[], options: spawnTaskMemOpts | null) {
+  constructor(CreatedBy: string, type: string, body: string[]) {
     this.CreatedBy = CreatedBy;
     this.type = type;
     this.body = body;
-    if (options == null) {
-      this.memory = {
-        type: type,
-        home: CreatedBy,
-        destination: null
-      };
-    }
-    else {
-      this.memory = {
-        type: type,
-        home: CreatedBy,
-        destination: options.destination,
-        myContainer: options.myContainer
-      };
-    }
+
+    this.memory = {
+      type: type,
+      home: CreatedBy,
+      destination: null
+    };
   }
 }
 
@@ -124,26 +115,34 @@ export class SpawnBrain {
     room.sources.forEach(function (source: Source, index: number, array: Source[]) {
       if (source.hasContainer() == true && source.hasMiner() == false) {
         var ContainerID = source.pos.findClosestByLimitedRange(room.containers, 2).id
-        var Miner: Creep | undefined = source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 1)
+        var Miner: Creep | undefined = source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 2)
 
-        if (source.hasMiner() == false || Miner == undefined && room.sources.length != (room.creepsByType.Miner.length + 1)) {
+        if (Miner == undefined || index != room.creepsByType.Miner.length) {
 
           let STMO: spawnTaskMemOpts = {
             destination: null,
             myContainer: ContainerID
           }
-          SpawnBrain.creepBuilder("Miner", room, STMO)
+          SpawnBrain.creepBuilder("Miner", room)
         }
       }
     })
 
   }
+  /**
+   * creepBuilder takes the following and creates a new RoomTask
+   *  @param type String
+   *  @param room Room
+   *  @param options SpawnMemOptions
+   *  @returns void - Produces RoomTask in the Room specified
+   *
+   */
 
-  static creepBuilder(type: string, room: Room, options: spawnTaskMemOpts | null): void {
+  static creepBuilder(type: string, room: Room): void {
     var spawnerTask: null | SpawnTask = null;
 
     let defaultBod: string[] = creepBodySizes(type, room)
-    spawnerTask = new SpawnTask(room.name, type, defaultBod, options);
+    spawnerTask = new SpawnTask(room.name, type, defaultBod);
 
     if (type != undefined) {
       //if Type is not undefined then do the do
@@ -195,41 +194,37 @@ export class SpawnBrain {
     var FoundFlag: Boolean | null = null;
 
     if (room.creeps.length == 0) {
-      SpawnBrain.creepBuilder("GeneralHand", room, null)
+      SpawnBrain.creepBuilder("GeneralHand", room)
     }
     else if (c.generalCreeps == undefined) {
-      SpawnBrain.creepBuilder("GeneralHand", room, null)
+      SpawnBrain.creepBuilder("GeneralHand", room)
     }
     else {
 
       if (c.generalCreeps.length < (tempGeneralCreepsMAX[room.controller.level])) {
-        SpawnBrain.creepBuilder("GeneralHand", room, null)
+        SpawnBrain.creepBuilder("GeneralHand", room)
       }
       if (c.miners == undefined || c.miners.length <= (room.sources.length - 1)) {
         this.ContainerMiners(room)
       }
-      else if (c.builders == undefined || c.builders != undefined && c.builders.length < (room.controller.level / 2)) {
-        SpawnBrain.creepBuilder("Builder", room, null)
+      else if (c.builders == undefined || c.builders != undefined && room.constructionSites.length >= 2 && c.builders <= 2) {
+        SpawnBrain.creepBuilder("Builder", room)
       }
       else if (room.controller.level >= 2) {
-        if (c.upgraders == undefined || c.upgraders != undefined && c.upgraders.length < (room.controller.level / 2)) {
-          SpawnBrain.creepBuilder("Upgrader", room, null)
+        if (c.upgraders == undefined || c.upgraders != undefined && c.upgraders.length <= 1) {
+          SpawnBrain.creepBuilder("Upgrader", room)
         }
       }
 
     }
 
     if (PatrollerFlag != null && PatrollerFlag.length >= 1 && c.patrollers == undefined || c.patrollers != undefined && c.patrollers.length <= 3) {
-      SpawnBrain.creepBuilder("Patroller", room, null)
+      SpawnBrain.creepBuilder("Patroller", room)
     }
 
-    if (ScoutFlag != null && ScoutFlag.length >= 1 && c.scout == null || c.scout != undefined && c.scout.length <= 1) {
-      let ScoutingNeeded = ScoutFlag.pop().pos.roomName;
+    if (ScoutFlag != null && ScoutFlag.length >= 1 && c.scout == null || c.scout != undefined && c.scout.length == 0) {
 
-      /*SpawnBrain.creepBuilder("Scout", room, {
-        destination: ScoutingNeeded,
-        myContainer: null
-      })*/
+      SpawnBrain.creepBuilder("Scout", room)
     }
 
 

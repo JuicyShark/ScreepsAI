@@ -158,6 +158,7 @@ export var roomTypes: string[] = [
   "SKRoom"
 ]
 
+
 function createBody(type: string, room: Room): string[] {
   var energy = room.energyCapacityAvailable
   if (room.creepsByType.GeneralHand == undefined || room.creeps.length <= 4) {

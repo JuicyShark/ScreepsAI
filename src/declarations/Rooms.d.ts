@@ -45,6 +45,7 @@ interface Room {
     handleExternalHighwayRoom: any;
     handleExternalRoom: any;
     handleReservedRoom: any;
+    handleAllyRoom: any;
     checkandSpawn(): void
     memLog: any;
     print: string;
@@ -115,7 +116,8 @@ interface Room {
     _fleeDefaults: Creep[];
     _tempLog: any;
     //RoomTask
-    taskList: any;
+    taskList: RoomTask[];
+    _taskList: RoomTask[]
     createRoomTask: any;
     filterRoomTask: any;
 

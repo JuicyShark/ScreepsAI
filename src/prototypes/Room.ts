@@ -85,7 +85,17 @@ Object.defineProperty(Room.prototype, 'signedByMe', {
 });
 
 //KODIES STUFF
-Room.prototype.taskList! = [];
+Object.defineProperty(Room.prototype, 'taskList', {
+    get() {
+        if (!this._taskList) {
+            this._taskList = [];
+        }
+
+        return this._taskList;
+    },
+    configurable: true,
+});
+
 Object.defineProperty(Room.prototype, 'roomType', {
     get() {
         var colony = Game.colonies[0]
@@ -93,7 +103,7 @@ Object.defineProperty(Room.prototype, 'roomType', {
             if (this.name == colony.name) {
                 return "ColonyHub"
             }
-            else if (this.name != colony.name && this.hostiles == undefined) {
+            else if (this.name != colony.name && this.hostiles.length == 0) {
                 return "Outpost"
             }
             else if (this.hostiles != undefined && this.sourceKeepers.length >= 1) {
@@ -310,60 +320,51 @@ Object.defineProperty(Room.prototype, 'droppedPower', {
 
 //Kodies Movein shit
 Room.prototype.handleMyRoom = function (): void {
-    if (!Memory.username) {
-        Memory.username = this.controller.owner.username;
-    }
-    this.memory.lastSeen = Game.time;
     this.executeRoom()
 }
-Room.prototype.handleExternalRoom = function (): any {
+Room.prototype.handleExternalRoom = function (colony: Colony): any {
     if (!this.controller) {
-        const nameSplit = this.splitRoomName();
-        if (nameSplit[2] % 10 === 0 || nameSplit[4] % 10 === 0) {
-            return this.handleExternalHighwayRoom();
-        }
+        //NO Controller
     } else {
 
         if (this.controller.owner != MY_ALLY) {
             return this.handleOccupiedRoom();
+        }
+        else if (this.controller.owner == MY_ALLY) {
+            return this.handleAllyRoom()
         }
         if (this.controller.reservation && this.controller.reservation.username === Memory.username) {
             return this.handleReservedRoom();
         }
     }
     if (this.controller && !this.controller.reservation) {
-        if (this.handleUnreservedRoom()) {
-            return false;
-        }
+        return this.handleUnreservedRoom();
+
     }
 }
-Room.prototype.handleUnreservedRoom = function (): void {
+Room.prototype.handleUnreservedRoom = function (colony: Colony): void {
+    if (this.isOutpost == true) {
+        colony.room.memory.outposts.push(this.name)
+    }
+}
+Room.prototype.handleOccupiedRoom = function (colony: Colony): void {
 
 }
-Room.prototype.handleOccupiedRoom = function (): void {
+Room.prototype.handleExternalHighwayRoom = function (colony: Colony): void {
 
 }
-Room.prototype.handleExternalHighwayRoom = function (): void {
+Room.prototype.handleReservedRoom = function (colony: Colony): void {
 
 }
-Room.prototype.handleReservedRoom = function (): void {
+Room.prototype.handleAllyRoom = function (colony: Colony): void {
 
 }
 
 Room.prototype.executeRoom = function (): void {
+    this.memory.lastSeen = Game.time;
 
     //records permanentObjs and refresh cache
     RoomBrain.run(this)
-
-    if (this.my == true) {
-        //Runs the timer. / will run priority thingy
-        RoomBrain.runTimer(this);
-    }
-    else {
-        //runs externalRooms
-        this.handleExternalRoom()
-    }
-
 }
 
 Room.prototype.checkandSpawn = function () {
@@ -380,6 +381,10 @@ Room.prototype.checkandSpawn = function () {
         }
     }
 }
+/**
+ *  Checks for Duplicate RoomTask in the room. If not found produces a roomTask to room.taskList
+ * @param roomTask
+ */
 
 Room.prototype.createRoomTask = function (roomTask: RoomTask) {
     /* var roomTask: RoomTask = {
@@ -426,43 +431,33 @@ Room.prototype.filterRoomTask = function (roomOrder: string): any {
 
 }
 
-Room.prototype.getRoomLocation = function (roomName): any {
-    let temp1 = [];
+Room.prototype.getRoomLocation = function (roomName: string): any {
     let thisString = roomName.split("");
-    for (let i = 0; i < thisString.length; i++) {
-        let result = thisString[i];
-        if (result == "W") {
-            temp1.push("!")
-        } else if (result == "S") {
-            temp1.push("$")
-        } else if (result == "E") {
-            temp1.push("@")
-        } else if (result == "N") {
-            temp1.push("#")
-        } else {
-            temp1.push(result)
-        }
-    }
+    let temp1 = [];
+    let swap: boolean = false;
 
-    var output: string[] | number[] = temp1
-    return output;
+    thisString.forEach(function (value: string, index: number) {
+        if (!Number(value)) {
+            swap = false;
+            temp1.push(value);
+        }
+        else {
+            temp1.push(Number(value))
+
+        }
+    })
+
+
+    var output: any = temp1
+    return JSON.stringify(output);
 }
-Room.prototype.decodeRoomLocation = function (roomPos: string[] | number[]) {
+Room.prototype.decodeRoomLocation = function (roomPos: string) {
     let temp1 = [];
 
     for (let i = 0; i < roomPos.length; i++) {
-        let result = roomPos[i];
-        if (result == "!") {
-            temp1.push("W")
-        } else if (result == "$") {
-            temp1.push("S")
-        } else if (result == "@") {
-            temp1.push("E")
-        } else if (result == "#") {
-            temp1.push("N")
-        } else {
-            temp1.push(result)
-        }
+        let result = JSON.parse(roomPos)[i];
+        temp1.push(result)
+
     }
     let temp3: string = temp1.join("");
     return temp3;
