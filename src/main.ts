@@ -11,6 +11,7 @@ import { isIVM } from "utils/helperFunctions";
 import * as config from "config";
 import profiler from './utils/screeps-profiler';
 import { checkColonys } from './Colony'
+import { runCreeps } from './ShowMaster/creepMaster';
 
 
 
@@ -70,6 +71,7 @@ function main(): void {
       var Colony = Game.colonies[i];
       Colony.run()
     }
+    runCreeps()
 
   } else {
     console.log("Nothings good with the Colonies ATM D:")

@@ -13,7 +13,8 @@ interface spawnTaskMem {
 }
 interface spawnTaskMemOpts {
     destination: string | null;
-    myContainer: string | null
+    myContainer: string | null;
+    mySource: string | null;
 }
 
 

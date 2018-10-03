@@ -20,6 +20,7 @@ import { TaskWithdraw, withdrawTargetType } from './TaskInstances/task_withdraw'
 import { dropTargetType, TaskDrop } from './TaskInstances/task_drop';
 import { TaskTransferAll, transferAllTargetType } from './TaskInstances/task_transferAll';
 import { TaskWithdrawAll, withdrawAllTargetType } from './TaskInstances/task_withdrawAll';
+import { TaskGoToSpot } from './TaskInstances/task_goToSpot'
 
 
 export class Tasks {
@@ -77,6 +78,9 @@ export class Tasks {
 	}
 
 	static goTo(target: goToTargetType, options = {} as TaskOptions): TaskGoTo {
+		return new TaskGoTo(target, options);
+	}
+	static goToSpot(target: goToTargetType, options = {} as TaskOptions): TaskGoToSpot {
 		return new TaskGoTo(target, options);
 	}
 

@@ -1,7 +1,8 @@
 // Room prototypes - commonly used room properties and methods
 
-import { MY_USERNAME, MY_ALLY, creepPriority } from "config";
+import { MY_USERNAME, MY_ALLY, creepPriority, roomTypes } from "config";
 import { RoomBrain } from "ShowMaster/roomMaster";
+import { SpawnBrain } from "./Spawn";
 
 //roomTask Class
 
@@ -85,16 +86,10 @@ Object.defineProperty(Room.prototype, 'signedByMe', {
 });
 
 //KODIES STUFF
-Object.defineProperty(Room.prototype, 'taskList', {
-    get() {
-        if (!this._taskList) {
-            this._taskList = [];
-        }
+/**
+ * Object taskList currently seems to go away every tick. to solve that im just gonna run a colony function to grab its output and do shit with it
+ */
 
-        return this._taskList;
-    },
-    configurable: true,
-});
 
 Object.defineProperty(Room.prototype, 'roomType', {
     get() {
@@ -360,24 +355,46 @@ Room.prototype.handleAllyRoom = function (colony: Colony): void {
 
 }
 
-Room.prototype.executeRoom = function (): void {
+Room.prototype.executeRoom = function (colony: Colony): void {
     this.memory.lastSeen = Game.time;
 
-    //records permanentObjs and refresh cache
+    //records permanentObjs and refresh cache also runs the room timer
     RoomBrain.run(this)
+    for (let i in roomTypes) {
+        if (this.roomType == roomTypes[i]) {
+            this.runMyType(colony)
+        }
+    }
 }
 
-Room.prototype.checkandSpawn = function () {
+Room.prototype.runMyType = function (colony: Colony) {
+    if (this.roomType == "ColonyHub" && this.memory.timer != undefined) {
+        if (this.memory.timer % 7 === 0) {
+            SpawnBrain.spawnForHub(colony)
+
+            this.checkandSpawn(colony)
+        }
+    }
+
+}
+
+Room.prototype.checkandSpawn = function (colony: Colony) {
+    if (Memory.Colonies[0].roomName == colony.room.name) {
+        var roomTaskStore = Memory.Colonies[0].roomTasks;
+    }
+
     if (this.my == true) {
-        if (this.taskList.length != 0) {
-            var CurrentTask = this.filterRoomTask("SpawnTask")
+        if (this.spawns[0].spawning == null) {
+            if (roomTaskStore.length != 0) {
+                var CurrentTask = colony.filterTask("SpawnTask")
 
-            if (CurrentTask != null) {
-                if (CurrentTask.details.body != undefined) {
-                    this.spawns[0].spawnNewCreep(CurrentTask.details)
+                if (CurrentTask != null) {
+                    if (CurrentTask.details.body != undefined) {
+                        this.spawns[0].spawnNewCreep(CurrentTask.details)
+                    }
                 }
-            }
 
+            }
         }
     }
 }
@@ -386,28 +403,6 @@ Room.prototype.checkandSpawn = function () {
  * @param roomTask
  */
 
-Room.prototype.createRoomTask = function (roomTask: RoomTask) {
-    /* var roomTask: RoomTask = {
-         name: roomTask.name,
-         roomOrder: roomTask.roomOrder,
-         priority: roomTask.priority,
-         details: roomTask.details
-     };*/
-    var duplicateTask: Boolean | null;
-
-    for (var i = 0; i < this.taskList.length; i++) {
-        if (duplicateTask == true) {
-            break;
-        }
-        if (this.taskList[i].details.type == roomTask.details.type) {
-            duplicateTask = true;
-
-        }
-    }
-    if (duplicateTask != true) {
-        this.taskList.push(roomTask)
-    }
-}
 
 Room.prototype.filterRoomTask = function (roomOrder: string): any {
     let output: RoomTask | null;

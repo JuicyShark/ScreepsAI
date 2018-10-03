@@ -165,7 +165,7 @@ export class GeneralHand {
      * @param thisCreepsTasks Array of Tasks
      */
     private static harvesterRun(creep, thisCreepsTasks): any {
-        if (creep.carry.energy == 0) {
+        if (creep.carry.energy == 0 || creep.carry.energy <= 49) {
             this.harvestTask(creep, thisCreepsTasks)
         }
         else if (creep.carry.energy != 0 || creep.carry.energy == creep.carryCapacity) {

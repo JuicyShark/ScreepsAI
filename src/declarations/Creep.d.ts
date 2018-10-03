@@ -16,6 +16,7 @@ interface CreepMemory {
     home: string;
     destination: string;
     myContainer: string;
+    mySource: string;
 }
 
 type BodyArray = string[]

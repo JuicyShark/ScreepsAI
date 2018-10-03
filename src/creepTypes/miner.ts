@@ -10,10 +10,29 @@ export class Miner {
 
 
         let container: StructureContainer = Game.getObjectById(creep.memory.myContainer)
+        let destination = creep.memory.destination
+        if (destination != undefined || destination != null) {
+            if (destination != creep.room.name) {
+                creep.task = Tasks.goToRoom(destination)
+            }
+            else if (destination == creep.room.name) {
+                creep.task = Tasks.goTo(Game.rooms[destination].controller)
+                if (creep.memory.mySource != undefined) {
+                    creep.task = Tasks.chain(
+                        [
+                            Tasks.goTo(Game.getObjectById(creep.memory.mySource)),
+                            Tasks.harvest(Game.getObjectById(creep.memory.mySource))
+                        ]
+                    )
+                }
+
+
+            }
+        }
 
         if (container != undefined) {
             if (creep.pos.x != container.pos.x && creep.pos.y != container.pos.y) {
-                creep.task = Tasks.goTo(container)
+                creep.task = Tasks.goToSpot(container)
 
 
             }

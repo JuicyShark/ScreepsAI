@@ -4,6 +4,9 @@ import { Tasks } from '../TaskManager/Tasks'
 export class Scout {
 
     static newTask(creep: Creep) {
+        if (!Game.flags["Scout"]) {
+            creep.task = Tasks.goTo(creep.room.controller)
+        }
 
         if (creep.memory.destination != undefined && creep.room.name != creep.memory.destination) {
             creep.task = Tasks.goToRoom(creep.memory.destination)
@@ -15,6 +18,8 @@ export class Scout {
         else if (!creep.memory.destination) {
             creep.memory.destination = Game.flags["Scout"].pos.roomName
         }
+
+
     }
 
 }

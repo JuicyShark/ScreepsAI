@@ -17,7 +17,7 @@ export class TaskGoTo extends Task {
 			super(TaskGoTo.taskName, { ref: '', pos: target }, options);
 		}
 		// Settings
-		this.settings.targetRange = 0;
+		this.settings.targetRange = 1;
 	}
 
 	isValidTask() {

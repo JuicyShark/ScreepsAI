@@ -1,5 +1,6 @@
 import { nameGen } from "utils/personality/nameGen";
 import { creepBodySizes, creepPriority, tempGeneralCreepsMAX } from "config"
+import { RoomTask } from "../prototypes/Room"
 
 export class SpawnTask {
 
@@ -8,17 +9,28 @@ export class SpawnTask {
   body: string[];
   memory: any;
 
-  constructor(CreatedBy: string, type: string, body: string[]) {
+  constructor(CreatedBy: string, type: string, body: string[], options: any) {
     this.CreatedBy = CreatedBy;
     this.type = type;
     this.body = body;
 
-    this.memory = {
-      type: type,
-      home: CreatedBy,
-      destination: null
-    };
-  }
+    if (options == null) {
+      this.memory = {
+        type: type,
+        home: CreatedBy,
+        destination: null
+      };
+    }
+    else {
+      this.memory = {
+        type: type,
+        home: CreatedBy,
+        destination: options.destination,
+        myContainer: options.myContainer,
+        mySource: options.mySource
+      };
+    }
+  };
 }
 
 
@@ -110,25 +122,6 @@ export class SpawnBrain {
 
   }
 
-  private static ContainerMiners(room: Room): void {
-
-    room.sources.forEach(function (source: Source, index: number, array: Source[]) {
-      if (source.hasContainer() == true && source.hasMiner() == false) {
-        var ContainerID = source.pos.findClosestByLimitedRange(room.containers, 2).id
-        var Miner: Creep | undefined = source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 2)
-
-        if (Miner == undefined || index != room.creepsByType.Miner.length) {
-
-          let STMO: spawnTaskMemOpts = {
-            destination: null,
-            myContainer: ContainerID
-          }
-          SpawnBrain.creepBuilder("Miner", room)
-        }
-      }
-    })
-
-  }
   /**
    * creepBuilder takes the following and creates a new RoomTask
    *  @param type String
@@ -138,32 +131,74 @@ export class SpawnBrain {
    *
    */
 
-  static creepBuilder(type: string, room: Room): void {
+  static creepBuilder(type: string, room: Room, opts: spawnTaskMemOpts | null): void {
     var spawnerTask: null | SpawnTask = null;
 
     let defaultBod: string[] = creepBodySizes(type, room)
-    spawnerTask = new SpawnTask(room.name, type, defaultBod);
-
+    spawnerTask = new SpawnTask(room.name, type, defaultBod, opts);
+    var roomTask: RoomTask | null;
     if (type != undefined) {
       //if Type is not undefined then do the do
-      let roomTask: RoomTask = {
-        name: (Game.time + "SpawnTask"),
-        roomOrder: "SpawnTask",
-        priority: creepPriority(type),
-        details: spawnerTask
-      }
-
-      if (roomTask != undefined || roomTask != null) {
-        //create the roomTask
-        room.createRoomTask(roomTask)
-      }
+      let taskName = Game.time + " SpawnTask"
+      roomTask = new RoomTask(taskName, "SpawnTask", creepPriority(type), spawnerTask)
 
     }
 
+    if (roomTask != undefined || roomTask != null) {
+      //create the roomTask
+      let colony: Colony = this.thisColony(room)
+      colony.roomTaskDupe(roomTask)
+      //room.taskList = roomTask;
+    }
+
+
   }
 
-  static spawnListChecker(room: Room) {
+  static spawnForHub(Colony: Colony) {
+    var room = Colony.room
     var c = this.creepTypesDef(room)
+
+    if (room.creeps.length == 0) {
+      SpawnBrain.creepBuilder("GeneralHand", room, null)
+    }
+    if (c.generalCreeps == undefined || c.generalCreeps.length < (tempGeneralCreepsMAX[room.controller.level])) {
+      SpawnBrain.creepBuilder("GeneralHand", room, null)
+    }
+    if (c.miners == undefined || c.miners.length <= (room.sources.length - 1)) {
+      room.sources.forEach(function (source: Source, index: number, array: Source[]) {
+        if (source.hasContainer() == true && source.hasMiner() == false) {
+          var ContainerID = source.pos.findClosestByLimitedRange(room.containers, 2).id
+          var Miner: Creep | undefined = source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 2)
+
+          if (Miner == undefined || index != room.creepsByType.Miner.length) {
+            let opts = {
+              destination: null,
+              myContainer: ContainerID,
+              mySource: source.id
+            }
+            SpawnBrain.creepBuilder("Miner", room, opts)
+          }
+        }
+      })
+    }
+    if (c.builders == undefined || c.builders != undefined && room.constructionSites.length >= 2 && c.builders <= 2) {
+      SpawnBrain.creepBuilder("Builder", room, null)
+    }
+    if (room.controller.level >= 2) {
+      if (c.upgraders == undefined || c.upgraders != undefined && c.upgraders.length <= 1) {
+        SpawnBrain.creepBuilder("Upgrader", room, null)
+      }
+    }
+
+
+
+
+
+  }
+
+  static spawnForFlags(Colony): void {
+    var c = this.creepTypesDef(room)
+    var room = Colony.room
     var ScoutFlag: Flag[] | null = null;
     var PatrollerFlag: Flag[] | null = null;
     var roomFlags = Object.values(Game.flags).forEach(function (flag: Flag, index: number) {
@@ -192,42 +227,35 @@ export class SpawnBrain {
       }
     })
     var FoundFlag: Boolean | null = null;
-
-    if (room.creeps.length == 0) {
-      SpawnBrain.creepBuilder("GeneralHand", room)
-    }
-    else if (c.generalCreeps == undefined) {
-      SpawnBrain.creepBuilder("GeneralHand", room)
-    }
-    else {
-
-      if (c.generalCreeps.length < (tempGeneralCreepsMAX[room.controller.level])) {
-        SpawnBrain.creepBuilder("GeneralHand", room)
-      }
-      if (c.miners == undefined || c.miners.length <= (room.sources.length - 1)) {
-        this.ContainerMiners(room)
-      }
-      else if (c.builders == undefined || c.builders != undefined && room.constructionSites.length >= 2 && c.builders <= 2) {
-        SpawnBrain.creepBuilder("Builder", room)
-      }
-      else if (room.controller.level >= 2) {
-        if (c.upgraders == undefined || c.upgraders != undefined && c.upgraders.length <= 1) {
-          SpawnBrain.creepBuilder("Upgrader", room)
-        }
-      }
-
-    }
-
     if (PatrollerFlag != null && PatrollerFlag.length >= 1 && c.patrollers == undefined || c.patrollers != undefined && c.patrollers.length <= 3) {
-      SpawnBrain.creepBuilder("Patroller", room)
+      SpawnBrain.creepBuilder("Patroller", room, null)
     }
 
     if (ScoutFlag != null && ScoutFlag.length >= 1 && c.scout == null || c.scout != undefined && c.scout.length == 0) {
 
-      SpawnBrain.creepBuilder("Scout", room)
+      SpawnBrain.creepBuilder("Scout", room, null)
     }
 
+  }
 
+  static spawnForOutpost(): void {
+
+    /*if (this.thisColony(room).outposts.length != 0) {
+  this.thisColony(room).outposts.forEach(function (outpost: Room) {
+    outpost.sources.forEach(function (source) {
+      if (source.hasMiner() == false) {
+        let opts: spawnTaskMemOpts = {
+          destination: outpost.name,
+          myContainer: null,
+          mySource: source.id
+
+        }
+        SpawnBrain.creepBuilder("Miner", room, opts)
+      }
+    })
+  })
+
+}*/
   }
 
 

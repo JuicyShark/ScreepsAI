@@ -46,7 +46,8 @@ interface Room {
     handleExternalRoom: any;
     handleReservedRoom: any;
     handleAllyRoom: any;
-    checkandSpawn(): void
+    runMyType: any;
+    checkandSpawn(colony: Colony): void
     memLog: any;
     print: string;
     my: boolean;
@@ -116,8 +117,7 @@ interface Room {
     _fleeDefaults: Creep[];
     _tempLog: any;
     //RoomTask
-    taskList: RoomTask[];
-    _taskList: RoomTask[]
+
     createRoomTask: any;
     filterRoomTask: any;
 

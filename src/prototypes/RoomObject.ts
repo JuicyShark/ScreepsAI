@@ -17,7 +17,7 @@ Object.defineProperty(RoomObject.prototype, 'targetedBy', { // List of creep nam
 });
 Source.prototype.hasContainer = function () {
   if (this.pos.findClosestByLimitedRange(this.room.containers, 2)) {
-    return true;
+    return this.pos.findClosestByLimitedRange(this.room.containers, 2);
   }
   else {
     return false;
@@ -32,11 +32,17 @@ Source.prototype.hasMiner = function () {
   } else if (anyMiners == undefined) {
     if (creepsByMiners != undefined) {
       creepsByMiners.forEach(function (creep: Creep) {
-        if (creep.memory.myContainer == this.id) {
+        if (this.hasContainer != false && creep.memory.myContainer == this.hasContainer.id) {
           found = true;
         }
       }, this)
     }
+  } else if (this.targetedBy.length >= 1) {
+    this.targetedBy.foreach(function (creep: Creep) {
+      if (creep.memory.type == "Miner") {
+        return true;
+      }
+    })
   }
   return found
 }

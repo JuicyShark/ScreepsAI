@@ -1,6 +1,6 @@
 import * as creepMaster from '../ShowMaster/creepMaster';
 import { getCacheExpiration } from '../utils/helperFunctions';
-import { roomTypes } from 'config'
+
 import { SpawnBrain } from "../prototypes/Spawn"
 import { CombatBrain } from "../ShowMaster/combatBrain"
 
@@ -83,17 +83,6 @@ export class RoomBrain {
       }
       room.memory.timer = 60;
     }
-    if (room.memory.timer % 8 === 0) {
-      //checking for type of room
-      for (let i in roomTypes) {
-        if (room.roomType == roomTypes[i]) {
-          this.runType(room)
-        }
-      }
-    }
-    if (room.memory.timer % 16 === 0) {
-      room.checkandSpawn()
-    }
 
     console.log(room.name + " Timer: " + room.memory.timer)
     room.memory.timer--
@@ -107,12 +96,10 @@ export class RoomBrain {
 
     }
   }
-
-  static runType(room: Room) {
-    if (room.roomType == "ColonyHub") {
-      SpawnBrain.spawnListChecker(room)
-    }
-  }
+  /**
+   * Records permanetObjs and Refresh the cache.
+   * Then runs room Timer
+   */
 
   static run(room: Room): void {
 
