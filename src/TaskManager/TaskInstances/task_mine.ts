@@ -6,7 +6,7 @@ export const minerTaskName = 'mine';
 
 export class TaskMine extends Task {
 
-    static taskName = 'mine';
+    static taskName = 'Mine';
     target!: harvestTargetType;
 
     constructor(target: harvestTargetType, options = {} as TaskOptions) {
@@ -14,7 +14,12 @@ export class TaskMine extends Task {
     }
 
     isValidTask() {
-        return _.sum(this.creep.carry) < this.creep.carryCapacity;
+        if (this.creep.ticksToLive >= 10) {
+            return true
+        }
+        else {
+            return false
+        }
     }
 
     isValidTarget() {

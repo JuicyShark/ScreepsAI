@@ -1,4 +1,4 @@
 interface Source {
-    hasContainer(): boolean;
+    hasContainer(): StructureContainer | any;
     hasMiner(): boolean
 }

@@ -165,12 +165,12 @@ export class SpawnBrain {
       SpawnBrain.creepBuilder("GeneralHand", room, null)
     }
     if (c.miners == undefined || c.miners.length <= (room.sources.length - 1)) {
-      room.sources.forEach(function (source: Source, index: number, array: Source[]) {
-        if (source.hasContainer() == true && source.hasMiner() == false) {
-          var ContainerID = source.pos.findClosestByLimitedRange(room.containers, 2).id
+      room.sources.forEach(function (source: Source, index: number) {
+        if (source.hasContainer() != false && source.hasMiner() == false) {
+          var ContainerID = source.hasContainer().id
           var Miner: Creep | undefined = source.pos.findClosestByLimitedRange(room.creepsByType.Miner, 2)
 
-          if (Miner == undefined || index != room.creepsByType.Miner.length) {
+          if (Miner == undefined || index != room.creepsByType.Miner.length && room.spawns[0].spawning == null) {
             let opts = {
               destination: null,
               myContainer: ContainerID,
