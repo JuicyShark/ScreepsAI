@@ -75,21 +75,21 @@ export class CombatBrain {
             return relevantOrder
         }
     }
-    static defendeRoom(room: Room): void {
+    /*static defendeRoom(room: Room): void {
         if (room.dangerousHostiles != null) {
             let neededDefenders = (room.dangerousPlayerHostiles.length + 1)
             let generalCreeps: Creep[] | null = SpawnBrain.thisColony(room).creepsByType.GeneralHand;
             let defenders: Creep[] | null = SpawnBrain.thisColony(room).creepsByType.Defender;
             if (generalCreeps != null) {
                 if (defenders == null || defenders.length <= neededDefenders) {
-                    SpawnBrain.creepBuilder("Defender", room, null)
+                    SpawnBrain.creepBuilder(Colony, "Defender", room, null)
                 }
             }
         }
 
 
 
-    }
+    }*/
 
 
 }

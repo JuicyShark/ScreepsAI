@@ -1,4 +1,4 @@
-import { initializeTask } from '../utils/initializer';
+import { initializeCreepTask } from '../utils/initializer';
 import { deref, derefRoomPosition } from '../utils/helperTask';
 
 export type targetType = { ref: string, pos: RoomPosition }; // overwrite this variable in derived classes to specify more precise typing
@@ -111,7 +111,7 @@ export abstract class Task implements ITask {
 
 	// Getter/setter for task parent
 	get parent(): Task | null {
-		return (this._parent ? initializeTask(this._parent) : null);
+		return (this._parent ? initializeCreepTask(this._parent) : null);
 	}
 
 	set parent(parentTask: Task | null) {

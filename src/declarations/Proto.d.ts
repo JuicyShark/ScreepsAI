@@ -32,3 +32,11 @@ interface protoTask {
     data: TaskData;
     tick: number;
 }
+interface protoRoomTask {
+    name: string;
+    _room: Room;
+    _parent: protoRoomTask | null;
+    options: RoomTaskOptions;
+    data: RoomTaskData;
+    tick: number;
+}

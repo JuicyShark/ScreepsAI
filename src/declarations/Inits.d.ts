@@ -19,6 +19,14 @@ interface ITask extends protoTask {
     finish(): void;
 }
 
+interface RTask extends protoRoomTask {
+    settings: RoomTaskSettings;
+    proto: protoRoomTask;
+    room: Room;
+    parent: RTask | null;
+    manifest: RTask[];
+}
+
 
 interface IGlobalCache {
     accessed: { [key: string]: number };

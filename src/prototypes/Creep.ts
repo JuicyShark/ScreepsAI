@@ -1,11 +1,11 @@
-import { initializeTask } from '../utils/initializer';
+import { initializeCreepTask } from '../utils/initializer';
 import { TargetCache } from '../utils/caching/gameCache';
 
 Object.defineProperty(Creep.prototype, 'task', {
     get() {
         if (!this._task) {
             let protoTask = this.memory.task;
-            this._task = protoTask ? initializeTask(protoTask) : null;
+            this._task = protoTask ? initializeCreepTask(protoTask) : null;
         }
         return this._task;
     },

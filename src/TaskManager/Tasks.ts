@@ -1,27 +1,27 @@
-import { attackTargetType, TaskAttack } from './TaskInstances/task_attack';
-import { buildTargetType, TaskBuild } from './TaskInstances/task_build';
-import { claimTargetType, TaskClaim } from './TaskInstances/task_claim';
-import { dismantleTargetType, TaskDismantle } from './TaskInstances/task_dismantle';
-import { fortifyTargetType, TaskFortify } from './TaskInstances/task_fortify';
-import { getRenewedTargetType, TaskGetRenewed } from './TaskInstances/task_getRenewed';
-import { goToTargetType, TaskGoTo } from './TaskInstances/task_goTo';
-import { goToRoomTargetType, TaskGoToRoom } from './TaskInstances/task_goToRoom';
-import { harvestTargetType, TaskHarvest } from './TaskInstances/task_harvest';
-import { healTargetType, TaskHeal } from './TaskInstances/task_heal';
-import { meleeAttackTargetType, TaskMeleeAttack } from './TaskInstances/task_meleeAttack';
-import { pickupTargetType, TaskPickup } from './TaskInstances/task_pickup';
-import { rangedAttackTargetType, TaskRangedAttack } from './TaskInstances/task_rangedAttack';
-import { repairTargetType, TaskRepair } from './TaskInstances/task_repair';
-import { reserveTargetType, TaskReserve } from './TaskInstances/task_reserve';
-import { signControllerTargetType, TaskSignController } from './TaskInstances/task_signController';
-import { TaskTransfer, transferTargetType } from './TaskInstances/task_transfer';
-import { TaskUpgrade, upgradeTargetType } from './TaskInstances/task_upgrade';
-import { TaskWithdraw, withdrawTargetType } from './TaskInstances/task_withdraw';
-import { dropTargetType, TaskDrop } from './TaskInstances/task_drop';
-import { TaskTransferAll, transferAllTargetType } from './TaskInstances/task_transferAll';
-import { TaskWithdrawAll, withdrawAllTargetType } from './TaskInstances/task_withdrawAll';
-import { TaskgoToContainer } from './TaskInstances/task_goToContainer'
-import { TaskMine } from './TaskInstances/task_mine';
+import { attackTargetType, TaskAttack } from './Creep_TaskInstances/task_attack';
+import { buildTargetType, TaskBuild } from './Creep_TaskInstances/task_build';
+import { claimTargetType, TaskClaim } from './Creep_TaskInstances/task_claim';
+import { dismantleTargetType, TaskDismantle } from './Creep_TaskInstances/task_dismantle';
+import { fortifyTargetType, TaskFortify } from './Creep_TaskInstances/task_fortify';
+import { getRenewedTargetType, TaskGetRenewed } from './Creep_TaskInstances/task_getRenewed';
+import { goToTargetType, TaskGoTo } from './Creep_TaskInstances/task_goTo';
+import { goToRoomTargetType, TaskGoToRoom } from './Creep_TaskInstances/task_goToRoom';
+import { harvestTargetType, TaskHarvest } from './Creep_TaskInstances/task_harvest';
+import { healTargetType, TaskHeal } from './Creep_TaskInstances/task_heal';
+import { meleeAttackTargetType, TaskMeleeAttack } from './Creep_TaskInstances/task_meleeAttack';
+import { pickupTargetType, TaskPickup } from './Creep_TaskInstances/task_pickup';
+import { rangedAttackTargetType, TaskRangedAttack } from './Creep_TaskInstances/task_rangedAttack';
+import { repairTargetType, TaskRepair } from './Creep_TaskInstances/task_repair';
+import { reserveTargetType, TaskReserve } from './Creep_TaskInstances/task_reserve';
+import { signControllerTargetType, TaskSignController } from './Creep_TaskInstances/task_signController';
+import { TaskTransfer, transferTargetType } from './Creep_TaskInstances/task_transfer';
+import { TaskUpgrade, upgradeTargetType } from './Creep_TaskInstances/task_upgrade';
+import { TaskWithdraw, withdrawTargetType } from './Creep_TaskInstances/task_withdraw';
+import { dropTargetType, TaskDrop } from './Creep_TaskInstances/task_drop';
+import { TaskTransferAll, transferAllTargetType } from './Creep_TaskInstances/task_transferAll';
+import { TaskWithdrawAll, withdrawAllTargetType } from './Creep_TaskInstances/task_withdrawAll';
+import { TaskgoToContainer } from './Creep_TaskInstances/task_goToContainer'
+import { TaskMine } from './Creep_TaskInstances/task_mine';
 
 
 export class Tasks {

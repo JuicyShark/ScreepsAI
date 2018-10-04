@@ -6,12 +6,18 @@ interface TaskSettings {
     targetRange: number;
     workOffRoad: boolean;
 }
+interface RoomTaskSettings {
+    timeout: any;
+}
 
 interface TaskOptions {
     blind?: boolean;
     nextPos?: protoPos;
     moveOptions?: MoveToOpts;
     // moveOptions: TravelToOptions; // <- uncomment this line if you use Traveler
+}
+interface RoomTaskOptions {
+    //yo
 }
 
 interface TaskData {
@@ -20,4 +26,10 @@ interface TaskData {
     amount?: number;
     signature?: string;
     skipEnergy?: boolean;
+}
+interface RoomTaskData {
+    room: Room;
+    creeps: Creep[];
+    data: any;
+    //yoagain
 }

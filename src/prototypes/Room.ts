@@ -3,6 +3,56 @@
 import { MY_USERNAME, MY_ALLY, creepPriority, roomTypes } from "config";
 import { RoomBrain } from "ShowMaster/roomMaster";
 import { SpawnBrain } from "./Spawn";
+import { initializeRoomTask } from '../utils/initializer';
+import { TargetCache } from '../utils/caching/gameCache';
+
+Object.defineProperty(Room.prototype, 'RoomTask', {
+    get() {
+        if (!this._roomTask) {
+            let protoRoomTask = this.memory.task;
+            this._roomTask = protoRoomTask ? initializeRoomTask(protoRoomTask) : null;
+        }
+        return this._roomTask;
+    },
+    set(roomTask: RTask | null) {
+        /* // Assert that there is an up-to-date target cache
+         TargetCache.assert();
+         // Unregister target from old task if applicable
+         let oldProtoTask = this.memory.task as protoRoomTask;
+         if (oldProtoTask) {
+             let oldRef = oldProtoTask._target.ref;
+             if (Game.TargetCache.targets[oldRef]) {
+                 _.remove(Game.TargetCache.targets[oldRef], name => name == this.name);
+             }
+         }*/
+        // Set the new task
+        this.memory.task = roomTask ? roomTask.proto : null;
+        if (roomTask) {
+            // Register references to creep
+            roomTask.room = this;
+        }
+        // Clear cache
+        this._roomTask = null;
+    }
+});
+
+Room.prototype.run = function (Colony: Colony): void {
+    if (this.roomTask) {
+        return this.roomTask.run(Colony);
+    }
+};
+Object.defineProperties(Creep.prototype, {
+    'hasValidTask': {
+        get() {
+            return this._roomTask && this._roomTask.isValid();
+        }
+    },
+    'isIdle': {
+        get() {
+            return !this.hasValidRoomTask;
+        }
+    }
+});
 
 //roomTask Class
 
@@ -10,7 +60,7 @@ export class RoomTask {
     name: string;
     roomOrder: string;
     priority: number;
-    details: any;
+    details: SpawnTask | null;
 
     constructor(taskName: string, roomOrder, priority, details) {
         this.name = taskName;
@@ -20,6 +70,7 @@ export class RoomTask {
 
     }
 }
+
 
 
 // Logging =============================================================================================================
@@ -372,7 +423,7 @@ Room.prototype.runMyType = function (colony: Colony) {
         if (this.memory.timer % 7 === 0) {
             SpawnBrain.spawnForHub(colony)
 
-            this.checkandSpawn(colony)
+            //this.checkandSpawn(colony)
         }
     }
 

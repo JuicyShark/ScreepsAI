@@ -36,6 +36,8 @@ interface RoomPosition {
         opts?: { filter: any | string; }): T | undefined;
 }
 interface Room {
+    run(Colony: Colony): void;
+    isIdle: boolean;
     decodeRoomLocation: any
     getRoomLocation: any;
     executeRoom: any;
@@ -56,6 +58,7 @@ interface Room {
     signedByMe: any;
     roomType: string;
     isOutpost: Boolean | null;
+
 
     // Cached structures
     tombstones: Tombstone[];
@@ -117,7 +120,8 @@ interface Room {
     _fleeDefaults: Creep[];
     _tempLog: any;
     //RoomTask
-
+    RoomTask: RTask | null;
+    _roomTask: any;
     createRoomTask: any;
     filterRoomTask: any;
 

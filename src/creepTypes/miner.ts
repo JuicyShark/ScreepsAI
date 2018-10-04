@@ -32,14 +32,20 @@ export class Miner {
         else {
 
             if (container != undefined) {
-                let temp = container.pos.findClosestByLimitedRange(creep.room.sources, 2)
+                let temp = container.pos.findClosestByLimitedRange(creep.room.sources, 2);
+                let mySource: Source = Game.getObjectById(creep.memory.mySource);
                 if (creep.pos.x != container.pos.x && creep.pos.y != container.pos.y) {
-                    creep.task = Tasks.chain(
-                        [
-                            Tasks.goToContainer(container),
-                            Tasks.harvest(temp)
-                        ]
-                    )
+                    if (mySource.hasMiner() == false) {
+                        creep.task = Tasks.chain(
+                            [
+                                Tasks.goToContainer(container),
+                                Tasks.harvest(temp)
+                            ]
+                        )
+                    } else {
+                        creep.memory.myContainer = undefined;
+                        creep.memory.mySource = undefined;
+                    }
 
 
                 } else {
@@ -54,6 +60,7 @@ export class Miner {
                         if (thisSource.hasMiner() == false) {
                             if (anyCon.targetedBy.length == 0) {
                                 creep.memory.myContainer = anyCon.id;
+                                creep.memory.mySource = thisSource.id;
                             }
                         }
                     }

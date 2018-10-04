@@ -10,7 +10,7 @@ export class TaskgoToContainer extends Task {
     static taskName = 'goToContainer';
     target: null;
 
-    constructor(target: StructureContainer, options = {} as TaskOptions) {
+    constructor(target: goToContainerTargetType, options = {} as TaskOptions) {
         if (hasPos(target)) {
             super(TaskgoToContainer.taskName, { ref: '', pos: target.pos }, options);
         } else {

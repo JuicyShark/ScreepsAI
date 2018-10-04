@@ -1,4 +1,4 @@
-import {Task} from '../Task';
+import { Task } from '../Task';
 
 export type signControllerTargetType = StructureController;
 
@@ -10,8 +10,8 @@ export class TaskSignController extends Task {
 		signature: string;
 	};
 
-	constructor(target: signControllerTargetType, signature = 'Your signature here',
-				options                                     = {} as TaskOptions) {
+	constructor(target: signControllerTargetType, signature = 'CrypTwo Code In Action!',
+		options = {} as TaskOptions) {
 		super(TaskSignController.taskName, target, options);
 		this.data.signature = signature;
 	}

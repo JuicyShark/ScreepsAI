@@ -4,7 +4,10 @@ declare class SpawnTask {
     type: string;
     body: string[];
     memory: spawnTaskMem | null;
-    constructor(CreatedBy: string, tyoe: string, body: string[])
+    constructor(CreatedBy: string, type: string, body: string[])
+}
+declare class SpawnBrain {
+
 }
 interface spawnTaskMem {
     home: string;

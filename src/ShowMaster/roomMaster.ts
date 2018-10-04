@@ -1,8 +1,10 @@
 import * as creepMaster from '../ShowMaster/creepMaster';
 import { getCacheExpiration } from '../utils/helperFunctions';
+import { roomTypes } from '../config'
 
 import { SpawnBrain } from "../prototypes/Spawn"
 import { CombatBrain } from "../ShowMaster/combatBrain"
+import { ColonyHub } from '../roomTypes/colony_Hub'
 
 const RECACHE_TIME = 2500;
 const OWNED_RECACHE_TIME = 1000;
@@ -71,7 +73,7 @@ export class RoomBrain {
     }
     if (room.hostiles != undefined && room.hostiles.length >= 1) {
       //room.defend
-      CombatBrain.defendeRoom(room)
+      //CombatBrain.defendeRoom(room)
     }
     if (!room.memory.timer || room.memory.timer == 0) {
       if (room.memory.log != undefined && room.memory.log.length >= 30) {
@@ -116,6 +118,19 @@ export class RoomBrain {
     //what else can we put in here?
 
   }
+
+  static setRoomTasks(Colony: Colony) {
+    for (let i = 0; i < roomTypes.length; i++) {
+
+      for (let room in Game.rooms) {
+        if (Game.rooms[room].isIdle === true) {
+
+          roomTypes[Game.rooms[room].roomType].newRoomTask(Game.rooms[room])
+        }
+      }
+    }
+  }
+
 }
 
 

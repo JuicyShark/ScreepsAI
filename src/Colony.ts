@@ -114,6 +114,8 @@ export class Colony {
     if (Object.keys(this.creepsByRoom).length > this.rooms.length) {
       this.outerColonyWork()
     }
+
+    this.room.run(this)
     //Extra logic for Colonising multiple rooms
   }
 

@@ -1,32 +1,50 @@
 // import tasks
 import { Task } from '../taskManager/Task';
-import { attackTargetType, TaskAttack } from '../taskManager/TaskInstances/task_attack';
-import { buildTargetType, TaskBuild } from '../taskManager/TaskInstances/task_build';
-import { claimTargetType, TaskClaim } from '../taskManager/TaskInstances/task_claim';
-import { dismantleTargetType, TaskDismantle } from '../taskManager/TaskInstances/task_dismantle';
-import { fortifyTargetType, TaskFortify } from '../taskManager/TaskInstances/task_fortify';
-import { getRenewedTargetType, TaskGetRenewed } from '../taskManager/TaskInstances/task_getRenewed';
-import { goToTargetType, TaskGoTo } from '../taskManager/TaskInstances/task_goTo';
-import { goToRoomTargetType, TaskGoToRoom } from '../taskManager/TaskInstances/task_goToRoom';
-import { harvestTargetType, TaskHarvest } from '../taskManager/TaskInstances/task_harvest';
-import { healTargetType, TaskHeal } from '../taskManager/TaskInstances/task_heal';
-import { meleeAttackTargetType, TaskMeleeAttack } from '../taskManager/TaskInstances/task_meleeAttack';
-import { pickupTargetType, TaskPickup } from '../taskManager/TaskInstances/task_pickup';
-import { rangedAttackTargetType, TaskRangedAttack } from '../taskManager/TaskInstances/task_rangedAttack';
-import { TaskWithdraw, withdrawTargetType } from '../taskManager/TaskInstances/task_withdraw';
-import { repairTargetType, TaskRepair } from '../taskManager/TaskInstances/task_repair';
-import { reserveTargetType, TaskReserve } from '../taskManager/TaskInstances/task_reserve';
-import { signControllerTargetType, TaskSignController } from '../taskManager/TaskInstances/task_signController';
-import { TaskTransfer, transferTargetType } from '../taskManager/TaskInstances/task_transfer';
-import { TaskUpgrade, upgradeTargetType } from '../taskManager/TaskInstances/task_upgrade';
-import { dropTargetType, TaskDrop } from '../taskManager/TaskInstances/task_drop';
+import { attackTargetType, TaskAttack } from '../taskManager/Creep_TaskInstances/task_attack';
+import { buildTargetType, TaskBuild } from '../taskManager/Creep_TaskInstances/task_build';
+import { claimTargetType, TaskClaim } from '../taskManager/Creep_TaskInstances/task_claim';
+import { dismantleTargetType, TaskDismantle } from '../taskManager/Creep_TaskInstances/task_dismantle';
+import { fortifyTargetType, TaskFortify } from '../taskManager/Creep_TaskInstances/task_fortify';
+import { getRenewedTargetType, TaskGetRenewed } from '../taskManager/Creep_TaskInstances/task_getRenewed';
+import { goToTargetType, TaskGoTo } from '../taskManager/Creep_TaskInstances/task_goTo';
+import { goToRoomTargetType, TaskGoToRoom } from '../taskManager/Creep_TaskInstances/task_goToRoom';
+import { harvestTargetType, TaskHarvest } from '../taskManager/Creep_TaskInstances/task_harvest';
+import { healTargetType, TaskHeal } from '../taskManager/Creep_TaskInstances/task_heal';
+import { meleeAttackTargetType, TaskMeleeAttack } from '../taskManager/Creep_TaskInstances/task_meleeAttack';
+import { pickupTargetType, TaskPickup } from '../taskManager/Creep_TaskInstances/task_pickup';
+import { rangedAttackTargetType, TaskRangedAttack } from '../taskManager/Creep_TaskInstances/task_rangedAttack';
+import { TaskWithdraw, withdrawTargetType } from '../taskManager/Creep_TaskInstances/task_withdraw';
+import { repairTargetType, TaskRepair } from '../taskManager/Creep_TaskInstances/task_repair';
+import { reserveTargetType, TaskReserve } from '../taskManager/Creep_TaskInstances/task_reserve';
+import { signControllerTargetType, TaskSignController } from '../taskManager/Creep_TaskInstances/task_signController';
+import { TaskTransfer, transferTargetType } from '../taskManager/Creep_TaskInstances/task_transfer';
+import { TaskUpgrade, upgradeTargetType } from '../taskManager/Creep_TaskInstances/task_upgrade';
+import { dropTargetType, TaskDrop } from '../taskManager/Creep_TaskInstances/task_drop';
 import { deref, derefRoomPosition } from './helperFunctions';
-import { TaskInvalid } from '../taskManager/TaskInstances/task_invalid';
-import { TaskTransferAll } from '../taskManager/TaskInstances/task_transferAll';
-import { TaskWithdrawAll, withdrawAllTargetType } from '../taskManager/TaskInstances/task_withdrawAll';
+import { TaskInvalid } from '../taskManager/Creep_TaskInstances/task_invalid';
+import { TaskTransferAll } from '../taskManager/Creep_TaskInstances/task_transferAll';
+import { TaskWithdrawAll, withdrawAllTargetType } from '../taskManager/Creep_TaskInstances/task_withdrawAll';
+import { TaskgoToContainer, goToContainerTargetType } from 'taskManager/Creep_TaskInstances/task_goToContainer';
+//End of creep Declairations
+import { RoomTask } from '../taskManager/Room_Task';
+import { RTaskSpawnCreeps } from '../taskManager/Room_TaskInstances/rtask_spawnCreeps'
 
+export function initializeRoomTask(protoRTask: protoRoomTask): RoomTask {
+	let taskName = protoRTask.name;
+	let data = protoRTask.data
+	let RTask: RoomTask
+	switch (taskName) {
+		case RTaskSpawnCreeps.taskName:
+			RTask = new RTaskSpawnCreeps(data as RoomTaskData);
+			break;
 
-export function initializeTask(protoTask: protoTask): Task {
+	}
+	// Set the task proto to what is in memory
+	RTask.proto = protoRTask;
+	// Return it
+	return RTask;
+}
+export function initializeCreepTask(protoTask: protoTask): Task {
 	// retrieve data from protoTask
 	let taskName = protoTask.name // name should be build for TaskBuild
 	let target = deref(protoTask._target.ref);
@@ -57,6 +75,9 @@ export function initializeTask(protoTask: protoTask): Task {
 			break;
 		case TaskGoTo.taskName:
 			task = new TaskGoTo(derefRoomPosition(protoTask._target._pos) as goToTargetType);
+			break;
+		case TaskgoToContainer.taskName:
+			task = new TaskgoToContainer(derefRoomPosition(protoTask._target._pos) as goToContainerTargetType);
 			break;
 		case TaskGoToRoom.taskName:
 			task = new TaskGoToRoom(protoTask._target._pos.roomName as goToRoomTargetType);
