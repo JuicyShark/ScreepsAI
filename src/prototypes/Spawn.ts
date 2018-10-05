@@ -1,36 +1,52 @@
 import { nameGen } from "utils/personality/nameGen";
-import { creepBodySizes, creepPriority, tempGeneralCreepsMAX } from "config"
-import { RoomTask } from "../prototypes/Room"
+import { creepPriority, tempGeneralCreepsMAX } from "config"
+//import { RoomTask } from "../prototypes/Room"
 
 export class SpawnTask {
 
-  CreatedBy: string;
+  room: Room;
   type: string;
-  body: string[];
+  body: BodyPartConstant[];
   memory: any;
 
-  constructor(CreatedBy: string, type: string, body: string[], options: any) {
-    this.CreatedBy = CreatedBy;
+  constructor(room: Room, type: string, body: BodyPartConstant[], options: any) {
+    this.room = room;
     this.type = type;
     this.body = body;
 
     if (options == null) {
       this.memory = {
         type: type,
-        home: CreatedBy,
+        home: room.name,
         destination: null
       };
     }
     else {
       this.memory = {
         type: type,
-        home: CreatedBy,
+        home: room.name,
         destination: options.destination,
         myContainer: options.myContainer,
         mySource: options.mySource
       };
     }
   };
+
+  spawnNewCreep(): number {
+    let newName = nameGen(this.type);
+    var testCreep: number = this.room.spawns[0].spawnCreep(this.body, newName, {
+      dryRun: true
+    });
+
+    /*if (testCreep == 0) {
+      this.room.spawns[0].spawnCreep(spawnTask.body, newName + Game.time, { memory: spawnTask.memory });
+      this.room.memLog = ("Spawning a " + spawnTask.type + ", named " + newName);
+    }*/
+
+
+    return testCreep
+
+  }
 }
 
 
@@ -98,23 +114,23 @@ export class SpawnBrain {
    *
    */
 
-  static creepBuilder(Colony: Colony, type: string, room: Room, opts: spawnTaskMemOpts | null): void {
+  /*static creepBuilder(Colony: Colony, type: string, room: Room, opts: spawnTaskMemOpts | null): void {
     var spawnerTask: null | SpawnTask = null;
 
     let defaultBod: string[] = creepBodySizes(type, room)
     spawnerTask = new SpawnTask(room.name, type, defaultBod, opts);
-    var roomTask: RoomTask | null;
+    var roomTask: RTask | null;
     if (type != undefined) {
       //if Type is not undefined then do the do
       let taskName = Game.time + " SpawnTask"
-      roomTask = new RoomTask(taskName, "SpawnTask", creepPriority(type), spawnerTask)
+      //roomTask = new RoomTask(taskName, "SpawnTask", creepPriority(type), spawnerTask)
 
     }
 
     if (roomTask != undefined || roomTask != null) {
       //create the roomTask
 
-      Colony.roomTaskDupe(roomTask)
+      //Colony.roomTaskDupe(roomTask)
       //room.taskList = roomTask;
     }
 
@@ -161,7 +177,7 @@ export class SpawnBrain {
 
 
 
-  }
+  }*/
 
   static spawnForFlags(Colony): void {
     var c = Colony.creepsByType
@@ -193,15 +209,15 @@ export class SpawnBrain {
         }
       }
     })
-    var FoundFlag: Boolean | null = null;
-    if (PatrollerFlag != null && PatrollerFlag.length >= 1 && c.Patroller == undefined || c.Patroller != undefined && c.Patroller.length <= 3) {
-      SpawnBrain.creepBuilder(Colony, "Patroller", room, null)
-    }
-
-    if (ScoutFlag != null && ScoutFlag.length >= 1 && c.Scout == null || c.scout != undefined && c.Scout.length == 0) {
-
-      SpawnBrain.creepBuilder(Colony, "Scout", room, null)
-    }
+    /*  var FoundFlag: Boolean | null = null;
+      if (PatrollerFlag != null && PatrollerFlag.length >= 1 && c.Patroller == undefined || c.Patroller != undefined && c.Patroller.length <= 3) {
+        SpawnBrain.creepBuilder(Colony, "Patroller", room, null)
+      }
+  
+      if (ScoutFlag != null && ScoutFlag.length >= 1 && c.Scout == null || c.scout != undefined && c.Scout.length == 0) {
+  
+        SpawnBrain.creepBuilder(Colony, "Scout", room, null)
+      }*/
 
   }
 

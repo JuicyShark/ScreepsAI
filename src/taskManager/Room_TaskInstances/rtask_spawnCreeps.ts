@@ -12,20 +12,30 @@ export class RTaskSpawnCreeps extends RoomTask {
         super(TaskName, TaskData);
     }
 
-    isValidRoomTask() {
-        return (this._room != undefined)
+    isValidRoomTask(): boolean {
+        if (this.data.room == undefined || this.data.room.spawns.length == null) {
+            return false
+        }
     }
 
-    work() {
-        let spawnTask: SpawnTask = this.data.data
+    work(): number {
+        var spawnTask: SpawnTask = this.data.data
 
         //doing shit
         if (!spawnTask) {
-            if (spawnTask.CreatedBy == this._room.name) {
-                if (this._room.spawns.length >= 2) {
 
-                } else if (this._room.spawns.length == 1 && this._room.spawns[0].spawning != null) {
-                    return this._room.spawns[0].spawnNewCreep(spawnTask)
+        } else {
+            if (this.data.room.spawns != undefined || this.data.room.spawns != null) {
+                if (this.data.room.spawns.length >= 2) {
+
+                } else if (this.data.room.spawns.length == 1 && this.data.room.spawns[0].spawning == null) {
+
+                    if (Game.rooms[this.data.room.name].spawns[0].spawnNewCreep(spawnTask) == 0) {
+                        if (this.data.room.spawns[0].spawning == null) {
+
+                            return 0
+                        }
+                    }
                 }
             }
         }

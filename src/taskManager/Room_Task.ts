@@ -7,6 +7,7 @@ export abstract class RoomTask implements RTask {
 
     name: string;
     _room: Room;
+    room: Room
     _parent: protoRoomTask | null;
     tick: number;
     settings: RoomTaskSettings;
@@ -31,29 +32,22 @@ export abstract class RoomTask implements RTask {
         }
     }
 
-    /*get proto(): protoRoomTask {
+    get proto(): protoRoomTask {
         return {
-            name: this.name;
+            name: this.name,
+            _room: this._room,
             _parent: this._parent,
             options: this.options,
             data: this.data,
             tick: this.tick,
         }
-    }*/
+    }
 
     set proto(protoRoomTask: protoRoomTask) {
         this._parent = protoRoomTask._parent;
         this.options = protoRoomTask.options;
         this.data = protoRoomTask.data;
         this.tick = protoRoomTask.tick;
-    }
-
-    get room(): Room { //Gets Tasks own Room by its name
-        return Game.rooms[this._room.name];
-    }
-
-    set room(room: Room) {
-        this._room.name = room.name;
     }
 
     get parent(): RoomTask | null {
@@ -63,7 +57,7 @@ export abstract class RoomTask implements RTask {
         this._parent = parentTask ? parentTask.proto : null;
 
         if (this.room) {
-            this.room.RoomTask = this
+            this.room.RoomTask = this as RTask | null;
         }
     }
 
@@ -82,7 +76,7 @@ export abstract class RoomTask implements RTask {
 
     isValid(): boolean {
         let validRoomTask = false;
-        if (this._room) {
+        if (this.data) {
             validRoomTask = this.isValidRoomTask();
         }
         if (validRoomTask) {
@@ -106,11 +100,11 @@ export abstract class RoomTask implements RTask {
     abstract work(): number;
 
     finish(): void {
-        if (this.room) {
+        if (this._parent) {
             this.room.RoomTask = this.parent
         } else {
 
-            console.log(`Room having issues executing ${this.name}!`);
+            console.log(`Room_Task having issues executing ${this.name}!`);
         }
     }
 }

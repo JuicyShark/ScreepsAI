@@ -1,13 +1,13 @@
-import * as creepMaster from '../ShowMaster/creepMaster';
-import { getCacheExpiration } from '../utils/helperFunctions';
-import { roomTypes } from '../config'
 
-import { SpawnBrain } from "../prototypes/Spawn"
-import { CombatBrain } from "../ShowMaster/combatBrain"
+import { getCacheExpiration } from '../utils/helperFunctions';
 import { ColonyHub } from '../roomTypes/colony_Hub'
+
+//import { ColonyHub } from '../roomTypes/colony_Hub'
 
 const RECACHE_TIME = 2500;
 const OWNED_RECACHE_TIME = 1000;
+
+
 export class RoomBrain {
   /* Records all info for permanent room objects, e.g. sources, controllers, etc. */
   private static recordPermanentObjects(room: Room): void {
@@ -120,15 +120,18 @@ export class RoomBrain {
   }
 
   static setRoomTasks(Colony: Colony) {
-    for (let i = 0; i < roomTypes.length; i++) {
+    let roomTypes = {
+      ["ColonyHub"]: ColonyHub,
 
-      for (let room in Game.rooms) {
-        if (Game.rooms[room].isIdle === true) {
+    }
 
-          roomTypes[Game.rooms[room].roomType].newRoomTask(Game.rooms[room])
-        }
+    for (let room in Game.rooms) {
+      if (Game.rooms[room].isIdle === true) {
+
+        roomTypes[Game.rooms[room].roomType].newRoomTask(Game.rooms[room])
       }
     }
+
   }
 
 }

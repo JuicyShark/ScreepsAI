@@ -37,25 +37,27 @@ Object.defineProperty(Room.prototype, 'RoomTask', {
 });
 
 Room.prototype.run = function (Colony: Colony): void {
-    if (this.roomTask) {
-        return this.roomTask.run(Colony);
+    if (this.RoomTask) {
+        return this.RoomTask.run(Colony);
     }
+
 };
-Object.defineProperties(Creep.prototype, {
-    'hasValidTask': {
-        get() {
-            return this._roomTask && this._roomTask.isValid();
-        }
-    },
-    'isIdle': {
-        get() {
-            return !this.hasValidRoomTask;
-        }
+/*Object.defineProperty(Room.prototype, 'hasValidTask', {
+    get() {
+        return this._roomTask && this._roomTask.isValid();
+    }
+
+});*/
+
+Object.defineProperty(Room.prototype, 'isIdle', {
+    get() {
+        return !this.hasValidRoomTask;
     }
 });
 
-//roomTask Class
 
+//roomTask Class
+/*
 export class RoomTask {
     name: string;
     roomOrder: string;
@@ -69,7 +71,7 @@ export class RoomTask {
         this.priority = priority
 
     }
-}
+}*/
 
 
 
@@ -411,6 +413,7 @@ Room.prototype.executeRoom = function (colony: Colony): void {
 
     //records permanentObjs and refresh cache also runs the room timer
     RoomBrain.run(this)
+
     for (let i in roomTypes) {
         if (this.roomType == roomTypes[i]) {
             this.runMyType(colony)
@@ -421,7 +424,7 @@ Room.prototype.executeRoom = function (colony: Colony): void {
 Room.prototype.runMyType = function (colony: Colony) {
     if (this.roomType == "ColonyHub" && this.memory.timer != undefined) {
         if (this.memory.timer % 7 === 0) {
-            SpawnBrain.spawnForHub(colony)
+            //SpawnBrain.spawnForHub(colony)
 
             //this.checkandSpawn(colony)
         }
@@ -429,53 +432,7 @@ Room.prototype.runMyType = function (colony: Colony) {
 
 }
 
-Room.prototype.checkandSpawn = function (colony: Colony) {
-    if (Memory.Colonies[0].roomName == colony.room.name) {
-        var roomTaskStore = Memory.Colonies[0].roomTasks;
-    }
 
-    if (this.my == true) {
-        if (this.spawns[0].spawning == null) {
-            if (roomTaskStore.length != 0) {
-                var CurrentTask = colony.filterTask("SpawnTask")
-
-                if (CurrentTask != null) {
-                    if (CurrentTask.details.body != undefined) {
-                        this.spawns[0].spawnNewCreep(CurrentTask.details)
-                    }
-                }
-
-            }
-        }
-    }
-}
-/**
- *  Checks for Duplicate RoomTask in the room. If not found produces a roomTask to room.taskList
- * @param roomTask
- */
-
-
-Room.prototype.filterRoomTask = function (roomOrder: string): any {
-    let output: RoomTask | null;
-    this.taskList.sort(function (a, b): number {
-        if (a.priority < b.priority) {
-            return -1;
-        }
-        if (a.priority > b.priority) {
-            return 1;
-        }
-        return 0;
-    })
-    for (var i = 0; i < this.taskList.length; i++) {
-        if (this.taskList[i].roomOrder == roomOrder) {
-            var filteredTask = this.taskList[i]
-            this.taskList.splice(i, 1);
-            output = filteredTask;
-        }
-    }
-    return output
-
-}
 
 Room.prototype.getRoomLocation = function (roomName: string): any {
     let thisString = roomName.split("");

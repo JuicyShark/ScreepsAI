@@ -70,7 +70,9 @@ function main(): void {
     for (let i in Game.colonies) {
       var Colony = Game.colonies[i];
       Colony.run()
+      Colony.room.run(Colony)
     }
+
     runCreeps()
 
   } else {

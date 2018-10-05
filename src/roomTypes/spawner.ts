@@ -2,7 +2,7 @@ import { Room_Tasks } from '../TaskManager/Room_Tasks'
 import { creepTypes } from 'config';
 import { SpawnTask } from '../prototypes/Spawn'
 
-export class ColonyHub {
+export class Spawner {
 
     static createBody(type: string, room: Room): string[] {
         var energy = room.energyCapacityAvailable
@@ -141,60 +141,14 @@ export class ColonyHub {
 
         }
     }
-    private creepTypes = {
-        GeneralHand: "GeneralHand",
-        Upgrader: "Upgrader",
-        Builder: "Builder",
-        Miner: "Miner",
-        Patroller: "Patroller",
-        Lorry: "Lorry",
-        Scout: "Scout"
-
-    }
 
 
-    static newRoomTask(room: Room): void {
+    static newRoomTask(room): void {
 
-        const tempGeneralCreepsMAX = {
-            1: 5,
-            2: 5,
-            3: 5,
-            4: 5,
-            5: 5,
-            6: 5,
-            7: 5,
-            8: 5
-        }
-        let spawns = room.spawns;
-        let targetSpawns: StructureSpawn[] | any = [];
-
-        spawns.forEach(function (spawn: StructureSpawn, index: number, array: StructureSpawn[]) {
-            if (spawn.spawning == null) {
-                targetSpawns.push(spawn);
-            }
-        })
-
-        if (targetSpawns.length != 0 && room.energyAvailable >= (room.energyCapacityAvailable / 2)) {
-
-
-            if (room.creepsByType.GeneralHand == undefined || room.creepsByType.GeneralHand.length <= (tempGeneralCreepsMAX[room.controller.level])) {
-                let type = "GeneralHand"
-                let opts = null;
-                let defaultBod: any = this.createBody(type, room)
-                var spawnTask = new SpawnTask(room, type, defaultBod, opts);
-                let roomTaskData = {
-                    room: room,
-                    creeps: room.creeps,
-                    data: spawnTask
-                }
-                room.RoomTask = Room_Tasks.spawnCreeps(roomTaskData)
-            }
-
-
-        } else if (room.creeps.length == 0) {
+        if (room.creeps.length == 0) {
             let type = "GeneralHand"
             let opts = null;
-            let defaultBod: any = ["move", "carry", "carry", "work"]
+            let defaultBod: any = this.createBody(type, room)
             var spawnTask = new SpawnTask(room, type, defaultBod, opts);
             let roomTaskData = {
                 room: room,

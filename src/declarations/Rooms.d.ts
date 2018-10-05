@@ -1,7 +1,7 @@
 type HasPos = { pos: RoomPosition }
 
 //changed from interface to class
-declare class RoomTask {
+/*declare class RoomTask {
     name: string;
     roomOrder: string;
     priority: number;
@@ -9,10 +9,7 @@ declare class RoomTask {
     constructor(name: string, roomOrder: string, priority: number, details: Object | SpawnTask)
 
 
-}
-interface RoomTask {
-
-}
+}*/
 interface RoomCoord {
     x: number;
     y: number;
@@ -121,9 +118,8 @@ interface Room {
     _tempLog: any;
     //RoomTask
     RoomTask: RTask | null;
-    _roomTask: any;
-    createRoomTask: any;
-    filterRoomTask: any;
+    _roomTask: RTask;
+
 
 }
 interface SavedRoomObject {

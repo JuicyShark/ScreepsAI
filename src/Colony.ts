@@ -46,7 +46,7 @@ export class Colony {
   Age: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
   roomNames: string[];
   room: Room;
-  roomTasks: RoomTask[] | undefined;             // RoomTask list
+  roomTasks: RTask[] | undefined;             // RoomTask list
   outposts: Room[];									// Rooms for remote resource collection
   rooms: Room[];
   pos: RoomPosition;
@@ -115,7 +115,7 @@ export class Colony {
       this.outerColonyWork()
     }
 
-    this.room.run(this)
+
     //Extra logic for Colonising multiple rooms
   }
 
@@ -125,74 +125,10 @@ export class Colony {
     })
   }
 
-  roomTaskDupe(roomTask) {
-    if (!(!roomTask)) {
-      var roomTaskStore: any | undefined;
-      if (Memory.Colonies[0].roomName == this.room.name) {
-        if (!Memory.Colonies[0].roomTasks) {
-          Memory.Colonies[0].roomTasks = [];
-        }
-        roomTaskStore = Memory.Colonies[0].roomTasks;
-      }
-      if (roomTaskStore != undefined && roomTaskStore.length != 0) {
-        var duplicateTask: Boolean | null;
-
-        for (var i = 0; i < roomTaskStore.length; i++) {
-          if (duplicateTask == true) {
-            break;
-          }
-          if (JSON.parse(roomTaskStore[i]).details.type == roomTask.details.type) {
-            duplicateTask = true;
-          }
-        }
-
-        if (duplicateTask != true) {
-          roomTaskStore.push(JSON.stringify(roomTask))
-        }
-      }
-
-      //console.log(JSON.stringify(this.roomTasks, null, " "))
-      else if (roomTaskStore.length == 0) {
-        roomTaskStore.push(JSON.stringify(roomTask))
-      }
-    }
-
-  }
-
-  filterTask(roomOrder: string): any {
-    if (Memory.Colonies[0].roomName == this.room.name) {
-      var roomTaskStore = Memory.Colonies[0].roomTasks;
-    }
-    let output: RoomTask | null;
-
-    roomTaskStore.sort(function (a, b): number {
-      if (JSON.parse(a).priority < JSON.parse(b).priority) {
-        return -1;
-      }
-      if (JSON.parse(a).priority > JSON.parse(b).priority) {
-        return 1;
-      }
-      return 0;
-    })
-    for (var i = 0; i < roomTaskStore.length; i++) {
-      if (JSON.parse(roomTaskStore[i]).roomOrder == roomOrder) {
-        var filteredTask = JSON.parse(roomTaskStore[i])
-        roomTaskStore.splice(i, 1);
-        output = filteredTask;
-      }
-    }
-    if (output != null) {
-      return output
-    }
-    else {
-      return null
-    }
-
-  }
-
 
   run(): void {
     setCreepTasks(this)
+    RoomBrain.setRoomTasks(this)
     this.handleColonyHub()
 
     if (this.outposts.length != 0) {

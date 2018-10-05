@@ -8,7 +8,7 @@ declare class Colony {
     room: Room;
     outposts: Room[];									// Rooms for remote resource collection
     rooms: Room[];
-    roomTasks: RoomTask[] | any;
+    roomTasks: RTask | any;
     storages: StructureStorage[] | undefined;
     pos: RoomPosition;
     creeps: Creep[];// Creeps bound to the colony
@@ -16,8 +16,6 @@ declare class Colony {
     creepsByRoom: { [roomName: string]: Creep[] };
     build(roomName: string, outposts: string[]): void;
     run(): void
-    roomTaskDupe(roomTask: RoomTask): void;
-    filterTask(roomOrder: string): any;
 }
 
 interface ColonyMemory {

@@ -1,10 +1,10 @@
 declare class SpawnTask {
 
-    CreatedBy: string;
+    room: Room;
     type: string;
     body: string[];
     memory: spawnTaskMem | null;
-    constructor(CreatedBy: string, type: string, body: string[])
+    constructor(room: Room, type: string, body: string[])
 }
 declare class SpawnBrain {
 
