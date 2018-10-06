@@ -8,37 +8,41 @@ export class RTaskSpawnCreeps extends RoomTask {
     static taskName = 'SpawnCreeps';
 
 
-    constructor(TaskData: RoomTaskData, options = {} as RoomTaskOptions) {
+    constructor(Colony: Colony, TaskData: RoomTaskData, options = {} as RoomTaskOptions) {
         super(TaskName, TaskData);
     }
 
     isValidRoomTask(): boolean {
-        if (this.data.room == undefined || this.data.room.spawns.length == null) {
+        if (!this.data || this.data.data.length == 0 || this.data.roomName == undefined || this.room.spawns.length != null) {
             return false
         }
     }
 
     work(): number {
-        var spawnTask: SpawnTask = this.data.data
+        var spawnTasks: SpawnTask[] = this.data.data
 
         //doing shit
-        if (!spawnTask) {
+        if (!spawnTasks) {
+            console.log("Grave error? Not defined in roomTask.data.data")
 
-        } else {
-            if (this.data.room.spawns != undefined || this.data.room.spawns != null) {
-                if (this.data.room.spawns.length >= 2) {
+        } else if (spawnTasks.length != 0 && this.data.spawns[0] != undefined) {
+            if (this.data.data.length >= 1) {
+                if (this.data.spawns[0].spawning == null) {
 
-                } else if (this.data.room.spawns.length == 1 && this.data.room.spawns[0].spawning == null) {
-
-                    if (Game.rooms[this.data.room.name].spawns[0].spawnNewCreep(spawnTask) == 0) {
-                        if (this.data.room.spawns[0].spawning == null) {
-
-                            return 0
-                        }
-                    }
+                    return this.data.spawns[0].spawnNewCreep(this.data.data.pop())
+                } else if (this.data.data.length == 0) {
+                    return 0;
+                } else if (this.data.spawns[0].spawning != null) {
+                    return -6
                 }
             }
+
+            //work work?
         }
+        else if (spawnTasks.length == 0) {
+            return 0;
+        }
+
     }
 
 }

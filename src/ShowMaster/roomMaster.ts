@@ -66,7 +66,10 @@ export class RoomBrain {
 
   }
 
-
+  /** Room Timer
+   *
+   * @param room Room
+   */
   static runTimer(room: Room): void {
     if (room.towers != undefined && room.towers.length != 0) {
       room.towers.forEach(tower => (tower.run()))
@@ -90,6 +93,10 @@ export class RoomBrain {
     room.memory.timer--
   }
 
+  /**
+   *
+   * @param roomName string
+   */
   static roomReservedBy(roomName: string): string | undefined {
     if (Memory.rooms[roomName] && Memory.rooms[roomName].ctrl && Memory.rooms[roomName].ctrl!.res) {
       if (Game.time - (Memory.rooms[roomName].tick || 0) < 10000) { // reservation expires after 10k ticks
@@ -98,11 +105,10 @@ export class RoomBrain {
 
     }
   }
-  /**
+  /**RoomBrain.run(room)
    * Records permanetObjs and Refresh the cache.
    * Then runs room Timer
    */
-
   static run(room: Room): void {
 
     // Record location of permanent objects in room and recompute score as needed
@@ -115,9 +121,12 @@ export class RoomBrain {
     }
 
     this.runTimer(room)
-    //what else can we put in here?
 
   }
+  /**
+   * @param Colony colony Object
+   * Runes all the room Types. Currently only ColonyHub Exists.
+   */
 
   static setRoomTasks(Colony: Colony) {
     let roomTypes = {
@@ -126,9 +135,9 @@ export class RoomBrain {
     }
 
     for (let room in Game.rooms) {
-      if (Game.rooms[room].isIdle === true) {
+      if (Game.rooms[room].isIdle) {
 
-        roomTypes[Game.rooms[room].roomType].newRoomTask(Game.rooms[room])
+        roomTypes[Game.rooms[room].roomType].newRoomTask(Colony, Game.rooms[room])
       }
     }
 

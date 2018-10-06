@@ -17,6 +17,8 @@ interface TaskOptions {
     // moveOptions: TravelToOptions; // <- uncomment this line if you use Traveler
 }
 interface RoomTaskOptions {
+    creepLength: number;
+    creepTarget: number;
     //yo
 }
 
@@ -28,8 +30,17 @@ interface TaskData {
     skipEnergy?: boolean;
 }
 interface RoomTaskData {
-    room: Room;
-    creeps: Creep[];
-    data: any;
+    _colony: Colony;
+    roomName: string;
+    spawns: StructureSpawn[] | null;
+    creeps: {
+        creepsByType: { [typeName: string]: Creep[] };
+    };
+    data: SpawnTask[] | any[];
     //yoagain
+}
+interface SpawnTaskData extends SpawnTask {
+
+
+
 }

@@ -1,30 +1,33 @@
-import { nameGen } from "utils/personality/nameGen";
-import { creepPriority, tempGeneralCreepsMAX } from "config"
+
+import { tempGeneralCreepsMAX } from "config"
 //import { RoomTask } from "../prototypes/Room"
 
 export class SpawnTask {
 
-  room: Room;
+  roomName: string;
   type: string;
+  creepName: string;
   body: BodyPartConstant[];
   memory: any;
 
-  constructor(room: Room, type: string, body: BodyPartConstant[], options: any) {
-    this.room = room;
+  constructor(roomName: string, type: string, body: BodyPartConstant[], creepName: string, options = {} as any) {
+    this.roomName = roomName;
     this.type = type;
+    this.creepName = creepName;
     this.body = body;
+
 
     if (options == null) {
       this.memory = {
         type: type,
-        home: room.name,
+        home: roomName,
         destination: null
       };
     }
     else {
       this.memory = {
         type: type,
-        home: room.name,
+        home: roomName,
         destination: options.destination,
         myContainer: options.myContainer,
         mySource: options.mySource
@@ -32,9 +35,8 @@ export class SpawnTask {
     }
   };
 
-  spawnNewCreep(): number {
-    let newName = nameGen(this.type);
-    var testCreep: number = this.room.spawns[0].spawnCreep(this.body, newName, {
+  spawnNewCreep(spawn: StructureSpawn): number {
+    var testCreep: number = spawn.spawnCreep(this.body, this.creepName, {
       dryRun: true
     });
 
@@ -52,14 +54,13 @@ export class SpawnTask {
 
 StructureSpawn.prototype.spawnNewCreep = function (spawnTask: SpawnTask): number {
 
-  let newName = nameGen(spawnTask.type);
-  var testCreep: number = this.spawnCreep(spawnTask.body, newName, {
+  var testCreep: number = this.spawnCreep(spawnTask.body, spawnTask.creepName, {
     dryRun: true
   });
 
   if (testCreep == 0) {
-    this.spawnCreep(spawnTask.body, newName + Game.time, { memory: spawnTask.memory });
-    this.room.memLog = ("Spawning a " + spawnTask.type + ", named " + newName);
+    this.spawnCreep(spawnTask.body, spawnTask.creepName + Game.time, { memory: spawnTask.memory });
+    this.room.memLog = ("Spawning a " + spawnTask.type + ", named " + spawnTask.creepName);
   }
   return testCreep
 };
@@ -213,9 +214,9 @@ export class SpawnBrain {
       if (PatrollerFlag != null && PatrollerFlag.length >= 1 && c.Patroller == undefined || c.Patroller != undefined && c.Patroller.length <= 3) {
         SpawnBrain.creepBuilder(Colony, "Patroller", room, null)
       }
-  
+
       if (ScoutFlag != null && ScoutFlag.length >= 1 && c.Scout == null || c.scout != undefined && c.Scout.length == 0) {
-  
+
         SpawnBrain.creepBuilder(Colony, "Scout", room, null)
       }*/
 

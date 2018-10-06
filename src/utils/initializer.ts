@@ -31,11 +31,12 @@ import { RTaskSpawnCreeps } from '../taskManager/Room_TaskInstances/rtask_spawnC
 
 export function initializeRoomTask(protoRTask: protoRoomTask): RoomTask {
 	let taskName = protoRTask.name;
+	let colony = protoRTask.data._colony;
 	let data = protoRTask.data
 	let RTask: RoomTask
 	switch (taskName) {
 		case RTaskSpawnCreeps.taskName:
-			RTask = new RTaskSpawnCreeps(data as RoomTaskData);
+			RTask = new RTaskSpawnCreeps(colony, data as RoomTaskData);
 			break;
 
 	}

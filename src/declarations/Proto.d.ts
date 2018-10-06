@@ -35,7 +35,7 @@ interface protoTask {
 interface protoRoomTask {
     name: string;
     _room: Room;
-    _parent: protoRoomTask | null;
+    _parent: RTask | null;
     options: RoomTaskOptions;
     data: RoomTaskData;
     tick: number;

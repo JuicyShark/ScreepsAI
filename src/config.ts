@@ -89,59 +89,7 @@ export const tempGeneralCreepsMAX = {
   7: 3,
   8: 3
 }
-export function creepPriority(type: string): number {
-  let temp = [
-    {
-      type: "GeneralHand",
-      priority: 3
-    },
-    {
-      type: "Builder",
-      priority: 4
-    },
-    {
-      type: "Upgrader",
-      priority: 4
-    },
-    {
-      type: "Miner",
-      priority: 2
-    },
-    {
-      type: "Lorry",
-      priority: 4
-    },
-    {
-      type: "Patroller",
-      priority: 2
-    },
-    {
-      type: "Defender",
-      priority: 2
-    },
-    {
-      type: "Attacker",
-      priority: 2
-    },
-    {
-      type: "Scout",
-      priority: 3
-    }
-  ]
 
-  if (type != undefined) {
-    let output: number | null = null;
-    temp.forEach(function (value: { type: string; priority: number; }, index: number) {
-      if (value.type == type) {
-        output = value.priority
-      }
-
-    })
-    if (output != null) {
-      return output
-    }
-  }
-}
 
 export var roomTypes: string[] = [
   //Colony RoomTypes
@@ -163,7 +111,7 @@ export var roomTypes: string[] = [
 
 
 
-export function configCreepTypes(type: string): string {
+/*export function configCreepTypes(type: string): string {
   let creepTypeSelected: string = "";
   if (creepTypeSelected != "") {
     return creepTypeSelected
@@ -186,6 +134,6 @@ export function configCreepTypes(type: string): string {
 
   })
 
-}
+}*/
 
 

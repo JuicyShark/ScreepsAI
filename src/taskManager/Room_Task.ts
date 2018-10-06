@@ -8,7 +8,7 @@ export abstract class RoomTask implements RTask {
     name: string;
     _room: Room;
     room: Room
-    _parent: protoRoomTask | null;
+    _parent: RTask | null;
     tick: number;
     settings: RoomTaskSettings;
     options: RoomTaskOptions;
@@ -50,19 +50,19 @@ export abstract class RoomTask implements RTask {
         this.tick = protoRoomTask.tick;
     }
 
-    get parent(): RoomTask | null {
+    get parent(): RTask | null {
         return (this._parent ? initializeRoomTask(this._parent) : null)
     }
-    set parent(parentTask: RoomTask | null) {
-        this._parent = parentTask ? parentTask.proto : null;
+    set parent(parentTask: RTask | null) {
+        this._parent = parentTask ? parentTask.proto as RTask : null;
 
         if (this.room) {
             this.room.RoomTask = this as RTask | null;
         }
     }
 
-    get manifest(): RoomTask[] {
-        let manifest: RoomTask[] = [this];
+    get manifest(): RTask[] {
+        let manifest: RTask[] = [this];
         let parent = this.parent;
         while (parent) {
             manifest.push(parent);
@@ -89,22 +89,29 @@ export abstract class RoomTask implements RTask {
     }
 
     run(): number | null {
-        //Execute this each Tick
-        let result = this.work();
-        if (result == OK) {
-            this.finish();
+        if (this.isValid) {
+            //Execute this each Tick
+            let result = this.work();
+            if (result == OK) {
+                this.finish();
+            }
+            return result;
         }
-        return result;
+        else {
+
+        }
     }
 
     abstract work(): number;
 
     finish(): void {
-        if (this._parent) {
+        if (!this.parent && this.room != undefined) {
             this.room.RoomTask = this.parent
         } else {
+            console.log(this._parent)
 
             console.log(`Room_Task having issues executing ${this.name}!`);
         }
+
     }
 }

@@ -25,6 +25,11 @@ interface RTask extends protoRoomTask {
     room: Room;
     parent: RTask | null;
     manifest: RTask[];
+    isValidRoomTask(): boolean;
+    isValid(): boolean;
+    run(): number | void;
+    work(): number;
+    finish(): void;
 }
 
 

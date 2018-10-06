@@ -1,6 +1,6 @@
 // Room prototypes - commonly used room properties and methods
 
-import { MY_USERNAME, MY_ALLY, creepPriority, roomTypes } from "config";
+import { MY_USERNAME, MY_ALLY, roomTypes } from "config";
 import { RoomBrain } from "ShowMaster/roomMaster";
 import { SpawnBrain } from "./Spawn";
 import { initializeRoomTask } from '../utils/initializer';

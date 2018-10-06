@@ -10,19 +10,12 @@ export class Lorry {
       return thisCreepsTasks
     }
     else {
-      let storage = creep.room.storage;
+
       let extensions = creep.room.extensions;
       //If you have no Upgraders targeting the upgrader  the harvester will do so.
       if (creep.room.controller.targetedBy.length == 0 && creep.room.creepsByType.Upgrader == undefined) {
         thisCreepsTasks.push(Tasks.upgrade(Game.rooms[creep.memory.home].controller))
         return thisCreepsTasks
-      }
-
-
-      else if (storage != undefined) {
-        thisCreepsTasks.push(Tasks.transfer(storage));
-        return thisCreepsTasks
-
       }
       else if (extensions.length != 0) {
         let temp: any;
@@ -46,12 +39,17 @@ export class Lorry {
     }
   }
   private static withdrawTask(creep: Creep, thisCreepsTasks: any): void {
+    let storage = creep.room.storage;
     //looks for Container with 200 Energy or more and with no more than 2 creeps (including miner)
     var unattendedContainer = _.filter(creep.room.containers, container => container.isEmpty != true && container.energy > 200 && container.targetedBy.length <= 1)[0];
     //if it is null
     if (unattendedContainer != null) {
       //take it from the container
       thisCreepsTasks.push(Tasks.withdraw(unattendedContainer, RESOURCE_ENERGY, creep.carryCapacity - creep.carry.energy))
+      this.depositTask(creep, thisCreepsTasks)
+    }
+    else if (unattendedContainer == null && storage != undefined && storage.store.energy >= 1000) {
+      thisCreepsTasks.push(Tasks.withdraw(storage, RESOURCE_ENERGY, creep.carryCapacity - creep.carry.energy))
       this.depositTask(creep, thisCreepsTasks)
     }
   }
