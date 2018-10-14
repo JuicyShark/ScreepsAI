@@ -13,26 +13,28 @@ export class RTaskSpawnCreeps extends RoomTask {
     }
 
     isValidRoomTask(): boolean {
-        if (!this.data || this.data.data.length == 0 || this.data.roomName == undefined || this.room.spawns.length != null) {
+        if (!this.data || this.data.data.length == 0 || this.data.roomName == undefined || this.room.spawns.length == 0) {
             return false
         }
     }
 
     work(): number {
         var spawnTasks: SpawnTask[] = this.data.data
+        let spawn: StructureSpawn = this.data.spawns[0]
 
         //doing shit
         if (!spawnTasks) {
-            console.log("Grave error? Not defined in roomTask.data.data")
+            return 0;
 
-        } else if (spawnTasks.length != 0 && this.data.spawns[0] != undefined) {
+        } else if (spawnTasks.length != 0 && spawn != undefined) {
             if (this.data.data.length >= 1) {
-                if (this.data.spawns[0].spawning == null) {
+                if (spawn.spawning == null) {
+                    let spawnData = this.data.data.pop()
 
-                    return this.data.spawns[0].spawnNewCreep(this.data.data.pop())
+                    return spawn.spawnNewCreep(spawnData)
                 } else if (this.data.data.length == 0) {
                     return 0;
-                } else if (this.data.spawns[0].spawning != null) {
+                } else if (spawn.spawning != null) {
                     return -6
                 }
             }

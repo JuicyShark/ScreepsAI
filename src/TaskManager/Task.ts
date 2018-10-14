@@ -244,9 +244,9 @@ export abstract class Task implements ITask {
 		for (let position of positions) {
 			if (_.find(position.lookFor(LOOK_STRUCTURES), s => s.structureType == STRUCTURE_ROAD)) continue;
 			//This IS what was changed over to getTerrain
-			let terrain: number = creep.room.getTerrain().get(position.x, position.y);
+			let terrain: RoomTerrain = Game.rooms[creep.room.name].getTerrain();
 			//2 = TERRAIN_MASK_SWAMP
-			if (terrain == 2) {
+			if (terrain.get(position.x, position.y) == 2) {
 				swampPosition = position;
 			} else {
 				return creep.move(creep.pos.getDirectionTo(position));

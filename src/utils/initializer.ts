@@ -28,6 +28,7 @@ import { TaskgoToContainer, goToContainerTargetType } from 'taskManager/Creep_Ta
 //End of creep Declairations
 import { RoomTask } from '../taskManager/Room_Task';
 import { RTaskSpawnCreeps } from '../taskManager/Room_TaskInstances/rtask_spawnCreeps'
+import { RTaskroomIdle } from 'taskManager/Room_TaskInstances/rtask_roomIdle';
 
 export function initializeRoomTask(protoRTask: protoRoomTask): RoomTask {
 	let taskName = protoRTask.name;
@@ -37,6 +38,9 @@ export function initializeRoomTask(protoRTask: protoRoomTask): RoomTask {
 	switch (taskName) {
 		case RTaskSpawnCreeps.taskName:
 			RTask = new RTaskSpawnCreeps(colony, data as RoomTaskData);
+			break;
+		case RTaskroomIdle.taskName:
+			RTask = new RTaskroomIdle(colony, data as RoomTaskData);
 			break;
 
 	}

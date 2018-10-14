@@ -24,12 +24,7 @@ export abstract class RoomTask implements RTask {
         });
         this.tick = Game.time;
         this.options = options;
-        if (!data) {
-            this.data = null;
-        }
-        else {
-            this.data = data;
-        }
+        this.data = data;
     }
 
     get proto(): protoRoomTask {
@@ -105,12 +100,10 @@ export abstract class RoomTask implements RTask {
     abstract work(): number;
 
     finish(): void {
-        if (!this.parent && this.room != undefined) {
-            this.room.RoomTask = this.parent
-        } else {
-            console.log(this._parent)
+        if (this.parent) {
+            this.room.RoomTask = this._parent
+        } else if (!this.parent) {
 
-            console.log(`Room_Task having issues executing ${this.name}!`);
         }
 
     }

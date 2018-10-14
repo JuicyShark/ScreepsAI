@@ -36,7 +36,7 @@ interface RoomTaskData {
     creeps: {
         creepsByType: { [typeName: string]: Creep[] };
     };
-    data: SpawnTask[] | any[];
+    data: SpawnTask[] | any;
     //yoagain
 }
 interface SpawnTaskData extends SpawnTask {
