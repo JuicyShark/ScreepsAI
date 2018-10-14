@@ -32,6 +32,7 @@ export class roomTypeBase {
         } else {
 
             console.log(type + " " + options.creepLength + " " + options.creepTarget)
+            // console.log(type + " " + options.creepLength + " " + options.creepTarget)
 
             let body: any = allCreepTypes.level1Types[type].body(room.energyCapacityAvailable)
             for (let i = options.creepLength; i < options.creepTarget; i++) {
