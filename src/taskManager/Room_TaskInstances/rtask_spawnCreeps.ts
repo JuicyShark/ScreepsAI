@@ -14,7 +14,6 @@ export class RTaskSpawnCreeps extends RoomTask {
     isValidRoomTask(): boolean {
         var spawnTaskData = this.data as SpawnTaskData;
         var spawnTasks: SpawnTask[] = this.data.data;
-        var spawns: StructureSpawn[] = spawnTaskData.spawns;
         if (!spawnTaskData || spawnTasks == null || spawnTaskData.roomName == undefined) {
             return false
         }
