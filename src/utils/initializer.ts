@@ -37,7 +37,7 @@ export function initializeRoomTask(protoRTask: protoRoomTask): RoomTask {
 	let RTask: RoomTask
 	switch (taskName) {
 		case RTaskSpawnCreeps.taskName:
-			RTask = new RTaskSpawnCreeps(colony, data as RoomTaskData);
+			RTask = new RTaskSpawnCreeps(colony, data as SpawnTaskData);
 			break;
 		case RTaskroomIdle.taskName:
 			RTask = new RTaskroomIdle(colony, data as RoomTaskData);

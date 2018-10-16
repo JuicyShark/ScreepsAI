@@ -1,6 +1,5 @@
 import { RoomTask } from '../Room_Task';
 
-export type spawnCreepTargetType = StructureSpawn;
 export const TaskName = 'SpawnCreeps';
 
 export class RTaskSpawnCreeps extends RoomTask {
@@ -8,43 +7,41 @@ export class RTaskSpawnCreeps extends RoomTask {
     static taskName = 'SpawnCreeps';
 
 
-    constructor(Colony: Colony, TaskData: RoomTaskData, options = {} as RoomTaskOptions) {
+    constructor(Colony: Colony, TaskData: SpawnTaskData, options = {} as RoomTaskOptions) {
         super(TaskName, TaskData);
     }
 
     isValidRoomTask(): boolean {
-        if (!this.data || this.data.data.length == 0 || this.data.roomName == undefined || this.room.spawns.length == 0) {
+        var spawnTaskData = this.data as SpawnTaskData;
+        var spawnTasks: SpawnTask[] = this.data.data;
+        var spawns: StructureSpawn[] = spawnTaskData.spawns;
+        if (!spawnTaskData || spawnTasks == null || spawnTaskData.roomName == undefined) {
             return false
         }
     }
 
     work(): number {
-        var spawnTasks: SpawnTask[] = this.data.data
-        let spawn: StructureSpawn = this.data.spawns[0]
+        var spawnTaskData = this.data as SpawnTaskData;
+        var spawnTasks: SpawnTask[] = this.data.data;
+        var spawns: StructureSpawn[] = spawnTaskData.spawns;
 
-        //doing shit
-        if (!spawnTasks) {
-            return 0;
-
-        } else if (spawnTasks.length != 0 && spawn != undefined) {
-            if (this.data.data.length >= 1) {
-                if (spawn.spawning == null) {
-                    let spawnData = this.data.data.pop()
-
-                    return spawn.spawnNewCreep(spawnData)
-                } else if (this.data.data.length == 0) {
-                    return 0;
-                } else if (spawn.spawning != null) {
-                    return -6
-                }
+        if (spawnTasks instanceof Array) {
+            if (spawnTasks.length == 0) {
+                return OK;
             }
+            else if (spawnTasks.length >= 1 && spawns[0].spawning == null) {
+                if (spawns[0] instanceof StructureSpawn) {
 
-            //work work?
+                    let spawnData = spawnTasks.pop()
+                    return spawns[0].spawnNewCreep(spawnData)
+                }
+
+            }
+            else if (spawns[0].spawning != null) {
+                return -1;
+            }
         }
-        else if (spawnTasks.length == 0) {
-            return 0;
-        }
+
 
     }
-
 }

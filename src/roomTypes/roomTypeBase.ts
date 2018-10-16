@@ -1,9 +1,19 @@
 import { nameGen } from "utils/personality/nameGen";
 import { Room_Tasks } from '../TaskManager/Room_Tasks'
 import { SpawnTask } from '../prototypes/Spawn'
+import { utils } from "../utils/temputil"
 import { allCreepTypes } from "../creepTypes/allTypes"
 
 export class roomTypeBase {
+
+    static expansionLv1(Colony): any {
+        let room = Colony.room;
+        let spawnPos = room.spawns[0].pos;
+        console.log(utils.getNearby(room, spawnPos, 1))
+
+
+    }
+
     static creepName(type: string): string {
         return nameGen(type)
 
@@ -31,7 +41,6 @@ export class roomTypeBase {
             return null;
         } else {
 
-            console.log(type + " " + options.creepLength + " " + options.creepTarget)
             // console.log(type + " " + options.creepLength + " " + options.creepTarget)
 
             let body: any = allCreepTypes.level1Types[type].body(room.energyCapacityAvailable)
@@ -49,23 +58,25 @@ export class roomTypeBase {
         if (Colony.rooms.length == 1) {
             let creepTypes = allCreepTypes.level1Types
             let output = null;
+            var options = null;
 
             for (let type of Object.values(creepTypes)) {
 
                 if (Colony.creepsByType[type.string] == undefined) {
-                    let options = {
+                    options = {
                         creepLength: 0,
                         creepTarget: creepTypes[type.string].creepAmmount[room.controller.level]
 
                     }
                     if (this.calculate(room, type.string, options) == null) {
-                        continue;
+                        break;
                     }
-                    let creepsToSpawn = this.calculate(room, type.string, options)
+                    var creepsToSpawn = this.calculate(room, type.string, options)
                     let roomTaskData = {
                         _colony: Colony,
                         roomName: room.name,
                         spawns: targetSpawns,
+                        leftToSpawn: (Colony.creepsByType[type.string].length - creepTypes[type.string].creepAmmount[room.controller.level]),
                         creeps: {
                             creepsByType: _.groupBy(Colony.creeps, creep => creep.memory.type)
                         },
@@ -76,7 +87,7 @@ export class roomTypeBase {
 
                 }
                 else if (Colony.creepsByType[type.string] != undefined || Colony.creepsByType[type.string] < type.creepAmmount[room.controller.level]) {
-                    let options = {
+                    options = {
                         creepLength: Colony.creepsByType[type.string].length,
                         creepTarget: creepTypes[type.string].creepAmmount[room.controller.level]
                     }
@@ -88,6 +99,7 @@ export class roomTypeBase {
                         creeps: {
                             creepsByType: _.groupBy(Colony.creeps, creep => creep.memory.type)
                         },
+                        leftToSpawn: (Colony.creepsByType[type.string].length - creepTypes[type.string].creepAmmount[room.controller.level]),
                         data: creepsToSpawn
                     }
                     output = Room_Tasks.spawnCreeps(Colony, roomTaskData, options)

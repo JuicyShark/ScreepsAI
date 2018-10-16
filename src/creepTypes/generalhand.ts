@@ -129,7 +129,7 @@ export class GeneralHand {
             return thisCreepsTasks
         } else {
 
-            if (creep.room.droppedEnergy.length != 0 && creep.room.droppedEnergy[0].amount >= (creep.carryCapacity / 2)) {
+            if (creep.room.droppedEnergy.length != 0 && creep.room.droppedEnergy[0].amount >= (creep.carryCapacity / 4)) {
                 thisCreepsTasks.push(Tasks.pickup(creep.room.droppedEnergy[0]))
 
             } else {
@@ -154,6 +154,10 @@ export class GeneralHand {
                     if (unattendedSource[0]) {
                         thisCreepsTasks.push(Tasks.harvest(unattendedSource[0]));
                         //this.depositTask(creep, thisCreepsTasks)
+                    }
+                    else if (unattendedSource[0] == null && creep.room.storage.store.energy >= (creep.room.storage.storeCapacity / 2)) {
+                        thisCreepsTasks.push(Tasks.withdraw(creep.room.storage, RESOURCE_ENERGY))
+
                     }
                 }
                 else {

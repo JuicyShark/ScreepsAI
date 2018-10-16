@@ -14,7 +14,7 @@ export class ColonyHub {
     static newRoomTask(Colony: Colony, room: Room): void {
         const creepTypes = allCreepTypes.level1Types
 
-        if (Colony.creepsByType.GeneralHand == undefined || Colony.creepsByType.GeneralHand.length <= creepTypes.GeneralHand.creepAmmount[room.controller.level]) {
+        if (Colony.creepsByType.GeneralHand == undefined || Colony.creepsByType.GeneralHand.length < creepTypes.GeneralHand.creepAmmount[room.controller.level]) {
             if (roomTypeBase.spawnBasicCreeps(Colony, room) != null) {
                 room.RoomTask = roomTypeBase.spawnBasicCreeps(Colony, room)
             }

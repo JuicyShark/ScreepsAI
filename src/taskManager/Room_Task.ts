@@ -12,7 +12,7 @@ export abstract class RoomTask implements RTask {
     tick: number;
     settings: RoomTaskSettings;
     options: RoomTaskOptions;
-    data: RoomTaskData;
+    data: RoomTaskData | SpawnTaskData;
     constructor(taskName: string, data: RoomTaskData, options = {} as RoomTaskOptions) {
         this.name = taskName;
         this._parent = null;
@@ -100,9 +100,10 @@ export abstract class RoomTask implements RTask {
     abstract work(): number;
 
     finish(): void {
-        if (this.parent) {
-            this.room.RoomTask = this._parent
-        } else if (!this.parent) {
+        if (this._room) {
+            Game.rooms[this._room.name].RoomTask = this._parent
+        } else if (!this._room) {
+            Game.rooms[this.data.roomName].RoomTask = this._parent
 
         }
 

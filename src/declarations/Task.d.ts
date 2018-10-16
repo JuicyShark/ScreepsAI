@@ -32,15 +32,15 @@ interface TaskData {
 interface RoomTaskData {
     _colony: Colony;
     roomName: string;
-    spawns: StructureSpawn[] | null;
     creeps: {
         creepsByType: { [typeName: string]: Creep[] };
     };
     data: SpawnTask[] | any;
     //yoagain
 }
-interface SpawnTaskData extends SpawnTask {
-
+interface SpawnTaskData extends RoomTaskData {
+    spawns: StructureSpawn[] | null;
+    leftToSpawn: number;
 
 
 }

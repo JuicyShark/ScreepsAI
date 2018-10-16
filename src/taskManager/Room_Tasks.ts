@@ -8,7 +8,7 @@ export class Room_Tasks {
         return new RTaskroomIdle(Colony, data, options)
     }
 
-    static spawnCreeps(Colony: Colony, data: RoomTaskData, options = {} as RoomTaskOptions): RTaskSpawnCreeps {
+    static spawnCreeps(Colony: Colony, data: SpawnTaskData, options = {} as RoomTaskOptions): RTaskSpawnCreeps {
         return new RTaskSpawnCreeps(Colony, data, options)
     }
 
