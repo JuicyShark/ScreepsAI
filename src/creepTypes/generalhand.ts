@@ -155,7 +155,7 @@ export class GeneralHand {
                         thisCreepsTasks.push(Tasks.harvest(unattendedSource[0]));
                         //this.depositTask(creep, thisCreepsTasks)
                     }
-                    else if (unattendedSource[0] == null && creep.room.storage.store.energy >= (creep.room.storage.storeCapacity / 2)) {
+                    else if (!creep.room.storage && unattendedSource[0] == null && creep.room.storage.store.energy >= (creep.room.storage.storeCapacity / 2)) {
                         thisCreepsTasks.push(Tasks.withdraw(creep.room.storage, RESOURCE_ENERGY))
 
                     }
