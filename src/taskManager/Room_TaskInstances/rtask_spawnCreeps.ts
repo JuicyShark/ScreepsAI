@@ -32,7 +32,10 @@ export class RTaskSpawnCreeps extends RoomTask {
                 if (spawns[0] instanceof StructureSpawn) {
 
                     let spawnData = spawnTasks.pop()
-                    return spawns[0].spawnNewCreep(spawnData)
+                    if (spawns[0].spawnNewCreep(spawnData) == 0) {
+                        spawnTaskData.leftToSpawn = (spawnTaskData.leftToSpawn - 1)
+                        return OK
+                    }
                 }
 
             }
