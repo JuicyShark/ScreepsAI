@@ -143,21 +143,21 @@ export class Spawner {
     }
 
 
-    static newRoomTask(room): void {
+    static newRoomTask(Colong: Colony, room: Room): void {
 
-        if (room.creeps.length == 0) {
-            let type = "GeneralHand"
-            let opts = null;
-            let defaultBod: any = this.createBody(type, room)
-            var spawnTask = new SpawnTask(room, type, defaultBod, opts);
-            let roomTaskData = {
-                room: room,
-                creeps: room.creeps,
-                data: spawnTask
-            }
-
-            room.RoomTask = Room_Tasks.spawnCreeps(roomTaskData)
-        }
+        /* if (room.creeps.length == 0) {
+             let type = "GeneralHand"
+             let opts = null;
+             let defaultBod: any = this.createBody(type, room)
+             var spawnTask = new SpawnTask(room, type, defaultBod, opts);
+             let roomTaskData = {
+                 room: room,
+                 creeps: room.creeps,
+                 data: spawnTask
+             }
+ 
+             room.RoomTask = Room_Tasks.spawnCreeps(Colony, roomTaskData as SpawnTaskData)
+         }*/
 
     }
 
