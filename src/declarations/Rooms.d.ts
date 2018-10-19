@@ -34,7 +34,6 @@ interface RoomPosition {
 }
 interface Room {
     run(Colony: Colony): void;
-    isIdle: boolean;
     decodeRoomLocation: any
     getRoomLocation: any;
     executeRoom: any;

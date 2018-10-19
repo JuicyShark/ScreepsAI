@@ -36,16 +36,23 @@ export class ColonyHub {
     }
 
 
+
     /**
      * RoomTask!
+     * Uses the spawnGuide generator function to do things. laid out so i can spread it!
      * @param room Room
      */
     static newRoomTask(Colony: Colony, room: Room): void {
+
+        var selected = "GeneralHand"
+        //the next one will be gud :3
+
+
         const Sb = roomTypeBase.spawnGuide(Colony, room) //declaring should start it up
 
         Sb.next() //Returns value { "trueOrFalse"}
         Sb.next(true) //Triggering - returns value {"String CreepType"}
-        Sb.next("GeneralHand") //SpawnType - returns value {"Ready"}
+        Sb.next(selected) //SpawnType - returns value {"Ready"}
         let temp001 = Sb.next().value as isSpawning; //this call creates a value {isSpawning} Still being worked on.
         switch (temp001.type) {
             case undefined:
@@ -53,6 +60,9 @@ export class ColonyHub {
                 break;
             case "canSpawn":
                 temp001.boolean ? this.spawnTask(Colony, room) : this.idleTask(Colony, room)
+                break;
+            case "Idle":
+                temp001.boolean ? this.idleTask(Colony, room) : null
                 break;
             default:
                 console.log("defualtin")

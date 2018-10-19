@@ -22,15 +22,20 @@ export class RTaskroomIdle extends RoomTask {
     }
 
     work(): number {
+        var output = -5;
         var dataPack: RoomTaskData = this.data
 
         //needs to return 0
-        if (Game.time >= dataPack.data.idleTill) {
-            return 0;
+        if (Game.time == dataPack.data.idleTill) {
+            console.log("ROOM DONE IDLE")
+            output = 0;
         }
         else {
-            return -1;
+            console.log(Game.time, " ", dataPack.data.idleTill)
+            output = -2;
         }
+
+        return output
 
     }
 

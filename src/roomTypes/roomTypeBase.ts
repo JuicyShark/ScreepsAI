@@ -127,22 +127,18 @@ export class roomTypeBase {
         const trigger = yield "trueOrFalse";
         const creepType = yield "String CreepType";
         yield "Ready"
+        //console.log(creepTypes[creepType].string)
 
-        var isSpawning: isSpawning | undefined = undefined;
+        var whatDo: isSpawning | undefined = undefined;
         if (trigger == true && room.spawns[0].spawning == null) {
-            if (Colony.creepsByType.GeneralHand == undefined || Colony.creepsByType.GeneralHand.length < creepTypes.GeneralHand.creepAmmount[room.controller.level]) {
-                isSpawning = { type: "canSpawn", boolean: true }
+            if (Colony.creepsByType[creepType] == undefined || Colony.creepsByType[creepType].length < creepTypes[creepType].creepAmmount[room.controller.level]) {
+                whatDo = { type: "canSpawn", boolean: true }
             } else {
-                isSpawning = { type: "canSpawn", boolean: false }
+                whatDo = { type: "Idle", boolean: true }
             }
         } else {
-            isSpawning = { type: "canSpawn", boolean: false }
+            whatDo = { type: "Idle", boolean: true }
         }
-        yield isSpawning; // Do it
-
-
-        yield undefined
-
-        return OK;
+        yield whatDo; // Do it
     }
 }

@@ -135,7 +135,7 @@ export class RoomBrain {
     }
 
     for (let room in Game.rooms) {
-      if (Game.rooms[room].isIdle) {
+      if (Game.rooms[room].RoomTask == null) {
 
         roomTypes[Game.rooms[room].roomType].newRoomTask(Colony, Game.rooms[room])
       }

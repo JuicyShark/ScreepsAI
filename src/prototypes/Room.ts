@@ -42,18 +42,6 @@ Room.prototype.run = function (Colony: Colony): void {
     }
 
 };
-/*Object.defineProperty(Room.prototype, 'hasValidTask', {
-    get() {
-        return this._roomTask && this._roomTask.isValid();
-    }
-
-});*/
-
-Object.defineProperty(Room.prototype, 'isIdle', {
-    get() {
-        return !this.hasValidRoomTask;
-    }
-});
 
 
 //roomTask Class
