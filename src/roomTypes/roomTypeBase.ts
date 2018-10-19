@@ -1,23 +1,10 @@
 import { nameGen } from "utils/personality/nameGen";
 import { Room_Tasks } from '../TaskManager/Room_Tasks'
 import { SpawnTask } from '../prototypes/Spawn'
-import { utils } from "../utils/temputil"
 import { allCreepTypes } from "../creepTypes/allTypes"
 
 export class roomTypeBase {
 
-    static expansionLv1(Colony): any {
-        let room = Colony.room;
-        let spawnPos = room.spawns[0].pos;
-        console.log(utils.getNearby(room, spawnPos, 1))
-
-
-    }
-
-    static creepName(type: string): string {
-        return nameGen(type)
-
-    }
     static spawnBasicCreeps(Colony: Colony, room: Room): RTask | null {
         let spawns = room.spawns;
         let targetSpawns: StructureSpawn[] = [];
@@ -34,6 +21,12 @@ export class roomTypeBase {
             return this.standardCreepDeployment(Colony, room, targetSpawns)
         }
     }
+
+    static creepName(type: string): string {
+        return nameGen(type)
+
+    }
+
     static calculate(room: Room, type: string, options): SpawnTask[] | null {
 
         var creepsToSpawn: SpawnTask[] = [];
@@ -50,17 +43,20 @@ export class roomTypeBase {
             }
             return creepsToSpawn;
         }
-
-
     }
-
+    /**
+     *  Level 1 Creeps
+     * @param Colony
+     * @param room
+     * @param targetSpawns
+     */
     static standardCreepDeployment(Colony: Colony, room: Room, targetSpawns: StructureSpawn[]): RTask | null {
         if (!Colony || !Colony.rooms) {
             return null
         }
         else if (Colony.rooms.length == 1) {
-            let creepTypes = allCreepTypes.level1Types
-            let output = null;
+            var creepTypes = allCreepTypes.level1Types
+            var output = null;
             var options = null;
 
             for (let type of Object.values(creepTypes)) {
@@ -126,10 +122,27 @@ export class roomTypeBase {
 
 
 
-    static *spawnGuide() {
-        const inside = yield
+    static *spawnGuide(Colony: Colony, room: Room) {
+        const creepTypes = allCreepTypes.level1Types
+        const trigger = yield "trueOrFalse";
+        const creepType = yield "String CreepType";
+        yield "Ready"
+
+        var isSpawning: isSpawning | undefined = undefined;
+        if (trigger == true && room.spawns[0].spawning == null) {
+            if (Colony.creepsByType.GeneralHand == undefined || Colony.creepsByType.GeneralHand.length < creepTypes.GeneralHand.creepAmmount[room.controller.level]) {
+                isSpawning = { type: "canSpawn", boolean: true }
+            } else {
+                isSpawning = { type: "canSpawn", boolean: false }
+            }
+        } else {
+            isSpawning = { type: "canSpawn", boolean: false }
+        }
+        yield isSpawning; // Do it
 
 
+        yield undefined
 
+        return OK;
     }
 }

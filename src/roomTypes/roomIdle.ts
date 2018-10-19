@@ -5,8 +5,6 @@ import { Room_Tasks } from 'taskManager/Room_Tasks'
 export class roomIdle {
 
 
-
-
     /**
      * RoomTask!
      * @param room Room
