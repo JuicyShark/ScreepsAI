@@ -9,7 +9,7 @@ export class ColonyHub {
      * @param Colony
      * @param room
      */
-    static idleTask(Colony: Colony, room: Room): any {
+    static idleTask(Colony: Colony, room: Room) {
         let data = {
             _colony: Colony,
             roomName: room.name,
@@ -18,7 +18,14 @@ export class ColonyHub {
             }
 
         }
-        return room.RoomTask = Room_Tasks.roomIdle(Colony, data as RoomTaskData);
+        let temp = [
+            Room_Tasks.roomIdle(Colony, data as RoomTaskData),
+            Room_Tasks.roomIdle(Colony, data as RoomTaskData)
+        ]
+
+
+        room.RoomTask = Room_Tasks.chain(temp)
+        // room.RoomTask = Room_Tasks.roomIdle(Colony, data as RoomTaskData);
 
     }
     /**
@@ -26,11 +33,11 @@ export class ColonyHub {
     * @param Colony  Passed for link
     * @param room
     */
-    static spawnTask(Colony: Colony, room: Room): any {
+    static spawnTask(Colony: Colony, room: Room) {
         const creepTypes = allCreepTypes.level1Types
 
         if (roomTypeBase.spawnBasicCreeps(Colony, room) != null) {
-            return room.RoomTask = roomTypeBase.spawnBasicCreeps(Colony, room)
+            room.RoomTask = roomTypeBase.spawnBasicCreeps(Colony, room)
         } else { console.log("Catching Error in colony_Hub") }
 
     }
@@ -49,9 +56,17 @@ export class ColonyHub {
 
 
         const Sb = roomTypeBase.spawnGuide(Colony, room) //declaring should start it up
+        var trigger = false;
 
+        if (room.RoomTask == null) {
+            trigger = true;
+        }
         Sb.next() //Returns value { "trueOrFalse"}
-        Sb.next(true) //Triggering - returns value {"String CreepType"}
+
+
+        Sb.next(trigger) //Triggering - returns value {"String CreepType"}
+
+
         Sb.next(selected) //SpawnType - returns value {"Ready"}
         let temp001 = Sb.next().value as isSpawning; //this call creates a value {isSpawning} Still being worked on.
         switch (temp001.type) {

@@ -45,6 +45,7 @@ export abstract class RoomTask implements RTask {
         this.tick = protoRoomTask.tick;
     }
 
+
     get parent(): RTask | null {
         return (this._parent ? initializeRoomTask(this._parent) : null)
     }
@@ -54,6 +55,14 @@ export abstract class RoomTask implements RTask {
         if (this.room) {
             this.room.RoomTask = this as RTask | null;
         }
+    }
+    // Fork the task, assigning a new task to the room with this task as its parent
+    fork(newTask: RTask): RTask {
+        newTask.parent = this;
+        if (this.room) {
+            this.room.RoomTask = newTask;
+        }
+        return newTask;
     }
 
     get manifest(): RTask[] {

@@ -26,7 +26,7 @@ export class RTaskroomIdle extends RoomTask {
         var dataPack: RoomTaskData = this.data
 
         //needs to return 0
-        if (Game.time == dataPack.data.idleTill) {
+        if (Game.time == dataPack.data.idleTill || Game.time > dataPack.data.idleTill) {
             console.log("ROOM DONE IDLE")
             output = 0;
         }
