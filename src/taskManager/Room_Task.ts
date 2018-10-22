@@ -4,7 +4,7 @@ export abstract class RoomTask implements RTask {
 
     static taskName: string;
 
-
+    _colony: number;
     name: string;
     _room: Room;
     room: Room
@@ -13,7 +13,12 @@ export abstract class RoomTask implements RTask {
     settings: RoomTaskSettings;
     options: RoomTaskOptions;
     data: RoomTaskData | SpawnTaskData;
-    constructor(taskName: string, data: RoomTaskData, options = {} as RoomTaskOptions) {
+    constructor(Colony: Colony, taskName: string, data: RoomTaskData | SpawnTaskData, options = {} as RoomTaskOptions) {
+        if (!Colony) {
+            this._colony = 1
+        } else {
+            this._colony = Colony.id;
+        }
         this.name = taskName;
         this._parent = null;
         this.settings = {

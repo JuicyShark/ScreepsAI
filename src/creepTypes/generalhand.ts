@@ -5,7 +5,7 @@ import { roomTypes } from 'config';
 
 export class GeneralHand {
 
-    private static harvestStorage(creep: Creep, thisCreepsTasks: any): any {
+    private static collectStorage(creep: Creep, thisCreepsTasks: any): any {
         let storage: StructureStorage | undefined = creep.room.storage;
         if (storage != undefined && creep.carry.energy == 0 && storage.store.energy >= creep.carryCapacity) {
             thisCreepsTasks.push(Tasks.withdraw(storage));
@@ -155,7 +155,7 @@ export class GeneralHand {
                         thisCreepsTasks.push(Tasks.harvest(unattendedSource[0]));
                         //this.depositTask(creep, thisCreepsTasks)
                     }
-                    else if (!creep.room.storage && unattendedSource[0] == null && creep.room.storage.store.energy >= (creep.room.storage.storeCapacity / 2)) {
+                    else if (creep.room.storage instanceof StructureStorage && unattendedSource[0] == null && creep.room.storage.store.energy >= (creep.room.storage.storeCapacity / 2)) {
                         thisCreepsTasks.push(Tasks.withdraw(creep.room.storage, RESOURCE_ENERGY))
 
                     }
@@ -185,7 +185,8 @@ export class GeneralHand {
         if (thisCreepsTasks.length != 0) {
             return thisCreepsTasks
         } else if (thisCreepsTasks.length == 0) {
-
+            thisCreepsTasks.push(Tasks.upgrade(Game.rooms[creep.memory.home].controller))
+            return thisCreepsTasks
         }
     }
 
@@ -204,5 +205,6 @@ export class GeneralHand {
             Builder.buildOrder(creep, thisCreepsTasks)
             creep.task = thisCreepsTasks[0]
         }
+
     }
 }

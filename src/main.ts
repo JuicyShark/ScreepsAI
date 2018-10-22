@@ -13,7 +13,9 @@ import profiler from './utils/screeps-profiler';
 import { checkColonys } from './Colony'
 import { runCreeps } from './ShowMaster/creepMaster';
 
-
+//temp
+//import { extesnions } from 'roomTypes/extensions'
+//temp
 
 profiler.enable();
 
@@ -67,10 +69,12 @@ function main(): void {
 
 
   if (Game.colonies.length >= 1) {
+
     for (let i in Game.colonies) {
       var Colony = Game.colonies[i];
       Colony.run()
       Colony.room.run(Colony)
+      //extesnions.testmeout(Colony, Colony.room)
     }
 
     runCreeps()

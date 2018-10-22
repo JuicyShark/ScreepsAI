@@ -4,14 +4,14 @@ export class allCreepTypes {
             string: "GeneralHand",
             priority: 3,
             creepAmmount: {
-                1: 8,
-                2: 8,
-                3: 7,
+                1: 6,
+                2: 6,
+                3: 6,
                 4: 6,
                 5: 5,
-                6: 5,
-                7: 5,
-                8: 5
+                6: 4,
+                7: 4,
+                8: 4
             },
             body: function (energy: number): BodyArray {
                 var numberOfParts = Math.floor(energy / 200);
@@ -57,30 +57,31 @@ export class allCreepTypes {
                 }
                 return body;
             }
-        }
-
-    }
-
-    static level2types = {
+        },
 
         Miner: {
             string: "Miner",
             priority: 2,
-            creepAmmount: null,
+            creepAmmount: (function ye(Room: Room) {
+                var output = 0;
+                Room.memory.src.forEach(function (src) {
+                    if (src.contnr != undefined) {
+                        output++;
+                    }
+                })
+                return output
+            }),
             body: function (energy: number): BodyArray {
-                if (energy <= 500) {
+                if (energy <= 450) {
                     energy = 300
-                } else if (energy >= 750) {
-                    energy = 750
+                } else if (energy >= 600) {
+                    energy = 600
                 }
                 const Minerdefaults = {
                     300: [WORK, WORK, MOVE],
                     500: [WORK, WORK, WORK, WORK, MOVE],
                     550: [WORK, WORK, WORK, WORK, WORK, MOVE],
                     600: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
-                    650: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
-                    700: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
-                    750: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE]
                 }
                 return Minerdefaults[energy]
             }
@@ -108,16 +109,7 @@ export class allCreepTypes {
         Lorry: {
             string: "Lorry",
             priority: 4,
-            creepAmmount: {
-                1: 0,
-                2: 0,
-                3: 1,
-                4: 1,
-                5: 2,
-                6: 2,
-                7: 2,
-                8: 2
-            },
+            creepAmmount: null,
             body: function (energy: number): BodyArray {
                 var numberOfParts = Math.floor(energy / 100);
                 var body: string[] = [];
@@ -131,12 +123,8 @@ export class allCreepTypes {
                 return body;
 
             }
-        }
+        },
 
-
-    }
-
-    static level3types = {
         Patroller: {
             string: "Patroller",
             priority: 2,

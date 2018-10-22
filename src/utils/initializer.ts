@@ -32,7 +32,7 @@ import { RTaskroomIdle } from 'taskManager/Room_TaskInstances/rtask_roomIdle';
 
 export function initializeRoomTask(protoRTask: protoRoomTask): RoomTask {
 	let taskName = protoRTask.name;
-	let colony = protoRTask.data._colony;
+	let colony = Game.colonies[(protoRTask.data._colony - 1)];
 	let data = protoRTask.data
 	let RTask: RoomTask
 	switch (taskName) {

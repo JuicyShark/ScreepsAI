@@ -1,5 +1,5 @@
 import { RoomBrain } from './ShowMaster/roomMaster';
-import { setCreepTasks, runCreeps } from './ShowMaster/creepMaster';
+import { setCreepTasks } from './ShowMaster/creepMaster';
 
 //import
 export function getAllColonies() {
@@ -130,10 +130,6 @@ export class Colony {
     setCreepTasks(this)
     RoomBrain.setRoomTasks(this)
     this.handleColonyHub()
-
-    if (this.outposts.length != 0) {
-      this.runOutposts()
-    }
   }
 
   refresh(): void {

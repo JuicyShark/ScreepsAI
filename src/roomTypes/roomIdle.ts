@@ -11,7 +11,7 @@ export class roomIdle {
      */
     static newRoomTask(Colony: Colony, room: Room): void {
         var data = {
-            _colony: Colony,
+            _colony: Colony.id,
 
             roomName: room.name,
             data: {

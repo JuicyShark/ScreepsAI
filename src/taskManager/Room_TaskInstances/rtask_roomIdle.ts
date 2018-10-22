@@ -9,7 +9,7 @@ export class RTaskroomIdle extends RoomTask {
 
 
     constructor(Colony: Colony, TaskData: RoomTaskData, options = {} as RoomTaskOptions) {
-        super(TaskName, TaskData);
+        super(Colony, TaskName, TaskData);
     }
 
     isValidRoomTask(): boolean {
