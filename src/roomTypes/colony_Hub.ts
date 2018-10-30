@@ -1,18 +1,17 @@
 import { Room_Tasks } from '../TaskManager/Room_Tasks'
 import { roomTypeBase } from './roomTypeBase';
-import { roomIdle } from './roomIdle'
 import { extesnions } from './extensions'
 import { allCreepTypes } from '../creepTypes/allTypes'
 
 export class ColonyHub {
 
     static testTask(Colony: Colony) {
-
-        let extensionCount = CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][Colony.room.controller.level];
-        let builtextensions = Colony.room.find(FIND_MY_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_EXTENSION })
-        if (builtextensions != null && builtextensions.length < extensionCount) {
-            extesnions.testmeout(Colony, Colony.room)
-        }
+        /*
+                let extensionCount = CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][Colony.room.controller.level];
+                let builtextensions = Colony.room.find(FIND_MY_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_EXTENSION })
+                if (builtextensions != null && builtextensions.length < extensionCount) {
+                    extesnions.testmeout(Colony, Colony.room)
+                }*/
     }
 
     /**
@@ -43,29 +42,47 @@ export class ColonyHub {
             Colony.room.RoomTask = roomTypeBase.spawnBasicCreeps(Colony, Colony.room, creepType)
         }
         if (Colony.room.RoomTask == null) {
-            roomIdle.newRoomTask(Colony, Colony.room)
+            this.idleTask(Colony)
         }
     }
 
+    /**
+     * Generator Function,
+     * Takes Colony Object and guides it through its chain of command. Giving back multiple Responses
+     * Standardazing responses to a object similar to the generator function will give us a more rebust
+     * way of dealing with our "Tour Guide" Here...
+     * Example:
+     * Me: Guide(Question)
+     * Guide: { value:{{T/F: Bool, info:{}}},done: false}
+     *
+     * This should allow us to combine switch and relay relevant information
+     * We can add an eventRoomLog handler and I could go on and on.
+     *
+     */
+
     static *ColonyHubGuide(Colony: Colony) {
         const thisRoomLink: Room = Colony.room
+        var outp: outp;
         const creepTypes = allCreepTypes.level1Types
-        const trigger = yield "trueOrFalse";
-        const creepType = yield "String CreepType";
-        yield "Ready"
+        outp = { boolean: true, info: "Starting" }
+        const trigger = yield outp;
+        outp = { boolean: true, info: trigger }
+        const creepType = yield outp;
+        outp = { boolean: true, info: "Ready" }
+        yield outp
         //console.log(creepTypes[creepType].string)
 
-        var whatDo: isSpawning | undefined = undefined;
+
         if (trigger == true) {
             if (Colony.creepsByType[creepType] == undefined || Colony.creepsByType[creepType].length < creepTypes[creepType].creepAmmount[thisRoomLink.controller.level]) {
-                whatDo = { type: "canSpawn", boolean: true }
+                outp = { boolean: true, info: { type: "canSpawn" } }
             } else {
-                whatDo = { type: "Idle", boolean: true }
+                outp = { boolean: true, info: { type: "Idle" } }
             }
         } else {
-            whatDo = { type: "Idle", boolean: true }
+            outp = { boolean: true, info: { type: "Idle" } }
         }
-        yield whatDo; // Do it
+        yield outp; // Do it
     }
 
 
@@ -75,10 +92,10 @@ export class ColonyHub {
      * @param room Room
      */
     static newRoomTask(Colony: Colony, room: Room): void {
-        this.testTask(Colony)
         var creepTypes = allCreepTypes.level1Types
         var selected;
 
+        //Here we are asking "What would the config ammount be? - not specified? 0"
         for (let type in creepTypes) {
             var configAmmount = creepTypes[type].creepAmmount ? creepTypes[type].creepAmmount[room.controller.level] : 0
 
@@ -88,7 +105,6 @@ export class ColonyHub {
             }
         }
 
-        //the next one will be gud :3
 
         const Sb = this.ColonyHubGuide(Colony) //declaring should start it up
         var trigger = false;
@@ -103,17 +119,17 @@ export class ColonyHub {
 
 
         Sb.next(selected) //SpawnType - returns value {"Ready"}
-        let temp001 = Sb.next().value as isSpawning; //this call creates a value {isSpawning} Still being worked on.
-        switch (temp001.type) {
+        let temp001 = Sb.next().value as outp; //this call creates a value {isSpawning} Still being worked on.
+        switch (temp001.info.type) {
             case undefined:
                 console.log("Having an issue Spawning in Colony_Hub")
                 break;
             case "canSpawn":
                 let creepType = selected;
-                temp001.boolean ? this.spawnTaskHub(Colony, creepType) : roomIdle.newRoomTask(Colony, Colony.room)
+                temp001.boolean ? this.spawnTaskHub(Colony, creepType) : this.idleTask(Colony)
                 break;
             case "Idle":
-                temp001.boolean ? roomIdle.newRoomTask(Colony, Colony.room) : null
+                temp001.boolean ? this.idleTask(Colony) : null
                 break;
             default:
                 console.log("Having an issue and defaulting in Colony_Hub")

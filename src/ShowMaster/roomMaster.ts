@@ -131,6 +131,7 @@ export class RoomBrain {
   static setRoomTasks(Colony: Colony) {
     let roomTypes = {
       ["ColonyHub"]: ColonyHub,
+      // ["Outpost"]: Outpost,
 
     }
 
