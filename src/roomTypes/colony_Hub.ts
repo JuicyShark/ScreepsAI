@@ -112,10 +112,9 @@ export class ColonyHub {
         if (room.RoomTask == null) {
             trigger = true;
         }
-        Sb.next() //Returns value { "trueOrFalse"}
-        //console.log("MY TRIGGER " + trigger)
+        Sb.next()
 
-        Sb.next(trigger) //Triggering - returns value {"String CreepType"}
+        Sb.next(true) //Triggering - returns value {"String CreepType"}
 
 
         Sb.next(selected) //SpawnType - returns value {"Ready"}
@@ -132,7 +131,7 @@ export class ColonyHub {
                 temp001.boolean ? this.idleTask(Colony) : null
                 break;
             default:
-                console.log("Having an issue and defaulting in Colony_Hub")
+                temp001.boolean ? this.idleTask(Colony) : null
                 break;
 
 

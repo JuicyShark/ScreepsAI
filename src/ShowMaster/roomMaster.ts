@@ -1,8 +1,7 @@
 
 import { getCacheExpiration } from '../utils/helperFunctions';
 import { ColonyHub } from '../roomTypes/colony_Hub'
-
-//import { ColonyHub } from '../roomTypes/colony_Hub'
+import { Outposts } from '../roomTypes/outposts'
 
 const RECACHE_TIME = 2500;
 const OWNED_RECACHE_TIME = 1000;
@@ -131,13 +130,13 @@ export class RoomBrain {
   static setRoomTasks(Colony: Colony) {
     let roomTypes = {
       ["ColonyHub"]: ColonyHub,
-      // ["Outpost"]: Outpost,
+      ["Outpost"]: Outposts,
 
     }
 
     for (let room in Game.rooms) {
       if (Game.rooms[room].RoomTask == null) {
-
+        //initiate the newRoomTask
         roomTypes[Game.rooms[room].roomType].newRoomTask(Colony, Game.rooms[room])
       }
     }
