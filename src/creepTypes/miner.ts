@@ -2,74 +2,30 @@ import { Tasks } from '../TaskManager/Tasks'
 
 
 export class Miner {
-
+    /**
+     * Create a New Miner Task
+     * @param creep
+     */
     static newTask(creep: Creep): void {
+        var source
+        let nearSource: any = creep.pos.findClosestByLimitedRange(creep.room.sources, 1)
 
+        if (!creep.memory.mySource) {
+            source = creep.pos.findClosestByPath(creep.room.sources)
 
-
-
-
-        let container: StructureContainer = Game.getObjectById(creep.memory.myContainer)
-        let destination = creep.memory.destination
-        if (destination != null) {
-            if (destination != creep.room.name) {
-                creep.task = Tasks.goToRoom(destination)
-            }
-            else if (destination == creep.room.name) {
-                creep.task = Tasks.goTo(Game.rooms[destination].controller)
-                if (creep.memory.mySource != undefined) {
-                    creep.task = Tasks.chain(
-                        [
-                            Tasks.goTo(Game.getObjectById(creep.memory.mySource)),
-                            Tasks.harvest(Game.getObjectById(creep.memory.mySource))
-                        ]
-                    )
-                }
-
-
-            }
+        } else {
+            source = creep.memory.mySource
         }
-        else {
+        //end declairations
 
-            if (container != undefined) {
-                let temp = container.pos.findClosestByLimitedRange(creep.room.sources, 2);
-                let mySource: Source = Game.getObjectById(creep.memory.mySource);
-                if (creep.pos.x != container.pos.x && creep.pos.y != container.pos.y) {
-                    if (mySource.hasMiner() == false) {
-                        creep.task = Tasks.chain(
-                            [
-                                Tasks.goToContainer(container),
-                                Tasks.harvest(temp)
-                            ]
-                        )
-                    } else {
-                        creep.memory.myContainer = undefined;
-                        creep.memory.mySource = undefined;
-                    }
-
-
-                } else {
-                    creep.task = Tasks.harvest(temp)
-                }
-            } else {
-
-                for (let i = 0; i < creep.room.sources.length; i++) {
-                    let thisSource = creep.room.sources[i]
-                    let anyCon: StructureContainer | undefined = thisSource.pos.findClosestByLimitedRange(creep.room.containers, 1)
-                    if (anyCon != undefined) {
-                        if (thisSource.hasMiner() == false) {
-                            if (anyCon.targetedBy.length == 0) {
-                                creep.memory.myContainer = anyCon.id;
-                                creep.memory.mySource = thisSource.id;
-                            }
-                        }
-                    }
-
-
-                }
-
-            }
+        //function
+        //if creep is near source
+        if (nearSource) {
+            creep.task = Tasks.harvest(source)
+        } else {
+            //creep.task = Tasks.idleFor(10)
         }
+
     }
-
 }
+

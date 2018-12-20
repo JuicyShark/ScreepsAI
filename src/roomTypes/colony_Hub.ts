@@ -1,17 +1,28 @@
 import { Room_Tasks } from '../TaskManager/Room_Tasks'
 import { roomTypeBase } from './roomTypeBase';
-import { extesnions } from './extensions'
 import { allCreepTypes } from '../creepTypes/allTypes'
 
 export class ColonyHub {
 
-    static testTask(Colony: Colony) {
-        /*
-                let extensionCount = CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][Colony.room.controller.level];
-                let builtextensions = Colony.room.find(FIND_MY_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_EXTENSION })
-                if (builtextensions != null && builtextensions.length < extensionCount) {
-                    extesnions.testmeout(Colony, Colony.room)
-                }*/
+
+    static extensionsTask(Colony: Colony) {
+        let testt = roomTypeBase.extensions(Colony.room.name)
+
+        let data = {
+            _colony: Colony.id,
+            roomName: Colony.room.name,
+            data: {
+                idleTill: (Game.time + 10),
+                homeZone: testt.homeZone,
+                homeZonePath: testt.homeZonePath,
+                extensionCount: testt.extensionCount,
+                builtextensions: testt.builtextensions,
+                wipExtensions: testt.wipExtensions
+            }
+        }
+
+        Colony.room.RoomTask = Room_Tasks.extentions(Colony, data as RoomTaskData)
+
     }
 
     /**
@@ -39,7 +50,7 @@ export class ColonyHub {
     */
     static spawnTaskHub(Colony: Colony, creepType: string) {
         if (creepType != undefined || creepType != null) {
-            Colony.room.RoomTask = roomTypeBase.spawnBasicCreeps(Colony, Colony.room, creepType)
+            Colony.room.RoomTask = roomTypeBase.spawnBasicCreeps(Colony, Colony.room.name, creepType)
         }
         if (Colony.room.RoomTask == null) {
             this.idleTask(Colony)
@@ -61,6 +72,10 @@ export class ColonyHub {
      */
 
     static *ColonyHubGuide(Colony: Colony) {
+        var extensionCount = CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][Colony.room.controller.level];
+        var builtextensions = Colony.room.find(FIND_MY_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_EXTENSION })
+        var wipExtensions = Colony.room.find(FIND_CONSTRUCTION_SITES, { filter: (s) => s.structureType == STRUCTURE_EXTENSION })
+
         const thisRoomLink: Room = Colony.room
         var outp: outp;
         const creepTypes = allCreepTypes.level1Types
@@ -72,15 +87,21 @@ export class ColonyHub {
         yield outp
         //console.log(creepTypes[creepType].string)
 
-
-        if (trigger == true) {
+        if (trigger == true && creepType != null) {
             if (Colony.creepsByType[creepType] == undefined || Colony.creepsByType[creepType].length < creepTypes[creepType].creepAmmount[thisRoomLink.controller.level]) {
                 outp = { boolean: true, info: { type: "canSpawn" } }
             } else {
                 outp = { boolean: true, info: { type: "Idle" } }
             }
         } else {
-            outp = { boolean: true, info: { type: "Idle" } }
+            if (thisRoomLink.controller.level == 1) {
+                outp = { boolean: true, info: { tyoe: "Idle" } }
+            }
+            else if (!wipExtensions.length || (builtextensions.length + wipExtensions.length) < extensionCount) {
+                outp = { boolean: true, info: { type: "Extensions" } }
+            } else if ((builtextensions.length + wipExtensions.length) == extensionCount) {
+                outp = { boolean: true, info: { type: "Idle" } }
+            }
         }
         yield outp; // Do it
     }
@@ -100,8 +121,13 @@ export class ColonyHub {
             var configAmmount = creepTypes[type].creepAmmount ? creepTypes[type].creepAmmount[room.controller.level] : 0
 
             if (Colony.creepsByType[type] == undefined || Colony.creepsByType[type].length < configAmmount) {
-                selected = type
-                break;
+                if (configAmmount >= 1) {
+                    selected = type
+                    break;
+                }
+                else if (configAmmount == 0) {
+                    selected = null
+                }
             }
         }
 
@@ -121,7 +147,8 @@ export class ColonyHub {
         let temp001 = Sb.next().value as outp; //this call creates a value {isSpawning} Still being worked on.
         switch (temp001.info.type) {
             case undefined:
-                console.log("Having an issue Spawning in Colony_Hub")
+                Colony.room.memLog = "Having and Issue with The Tasks... Idling (Maybe lvl1?)"
+                this.idleTask(Colony)
                 break;
             case "canSpawn":
                 let creepType = selected;
@@ -129,6 +156,9 @@ export class ColonyHub {
                 break;
             case "Idle":
                 temp001.boolean ? this.idleTask(Colony) : null
+                break;
+            case "Extensions":
+                temp001.boolean ? this.extensionsTask(Colony) : null
                 break;
             default:
                 temp001.boolean ? this.idleTask(Colony) : null
@@ -142,8 +172,3 @@ export class ColonyHub {
 
 
 }
-
-
-
-
-

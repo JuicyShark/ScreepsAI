@@ -78,10 +78,10 @@ export class allCreepTypes {
                     energy = 600
                 }
                 const Minerdefaults = {
-                    300: [WORK, WORK, MOVE],
-                    500: [WORK, WORK, WORK, WORK, MOVE],
-                    550: [WORK, WORK, WORK, WORK, WORK, MOVE],
-                    600: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
+                    300: [WORK, WORK, WORK],
+                    500: [WORK, WORK, WORK, WORK, WORK],
+                    600: [WORK, WORK, WORK, WORK, WORK, WORK]
+                    
                 }
                 return Minerdefaults[energy]
             }

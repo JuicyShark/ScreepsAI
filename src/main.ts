@@ -1,27 +1,29 @@
-import 'prototypes/Room';
-import 'prototypes/Creep';
-import 'prototypes/RoomObject'; // RoomObject
-import 'prototypes/RoomPosition'; // RoomPosition
-import 'prototypes/RoomStructures';
-import 'prototypes/Structures';
-import 'prototypes/Spawn';
-import 'prototypes/tower'
-import { ErrorMapper } from "utils/ErrorMapper";
-import { isIVM } from "utils/helperFunctions";
-import * as config from "config";
-import profiler from './utils/screeps-profiler';
-import { checkColonys } from './Colony'
-import { runCreeps } from './ShowMaster/creepMaster';
+import "prototypes/RoomPosition"
+import "prototypes/Creep"
+import "prototypes/Room"
+import "prototypes/Spawn"
+import "prototypes/RoomStructures"
+import "prototypes/RoomObject"
+import { ErrorMapper } from "utils/ErrorMapper"
+import * as config from "config"
+import { isIVM } from "utils/helperFunctions"
+import { checkColonys } from "./Colony"
+import { runCreeps } from "./brainGroup/creepLobe"
 
-//temp
-//import { extesnions } from 'roomTypes/extensions'
-//temp
+// Profiler
+import profiler from './utils/screeps-profiler'
+//
 
-profiler.enable();
+//End imports
 
-// When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
-// This utility uses source maps to get the line numbers and file names of the original, TS source code
 
+
+//end declairations
+
+
+
+// functions
+/**Checks if we need to suspend code */
 function suspendCode(): Boolean {
   console.log(Game.cpu.getUsed().toString().slice(0, 6) + "/" + Game.cpu.limit + " Used")
   if (Game.cpu.bucket < config.minBucket) {
@@ -36,6 +38,9 @@ function suspendCode(): Boolean {
     return false;
   }
 }
+/**
+ * Checks if its a IsolatedVirtualMachine and if we need to suspend or run the code.
+ */
 function handler(): void {
   //checks if IsolatedVirtualMachine
   if (!isIVM()) {
@@ -53,18 +58,16 @@ function handler(): void {
     }
   }
 }
-
+/**
+ * Main function block
+ */
 function main(): void {
   if (Game.colonies == undefined || Game.colonies === null) {
-    //console.log("ITS UNDEFINED")
     Game.colonies = [];
     if (!Memory.Colonies) {
       Memory.Colonies = [];
     }
-    //console.log(JSON.stringify(Game.colonies))
     checkColonys();
-    //console.log(Game.colonies + " After")
-    //console.log(Game.colonies.length + " IS LENGTH OF COLONIES")
   }
 
 
@@ -73,18 +76,16 @@ function main(): void {
     for (let i in Game.colonies) {
       var Colony = Game.colonies[i];
       Colony.run()
-      Colony.room.run(Colony)
-      //extesnions.testmeout(Colony, Colony.room)
+      let room: Room = Colony.room
+      room.run(Colony.id)
     }
-
     runCreeps()
-
   } else {
-    console.log("Nothings good with the Colonies ATM D:")
-    console.log("Colony Object :" + JSON.stringify(Game.colonies))
+    console.log("Colonies are currently malfunctioning")
   }
 
 }
+
 //GameLoop
 export const loop = ErrorMapper.wrapLoop(() => {
 
@@ -92,3 +93,10 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
 
 });
+
+
+
+//end functions
+
+
+//script

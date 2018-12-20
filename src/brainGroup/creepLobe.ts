@@ -5,8 +5,7 @@ import { Builder } from '../creepTypes/builder';
 import { Lorry } from '../creepTypes/lorry';
 import { Miner } from '../creepTypes/miner';
 import { Patroller } from '../creepTypes/patroller';
-import { Colony } from '../Colony';
-import { Scout } from 'creepTypes/scout';
+import { Scout } from '../creepTypes/scout';
 
 // set up how testRoles var will be set up. role is how it can be identified and
 // unsure what declaration other than any for seperate functions in classes
@@ -22,7 +21,9 @@ let creepTypes = {
     ["Lorry"]: Lorry,
     ["Scout"]: Scout
 }
-
+/**
+ * Takes all the creeps in Game.creeps and runs their creepyLogic
+ */
 export function runCreeps(): void {
     let creeps = _.values(Game.creeps) as Creep[];
     for (let creep of creeps) {

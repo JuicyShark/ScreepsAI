@@ -1,10 +1,17 @@
-// Room prototypes - commonly used room properties and methods
 
 import { MY_USERNAME, MY_ALLY, roomTypes } from "config";
-import { RoomBrain } from "ShowMaster/roomMaster";
-import { SpawnBrain } from "./Spawn";
 import { initializeRoomTask } from '../utils/initializer';
-import { TargetCache } from '../utils/caching/gameCache';
+import { RoomBrain } from "brainGroup/roomLobe"
+
+//Finished imports
+
+//Room Task stuff
+Room.prototype.run = function (Colony: number): void {
+    if (this.RoomTask) {
+        return this.RoomTask.run(Game.colonies[Colony]);
+    }
+
+};
 
 Object.defineProperty(Room.prototype, 'RoomTask', {
     get() {
@@ -36,41 +43,9 @@ Object.defineProperty(Room.prototype, 'RoomTask', {
     }
 });
 
-Room.prototype.run = function (Colony: Colony): void {
-    if (this.RoomTask) {
-        return this.RoomTask.run(Colony);
-    }
+//End Room Task Stuff
 
-};
-
-
-//roomTask Class
-/*
-export class RoomTask {
-    name: string;
-    roomOrder: string;
-    priority: number;
-    details: SpawnTask | null;
-
-    constructor(taskName: string, roomOrder, priority, details) {
-        this.name = taskName;
-        this.roomOrder = roomOrder;
-        this.details = details;
-        this.priority = priority
-
-    }
-}*/
-
-
-
-// Logging =============================================================================================================
-Object.defineProperty(Room.prototype, 'print', {
-    get() {
-        return '<a href="#!/room/' + Game.shard.name + '/' + this.name + '">' + this.name + '</a>';
-    },
-    configurable: true,
-});
-
+//Memory Log
 Object.defineProperty(Room.prototype, 'memLog', {
     get() {
         if (!this.memory.log) {
@@ -96,42 +71,7 @@ Object.defineProperty(Room.prototype, 'memLog', {
     configurable: true,
 })
 
-// Room properties =====================================================================================================
-
-Object.defineProperty(Room.prototype, 'my', {
-    get() {
-        return this.controller && this.controller.my;
-    },
-    configurable: true,
-});
-
-Object.defineProperty(Room.prototype, 'owner', {
-    get() {
-        return this.controller && this.controller.owner ? this.controller.owner.username : undefined;
-    },
-    configurable: true,
-});
-
-Object.defineProperty(Room.prototype, 'reservedByMe', {
-    get() {
-        return this.controller && this.controller.reservation && this.controller.reservation.username == MY_USERNAME;
-    },
-    configurable: true,
-});
-
-Object.defineProperty(Room.prototype, 'signedByMe', {
-    get() {
-        return this.controller && this.controller.sign && this.controller.sign.text == Memory.settings.signature;
-    },
-    configurable: true,
-});
-
-//KODIES STUFF
-/**
- * Object taskList currently seems to go away every tick. to solve that im just gonna run a colony function to grab its output and do shit with it
- */
-
-
+// Room Type Stuff!
 Object.defineProperty(Room.prototype, 'roomType', {
     get() {
         var colony = Game.colonies[0]
@@ -170,7 +110,7 @@ Object.defineProperty(Room.prototype, 'isOutpost', {
     configurable: true,
 })
 
-// Room properties: creeps =============================================================================================
+// Room Type stuff done
 
 // Creeps physically in the room
 Object.defineProperty(Room.prototype, 'creeps', {
@@ -183,21 +123,19 @@ Object.defineProperty(Room.prototype, 'creeps', {
     configurable: true,
 });
 
-//Kodie Shit---------------
 
 Object.defineProperty(Room.prototype, 'creepsByType', {
     get() {
         let output = _.groupBy(this.creeps, function (creep: Creep) { return creep.memory.type });
         return output
-
-
-
     },
     configurable: true,
 
 })
 
-// Room properties: hostiles ===========================================================================================
+//End creeps
+
+// Room properties: hostiles
 
 Object.defineProperty(Room.prototype, 'hostiles', {
     get() {
@@ -296,9 +234,37 @@ Object.defineProperty(Room.prototype, 'hostileStructures', {
     configurable: true,
 });
 
-// Room properties: flags ==============================================================================================
+// end hostiles
 
-// Flags physically in this room
+//  Room Properties begin
+
+Object.defineProperty(Room.prototype, 'my', {
+    get() {
+        return this.controller && this.controller.my;
+    },
+    configurable: true,
+});
+
+Object.defineProperty(Room.prototype, 'owner', {
+    get() {
+        return this.controller && this.controller.owner ? this.controller.owner.username : undefined;
+    },
+    configurable: true,
+});
+
+Object.defineProperty(Room.prototype, 'reservedByMe', {
+    get() {
+        return this.controller && this.controller.reservation && this.controller.reservation.username == MY_USERNAME;
+    },
+    configurable: true,
+});
+
+Object.defineProperty(Room.prototype, 'signedByMe', {
+    get() {
+        return this.controller && this.controller.sign && this.controller.sign.text == Memory.settings.signature;
+    },
+    configurable: true,
+});
 Object.defineProperty(Room.prototype, 'flags', {
     get() {
         if (!this._flags) {
@@ -308,8 +274,6 @@ Object.defineProperty(Room.prototype, 'flags', {
     },
     configurable: true,
 });
-
-// Room properties: structures =========================================================================================)
 Object.defineProperty(Room.prototype, 'constructionSites', {
     get() {
         if (!this._constructionSites) {
@@ -353,8 +317,10 @@ Object.defineProperty(Room.prototype, 'droppedPower', {
     },
     configurable: true,
 });
+// end room properties
 
-//Kodies Movein shit
+// Prototypes
+
 Room.prototype.handleMyRoom = function (): void {
     this.executeRoom()
 }
@@ -396,7 +362,7 @@ Room.prototype.handleAllyRoom = function (colony: Colony): void {
 
 }
 
-Room.prototype.executeRoom = function (colony: Colony): void {
+Room.prototype.executeRoom = function (): void {
     this.memory.lastSeen = Game.time;
 
     //records permanentObjs and refresh cache also runs the room timer
@@ -404,23 +370,19 @@ Room.prototype.executeRoom = function (colony: Colony): void {
 
     for (let i in roomTypes) {
         if (this.roomType == roomTypes[i]) {
-            this.runMyType(colony)
+            this.runMyType()
         }
     }
 }
 
-Room.prototype.runMyType = function (colony: Colony) {
+Room.prototype.runMyType = function () {
     if (this.roomType == "ColonyHub" && this.memory.timer != undefined) {
         if (this.memory.timer % 7 === 0) {
-            //SpawnBrain.spawnForHub(colony)
 
-            //this.checkandSpawn(colony)
         }
     }
 
 }
-
-
 
 Room.prototype.getRoomLocation = function (roomName: string): any {
     let thisString = roomName.split("");
@@ -453,3 +415,4 @@ Room.prototype.decodeRoomLocation = function (roomPos: string) {
     let temp3: string = temp1.join("");
     return temp3;
 }
+

@@ -113,11 +113,11 @@ export class GeneralHand {
                 thisCreepsTasks.push(Tasks.upgrade(Game.rooms[creep.memory.home].controller))
                 return thisCreepsTasks
             }
-            else if (creep.room.controller.targetedBy.length >= 1 && creep.room.creepsByType.Upgrader == undefined) {
+            if (creep.room.controller.targetedBy.length >= 1 && creep.room.creepsByType.Upgrader == undefined) {
                 this.deposTower(creep, thisCreepsTasks)
 
                 if (thisCreepsTasks.length == 0) {
-                    this.depositStorage(creep, thisCreepsTasks)
+                    return this.depositStorage(creep, thisCreepsTasks)
                 }
             }
             else {
@@ -188,7 +188,7 @@ export class GeneralHand {
         if (thisCreepsTasks.length != 0) {
             return thisCreepsTasks
         } else if (thisCreepsTasks.length == 0) {
-            thisCreepsTasks.push(Tasks.upgrade(Game.rooms[creep.memory.home].controller))
+
             return thisCreepsTasks
         }
     }

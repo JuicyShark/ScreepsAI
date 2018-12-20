@@ -29,6 +29,7 @@ import { TaskgoToContainer, goToContainerTargetType } from 'taskManager/Creep_Ta
 import { RoomTask } from '../taskManager/Room_Task';
 import { RTaskSpawnCreeps } from '../taskManager/Room_TaskInstances/rtask_spawnCreeps'
 import { RTaskroomIdle } from 'taskManager/Room_TaskInstances/rtask_roomIdle';
+import { RTaskextensions } from 'taskManager/Room_TaskInstances/rtask_extensions';
 
 export function initializeRoomTask(protoRTask: protoRoomTask): RoomTask {
 	let taskName = protoRTask.name;
@@ -41,6 +42,9 @@ export function initializeRoomTask(protoRTask: protoRoomTask): RoomTask {
 			break;
 		case RTaskroomIdle.taskName:
 			RTask = new RTaskroomIdle(colony, data as RoomTaskData);
+			break;
+		case RTaskextensions.taskName:
+			RTask = new RTaskextensions(colony, data as RoomTaskData);
 			break;
 
 	}

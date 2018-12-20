@@ -1,5 +1,6 @@
 import { RTaskSpawnCreeps } from './Room_TaskInstances/rtask_spawnCreeps';
 import { RTaskroomIdle } from './Room_TaskInstances/rtask_roomIdle';
+import { RTaskextensions } from './Room_TaskInstances/rtask_extensions';
 
 
 export class Room_Tasks {
@@ -25,6 +26,10 @@ export class Room_Tasks {
 
 	static spawnCreeps(Colony: Colony, data: SpawnTaskData, options = {} as RoomTaskOptions): RTaskSpawnCreeps {
 		return new RTaskSpawnCreeps(Colony, data, options)
+	}
+
+	static extentions(Colony: Colony, data: RoomTaskData, options = {} as RoomTaskOptions): RTaskextensions {
+		return new RTaskextensions(Colony, data, options)
 	}
 
 }

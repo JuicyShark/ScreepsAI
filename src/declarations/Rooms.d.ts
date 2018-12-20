@@ -33,10 +33,10 @@ interface RoomPosition {
         opts?: { filter: any | string; }): T | undefined;
 }
 interface Room {
-    run(Colony: Colony): void;
+    run(Colony: number): void;
     decodeRoomLocation: any
     getRoomLocation: any;
-    executeRoom: any;
+    executeRoom(): any;
     handleMyRoom: any;
     handleUnreservedRoom: any;
     handleOccupiedRoom: any;
