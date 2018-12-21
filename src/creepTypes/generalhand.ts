@@ -149,7 +149,6 @@ export class GeneralHand {
             } else if (creep.carry.energy == creep.carryCapacity) {
                 if (creep.room.energyAvailable != creep.room.energyCapacityAvailable) {
                     var found = false;
-                    console.log(JSON.stringify(spawns[0]))
                     if (spawns.length == 1) {
                         let spawn = spawns[0];
                         if (spawn.energy != spawn.energyCapacity && spawn.targetedBy.length < 2) {
