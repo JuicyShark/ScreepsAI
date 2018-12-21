@@ -67,8 +67,6 @@ export class Harvester {
         }
     }
 
-
-
     static newTask(creep: Creep): void {
         let thisCreepsTasks: any = []
 

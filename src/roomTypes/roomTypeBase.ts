@@ -114,10 +114,11 @@ export class roomTypeBase {
         }
 
     }
-
+    /**Somewhat smart placement of extensions
+     *
+     * @param roomName
+     */
     static extensions(roomName) {
-
-
         const room = Game.rooms[roomName]
         const terrain = new Room.Terrain(roomName);
         const matrix = new PathFinder.CostMatrix;
@@ -170,6 +171,66 @@ export class roomTypeBase {
             wipExtensions: wipExtensions
         }
         return myReturn
+
+    }
+
+    /**
+     *  Smart Placement of towers
+     */
+    static towers(roomName) {
+
+        const room = Game.rooms[roomName]
+        const terrain = new Room.Terrain(roomName);
+        const towerMatrix = new PathFinder.CostMatrix;
+        var homeZone: RoomPosition[] = [];
+        var homeZonePath: RoomPosition[] = []
+        var extensionCount = CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][room.controller.level];
+        var builtextensions = room.find(FIND_MY_STRUCTURES, { filter: (s) => s.structureType == STRUCTURE_EXTENSION })
+        var wipExtensions = room.find(FIND_CONSTRUCTION_SITES, { filter: (s) => s.structureType == STRUCTURE_EXTENSION })
+
+        for (let y = 0; y < 50; y++) {
+            for (let x = 0; x < 50; x++) {
+                const tile = terrain.get(x, y);
+                const roomPos = new RoomPosition(x, y, room.name)
+                const structs = room.lookForAt(LOOK_STRUCTURES, roomPos).filter(
+                    (s) => s.structureType == STRUCTURE_EXTENSION ||
+                        s.structureType == STRUCTURE_TOWER ||
+                        s.structureType == STRUCTURE_SPAWN)
+                const constructs = room.lookForAt(LOOK_CONSTRUCTION_SITES, roomPos).filter((s) => s.structureType == STRUCTURE_EXTENSION ||
+                    s.structureType == STRUCTURE_ROAD)
+
+                const weight =
+                    tile === TERRAIN_MASK_WALL ? 255 : // wall  => unwalkable
+                        tile === TERRAIN_MASK_SWAMP ? 5 : // swamp => weight:  5
+                            1; // plain => weight:  1
+                towerMatrix.set(x, y, weight);
+                if (roomPos.getRangeTo(room.spawns[0]) <= 8) {
+                    if ((x + y) % 2 === 0 && weight != 255) {
+                        if (structs.length || constructs.length) {
+                        } else {
+                            homeZone.push(roomPos)
+                        }
+                    }
+                    else if ((x + y) % 1 === 0 && weight != 255) {
+                        if (structs.length || constructs.length) {
+                        } else {
+                            homeZonePath.push(roomPos)
+                        }
+                    }
+                }
+
+            }
+        }
+
+    }
+
+    /**
+     *
+     * @param fromPos From RoomPosition Obj
+     * @param toPos to RoomPosition Obj
+     * @param width path width
+     */
+    static paths(fromPos, toPos, width) {
 
     }
 }

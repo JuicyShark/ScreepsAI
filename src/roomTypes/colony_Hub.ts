@@ -138,9 +138,9 @@ export class ColonyHub {
         if (room.RoomTask == null) {
             trigger = true;
         }
-        Sb.next()
+        Sb.next() //Yeild starting outp
 
-        Sb.next(true) //Triggering - returns value {"String CreepType"}
+        Sb.next(true) //Triggering
 
 
         Sb.next(selected) //SpawnType - returns value {"Ready"}
