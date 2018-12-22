@@ -80,10 +80,10 @@ export class GeneralHand {
     }
 
     static upgradeTask(creep: Creep, thisCreepsTasks: any) {
-        if (creep.room.creepsByType.Upgrader == undefined) {
-            thisCreepsTasks.push(Tasks.upgrade(Game.rooms[creep.memory.home].controller))
-            return thisCreepsTasks
-        }
+
+        thisCreepsTasks.push(Tasks.upgrade(Game.rooms[creep.memory.home].controller))
+        return thisCreepsTasks
+
     }
 
     static harvestTask(creep: Creep, thisCreepsTasks: any): any {
@@ -130,56 +130,69 @@ export class GeneralHand {
         var returnMe: outp;
         returnMe = { boolean: true, info: "Starting" }
         yield returnMe
-
+        returnMe = null;
+        // If creep isnt in its correct room. GoTo a room Task
         if (creep.memory.destination != null && creep.memory.destination != creep.room.name) {
             returnMe = { boolean: true, info: "goToRoomTask" }
-
+            //Else if in correct room
         } else if (creep.memory.destination == null || creep.memory.destination == creep.room.name) {
-
-
-
+            //If creeps energy is 0 or 49 or under.
             if (creep.carry.energy == 0 || creep.carry.energy <= 49) {
+                //Pick up any energy
                 if (creep.room.droppedEnergy.length != 0 && creep.room.droppedEnergy[0].amount >= (creep.carryCapacity / 5)) {
                     returnMe = { boolean: true, info: "PickupDroppedEnergy" }
+                    // Else harvest Task
                 } else {
-
                     returnMe = { boolean: true, info: "HarvesterTask" }
                 }
-
+                // Else if Creep energy is at capacity
             } else if (creep.carry.energy == creep.carryCapacity) {
+                // If the room is not at evergyCap
                 if (creep.room.energyAvailable != creep.room.energyCapacityAvailable) {
                     var found = false;
+                    // If you only have 1 spawn
                     if (spawns.length == 1) {
                         let spawn = spawns[0];
                         if (spawn.energy != spawn.energyCapacity && spawn.targetedBy.length < 2) {
-                            returnMe = { boolean: true, info: "DepositSpawns" }
+                            returnMe = { boolean: true, info: "DepositSpawning" }
                             found = true;
                         }
+                        //If you have multiple spawns
                     } else if (spawns.length >= 2) {
                         for (let i = 0; i < spawns.length; i++) {
-                            if (spawns[i].energy < spawns[i].energyCapacity) {
-                                returnMe = { boolean: true, info: "DepositSpawns" }
-                                found = true;
-                                break;
+                            if (spawns[i] instanceof StructureSpawn) {
+                                if (spawns[i].energy < spawns[i].energyCapacity) {
+                                    returnMe = { boolean: true, info: "DepositSpawning" }
+                                    found = true;
+                                    break;
+                                }
                             }
                         }
-
+                        // If spawn not Found, and room EnergyCa
                     } else if (!found && creep.room.energyAvailable != creep.room.energyCapacityAvailable) {
-                        returnMe = { boolean: false, info: "DepositSpawns" }
+                        returnMe = { boolean: false, info: "DepositSpawning" }
 
-                    } else {
-                        returnMe = { boolean: true, info: "UpgradeTask" }
                     }
 
+                } else if (creep.room.energyAvailable == creep.room.energyCapacityAvailable) {
+                    // If there are no upgraders and its being targeted by less than 2. Upgrade
+                    if (creep.room.creepsByType.Upgrader == undefined && creep.room.controller.targetedBy.length <= 2) {
+                        returnMe = { boolean: true, info: "UpgradeTask" }
+                    } else {
+                        if (creep.room.constructionSites.length != 0 && creep.room.constructionSites != undefined) {
+                            returnMe = { boolean: true, info: "BuildTask" }
+                        }
+                    }
+                    //Is there storage?
+                    if (storage != undefined && storage.store.energy <= storage.storeCapacity) {
+                        returnMe = { boolean: true, info: "DepositStorage" }
+                    }
                 }
-
-
-
-                if (storage != undefined && storage.store.energy <= storage.storeCapacity) {
-
+                // If all else fails, upgrade away bois.
+                if (returnMe == null) {
+                    returnMe = { boolean: true, info: "UpgradeTask" }
                 }
             }
-
         }
 
         yield returnMe;
@@ -199,20 +212,24 @@ export class GeneralHand {
 
         switch (value.info) {
             case "PickupDroppedEnergy":
-                value.boolean ? this.droppedEnergy(creep, thisCreepsTasks) : null
+                this.droppedEnergy(creep, thisCreepsTasks)
             case "HarvesterTask":
-                value.boolean ? this.harvestTask(creep, thisCreepsTasks) : null
+                this.harvestTask(creep, thisCreepsTasks)
                 break;
-            case "DepositSpawns":
+            case "DepositSpawning":
                 value.boolean ? this.depositSpawns(creep, thisCreepsTasks) : this.depositExtensions(creep, thisCreepsTasks)
                 break;
             case "goToRoomTask":
-                value.boolean ? this.goToRoomTask(creep, thisCreepsTasks) : null
+                this.goToRoomTask(creep, thisCreepsTasks)
+                break;
             case "UpgradeTask":
                 this.upgradeTask(creep, thisCreepsTasks)
                 break;
             case "BuildTask":
                 Builder.buildOrder(creep, thisCreepsTasks)
+                break;
+            case "DepositStorage":
+                this.depositStorage(creep, thisCreepsTasks)
                 break;
             default:
                 this.upgradeTask(creep, thisCreepsTasks)
