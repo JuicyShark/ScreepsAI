@@ -1,32 +1,34 @@
-"use strict";
+// rollup.config.js
+import commonjs from 'rollup-plugin-commonjs'
+import screeps from 'rollup-plugin-screeps'
+import resolve from 'rollup-plugin-node-resolve'
+import rootImport from 'rollup-plugin-root-import'
 
-import clear from "rollup-plugin-clear";
-import resolve from "rollup-plugin-node-resolve";
-import commonjs from "rollup-plugin-commonjs";
-import typescript from "rollup-plugin-typescript2";
-import screeps from "rollup-plugin-screeps";
-
-let cfg;
-const dest = process.env.DEST;
-if (!dest) {
-  console.log("No destination specified - code will be compiled but not uploaded");
-} else if ((cfg = require("./screeps.json")[dest]) == null) {
-  throw new Error("Invalid upload destination");
-}
-
+let auth = false
+try {
+  auth = require('./auth.js')
+} catch (e) {}
 export default {
-  input: "src/main.ts",
+  input: 'src/index.js',
   output: {
-    file: "dist/main.js",
-    format: "cjs",
+    file: 'dist/main.js',
+    format: 'cjs',
+    exports: 'named',
     sourcemap: true
   },
-
   plugins: [
-    clear({ targets: ["dist"] }),
-    resolve(),
+    rootImport({
+      root: `${__dirname}/src`,
+      useEntry: 'prepend',
+      extensions: '.js'
+    }),
     commonjs(),
-    typescript({tsconfig: "./tsconfig.json"}),
-    screeps({config: cfg, dryRun: cfg == null})
+    resolve({
+      module: true
+    }),
+    screeps({
+      dryRun: !auth,
+      config: auth
+    })
   ]
 }
