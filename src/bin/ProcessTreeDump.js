@@ -28,7 +28,9 @@ export default class ProcessTreeDump {
       } catch (e) {
         desc = e.message || e.toString()
       }
-      let ret = `\n${prefix}- ${p.i} ${p.n} ${desc}`
+      let pn =  p.n.replace('JuicedProcesses/', '')
+      let ret = `\n${prefix}- PID#${p.i} Process Name: ${pn} | Desc: ${desc}`
+      //Process Tree console layout ^
       ret += this.getTree(pt, p.i, `  ${prefix}`)
       return ret
     }).join('')
