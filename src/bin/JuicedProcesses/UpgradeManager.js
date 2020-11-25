@@ -41,10 +41,10 @@ export default class UpgradeManager extends BaseProcess {
         }
 
         if (this.room.controller && this.room.controller.level && this.room.controller.level < 8) {
-            let want = 0
+            let want
             const stored = this.room.storage && this.room.storage.store.energy || false
             if (stored === false) {
-              want = 1 + Math.floor(this.room.extensions.length / 4)
+              want = 2 + Math.floor(this.room.extensions.length / 4)
             } else {
               if (stored > 10000) {
                 want = Math.min(3, stored / 10000)
