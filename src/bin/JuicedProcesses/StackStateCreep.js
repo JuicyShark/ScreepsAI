@@ -1,7 +1,4 @@
 import C from '/include/constants'
-import eachRight from 'lodash-es/eachRight'
-import sum from 'lodash-es/sum'
-import values from 'lodash-es/values'
 import states from '/lib/StackStates/index'
 
 export default class StackStateCreep extends states {
@@ -39,7 +36,7 @@ export default class StackStateCreep extends states {
     let start = Game.cpu.getUsed()
     let status = this.spawn.getStatus(this.memory.spawnTicket)
     if (status.status === C.EPosisSpawnStatus.ERROR) {
-      throw new Error(`Spawn ticket error: ${status.message}`)
+      throw new Error(`Spawning ticket error: ${status.message}`)
     }
     let creep = this.creep
     if (!creep) {
