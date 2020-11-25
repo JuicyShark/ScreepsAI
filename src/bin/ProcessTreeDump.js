@@ -29,8 +29,8 @@ export default class ProcessTreeDump {
         desc = e.message || e.toString()
       }
       let pn =  p.n.replace('JuicedProcesses/', '')
-      let ret = `\n${prefix}- PID#${p.i} Process Name: ${pn} | Desc: ${desc}`
-      //Process Tree console layout ^
+      let ret = `\n${prefix} - ${p.i} > ${pn} | ${desc}`
+      // prefix is indented if process has a parent, followed by the Process ID > Process name | Description if any
       ret += this.getTree(pt, p.i, `  ${prefix}`)
       return ret
     }).join('')
