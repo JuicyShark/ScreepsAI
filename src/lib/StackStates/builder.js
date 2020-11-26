@@ -88,7 +88,7 @@ export default {
     }
     if (cache.work) {
       const road = this.creep.pos.lookFor(C.LOOK_STRUCTURES).find(s => s.structureType === C.STRUCTURE_ROAD)
-      if (road && road.hits <= road.hitsMax < 100) {
+      if (road != undefined && road.hits < road.hitsMax / 2) {
         this.creep.repair(road)
       }
       let cs = this.pos.lookFor(C.LOOK_CONSTRUCTION_SITES).find(s=>s.structureType === C.STRUCTURE_ROAD)
