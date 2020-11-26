@@ -122,12 +122,10 @@ export default class HarvestManager extends BaseProcess {
       })
       this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', { spawnTicket, base: ['harvester', source.id] })
 
+      //How many haulers per source
       const dist = (this.roads[source.id] && this.roads[source.id].path.length) || (this.storage && this.storage.pos.findPathTo(s).length) || 30
      const needed = Math.max(2, Math.ceil((source.energyCapacity / (C.ENERGY_REGEN_TIME / (dist * 2))) / 50)) + 2 
-      var wanted = Math.min(Math.ceil(needed / maxParts), 4) / 2;
-      //var wanted = 1;
-      const cbody = [this.expand([maxParts, C.CARRY, hasRoad ? Math.ceil(maxParts / 2) : maxParts, C.MOVE])]
-      const wbody = [this.expand([maxParts-1, C.CARRY, hasRoad ? Math.ceil(maxParts / 2) : maxParts, C.MOVE, 1, C.WORK])]
+      var wanted = Math.min(Math.ceil(needed / maxParts), 2) / 2;
       for (let i = 1; i <= wanted; i++) {
         const spawnTicket = this.ensureCreep(`${source.id}_coll_${i+1}`, {
           rooms: [this.memory.room],
