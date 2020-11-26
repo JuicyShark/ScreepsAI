@@ -1,5 +1,6 @@
 import C from '/include/constants'
 import BaseProcess from './BaseProcess'
+import { expand } from "/etc/common"
 
 
 export default class UpgradeManager extends BaseProcess {
@@ -13,22 +14,6 @@ export default class UpgradeManager extends BaseProcess {
 
     get room () {
         return Game.rooms[this.memory.room]
-      }
-
-      expand (body) {
-        let count = 1
-        let returnMe = []
-        for (let a in body) {
-          let t = body[a]
-          if (typeof t === 'number') {
-            count = t
-          } else {
-            for (let b = 0; b < count; b++) {
-              returnMe.push(t)
-            }
-          }
-        }
-        return returnMe
       }
 
       run () {
@@ -54,8 +39,8 @@ export default class UpgradeManager extends BaseProcess {
               const cid = this.ensureCreep(`upgrader_${i}`, {
                 rooms: [this.roomName],
                 body: [
-                  this.expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE]),
-                  this.expand([4, C.CARRY, 2, C.WORK, 3, C.MOVE])
+                  expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE]),
+                  expand([4, C.CARRY, 2, C.WORK, 3, C.MOVE])
                 ],
                 priority: 7
               })

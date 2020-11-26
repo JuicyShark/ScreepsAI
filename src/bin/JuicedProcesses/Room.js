@@ -3,6 +3,7 @@ import each from 'lodash-es/each'
 import BaseProcess from './BaseProcess'
 import IFF from '/lib/IFF'
 import filter from 'lodash-es/filter'
+import { expand } from "/etc/common"
 
 
 
@@ -58,7 +59,7 @@ export default class Room extends BaseProcess {
       const cid = this.ensureCreep(`feeder_${i}`, {
         rooms: [this.roomName],
         body: [
-          this.expand([1, C.CARRY, 1, C.MOVE])
+          expand([1, C.CARRY, 1, C.MOVE])
         ],
         priority: 2
       })
@@ -74,7 +75,7 @@ export default class Room extends BaseProcess {
       const cid = this.ensureCreep('builder_1', {
         rooms: [this.roomName],
         body: [
-          this.expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE])
+         expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE])
         ],
         priority: 2
       })
@@ -89,8 +90,8 @@ export default class Room extends BaseProcess {
         const cid = this.ensureCreep('protector_1', {
           rooms: [this.roomName],
           body: [
-            this.expand([2, C.ATTACK, 2, C.MOVE]),
-            this.expand([1, C.ATTACK, 1, C.MOVE])
+            expand([2, C.ATTACK, 2, C.MOVE]),
+            expand([1, C.ATTACK, 1, C.MOVE])
           ],
           priority: 0
         })
@@ -106,8 +107,8 @@ export default class Room extends BaseProcess {
         const cid = this.ensureCreep('protector_2', {
           rooms: [this.roomName],
           body: [
-            this.expand([2, C.ATTACK, 2, C.MOVE]),
-            this.expand([1, C.ATTACK, 1, C.MOVE])
+            expand([2, C.ATTACK, 2, C.MOVE]),
+            expand([1, C.ATTACK, 1, C.MOVE])
           ],
           priority: 0
         })
@@ -122,26 +123,5 @@ export default class Room extends BaseProcess {
   }
   toString () {
     return `${this.roomName} ${this.room.level}/${this.room.controller.level}`
-  }
-
-  expand (body) {
-    this.bodyCache = this.bodyCache || {}
-    const cacheKey = body.join('')
-    if (this.bodyCache[cacheKey]) {
-      return this.bodyCache[cacheKey]
-    }
-    let cnt = 1
-    const ret = this.bodyCache[cacheKey] = []
-    for (let i in body) {
-      const t = body[i]
-      if (typeof t === 'number') {
-        cnt = t
-      } else {
-        for (let ii = 0; ii < cnt; ii++) {
-          ret.push(t)
-        }
-      }
-    }
-    return ret
   }
 }
