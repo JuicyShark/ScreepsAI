@@ -185,69 +185,6 @@ export default class HarvestManager extends BaseProcess {
         }
       })
     }
-    this.buildRoads()
-  }
-  buildRoads (){
-    const sources = this.room.find(C.FIND_SOURCES)
-    const getStructureMatrix = this.getStructureMatrix
-    each(sources, source => {
-      const { id } = source
-      if(!this.roads[id] || this.roads[id].expires < Game.time){
-        const { storage, controller, spawn } = this.room
-        const target = storage || spawn
-        if (!target) return
-        const { path } = PathFinder.search(source.pos,{
-          pos: target.pos, 
-          range: 1
-        },{
-          plainCost:2,
-          swampCost:5,
-          roomCallback(room){ 
-            if (!Game.rooms[room]) return
-            return getStructureMatrix(Game.rooms[room])
-          }
-        })
-        this.roads[id] = {
-          path: path.slice(1).filter(({x, y})=>x > 0 && y > 0 && x < 49 && y < 49),
-          expires: Game.time + 50,
-          complete: false
-        }
-      }
-      const road = this.roads[id]
-      const next = road.path.find(r=>{
-        let room = Game.rooms[r.roomName]
-        return room && !room.lookForAt(C.LOOK_STRUCTURES, r.x, r.y).find(s => s.structureType === C.STRUCTURE_ROAD)
-      })
-      if (next) {
-        road.complete = false
-      } else {
-        road.complete = true
-        return
-      }
-      const nextRoom = Game.rooms[next.roomName]
-      if (!nextRoom.lookForAt(C.LOOK_CONSTRUCTION_SITES, next.x, next.y).length) {
-        nextRoom.createConstructionSite(next.x, next.y, STRUCTURE_ROAD)
-        road.expires = Game.time
-      }
-      nextRoom.visual.poly(road.path.filter(r => r.roomName === nextRoom.name).map(r => [r.x,r.y]), { liRoomyle: 'dashed', color: '#CCC' })
-    })
-  }
-  getStructureMatrix (room) {
-    if(room._structureMatrix && room._structureMatrixTick == Game.time) 
-      return room._structureMatrix
-    let matrix = new PathFinder.CostMatrix()
-    room._structureMatrix = matrix
-    room._structureMatrixTick = Game.time
-    room.find(C.FIND_STRUCTURES).forEach(s=>{
-      let cost = 0
-      if(isObstacle(s))
-        cost = 255
-      if(s.structureType == C.STRUCTURE_ROAD)
-        cost = 1
-      matrix.set(s.pos.x,s.pos.y,cost)
-    })  
-    // matrix = room.costMatrixAvoidFlowers(matrix) || matrix
-    return matrix
   }
   toString () {
     return this.memory.room
