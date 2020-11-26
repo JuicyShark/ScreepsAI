@@ -29,18 +29,19 @@ export default class UpgradeManager extends BaseProcess {
             let want
             const stored = this.room.storage && this.room.storage.store.energy || false
             if (stored === false) {
-              want = 2 + Math.floor(this.room.extensions.length / 4)
+              want = 1 + Math.floor(this.room.extensions.length / 2.5)
             } else {
               if (stored > 10000) {
-                want = Math.min(3, stored / 10000)
+                want = Math.max(2, stored / 1500)
               }
             }
             for(let i = 0; i < want; i++) {
               const cid = this.ensureCreep(`upgrader_${i}`, {
                 rooms: [this.roomName],
                 body: [
-                  expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE]),
-                  expand([4, C.CARRY, 2, C.WORK, 3, C.MOVE])
+                  expand([7, C.CARRY, 3, C.WORK, 3, C.MOVE ]),
+                  expand([4, C.CARRY, 2, C.WORK, 2, C.MOVE]),
+                  expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE])
                 ],
                 priority: 7
               })
