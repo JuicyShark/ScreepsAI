@@ -112,7 +112,6 @@ export default class HarvestManager extends BaseProcess {
       const spawnTicket = this.ensureCreep(`${source.id}_harv`, {
         rooms: [this.memory.room],
         body: [
-          this.expand([6, C.WORK, 3, C.MOVE]),
           this.expand([5, C.WORK, 3, C.MOVE]),
           this.expand([4, C.WORK, 3, C.MOVE]),
           this.expand([3, C.WORK, 2, C.MOVE]),
