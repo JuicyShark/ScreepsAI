@@ -77,7 +77,7 @@ export default class Room extends BaseProcess {
         body: [
          expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE])
         ],
-        priority: 2
+        priority: 4
       })
        this.ensureChild(`builder_${cid}`, 'JuicedProcesses/stackStateCreep', {
          spawnTicket: cid,
