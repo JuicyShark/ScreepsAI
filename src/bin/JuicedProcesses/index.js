@@ -5,7 +5,7 @@ import HarvestManager from './HarvestManager'
 import UpgradeManager from './UpgradeManager'
 import TowerDefense from './TowerDefense'
 import Intel from './Intel'
-import Layout from './Layout'
+import Layout from './layout'
 import Cron from './Cron'
 
 export const bundle = {
