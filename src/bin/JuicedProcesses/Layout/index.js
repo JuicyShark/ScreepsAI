@@ -65,6 +65,8 @@ export default class Layout extends BaseProcess {
     }
 
 
+
+
     tier1 (level, room) {
         console.log(layouts.legend.s)
         let wanted = [C.STRUCTURE_TOWER, C.STRUCTURE_EXTENSION, C.STRUCTURE_STORAGE, C.STRUCTURE_SPAWN, C.STRUCTURE_TERMINAL, C.STRUCTURE_CONTAINER, C.STRUCTURE_ROAD]
@@ -73,33 +75,33 @@ export default class Layout extends BaseProcess {
         let sites = _.groupBy(allSites, 'structureType')
         let have = _.mapValues(room.structures, 'length')
         want[C.STRUCTURE_CONTAINER] = Math.min(level, C.CONTROLLER_STRUCTURES[C.STRUCTURE_CONTAINER][level])
-        console.log(JSON.stringify(want))
         let src = room.spawns[0] || room.controller
         for (let type in want) {
             let amount = want[type] - ((have[type] || 0) + (sites[type] || []).length)
-            console.log(type, want[type], have[type] || 0, (sites[type] || []).length)
+      console.log(type, want[type], have[type] || 0, (sites[type] || []).length)
             if (amount <= 0) continue
-            let positions = [
-                ...allSites,
-                ...room.structures.all,
-                ...room.find(C.FIND_EXIT),
-                ...room.find(C.FIND_SOURCES)
-            ].map(this.getRange)
-            console.log(`Want ${amount} of ${type}`)
+            //console.log(`Want ${amount} of ${type}`)
             if (src.pos) {
 
-                let tlx = src.pos.x - 3;
-                let tly = src.pos.y - 3;
-                console.log(src.pos.x, src.pos.y)
-                console.log(tlx, tly)
-                
+                if (src instanceof StructureSpawn) {
+
+
+
+                    let def1 = layouts.testy.Stage1.buildings;
+                    console.log(JSON.stringify(this.translator(src.pos,def1.spawn.pos)))
+
+                }
+
+
+
+
 
                 /*if (layouts.default){
                 for (let i=0; i< ) {
-                        Object.keys(layouts.legend.default).forEach((key)=> {
+                        
+                    Object.keys(layouts.legend.default).forEach((key)=> {
                         if (key == layouts.default.slice(type)){}
                     }) }
-
                     */
                     
                     
@@ -108,6 +110,25 @@ export default class Layout extends BaseProcess {
                 return
             }
         }
+
+        /**
+     * Translates the blueprints into relative location.
+     * @param origionalpos
+     * @param changerate
+     * @returns {POS}
+     */
+    translator (origionalpos, changerate) {
+        let ab = changerate[0].x
+        let ba = changerate[0].y
+        let newx = +ab + +origionalpos.x
+        let newy = +ba + +origionalpos.y
+
+
+        return {
+            x: newx,
+            y: newy
+        }
+    }
         
 
 
