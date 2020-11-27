@@ -80,7 +80,7 @@ export default class HarvestManager extends BaseProcess {
       }
           })
 
-    if (CONTROLLER_STRUCTURES[C.STRUCTURE_EXTRACTOR][this.room.level]) {      
+/**    if (CONTROLLER_STRUCTURES[C.STRUCTURE_EXTRACTOR][this.room.level]) {      
       each(minerals, mineral => {
         let [extractor] = mineral.pos.lookFor(C.LOOK_STRUCTURES)
         if (!extractor) {
@@ -119,7 +119,7 @@ export default class HarvestManager extends BaseProcess {
           this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', { spawnTicket, base: ['collector', mineral.id, mineral.mineralType] })
         }
       })
-    }
+    }*/ 
   }
   toString () {
     return this.memory.room
