@@ -12,6 +12,7 @@ export default class Layout extends BaseProcess {
         super(context)
         this.context = context
         this.kernel = context.queryPosisInterface('baseKernel')
+        this.sleep = context.queryPosisInterface('sleep')
         this.mm = context.queryPosisInterface('segments')
         //for the matrix
         this.structureMatrixCache = {}
@@ -36,8 +37,17 @@ export default class Layout extends BaseProcess {
 
 
     run () {
+        this.sleep.sleep(10)
         const room = this.room
         const { controller: { level } } = this.room
+
+
+        if (!(room.memory.dirtRoads)){
+            room.memory.dirtRoads = true;
+            this.dirtRoads(room)
+        }
+
+        //
         switch (room.controller.level) {
             case 1:
                 this.sleep.sleep(10)
@@ -65,7 +75,18 @@ export default class Layout extends BaseProcess {
     }
 
 
-
+    dirtRoads() {
+        const bs = this.room.spawns[0];
+        var destin = this.room.find(FIND_SOURCES)
+        destin.push(this.room.controller)
+        //let planner = this.roadInfo()
+            for (let i=0; i< destin.length; i++){
+                let pathplan = bs.pos.findPathTo(destin[i])
+                    for(let q=0; q<pathplan.length; q++) {
+                        Game.rooms[this.roomName].createConstructionSite(pathplan[q].x, pathplan[q].y, STRUCTURE_ROAD);
+                        }
+        }
+    }
 
     tier1 (level, room) {
         console.log(layouts.legend.s)
