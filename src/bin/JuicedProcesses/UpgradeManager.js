@@ -32,7 +32,7 @@ export default class UpgradeManager extends BaseProcess {
               want = 1 + Math.floor(this.room.extensions.length / 2.5)
             } else {
               if (stored > 10000) {
-                want = Math.max(2, stored / 1500)
+                want = Math.max(3, stored / 100000)
               }
             }
             for(let i = 0; i < want; i++) {
