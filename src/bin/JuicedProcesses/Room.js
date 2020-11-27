@@ -53,13 +53,15 @@ export default class Room extends BaseProcess {
     })
     let [container] = this.room.lookNear(C.LOOK_STRUCTURES, this.room.spawns[0].pos)
     .filter((s) => s.structureType === C.STRUCTURE_CONTAINER)
-    if(container){
+    let storage = this.room.find(C.FIND_STRUCTURES).filter(s => s.structureType === C.STRUCTURE_CONTAINER && s.hits < (s.hitsMax / 1.5))
+    if(container || storage){
     var feeders = 1;
     for (let i = 0; i < feeders; i++) {
       const cid = this.ensureCreep(`feeder_${i}`, {
         rooms: [this.roomName],
         body: [
-          expand([1, C.CARRY, 1, C.MOVE])
+          expand([1, C.CARRY, 1, C.MOVE]),
+          expand([4, C.CARRY, 4, C.MOVE])
         ],
         priority: 2
       })
@@ -70,7 +72,6 @@ export default class Room extends BaseProcess {
       })
     }
   }
-
     if (this.room.find(C.FIND_MY_CONSTRUCTION_SITES).length) {
       const cid = this.ensureCreep('builder_1', {
         rooms: [this.roomName],
