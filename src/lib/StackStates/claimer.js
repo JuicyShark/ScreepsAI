@@ -16,14 +16,5 @@ export default {
       }
     }
     this.runStack()
-  },
-  moveToRoom (target) {
-    let tgt = this.resolveTarget(target)
-    if (this.creep.pos.roomName === tgt.roomName) {
-      this.pop()
-      this.runStack()
-    } else {
-      this.creep.travelTo(tgt)
-    }
   }
 }

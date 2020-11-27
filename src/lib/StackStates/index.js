@@ -7,14 +7,14 @@ import collector from './collector'
 import claimer from './claimer'
 import miner from './miner'
 import harvester from './harvester'
-import movement from './movement'
 import base from './base'
 import core from './core'
+import commonTasks from './commonTasks'
 
 let parts = [
   core,
   base,
-  movement,
+  commonTasks,
   harvester,
   miner,
   claimer,
