@@ -92,11 +92,8 @@ export default class SpawnExtension {
   }
   getOrphans (rooms) {
     let returnMe = {}
-    // let stats = {}
-    // each(this.status, (stat, id) => stats[stat.name || id] = stat)
     for (let id in Game.creeps) {
       const creep = Game.creeps[id]
-      // const { lastAccess = 0, status } = stats[id]
       if (!creep.memory._p || !this.kernel.getProcessById(creep.memory._p)) {
         if (rooms && !rooms.includes(creep.pos.roomName)) continue
         const body = creep.body.map(b => b.type).join()

@@ -106,7 +106,6 @@ export default class Scheduler {
     this.mem.lastRem = this.remainingCPU
     this.queue = 0
     this.index = 0
-    this.stats = {}
     this.done = []
     this.cpu = {}
     this.ql = this.queues.map(q => q.length)
@@ -194,26 +193,5 @@ export default class Scheduler {
     this.log.info(this.ql.map(q => ('    ' + q).slice(-4)).join(', '))
     this.log.info(`Promoted: ${procnt} Demoted: ${demcnt}`)
     this.log.info(`Counts: ${runcnt}/${this.cnt} (${Math.floor((runcnt / this.cnt) * 100)}%) ${this.cnt - runcnt} rem`)
-    if (global.stats) {
-      global.stats.addStat('scheduler', {
-        v: 3
-      }, {
-        count: QUEUE_COUNT,
-        queue: this.queue,
-        promoted: procnt,
-        demoted: demcnt,
-        cleanupCPU: cur,
-        processCount: this.cnt,
-        runCnt: runcnt
-      })
-      this.ql.forEach((q, i) => {
-        global.stats.addStat('schedulerQueue', {
-          level: i
-        }, {
-          level: i,
-          count: q
-        })
-      })
-    }
   }
 }

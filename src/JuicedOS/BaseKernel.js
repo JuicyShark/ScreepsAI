@@ -323,17 +323,10 @@ export class BaseKernel { // implements IPosisKernel, IPosisSleepExtension {
     if (cnt === 0) {
       this.startProcess('init', {})
     }
-
-    let stats = []
     this.log.debug('loop')
     while (true) {
       let pid = this.scheduler.getNextProcess()
       this.log.debug('pid', pid)
-      if (pid === false) { // Hard stop
-        _.each(stats, stat => {
-          this.log.debug(`-- ${stat.id} ${stat.cpu.toFixed(3)} ${stat.end.toFixed(3)} ${stat.pinfo.n}`)
-        })
-      }
       if (!pid) break
       this.log.debug('process')
       let start = Game.cpu.getUsed()
@@ -345,34 +338,10 @@ export class BaseKernel { // implements IPosisKernel, IPosisSleepExtension {
       ts = Game.cpu.getUsed()
       this.scheduler.setCPU(pid, dur.toFixed(3))
       let pinfo = this.getProcessById(pid)
-      if (pinfo === false) {
-        this.log.info(`Stats collection: PID ${pid} was not found`)
-        return
-      }
       pinfo.c = dur
       procUsed += dur
       te = Game.cpu.getUsed()
       this.log.debug(() => `${pinfo.i} scheduler setCPU ${(te - ts).toFixed(3)}`)
-      ts = Game.cpu.getUsed()
-      global.stats.addStat('process', {
-        name: pinfo.context.imageName
-      }, {
-        cpu: dur
-        // id: pinfo.i,
-        // parent: pinfo.p
-      })
-      te = Game.cpu.getUsed()
-      this.log.debug(() => `${pinfo.i} influx addStat ${(te - ts).toFixed(3)}`)
-      ts = Game.cpu.getUsed()
-      stats.push({
-        pinfo,
-        cpu: dur,
-        id: pinfo.i,
-        end,
-        parent: pinfo.p
-      })
-      te = Game.cpu.getUsed()
-      this.log.debug(() => `${pinfo.i} stats push ${(te - ts).toFixed(3)}`)
     }
     this.scheduler.cleanup()
     interrupts = this.interruptHandler.run(C.INT_STAGE.END)

@@ -1,4 +1,3 @@
-import stats from './lib/stats'
 import globals from './lib/GlobalTracker'
 import MemHack from './lib/MemHack'
 
@@ -14,13 +13,10 @@ import { bundle as bin } from './bin'
 
 import C from './include/constants'
 
-globals.statsDriver = stats
-
 const processRegistry = new ProcessRegistry()
 const extensionRegistry = new ExtensionRegistry()
 
 extensionRegistry.register('JuicedOS/memHack', MemHack)
-extensionRegistry.register('JuicedOS/stats', stats)
 extensionRegistry.register('JuicedOS/globals', globals)
 
 const memoryManager = new MemoryManager()
@@ -78,7 +74,6 @@ extensionRegistry.register('interrupt', {
 bin.install(processRegistry, extensionRegistry)
 
 global.kernel = kernel
-global.stats = stats
 global.C = C
 
 export function loop () {
