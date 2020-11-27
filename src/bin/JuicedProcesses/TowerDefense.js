@@ -13,22 +13,6 @@ export default class TowerDefense extends BaseProcess {
     return Game.rooms[this.memory.room]
   }
 
-  expand (body) {
-    let cnt = 1
-    let ret = []
-    for (let i in body) {
-      let t = body[i]
-      if (typeof t === 'number') {
-        cnt = t
-      } else {
-        for (let ii = 0; ii < cnt; ii++) {
-          ret.push(t)
-        }
-      }
-    }
-    return ret
-  }
-
   run () {
     const room = this.room
     if (!room) {
@@ -67,11 +51,11 @@ export default class TowerDefense extends BaseProcess {
   }
   doTowerMaint () {
     const room = this.room
-    const roads = room.find(C.FIND_STRUCTURES).filter(s => s.structureType === C.STRUCTURE_ROAD && s.hits < (s.hitsMax / 2))
+    let repairList = this.room.find(C.FIND_STRUCTURES, { filter: s => s.hits < (s.hitsMax / 2 )}) 
     room.towers.forEach(tower => {
       if (tower.energy < (tower.energyCapacity / 2)) return 
-      const road = roads.pop()
-      if (road) tower.repair(road)
+      const damagedStruct = repairList.pop()
+      if (damagedStruct) tower.repair(damagedStruct)
     })
   }
   toString () {
