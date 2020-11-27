@@ -35,38 +35,40 @@ export default class Layout extends BaseProcess {
         return "debugging Okay"
     }
 
-
     run () {
         this.sleep.sleep(10)
         const room = this.room
         const { controller: { level } } = this.room
 
 
-        if (!(room.memory.dirtRoads)){
-            room.memory.dirtRoads = true;
-            this.dirtRoads(room)
-        }
-
+        
+        this.sleep.sleep(10)
         //
         switch (room.controller.level) {
             case 1:
-                this.sleep.sleep(10)
-                //Maybe some roads here idk yet...
+                
+                this.dirtRoads(room)
                 break;
             case 2:
-                this.tier1(level, room)
+                this.dirtRoads(room)
+                //this.tier1(level, room)
                 break;
             case 3:
-                this.tier1(level, room)
+                this.dirtRoads(room)
+                //this.tier1(level, room)
                 break;
             case 4:
-                this.tier1(level, room)
+                this.dirtRoads(room)
+                //this.tier1(level, room)
                 break;
             case 5:
+                this.dirtRoads(room)
                 break;
             case 6:
+                this.dirtRoads(room)
                 break;
             case 7:
+                this.dirtRoads(room)
                 break;
             case 8:
                 break;
@@ -74,8 +76,17 @@ export default class Layout extends BaseProcess {
         
     }
 
-
-    dirtRoads() {
+        /**
+     * calls upon the all mighty city planner to carve out sections of the earth for devine travel
+     * It creates roads. Pretty Simple
+     * @param room!
+     * @returns {CostMatrix}
+     */
+    dirtRoads(room) {
+        if (!(room.memory.dirtRoads)){
+            room.memory.dirtRoads = true;
+        }
+        else {return}
         const bs = this.room.spawns[0];
         var destin = this.room.find(FIND_SOURCES)
         destin.push(this.room.controller)
