@@ -51,9 +51,8 @@ export default class Room extends BaseProcess {
     each(children, ([child, context = {}]) => {
       this.ensureChild(child, child, context)
     })
-    let [container] = this.room.lookNear(C.LOOK_STRUCTURES, this.room.spawns[0].pos)
-    .filter((s) => s.structureType === C.STRUCTURE_CONTAINER)
-    let storage = this.room.find(C.FIND_STRUCTURES).filter(s => s.structureType === C.STRUCTURE_CONTAINER && s.hits < (s.hitsMax / 1.5))
+    let [container] = this.room.lookNear(C.LOOK_STRUCTURES, this.room.find(C.FIND_STRUCTURES).filter((s) => s.structureType === C.STRUCTURE_CONTAINER))
+    let storage = this.room.find(C.FIND_STRUCTURES).filter(s => s.structureType === C.STRUCTURE_STORAGE && s.hits < (s.hitsMax / 1.5))
     if(container || storage){
     var feeders = 1;
     for (let i = 0; i < feeders; i++) {
