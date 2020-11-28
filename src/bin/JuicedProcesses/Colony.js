@@ -10,7 +10,7 @@ export default class Colony extends BaseProcess {
     super(context)
     this.context = context
     this.kernel = context.queryPosisInterface('baseKernel')
-    this.mm = context.queryPosisInterface('segments')
+    this.segments = context.queryPosisInterface('segments')
   }
 
   get rooms () {
@@ -71,6 +71,7 @@ export default class Colony extends BaseProcess {
       }
     }
     this.ensureChild('intel', 'JuicedProcesses/intel')
+    this.ensureChild('flagManager', 'JuicedProcesses/flagManager')
     this.sleep.sleep(5)
   }
 

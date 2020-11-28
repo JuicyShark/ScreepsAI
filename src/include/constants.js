@@ -11,7 +11,8 @@ C.EPosisSpawnStatus = {
   SPAWNED: 2
 }
 
-C.USER = C.USERNAME = Game.spawns.Spawn1 && Game.spawns.Spawn1.owner.username
+C.USER = Game.spawns.HomeBase
+C.USERNAME = Game.spawns.HomeBase.owner.username
 
 // Import global constants
 Object.keys(global)

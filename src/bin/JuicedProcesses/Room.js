@@ -12,7 +12,7 @@ export default class Room extends BaseProcess {
     super(context)
     this.context = context
     this.kernel = context.queryPosisInterface('baseKernel')
-    this.mm = context.queryPosisInterface('segments')
+    this.segments = context.queryPosisInterface('segments')
   }
 
   get log () {
