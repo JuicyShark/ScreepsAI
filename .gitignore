@@ -3,11 +3,8 @@
 */.DS_Store
 /node_modules
 /dist
-dist/main.js
-dist/main.js.map.js
-dist/main.js
-dist/main.js.map.js
 .screepsiderc
 .tern-project
 main.js
 main.js.map.js
+auth.js
