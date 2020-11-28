@@ -338,10 +338,12 @@ export class BaseKernel { // implements IPosisKernel, IPosisSleepExtension {
       ts = Game.cpu.getUsed()
       this.scheduler.setCPU(pid, dur.toFixed(3))
       let pinfo = this.getProcessById(pid)
+      if(pinfo){
       pinfo.c = dur
       procUsed += dur
       te = Game.cpu.getUsed()
       this.log.debug(() => `${pinfo.i} scheduler setCPU ${(te - ts).toFixed(3)}`)
+      }
     }
     this.scheduler.cleanup()
     interrupts = this.interruptHandler.run(C.INT_STAGE.END)
