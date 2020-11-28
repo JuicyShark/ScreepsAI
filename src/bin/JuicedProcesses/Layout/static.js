@@ -1,129 +1,26 @@
 export default {
   legend: {
     default: {
-      c: "STRUCTURE_CONTAINER",
-      r: "STRUCTURE_ROAD",
+      c: "STRUCTURE.CONTAINER",
+      r: "STRUCTURE.ROAD",
       e: "STRUCTURE.EXTENSION",
       t: "STRUCTURE.TOWER",
       s: "STRUCTURE.STORAGE",
       S: "STRUCUTRE.SPAWN",
-      t: "STRUCTURE.TERMINAL"
+      T: "STRUCTURE.TERMINAL"
     }
   },
   default: {
-    min: [5, 5],
-    max: [7, 7],
-    center: [3, 3],
-    layout: [
-      ' rerer ',
-      ' errte ',
-      ' erSre ',
-      ' errre ',
-      ' rerer '
-    ]
+    min: 5,
+    max: 7,
+    layout: {
+      0: ' reSer ',
+      1: ' errte ',
+      2: ' ersre ',
+      3: ' erere ',
+      4: ' rerer '
+  }
   },
-  testy: {
-    Stage1: {
-      "buildings": {
-        "extension": {
-          "pos": [{
-            "x": 1,
-            "y": 0
-          }, {
-            "x": 3,
-            "y": 0
-          }, {
-            "x": 4,
-            "y": 1
-          }, {
-            "x": 0,
-            "y": 1
-          }, {
-            "x": 0,
-            "y": 3
-          }, {
-            "x": 4,
-            "y": 3
-          }, {
-            "x": 2,
-            "y": 4
-          }, {
-            "x": 2,
-            "y": 5
-          }, {
-            "x": 4,
-            "y": 4
-          }, {
-            "x": 0,
-            "y": 4
-          }]
-        },
-        "road": {
-          "pos": [{
-            "x": 4,
-            "y": 2
-          }, {
-            "x": 3,
-            "y": 2
-          }, {
-            "x": 3,
-            "y": 3
-          }, {
-            "x": 3,
-            "y": 4
-          }, {
-            "x": 4,
-            "y": 5
-          }, {
-            "x": 3,
-            "y": 5
-          }, {
-            "x": 2,
-            "y": 3
-          }, {
-            "x": 1,
-            "y": 3
-          }, {
-            "x": 1,
-            "y": 4
-          }, {
-            "x": 1,
-            "y": 5
-          }, {
-            "x": 0,
-            "y": 5
-          }, {
-            "x": 1,
-            "y": 2
-          }, {
-            "x": 0,
-            "y": 2
-          }, {
-            "x": 1,
-            "y": 1
-          }, {
-            "x": 2,
-            "y": 1
-          }, {
-            "x": 2,
-            "y": 0
-          }]
-        },
-        "tower": {
-          "pos": [{
-            "x": 3,
-            "y": 1
-          }]
-        },
-        "spawn": {
-          "pos": [{
-            "x": 2,
-            "y": 2
-          }]
-        }
-      }
-    }
-},
 highwayX: {
     min: [3, 1],
     max: [7, 7],
