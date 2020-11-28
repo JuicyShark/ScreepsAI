@@ -17,16 +17,17 @@ export default {
     let { room, pos } = this.creep
     if (this.creep.carry.energy) {
       this.status = 'Looking for target'
-      let sites = this.creep.room.find(C.FIND_MY_CONSTRUCTION_SITES)
+      let sites = room.find(C.FIND_MY_CONSTRUCTION_SITES)
       if (!sites.length) {
-        let repairSite = this.room.find(C.FIND_STRUCTURES, { filter: s => s.hits < (s.hitsMax / 2 )}) 
-        if(repairSite){
-          let hitsMax = Math.ceil(sum(values(this.creep.carry)) / (opts.work * C.BUILD_POWER))
+        let repairSite = room.find(C.FIND_STRUCTURES, { filter: s => s.hits < (s.hitsMax / 2 )}) 
+        if(repairSite.length  && repairSite != null){
+          let hitsMax = Math.ceil(sum(values(this.creep.carry)) / (cache.work * C.BUILD_POWER))
           this.push('repeat', hitsMax, 'repair', repairSite.id)
-          this.push('moveInRange', site.id, 3)
-          this.runStack() 
+          this.push('moveInRange', repairSite.id, 3)
+          return this.runStack() 
         }
-        return this.pop();
+        this.push('suicide');
+        return this.runStack();
       }
       sites = _.sortBy(sites, site => -site.progress / site.progressTotal)
       let site = _.first(sites)
@@ -54,6 +55,6 @@ export default {
           return this.runStack()
         }
       }
-    }
+    } 
   }
 }
