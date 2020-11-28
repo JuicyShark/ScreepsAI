@@ -5,6 +5,7 @@ import HarvestManager from './HarvestManager'
 import UpgradeManager from './UpgradeManager'
 import TowerDefense from './TowerDefense'
 import Intel from './Intel'
+import FlagManager from './FlagManager'
 import Layout from './layout'
 import Cron from './Cron'
 
@@ -17,6 +18,7 @@ export const bundle = {
     processRegistry.register('JuicedProcesses/upgradeManager', UpgradeManager)
     processRegistry.register('JuicedProcesses/towerDefense', TowerDefense)
     processRegistry.register('JuicedProcesses/intel', Intel)
+    processRegistry.register('JuicedProcesses/flagManager', FlagManager)
     processRegistry.register('JuicedProcesses/layout', Layout)
     processRegistry.register('JuicedProcesses/cron', Cron)
   }
