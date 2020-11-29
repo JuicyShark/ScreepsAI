@@ -1,7 +1,11 @@
 import C from '/include/constants'
+import { each } from 'lodash-es'
+import BaseProcess from './BaseProcess'
+
 //Child from Colony
-export default class Intel {
+export default class Intel extends BaseProcess {
   constructor(context) {
+    super(context)
     this.context = context
     this.kernel = context.queryPosisInterface('baseKernel')
     this.sleep = context.queryPosisInterface('sleep')
@@ -27,6 +31,14 @@ export default class Intel {
       this.drawMap()
       this.drawMapImage()
     }
+    let mem = this.segments.load(C.SEGMENTS.INTEL) || {}
+    const children = [
+      ['JuicedProcesses/colonyExpansion', {intelLog: mem.rooms }],
+      ['JuicedProcesses/layout', { intelLog: mem.rooms }]
+        ]
+        each(children,( [child, context={}]) => {
+          this.ensureChild(child, child, context)
+        })
   }
 
   INTERRUPT({hook: {type,stage},key}) {
@@ -82,49 +94,13 @@ export default class Intel {
       },
       sources: room.find(C.FIND_SOURCES).map(smap),
       mineral: mineralType,
-      roomWorth: this.newBaseEvaluater(room.find(C.FIND_SOURCES).map(smap),  owner, name) || 0,
+      roomWorth:  0,
+      //newBaseEvaluater(room.find(C.FIND_SOURCES).map(smap),  owner, name) || 0,
       ts: Game.time
     }
     //    console.log(C.SEGMENTS.INTEL, mem.rooms.W6N1.owner)
     this.segments.save(C.SEGMENTS.INTEL, mem)
   }
 
-  newBaseEvaluater(sources, owner, mineral, name) {
-    const sourceP = 5
-    let totalPoints
-
-    if (owner == C.USERNAME || C.USER.room.controller.level >= 2){
-      totalPoints = 0
-    } else {
-      let pos = [C.USER.room.name, name]
-      let distance = this.distanceCalcFromRoomName(pos)
-      console.log(distance)
-      totalPoints = sources.length * sourceP - distance
-      console.log(totalPoints)
-    }
-    return totalPoints
-  }
-
-  // sets a distance value based on W6N1 - W7N1 = (6-7) + (1-1) * 5
-  distanceCalcFromRoomName(wholeString) {
-    let pos = []
-    let distance
-    for (let string in wholeString) {
-      let repString = wholeString[string].replace(/W|S|E|N/gi, ' ')
-      repString = repString.slice(1)
-      pos.push(repString.split(' '))
-    }
-    let newpos = []
-    for (let number in pos) {
-      let posnumber = pos[number]
-      for (let n in posnumber) {
-        let please = Math.floor(posnumber[n])
-        newpos.push(please)
-      }
-    }
-    let pos1 = newpos[0] - newpos[2]
-    let pos2 = newpos[1] - newpos[3]
-    distance = Math.abs(pos1) + Math.abs(pos2)
-    return distance
-  }
+ 
 }

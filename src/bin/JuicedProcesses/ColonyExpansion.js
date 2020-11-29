@@ -1,6 +1,7 @@
 import C from '/include/constants'
 import BaseProcess from './BaseProcess'
 
+
 export default class ColonyExpansion extends BaseProcess {
   constructor(context) {
     super(context)
@@ -31,6 +32,83 @@ export default class ColonyExpansion extends BaseProcess {
   }
 
   run() {
-  console.log(`running`)
+
+    if (this.segments.load(C.SEGMENTS.INTEL) === false) {} else {
+      let intelLog = this.segments.load(C.SEGMENTS.INTEL)
+      let visionRooms = Game.rooms;
+      let allFlags = Game.flags
+
+      let bestRoom = this.findBestRooms(intelLog)[0]
+      for (let room in visionRooms) {
+          if(!intelLog.rooms){
+              break;
+          }
+        let roomMem = intelLog.rooms[`${room}`]
+        if (room == bestRoom.roomName) {
+          console.log(`placing flag at ${bestRoom.roomName}`)
+          let flagPlacement = new RoomPosition(25, 25, `${bestRoom.roomName}`)
+          flagPlacement.createFlag('claim')
+        }
+      }
+      this.sleep.sleep(10000)
+    }
+  }
+  //find best room out of all of intel segment currently
+  // TODO have this program segment intel file as it can get v big and perform search over multiple ticks before 
+  // placing flag
+  findBestRooms(intelLog) {
+    let bestRooms = []
+    let bestRoom = 0
+    for (let room in intelLog.rooms) {
+        //roomWorth object key, intelLog.rooms[room] iswhat loop is 
+      let roomWorth = intelLog.rooms[room].roomWorth
+      if (roomWorth >= bestRoom) {
+        bestRoom = roomWorth
+        bestRooms = []
+        bestRooms.push({
+          roomName: room,
+          totalPoints: roomWorth
+        })
+      } else continue
+    }
+    return bestRooms
+  }
+  newBaseEvaluater(sources, owner, mineral, name) {
+    const sourceP = 5
+    let totalPoints
+
+    if (owner == C.USERNAME || C.USER.room.controller.level >= 2){
+      totalPoints = 0
+    } else {
+      let pos = [C.USER.room.name, name]
+      let distance = this.distanceCalcFromRoomName(pos)
+      console.log(distance)
+      totalPoints = sources.length * sourceP - distance
+      console.log(totalPoints)
+    }
+    return totalPoints
+  }
+
+  // sets a distance value based on W6N1 - W7N1 = (6-7) + (1-1) * 5
+  distanceCalcFromRoomName(wholeString) {
+    let pos = []
+    let distance
+    for (let string in wholeString) {
+      let repString = wholeString[string].replace(/W|S|E|N/gi, ' ')
+      repString = repString.slice(1)
+      pos.push(repString.split(' '))
+    }
+    let newpos = []
+    for (let number in pos) {
+      let posnumber = pos[number]
+      for (let n in posnumber) {
+        let please = Math.floor(posnumber[n])
+        newpos.push(please)
+      }
+    }
+    let pos1 = newpos[0] - newpos[2]
+    let pos2 = newpos[1] - newpos[3]
+    distance = Math.abs(pos1) + Math.abs(pos2)
+    return distance
   }
 }
