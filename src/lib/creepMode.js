@@ -46,7 +46,7 @@ export default {
     }
   },
   upgrade (creep) {
-    let controller = creep.memory.tgt
+    let controller = creep.room.controller
     if (creep.pos.inRangeTo(controller, 3)) {
       creep.upgradeController(controller)
     } else {
