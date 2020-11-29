@@ -22,6 +22,17 @@ export default class Layout extends BaseProcess {
     get memory () {
         return this.context.memory
     }
+
+    get buildList () {
+        if(!(this.memory.layoutsys.rooms)) {
+            this.memory.layoutsys.rooms = {}
+        }
+        let returnob = this.memory.layoutsys.rooms[this.room]
+        if (!(returnob.buildList)) {
+            returnob.buildList = [];
+        }
+        return returnob.buildList;
+    }
     
     get roomName () {
         return this.memory.room
@@ -35,40 +46,39 @@ export default class Layout extends BaseProcess {
         return "debugging Okay"
     }
 
+    init() {
+        if (!(this.memory.layoutsys)) {
+            this.memory.layoutsys = {}
+        }
+    }
+
     run () {
+        
         this.sleep.sleep(10)
         const room = this.room
         const { controller: { level } } = this.room
-
-
-        
-        this.sleep.sleep(10)
         //
         switch (room.controller.level) {
             case 1:
-                
-                this.dirtRoads(room)
+                //maybs put init
                 break;
             case 2:
                 this.dirtRoads(room)
-                //this.tier1(level, room)
+                this.tier1(level, room)
                 break;
             case 3:
-                this.dirtRoads(room)
-                //this.tier1(level, room)
+                this.tier1(level, room)
                 break;
             case 4:
-                this.dirtRoads(room)
-                //this.tier1(level, room)
+                
                 break;
             case 5:
-                this.dirtRoads(room)
                 break;
             case 6:
-                this.dirtRoads(room)
+                
                 break;
             case 7:
-                this.dirtRoads(room)
+                
                 break;
             case 8:
                 break;
@@ -92,7 +102,7 @@ export default class Layout extends BaseProcess {
         destin.push(this.room.controller)
         //let planner = this.roadInfo()
             for (let i=0; i< destin.length; i++){
-                let pathplan = bs.pos.findPathTo(destin[i])
+                let pathplan = bs.pos.findPathTo(destin[i], {range:3})
                     for(let q=0; q<pathplan.length; q++) {
                         Game.rooms[this.roomName].createConstructionSite(pathplan[q].x, pathplan[q].y, STRUCTURE_ROAD);
                         }
@@ -100,74 +110,141 @@ export default class Layout extends BaseProcess {
     }
 
     tier1 (level, room) {
-        console.log(layouts.legend.s)
+
+        let buildQue = [];
         let wanted = [C.STRUCTURE_TOWER, C.STRUCTURE_EXTENSION, C.STRUCTURE_STORAGE, C.STRUCTURE_SPAWN, C.STRUCTURE_TERMINAL, C.STRUCTURE_CONTAINER, C.STRUCTURE_ROAD]
         let want = _.mapValues(_.pick(C.CONTROLLER_STRUCTURES, wanted), level)
         let allSites = room.find(C.FIND_MY_CONSTRUCTION_SITES)
         let sites = _.groupBy(allSites, 'structureType')
         let have = _.mapValues(room.structures, 'length')
         want[C.STRUCTURE_CONTAINER] = Math.min(level, C.CONTROLLER_STRUCTURES[C.STRUCTURE_CONTAINER][level])
-        let src = room.spawns[0] || room.controller
+        let src = room.spawns[0] || undefined
         for (let type in want) {
             let amount = want[type] - ((have[type] || 0) + (sites[type] || []).length)
-      console.log(type, want[type], have[type] || 0, (sites[type] || []).length)
+                console.log(type, want[type], have[type] || 0, (sites[type] || []).length)
             if (amount <= 0) continue
-            //console.log(`Want ${amount} of ${type}`)
+            console.log(`Want ${amount} of ${type}`)
+
             if (src.pos) {
-
                 if (src instanceof StructureSpawn) {
+                    // Make a array to store the config deconstructed
+                    var blueprintXy = []
+                    let maxYlength = Object.entries(layouts.default.layout).length;
+                    //Loop through each line in the layout object for the design
+                    for(let i = 0; i <= maxYlength; i++){
+                        let linedata = layouts.default.layout[i];
+                        if(linedata == undefined|null){
+                            //backout if its not there
+                            break;
+                        }
+                        let outcome = linedata.split("")
+                        let datafuckery = {
+                            orderY: outcome,
+                            pos: {
+                                x: 0,
+                                y: i
+                            }
+                        }
+                        console.log(JSON.stringify(datafuckery))
+                        blueprintXy.push(datafuckery)
+                    }
+                    
+                    //By now I have an array of arrays. The first being omplete with arrays of the lines of buildings. Not decoded
+                    
 
-
-
-                    let def1 = layouts.testy.Stage1.buildings;
-                    console.log(JSON.stringify(this.translator(src.pos,def1.spawn.pos)))
-
-                }
-
-
-
-
-
-                /*if (layouts.default){
-                for (let i=0; i< ) {
+                    let rowBluePrint = Object.values(blueprintXy);
+                    
+                    
+                    if(rowBluePrint.length != null || undefined){
                         
-                    Object.keys(layouts.legend.default).forEach((key)=> {
-                        if (key == layouts.default.slice(type)){}
-                    }) }
-                    */
-                    
-                    
+                    for (let e=0; e <maxYlength; e++){
+                        l
+                        let thline = rowBluePrint[e]
+                        let thepos = thline.pos
+                        let theline = thline.orderY
+
+                        //Go through each letter
+                        theline.forEach((letter,theX)=>{
+
+                            let selection;
+                            //dont forget to take a break... Litteratlly
+
+                            switch (letter) {
+                                case " ":
+                                    break
+                                case "c":
+                                    selection = C.STRUCTURE_CONTAINER
+                                    break;
+                                case "r":
+                                    selection = C.STRUCTURE_ROAD
+                                    break;
+                                case "e":
+                                    selection = C.STRUCTURE_EXTENSION
+                                    break;
+                                case "t":
+                                    selection = C.STRUCTURE_TOWER
+                                    break;
+                                case "T":
+                                    selection = C.STRUCTURE_TERMINAL
+                                    break;
+                                case "S":
+                                    selection = C.STRUCTURE_SPAWN
+                                    break;
+                                case "s":
+                                    selection = C.STRUCTURE_STORAGE
+                                    break;
+                                default:
+                                    break;
+                            }
+                            //nono if it no no
+                            if (!selection){
+                                return
+                            }    
+                            let datafuckery2 = {
+                                building: selection,
+                                pos: {
+                                    x: theX,
+                                    y: thepos.y
+                                }
+                            }
+                                buildQue.push(datafuckery2);
+                        })
+                    }
                 }
+                let spawn = buildQue.findIndex(item => item.building === C.STRUCTURE_SPAWN);
+                let blueprintspawnpos = buildQue[spawn].pos
+                
+                function diff(a,b){return Math.abs(a-b);}
+
+                let difX = diff(blueprintspawnpos.x, src.pos.x)
+                let difY = diff(blueprintspawnpos.y, src.pos.y)
+                
+
+                    console.log("WE OUTTA THERE ", buildQue.length, " Also ", difX, " ", difY)
+                    console.log(JSON.stringify(buildQue))
+
+                buildQue.forEach(function (order){
+                    let ordernewx = order.pos.x += difX;
+                    let ordernewy = order.pos.y += difY;
+                    //ORDER UP!
+                console.log(this.createConstructionSite(ordernewx, ordernewy, order.building))
+
+                }, room)
+
+
+
+
+                } else {
+                return
+                }
+            }
                 //room.createConstructionSite(pos, type)
                 return
-            }
         }
-
-        /**
-     * Translates the blueprints into relative location.
-     * @param origionalpos
-     * @param changerate
-     * @returns {POS}
-     */
-    translator (origionalpos, changerate) {
-        let ab = changerate[0].x
-        let ba = changerate[0].y
-        let newx = +ab + +origionalpos.x
-        let newy = +ba + +origionalpos.y
-
-
-        return {
-            x: newx,
-            y: newy
-        }
-    }
         
-
-
-    
-    
-
-
+        
+            
+        }
 
 
         /**
