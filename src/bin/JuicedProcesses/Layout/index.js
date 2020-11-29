@@ -122,9 +122,9 @@ export default class Layout extends BaseProcess {
         let src = room.spawns[0] || undefined
         for (let type in want) {
             let amount = want[type] - ((have[type] || 0) + (sites[type] || []).length)
-                console.log(type, want[type], have[type] || 0, (sites[type] || []).length)
+                //console.log(type, want[type], have[type] || 0, (sites[type] || []).length)
             if (amount <= 0) continue
-            console.log(`Want ${amount} of ${type}`)
+            //console.log(`Want ${amount} of ${type}`)
 
             if (src.pos) {
                 if (src instanceof StructureSpawn) {
@@ -146,7 +146,6 @@ export default class Layout extends BaseProcess {
                                 y: i
                             }
                         }
-                        console.log(JSON.stringify(datafuckery))
                         blueprintXy.push(datafuckery)
                     }
                     
@@ -219,10 +218,6 @@ export default class Layout extends BaseProcess {
 
                 let difX = diff(blueprintspawnpos.x, src.pos.x)
                 let difY = diff(blueprintspawnpos.y, src.pos.y)
-                
-
-                    console.log("WE OUTTA THERE ", buildQue.length, " Also ", difX, " ", difY)
-                    console.log(JSON.stringify(buildQue))
 
                 buildQue.forEach(function (order){
                     let ordernewx = order.pos.x += difX;
