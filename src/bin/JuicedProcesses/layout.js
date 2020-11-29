@@ -83,10 +83,10 @@ export default class Layout extends BaseProcess {
                         if(!(room.memory.dirtRoadOrder)) {
                             this.dirtRoads(room, buildQue)
                         }
-                        this.tier1(level, room, buildQue)
+                        //this.tier1(level, room, buildQue)
                         break;
                     case 3:
-                        this.tier1(level, room, buildQue)
+                        //this.tier1(level, room, buildQue)
                         break;
                     case 4:
 
@@ -129,9 +129,17 @@ export default class Layout extends BaseProcess {
                 destin.push(room.controller)
                 //let planner = this.roadInfo()
                 for (let i = 0; i < destin.length; i++) {
-                    let pathplan = bs.pos.findPathTo(destin[i], {
-                        range: 3
-                    })
+                    let pathplan;
+                    if(destin == C.STRUCTURE_CONTROLLER){
+                        pathplan = bs.pos.findPathTo(destin[i], {
+                            range: 3
+                        })
+                    } else {
+                        pathplan = bs.pos.findPathTo(destin[i], {
+                            range: 1
+                        })
+                    }
+        
                     for (let q = 0; q < pathplan.length; q++) {
                         let datafuckeryroad = {
                             building: STRUCTURE_ROAD,
