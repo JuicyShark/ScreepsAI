@@ -1,5 +1,7 @@
 import C from '/include/constants'
-import { each } from 'lodash-es'
+import {
+  each
+} from 'lodash-es'
 import BaseProcess from './BaseProcess'
 
 //Child from Colony
@@ -18,30 +20,35 @@ export default class Intel extends BaseProcess {
   }
 
   run() {
-    if (this.segments.load(C.SEGMENTS.INTEL) === false) {
+    let intelLog = this.segments.load(C.SEGMENTS.INTEL)
+    if (intelLog === false) {
       this.segments.activate(C.SEGMENTS.INTEL)
       this.int.clearAllInterrupts()
       this.int.wait(C.INT_TYPE.SEGMENT, C.INT_STAGE.START, C.SEGMENTS.INTEL)
     } else {
       this.int.setInterrupt(C.INT_TYPE.VISION, C.INT_STAGE.START)
-      // this.sleep.sleep(10)
+      this.sleep.sleep(10)
     }
-    if (Game.flags.map) {
-      this.log.warn('Map rendering is enabled')
-      this.drawMap()
-      this.drawMapImage()
-    }
-    let mem = this.segments.load(C.SEGMENTS.INTEL) || {}
     const children = [
-      ['JuicedProcesses/colonyExpansion', {intelLog: mem.rooms }],
-      ['JuicedProcesses/layout', { intelLog: mem.rooms }]
-        ]
-        each(children,( [child, context={}]) => {
-          this.ensureChild(child, child, context)
-        })
+      ['JuicedProcesses/colonyExpansion', {
+        intelLog: intelLog.rooms
+      }],
+      ['JuicedProcesses/layout', {
+        intelLog: intelLog.rooms
+      }]
+    ]
+    each(children, ([child, context = {}]) => {
+      this.ensureChild(child, child, context)
+    })
   }
 
-  INTERRUPT({hook: {type,stage},key}) {
+  INTERRUPT({
+    hook: {
+      type,
+      stage
+    },
+    key
+  }) {
     this.log.info(`Collecting intel on ${key}`, )
     let room = Game.rooms[key]
     let mem = this.segments.load(C.SEGMENTS.INTEL) || {}
@@ -70,11 +77,25 @@ export default class Intel extends BaseProcess {
     let {
       mineralType
     } = mineral || {}
-    let smap = ({id, pos}) => ({
-      id, pos
+    let smap = ({
+      id,
+      pos
+    }) => ({
+      id,
+      pos
     })
-    let cmap = ({id, pos, body, hits, hitsMax }) => ({
-      id, pos, body, hits, hitsMax
+    let cmap = ({
+      id,
+      pos,
+      body,
+      hits,
+      hitsMax
+    }) => ({
+      id,
+      pos,
+      body,
+      hits,
+      hitsMax
     })
     hr[room.name] = {
       hostile: level && !my,
@@ -94,13 +115,10 @@ export default class Intel extends BaseProcess {
       },
       sources: room.find(C.FIND_SOURCES).map(smap),
       mineral: mineralType,
-      roomWorth:  0,
+      roomWorth: 0,
       //newBaseEvaluater(room.find(C.FIND_SOURCES).map(smap),  owner, name) || 0,
       ts: Game.time
     }
-    //    console.log(C.SEGMENTS.INTEL, mem.rooms.W6N1.owner)
     this.segments.save(C.SEGMENTS.INTEL, mem)
   }
-
- 
 }

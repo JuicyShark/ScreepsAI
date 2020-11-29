@@ -72,7 +72,6 @@ export default class HarvestManager extends BaseProcess {
             expand([6, C.CARRY, 6, C.MOVE]),
             expand([4, C.CARRY, 4, C.MOVE]),
             expand([2, C.CARRY, 2, C.MOVE]),
-            expand([1, C.CARRY, 1, C.MOVE])
           ],
           priority: 3
         })

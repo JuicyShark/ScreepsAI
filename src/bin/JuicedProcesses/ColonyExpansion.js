@@ -32,25 +32,32 @@ export default class ColonyExpansion extends BaseProcess {
   }
 
   run() {
-
-    if (this.segments.load(C.SEGMENTS.INTEL) === false) {} else {
+    console.log(this)
+    if (this.segments.load(C.SEGMENTS.INTEL) === false) {
+      this.log.info(`Unable to find intel segment sleeping for 50 Ticks`)
+      this.sleep.sleep(50)
+    } else {
       let intelLog = this.segments.load(C.SEGMENTS.INTEL)
       let visionRooms = Game.rooms;
       let allFlags = Game.flags
 
-      let bestRoom = this.findBestRooms(intelLog)[0]
+     
       for (let room in visionRooms) {
-          if(!intelLog.rooms){
-              break;
-          }
-        let roomMem = intelLog.rooms[`${room}`]
-        if (room == bestRoom.roomName) {
-          console.log(`placing flag at ${bestRoom.roomName}`)
-          let flagPlacement = new RoomPosition(25, 25, `${bestRoom.roomName}`)
-          flagPlacement.createFlag('claim')
+        if (!intelLog.rooms) {
+          this.log.info(`cannot find anything useful in Intel, Sleeping for 50 Ticks`)
+          this.sleep.sleep(50)
+        } else {
+          if(Game.GCL >= Memory.rooms.length){
+          let bestRoom = this.findBestRooms(intelLog)[0]
+          let roomMem = intelLog.rooms[`${room}`]
+          if (room == bestRoom.roomName) {
+            console.log(`placing flag at ${bestRoom.roomName}`)
+            let flagPlacement = new RoomPosition(25, 25, `${bestRoom.roomName}`)
+            flagPlacement.createFlag('claim')
+          }}
         }
       }
-      this.sleep.sleep(10000)
+      this.sleep.sleep(10)
     }
   }
   //find best room out of all of intel segment currently
@@ -60,7 +67,7 @@ export default class ColonyExpansion extends BaseProcess {
     let bestRooms = []
     let bestRoom = 0
     for (let room in intelLog.rooms) {
-        //roomWorth object key, intelLog.rooms[room] iswhat loop is 
+      //roomWorth object key, intelLog.rooms[room] iswhat loop is 
       let roomWorth = intelLog.rooms[room].roomWorth
       if (roomWorth >= bestRoom) {
         bestRoom = roomWorth
@@ -76,16 +83,16 @@ export default class ColonyExpansion extends BaseProcess {
   newBaseEvaluater(sources, owner, mineral, name) {
     const sourceP = 5
     let totalPoints
-
-    if (owner == C.USERNAME || C.USER.room.controller.level >= 2){
+    console.log(`base eval info coming up: like is our controller level 2 or more? ${C.USER.room.controller.level}`)
+    if (owner == C.USERNAME || C.USER.room.controller.level >= 2) {
       totalPoints = 0
     } else {
       let pos = [C.USER.room.name, name]
       let distance = this.distanceCalcFromRoomName(pos)
-      console.log(distance)
+      console.log(`room distance from home ${distance}`)
       totalPoints = sources.length * sourceP - distance
-      console.log(totalPoints)
     }
+    console.log(`our total point value: ${totalPoints}`)
     return totalPoints
   }
 

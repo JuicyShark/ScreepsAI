@@ -7,33 +7,34 @@ import reduce from 'lodash-es/reduce'
 import C from '/include/constants'
 
 export default class SpawnManager {
-  constructor (context) {
+  constructor(context) {
     this.context = context
-    this.sleeper = this.context.queryPosisInterface('sleep')
+    this.sleep = this.context.queryPosisInterface('sleep')
     this.spawn = this.context.queryPosisInterface('spawn')
     this.kernel = this.context.queryPosisInterface('JuicedOS/kernel')
   }
-  get id () { return this.context.id }
-  get memory () {
+  get id() {
+    return this.context.id
+  }
+  get memory() {
     return this.context.memory
   }
-  get log () {
+  get log() {
     return this.context.log
   }
-  get queue () {
+  get queue() {
     return this.spawn.queue
   }
-  get status () {
+  get status() {
     return this.spawn.status
   }
 
-  run () {
-    this.context.log.info(`Sleeping for 5 ticks (${Game.time})`)
-    //this.sleeper.sleep(5)
+  run() {
     this.cleanup()
+   
     if (this.queue.length) {
       let spawns = filter(Game.spawns, (spawn) => !spawn.spawning && spawn.isActive())
-      for (let qi = 0; qi < this.queue.length; qi++) {
+      for(let qi = 0; qi < this.queue.length; qi++) {
         let queue = this.queue[qi]
         let drop = []
         for (let i = 0; i < queue.length; i++) {
@@ -68,22 +69,45 @@ export default class SpawnManager {
                 if (spawn.room.storage && spawn.room.storage.store.energy < 10000) {
                   rank -= 10000
                 }
-                return { index, dist, energy, rank, spawn }
+                return {
+                  index,
+                  dist,
+                  energy,
+                  rank,
+                  spawn
+                }
               })
               cspawns = sortBy(cspawns, (s) => s.rank)
               let bodies = map(item.body, (body) => {
                 let cost = reduce(body, (l, v) => l + C.BODYPART_COST[v], 0)
-                return { cost, body }
+                return {
+                  cost,
+                  body
+                }
               })
-              let { index, energy, spawn } = cspawns.pop()
-              let { body } = maxBy(filter(bodies, (b) => b.cost <= energy), 'cost') || { body: false }
+              let {
+                index,
+                energy,
+                spawn
+              } = cspawns.pop()
+              let {
+                body
+              } = maxBy(filter(bodies, (b) => b.cost <= energy), 'cost') || {
+                body: false
+              }
               if (!body) continue
               spawns.splice(index, 1)
-              let ret = spawn.spawnCreep(body, item.statusId, { memory: { _p: this.kernel.currentId } })
+              let ret = spawn.spawnCreep(body, item.statusId, {
+                memory: {
+                  _p: this.kernel.currentId
+                }
+              })
               this.context.log.info(`Spawning ${item.statusId}`)
               if (ret === C.OK) {
+ //               spawnTime = spawn.spawning.needTime * 2
                 status.status = C.EPosisSpawnStatus.SPAWNING
               } else {
+ //               spawnTime = 5
                 status.status = C.EPosisSpawnStatus.ERROR
                 status.message = this.spawnErrMsg(ret)
               }
@@ -100,18 +124,28 @@ export default class SpawnManager {
         if (queue.length) break
       }
     }
+
+    //TODO: Need to make dynamic based on any spawn
+    console.log(Game.spawns[0])
+    if(Game.spawns.HomeBase.spawning){
+      this.context.log.info(`Sleeping for ${Game.spawns.HomeBase.spawning.needTime * 2} ticks (${Game.time})`)
+    this.sleep.sleep(Game.spawns.HomeBase.spawning.needTime * 2)
+    }
   }
-  cleanup () {
+  cleanup() {
     let keys = Object.keys(this.status)
     each(keys, k => {
       if (!this.status[k]) return
-      let { name, status } = this.status[k]
+      let {
+        name,
+        status
+      } = this.status[k]
       if (status !== C.EPosisSpawnStatus.QUEUED && !Game.creeps[name || k]) {
         delete this.status[k]
       }
     })
   }
-  spawnErrMsg (err) {
+  spawnErrMsg(err) {
     let errors = {
       [C.ERR_NOT_OWNER]: 'You are not the owner of this spawn.',
       [C.ERR_NAME_EXISTS]: 'There is a creep with the same name already.',

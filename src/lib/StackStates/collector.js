@@ -4,7 +4,7 @@ import values from 'lodash-es/values'
 
 export default {
   collector (target, resourceType = C.RESOURCE_ENERGY) {
-    this.status = 'collector'
+    this.status = 'idle collector'
     let tgt = this.resolveTarget(target)
     if (!this.creep.carryCapacity) {
       this.status = 'dying'

@@ -45,11 +45,11 @@ export default class StackStateCreep extends states {
         return this.kernel.killProcess(this.context.id)
       }
       this.status = `no creep ${status.status}`
-      return this.log.info(`Creep not ready ${status.status}`)// Still waiting on creep
+      return //this.log.info(`Creep not ready ${status.status}`)// Still waiting on creep
     }
     try {
       this.runStack()
-      // this.debug = true
+      this.debug = true
       if (this.debug) {
         this.say(this.stack.slice(-1)[0])
       }
