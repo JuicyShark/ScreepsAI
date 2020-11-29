@@ -58,6 +58,7 @@ export default class Layout extends BaseProcess {
         const room = this.room
         const { controller: { level } } = this.room
         //
+        this.sleep.sleep(10)
         switch (room.controller.level) {
             case 1:
                 //maybs put init
@@ -227,8 +228,31 @@ export default class Layout extends BaseProcess {
                     let ordernewx = order.pos.x += difX;
                     let ordernewy = order.pos.y += difY;
                     //ORDER UP!
-                console.log(this.createConstructionSite(ordernewx, ordernewy, order.building))
+                let freespot = this.lookForAt(LOOK_STRUCTURES, ordernewx, ordernewy) | [];
+                if(freespot.length == 0){
+                switch(this.createConstructionSite(ordernewx, ordernewy, order.building)) {
+                    case 0:
+                        console.log("Creating ", order.building, " at (x,y) : ", ordernewx, " ", ordernewy)
+                        break;
+                    case -1:
+                        console.log("Not Owner")
+                        break;
+                    case -7:
+                        console.log("Bad Location!")
+                        break;
+                    case -8:
+                        console.log("Construction Site Cap!")
+                        break;
+                    case -10:
+                        console.log("Bad Location for ", order.building," ", ordernewx," ",ordernewy)
+                        break;
+                    case -14:
+                        break;
+                }
 
+
+
+                }
                 }, room)
 
 
