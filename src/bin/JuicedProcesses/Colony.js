@@ -72,6 +72,9 @@ export default class Colony extends BaseProcess {
     }
     this.ensureChild('intel', 'JuicedProcesses/intel')
     this.ensureChild('flagManager', 'JuicedProcesses/flagManager')
+    // want this run every 1000 ticks or so probably longer
+    this.ensureChild('layout', 'JuicedProcesses/layout')
+    this.ensureChild('colonyExpansion', 'JuicedProcesses/colonyExpansion')
     this.sleep.sleep(5)
   }
 

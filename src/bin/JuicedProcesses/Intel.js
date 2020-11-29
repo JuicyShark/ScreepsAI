@@ -82,7 +82,7 @@ export default class Intel {
       },
       sources: room.find(C.FIND_SOURCES).map(smap),
       mineral: mineralType,
-      roomWorth: this.newBaseEvaluater(hr[room.name].sources, hr[room.name].owner, hr[room.name].mineral, hr[room.name].name),
+      roomWorth: this.newBaseEvaluater(room.find(C.FIND_SOURCES).map(smap),  owner, name) || 0,
       ts: Game.time
     }
     //    console.log(C.SEGMENTS.INTEL, mem.rooms.W6N1.owner)
@@ -93,7 +93,7 @@ export default class Intel {
     const sourceP = 5
     let totalPoints
 
-    if (owner == C.USERNAME) {
+    if (owner == C.USERNAME || C.USER.room.controller.level >= 2){
       totalPoints = 0
     } else {
       let pos = [C.USER.room.name, name]

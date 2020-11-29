@@ -47,7 +47,7 @@ export default class Room extends BaseProcess {
       ['JuicedProcesses/harvestManager', { room: this.roomName }],
       ['JuicedProcesses/upgradeManager', { room: this.roomName }],
       ['JuicedProcesses/towerDefense', { room: this.roomName }],
-      ['JuicedProcesses/layout', { room: this.roomName }] ]
+        ]
     each(children, ([child, context = {}]) => {
       this.ensureChild(child, child, context)
     })
@@ -62,7 +62,7 @@ export default class Room extends BaseProcess {
           expand([1, C.CARRY, 1, C.MOVE]),
           expand([4, C.CARRY, 4, C.MOVE])
         ],
-        priority: 2
+        priority: 4
       })
 
       this.ensureChild(`feeder_${cid}`, 'JuicedProcesses/stackStateCreep', {
@@ -77,7 +77,7 @@ export default class Room extends BaseProcess {
         body: [
          expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE])
         ],
-        priority: 4
+        priority: 5
       })
        this.ensureChild(`builder_${cid}`, 'JuicedProcesses/stackStateCreep', {
          spawnTicket: cid,

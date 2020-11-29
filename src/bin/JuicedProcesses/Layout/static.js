@@ -15,8 +15,8 @@ export default {
     max: 7,
     layout: {
       0: ' reSer ',
-      1: ' errte ',
-      2: ' ersre ',
+      1: ' ertre ',
+      2: ' ercre ',
       3: ' erere ',
       4: ' rerer '
   }

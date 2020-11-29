@@ -38,6 +38,9 @@ export default class FlagManager extends BaseProcess {
 
       let bestRoom = this.findBestRooms(intelLog)[0]
       for (let room in visionRooms) {
+          if(!intelLog.rooms){
+              break;
+          }
         let roomMem = intelLog.rooms[`${room}`]
         if (room == bestRoom.roomName) {
           console.log(`placing flag at ${bestRoom.roomName}`)
