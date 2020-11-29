@@ -1,3 +1,5 @@
+import C from '/include/constants'
+
 export default {
     buildAt (type, target, opts = {}) {
         if (!opts.work) {
@@ -49,7 +51,7 @@ export default {
             return this.build(cs)
           }
         }
-        let [container] = this.creep.room.lookNear(C.LOOK_STRUCTURES, this.creep.room.spawns[0].pos)
+        let [container] = this.creep.room.lookNear(C.LOOK_STRUCTURES, this.C.USER.room.pos)
         .filter((s) => s.structureType === C.STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] < s.storeCapacity)
         let tgt = this.creep.room.storage || container || this.creep.room.spawns.find(s => s.energy < s.energyCapacity) || this.creep.room.extensions.find(s => s.energy < s.energyCapacity)
         if (tgt) {

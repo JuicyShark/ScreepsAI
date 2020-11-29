@@ -124,7 +124,7 @@ export default class Intel {
     }
     let pos1 = newpos[0] - newpos[2]
     let pos2 = newpos[1] - newpos[3]
-    distance = pos1 + pos2
-    return Math.abs(distance)
+    distance = Math.abs(pos1) + Math.abs(pos2)
+    return distance
   }
 }
