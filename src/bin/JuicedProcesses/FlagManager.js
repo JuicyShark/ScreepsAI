@@ -1,5 +1,6 @@
 import C from '/include/constants'
 import BaseProcess from './BaseProcess'
+import { expand } from "/etc/common"
 
 export default class FlagManager extends BaseProcess {
   constructor(context) {
@@ -41,7 +42,7 @@ export default class FlagManager extends BaseProcess {
       this.checkFlag(flag)
 
     }
-    /** if (Game.flags.claim) {
+     if (Game.flags.claim) {
       let { pos: { x, y, roomName } } = Game.flags.claim
       let room = Game.rooms[roomName]
       if (room && room.controller.my) {
@@ -49,18 +50,8 @@ export default class FlagManager extends BaseProcess {
         invoke(room.find(FIND_HOSTILE_CONSTRUCTION_SITES), 'remove')
         Game.flags.claim.remove()
       } else {
-        let cid = this.ensureCreep(`claimer_${roomName}`, {
-          rooms: [roomName],
-          body: [[MOVE, CLAIM]],
-          priority: 10
-        })
-        console.log(roomName, cid)
-        this.ensureChild(`claimer_${roomName}_${cid}`, 'JuicedProcesses/stackStateCreep', {
-          spawnTicket: cid,
-          base: ['claimer', { x, y, roomName }]
-        })
       }
-    } */
+    } 
   }
 
   /**
@@ -92,19 +83,26 @@ export default class FlagManager extends BaseProcess {
   }
 
   /**
-   *  LDM LONG DISTANCE MINING
-   *  This one is gonna be the bees knees
-   *  @param flag Flag Object
-   */
-  ldm(flag) {
-
-  }
-
-  /**
    * This will do some attack logic on an enemy room or if you just want a bunch of trigger happy attack creeps in a room... for "Defence"
    *  @param flag Flag Object
    */
   attack(flag){
+
+        const cid = this.ensureCreep('protector_2', {
+          rooms: [flag.pos.roomName],
+          body: [
+            expand([2, C.ATTACK, 2, C.MOVE]),
+            expand([1, C.ATTACK, 1, C.MOVE])
+          ],
+          priority: 0
+        })
+        this.ensureChild(`protector_${cid}`, 'JuicedProcesses/stackStateCreep', {
+          spawnTicket: cid,
+          base: ['protector', flag.pos.roomName]
+        })
+        flag.remove();
+    
+
 
   }
 
