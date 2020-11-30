@@ -70,13 +70,14 @@ export default class Layout extends BaseProcess {
                         this.sleep.sleep(10)
                     }*/
 
-                console.log("Running Layout!", level)
+                //console.log("Running Layout!", level)
 
                 switch (level) {
                     case 1:
                         if(this.dirtRoads(room, buildQue) == true) {
                         } else {
                             console.log(this.dirtRoads(room, buildQue))
+                            this.sleep.sleep(5)
                         }
                         break;
                     case 2:
