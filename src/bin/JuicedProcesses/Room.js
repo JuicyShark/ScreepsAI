@@ -8,36 +8,36 @@ import { expand } from "/etc/common"
 
 
 export default class Room extends BaseProcess {
-  constructor (context) {
+  constructor(context) {
     super(context)
     this.context = context
     this.kernel = context.queryPosisInterface('baseKernel')
     this.segments = context.queryPosisInterface('segments')
   }
 
-  get log () {
+  get log() {
     return this.context.log
   }
 
-  get memory () {
+  get memory() {
     return this.context.memory
   }
 
-  get children () {
+  get children() {
     this.memory.children = this.memory.children || {}
     return this.memory.children
   }
 
-  get roomName () {
+  get roomName() {
     return this.memory.room
   }
 
-  get room () {
+  get room() {
     return Game.rooms[this.roomName]
   }
-  
 
-  run () {
+
+  run() {
     if (!this.room || !this.room.controller || !this.room.controller.my) {
       this.log.warn(`Invalid Room, terminating. (${this.roomName},${JSON.stringify(this.memory)})`)
       this.kernel.killProcess(this.context.id)
@@ -47,16 +47,22 @@ export default class Room extends BaseProcess {
 
 
     const children = [
-      ['JuicedProcesses/harvestManager', { room: this.roomName }],
-      ['JuicedProcesses/upgradeManager', { room: this.roomName }],
-      ['JuicedProcesses/towerDefense', { room: this.roomName }],
-        ]
+      ['JuicedProcesses/harvestManager', {
+        room: this.roomName
+      }],
+      ['JuicedProcesses/upgradeManager', {
+        room: this.roomName
+      }],
+      ['JuicedProcesses/towerDefense', {
+        room: this.roomName
+      }],
+    ]
 
-    
+
     each(children, ([child, context = {}]) => {
       this.ensureChild(child, child, context)
     })
-    
+
 
     this.feederOrganiser()
     this.builderOrganiser()
@@ -76,43 +82,43 @@ export default class Room extends BaseProcess {
     let [container] = this.room.lookNear(C.LOOK_STRUCTURES, this.room.find(C.FIND_STRUCTURES).filter((s) => s.structureType === C.STRUCTURE_CONTAINER))
     let storage = this.room.find(C.FIND_STRUCTURES).filter(s => s.structureType === C.STRUCTURE_STORAGE && s.hits < (s.hitsMax / 1.5))
 
-    if(container || storage){
-    var feeders = 1;
-    for (let i = 0; i < feeders; i++) {
-      const cid = this.ensureCreep(`feeder_${i}`, {
-        rooms: [this.roomName],
-        body: [
-          expand([1, C.CARRY, 1, C.MOVE]),
-          expand([4, C.CARRY, 4, C.MOVE])
-        ],
-        priority: 4
-      })
+    if (container || storage) {
+      var feeders = 1;
+      for (let i = 0; i < feeders; i++) {
+        const cid = this.ensureCreep(`feeder_${i}`, {
+          rooms: [this.roomName],
+          body: [
+            expand([1, C.CARRY, 1, C.MOVE]),
+            expand([4, C.CARRY, 4, C.MOVE])
+          ],
+          priority: 4
+        })
 
-      this.ensureChild(`feeder_${cid}`, 'JuicedProcesses/stackStateCreep', {
-        spawnTicket: cid,
-        base: ['feeder', this.roomName]
-      })
+        this.ensureChild(`feeder_${cid}`, 'JuicedProcesses/stackStateCreep', {
+          spawnTicket: cid,
+          base: ['feeder', this.roomName]
+        })
+      }
     }
-  }
   }
 
   /**
    * Honestly just sick of seeing everyinthing in one damn run function
    * Spawns builder if there are construction sites
    */
-  builderOrganiser(){
+  builderOrganiser() {
     if (this.room.find(C.FIND_MY_CONSTRUCTION_SITES).length) {
       const cid = this.ensureCreep('builder_1', {
         rooms: [this.roomName],
         body: [
-         expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE])
+          expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE])
         ],
         priority: 5
       })
-       this.ensureChild(`builder_${cid}`, 'JuicedProcesses/stackStateCreep', {
-         spawnTicket: cid,
-          base: ['builder', this.roomName]
-       })
+      this.ensureChild(`builder_${cid}`, 'JuicedProcesses/stackStateCreep', {
+        spawnTicket: cid,
+        base: ['builder', this.roomName]
+      })
     }
 
   }
@@ -122,7 +128,7 @@ export default class Room extends BaseProcess {
    * checks for hostiles and ensures the spawn of a creep if needed?
    * @param {*} hostiles  
    */
-  checkHostiles(hostiles){
+  checkHostiles(hostiles) {
     if (hostiles.length) {
       if (true || hostiles[0].owner.username === 'Invader') {
         const cid = this.ensureCreep('protector_1', {
@@ -141,7 +147,7 @@ export default class Room extends BaseProcess {
     }
   }
 
-  toString () {
+  toString() {
     return `${this.roomName} ${this.room.level}/${this.room.controller.level}`
   }
 }
