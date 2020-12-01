@@ -37,7 +37,8 @@ export default {
       this.runStack()
     } else {
       if(this.creep.pos.roomName !== C.USER.room.name){
-        this.push('moveToRoom', C.USER.room)
+        let tgt = {x: C.USER.pos.x, y: C.USER.pos.y, roomName: C.USER.room.name}
+        this.push('moveToRoom', tgt)
         return this.runStack()
       } else {
       this.status = 'Looking for energy'

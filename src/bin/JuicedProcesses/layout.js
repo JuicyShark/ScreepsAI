@@ -125,7 +125,7 @@ export default class Layout extends BaseProcess {
     dirtRoads(room, buildQue) {
         switch (room.memory.dirtRoadOrder) {
             case undefined:
-                var bs = room.spawns[0];
+                var bs = C.USER;
                 var destin = room.find(FIND_SOURCES)
                 destin.push(room.controller)
                 //let planner = this.roadInfo()
