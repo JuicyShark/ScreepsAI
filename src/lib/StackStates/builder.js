@@ -36,6 +36,10 @@ export default {
       this.push('moveInRange', site.id, 3)
       this.runStack()
     } else {
+      if(this.creep.pos.roomName !== C.USER.room.name){
+        this.push('moveToRoom', C.USER.room)
+        return this.runStack()
+      } else {
       this.status = 'Looking for energy'
       let tgt = room.storage || room.containers.find(c => c.store.energy) ||  room.structures[STRUCTURE_SPAWN][0] || room.structures[STRUCTURE_SPAWN] || room.structures[STRUCTURE_EXTENSION]
       if (room.storage && room.storage.store.energy < 1000) {
@@ -55,6 +59,7 @@ export default {
           return this.runStack()
         }
       }
+    }
     } 
   }
 }
