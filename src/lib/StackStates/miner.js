@@ -22,7 +22,7 @@ export default {
     }
     if (tgt instanceof Source) {
       if (tgt.energy) {
-        this.push('repeat', 5, 'harvest', tgt.id)
+        this.push('repeat', this.creep.ticksToLive, 'harvest', tgt.id)
         this.push('moveNear', tgt.id)
       } else {
         this.push('sleep', Game.time + tgt.ticksToRegeneration)
