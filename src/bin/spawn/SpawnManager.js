@@ -97,9 +97,11 @@ export default class SpawnManager {
               }
               if (!body) continue
               spawns.splice(index, 1)
+              console.log(`spawning someone, homeRoom is: ${item.rooms[0]}`)
               let ret = spawn.spawnCreep(body, item.statusId, {
                 memory: {
-                  _p: this.kernel.currentId
+                  _p: this.kernel.currentId,
+                  homeRoom: item.rooms[0]
                 }
               })
               this.context.log.info(`Spawning ${item.statusId}`)
@@ -126,7 +128,7 @@ export default class SpawnManager {
     }
 
     //TODO: Need to make dynamic based on any spawn
-    console.log(Game.spawns[0])
+    //console.log(Game.spawns[0])
     if(Game.spawns.HomeBase.spawning){
       this.context.log.info(`Sleeping for ${Game.spawns.HomeBase.spawning.needTime * 2} ticks (${Game.time})`)
     this.sleep.sleep(Game.spawns.HomeBase.spawning.needTime * 2)

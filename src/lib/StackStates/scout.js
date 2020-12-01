@@ -51,7 +51,7 @@ export default {
         return this.runStack()
       } 
       // guess we keep on scouting
-      else if(this.creep.pos.roomName != exit.roomName){
+      else if(this.creep.pos.roomName != exit.roomName && exit.roomName){
         this.push('moveToRoom', exit)
         return this.runStack()
       } else {
