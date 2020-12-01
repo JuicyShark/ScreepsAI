@@ -15,17 +15,11 @@ export default {
       return this.runStack()
     }
     let { room, pos } = this.creep
+    console.log(room, this.roomName)
     if (this.creep.carry.energy) {
       this.status = 'Looking for target'
       let sites = room.find(C.FIND_MY_CONSTRUCTION_SITES)
       if (!sites.length) {
-        let repairSite = room.find(C.FIND_STRUCTURES, { filter: s => s.hits < (s.hitsMax / 2 )}) 
-        if(repairSite.length  && repairSite != null){
-          let hitsMax = Math.ceil(sum(values(this.creep.carry)) / (cache.work * C.BUILD_POWER))
-          this.push('repeat', hitsMax, 'repair', repairSite.id)
-          this.push('moveInRange', repairSite.id, 3)
-          return this.runStack() 
-        }
         this.push('suicide');
         return this.runStack();
       }
@@ -36,13 +30,11 @@ export default {
       this.push('moveInRange', site.id, 3)
       this.runStack()
     } else {
-      if(this.creep.pos.roomName !== C.USER.room.name){
-        let tgt = {x: C.USER.pos.x, y: C.USER.pos.y, roomName: C.USER.room.name}
-        this.push('moveToRoom', tgt)
-        return this.runStack()
-      } else {
       this.status = 'Looking for energy'
-      let tgt = room.storage || room.containers.find(c => c.store.energy) ||  room.structures[STRUCTURE_SPAWN][0] || room.structures[STRUCTURE_SPAWN] || room.structures[STRUCTURE_EXTENSION]
+      let tgt = room.storage || room.containers.find(c => c.store.energy) ||  room.structures[STRUCTURE_SPAWN] || room.structures[STRUCTURE_SPAWN] || room.structures[STRUCTURE_EXTENSION]
+      if(!tgt){
+        tgt = C.USER.room.storage || C.USER.room.containers.find(c => c.store.energy) ||  C.USER.room.structures[STRUCTURE_SPAWN][0] || C.USER.room.structures[STRUCTURE_SPAWN] || C.USER.room.structures[STRUCTURE_EXTENSION]
+      }
       if (room.storage && room.storage.store.energy < 1000) {
         let { x, y, roomName } = room.storage.pos
         this.push('repeat',5,'flee', [{ pos: { x, y, roomName }, range: 5 }])
@@ -63,4 +55,4 @@ export default {
     }
     } 
   }
-}
+
