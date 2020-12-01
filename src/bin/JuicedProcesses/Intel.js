@@ -27,7 +27,7 @@ export default class Intel extends BaseProcess {
       this.int.wait(C.INT_TYPE.SEGMENT, C.INT_STAGE.START, C.SEGMENTS.INTEL)
     } else {
       this.int.setInterrupt(C.INT_TYPE.VISION, C.INT_STAGE.START)
-      this.sleep.sleep(10)
+      this.sleep.sleep(5)
     }
     const children = [
       ['JuicedProcesses/colonyExpansion', {
