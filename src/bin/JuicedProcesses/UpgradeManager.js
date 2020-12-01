@@ -37,7 +37,7 @@ export default class UpgradeManager extends BaseProcess {
             }
             for(let i = 0; i < want; i++) {
               const cid = this.ensureCreep(`upgrader_${i}`, {
-                rooms: [this.roomName],
+                rooms: [this.room.name],
                 body: [
                   expand([7, C.CARRY, 3, C.WORK, 3, C.MOVE ]),
                   expand([4, C.CARRY, 2, C.WORK, 2, C.MOVE]),
@@ -47,7 +47,7 @@ export default class UpgradeManager extends BaseProcess {
               })
               this.ensureChild(`upgrader_${cid}`, 'JuicedProcesses/stackStateCreep', {
                 spawnTicket: cid,
-                base: ['upgrader', this.roomName]
+                base: ['upgrader', this.room.name]
               })   
             }
           }
