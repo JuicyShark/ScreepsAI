@@ -35,7 +35,7 @@ export default class FlagManager extends BaseProcess {
    *  Runs the Flag Logic. Located in FlagManager.js
    */
   run() {
-
+    this.sleep.sleep(50)
     //using for f
     for (let flag in Game.flags) {
 
