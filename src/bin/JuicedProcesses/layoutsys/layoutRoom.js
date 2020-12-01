@@ -65,7 +65,7 @@ export default {
         let src = room.spawns[0] || room.controller
         for (let type in want) {
             let amount = want[type] - ((have[type] || 0) + (sites[type] || []).length)
-            console.log(type, want[type], have[type] || 0, (sites[type] || []).length)
+            //console.log(type, want[type], have[type] || 0, (sites[type] || []).length)
             if (amount <= 0) continue
             let positions = [
                 ...allSites,
