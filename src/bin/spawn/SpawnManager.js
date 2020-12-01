@@ -31,10 +31,9 @@ export default class SpawnManager {
 
   run() {
     this.cleanup()
-   
     if (this.queue.length) {
       let spawns = filter(Game.spawns, (spawn) => !spawn.spawning && spawn.isActive())
-      for(let qi = 0; qi < this.queue.length; qi++) {
+      for (let qi = 0; qi < this.queue.length; qi++) {
         let queue = this.queue[qi]
         let drop = []
         for (let i = 0; i < queue.length; i++) {
@@ -97,7 +96,6 @@ export default class SpawnManager {
               }
               if (!body) continue
               spawns.splice(index, 1)
-              console.log(`spawning someone, homeRoom is: ${item.rooms[0]}`)
               let ret = spawn.spawnCreep(body, item.statusId, {
                 memory: {
                   _p: this.kernel.currentId,
@@ -106,13 +104,18 @@ export default class SpawnManager {
               })
               this.context.log.info(`Spawning ${item.statusId}`)
               if (ret === C.OK) {
- //               spawnTime = spawn.spawning.needTime * 2
                 status.status = C.EPosisSpawnStatus.SPAWNING
+ //               console.log(`Sleeping for ${spawn.spawning.needTime * 2} ticks (${Game.time})`)
+  //              this.sleep.sleep(spawn.spawning.needTime * 2)
               } else {
- //               spawnTime = 5
                 status.status = C.EPosisSpawnStatus.ERROR
                 status.message = this.spawnErrMsg(ret)
               }
+ //             if (status.status == C.EPosisSpawnStatus.SPAWNING) {
+ //               this.context.log.info(`Sleeping for ${spawn.spawning.needTime * 2} ticks (${Game.time})`)
+ //               console.log(`Sleeping for ${spawn.spawning.needTime * 2} ticks (${Game.time})`)
+  //              this.sleep.sleep(spawn.spawning.needTime * 2)
+  //            }
             }
           } catch (e) {
             status.status = C.EPosisSpawnStatus.ERROR
@@ -125,13 +128,6 @@ export default class SpawnManager {
         }
         if (queue.length) break
       }
-    }
-
-    //TODO: Need to make dynamic based on any spawn
-    //console.log(Game.spawns[0])
-    if(Game.spawns.HomeBase.spawning){
-      this.context.log.info(`Sleeping for ${Game.spawns.HomeBase.spawning.needTime * 2} ticks (${Game.time})`)
-    this.sleep.sleep(Game.spawns.HomeBase.spawning.needTime * 2)
     }
   }
   cleanup() {
