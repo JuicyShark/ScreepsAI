@@ -81,16 +81,19 @@ export default {
           this.creep.travelTo(tgt, opts)
         }
       },
-      moveNear (target, opts = {maxOps: 1500}) {
+      //id of object or object itself to path too 
+      //can include rooms with
+      moveNear (target, opts = {}) {
         if (typeof opts.roomCallback === 'string') {
           opts.roomCallback = new Function(opts.roomCallback)
         }
+        //getobject by ID
         let tgt = this.resolveTarget(target)
         if (this.creep.pos.isNearTo(tgt)) {
           this.pop()
           this.runStack()
         } else {
-          this.creep.travelTo(tgt, opts)
+          this.creep.moveTo(tgt, opts)
         }
       },
       moveInRange (target, range) {
