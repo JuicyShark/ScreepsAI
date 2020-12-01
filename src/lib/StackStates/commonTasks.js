@@ -60,7 +60,6 @@ export default {
           return this.runStack()
         } else {
           tgt = C.USER.room.storage  || C.USER.room.lookNear(C.LOOK_STRUCTURES, C.USER.pos).filter((s) => s.structureType === C.STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] < s.storeCapacity) ||C.USER.room.spawns.find(s => s.energy < s.energyCapacity) || C.USER.room.extensions.find(s => s.energy < s.energyCapacity)
-          console.log(`going back to ${C.USER.name}`)
           this.push('transfer', tgt.id, res)
           this.push('moveNear', tgt.id)
           return this.runStack()

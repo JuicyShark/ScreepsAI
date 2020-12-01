@@ -32,7 +32,6 @@ export default class ColonyExpansion extends BaseProcess {
   }
 
   run() {
-    console.log(this)
     if (this.segments.load(C.SEGMENTS.INTEL) === false) {
       this.log.info(`Unable to find intel segment sleeping for 50 Ticks`)
       this.sleep.sleep(50)

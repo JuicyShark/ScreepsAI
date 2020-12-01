@@ -39,8 +39,8 @@ export default class FlagManager extends BaseProcess {
     //using for f
     for (let flag in Game.flags) {
 
-      flag.room ? this.checkFlag(flag) :
-console.log("Getting Flag Manager ready")
+//      flag.room ? this.checkFlag(flag) :
+// console.log("Getting Flag Manager ready")
 
     }
   }

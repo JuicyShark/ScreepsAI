@@ -65,9 +65,7 @@ export default {
       return this.runStack()
     }
     let creeps = tgt.findInRange(C.FIND_MY_CREEPS, 2)
-    console.log(creeps.map(c => c.memory.group === wgroup))
     creeps = creeps.filter(c => c.memory.group === wgroup && c.carry.energy > 10)
-    console.log(creeps)
     const creep = this.creep.pos.findClosestByRange(creeps)
     if (creep) {
       const vis = this.creep.room.visual
