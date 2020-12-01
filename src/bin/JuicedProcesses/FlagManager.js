@@ -37,21 +37,12 @@ export default class FlagManager extends BaseProcess {
   run() {
 
     //using for f
-    for (flag in Game.flags) {
+    for (let flag in Game.flags) {
 
-      this.checkFlag(flag)
+      flag.room ? this.checkFlag(flag) :
+console.log("Getting Flag Manager ready")
 
     }
-     if (Game.flags.claim) {
-      let { pos: { x, y, roomName } } = Game.flags.claim
-      let room = Game.rooms[roomName]
-      if (room && room.controller.my) {
-        invoke(room.find(FIND_HOSTILE_STRUCTURES), 'destroy')
-        invoke(room.find(FIND_HOSTILE_CONSTRUCTION_SITES), 'remove')
-        Game.flags.claim.remove()
-      } else {
-      }
-    } 
   }
 
   /**
@@ -64,6 +55,8 @@ export default class FlagManager extends BaseProcess {
 
     switch (name) {
       case "mining":
+        this.checkVision(flag) ? this.ldm(flag) : this.keepVision(flag)
+        this.keepVision(flag)
         this.ldm(flag)
         break;
       case "attack":
@@ -119,9 +112,27 @@ export default class FlagManager extends BaseProcess {
    * @param flag Flag Object
    */
   keepVision(flag){
+    const cid = this.ensureCreep('claimer', {
+      rooms: [flag.pos.roomName],
+      body: [ MOVE, CLAIM ],
+      priority: 10
+    })
+    this.ensureChild(`claimer_${cid}`, 'JuicedProcesses/stackStateCreep', {
+      spawnTicket: cid,
+      base: ['claimer', flag.pos.roomName]
+    })
 
     //flag.room == undefined then we dont have vision. RoomObject unseeable..
 
+  }
+
+  checkVision(flag) {
+    if(!flag.room){
+      
+
+
+      return false
+    }
   }
 
 
