@@ -45,6 +45,43 @@ console.log("Getting Flag Manager ready")
     }
   }
 
+  checkColor(flag){
+    switch (flag.color){
+      case 1:
+        //Red
+        break;
+      case 2:
+        //Purple
+        break;
+      case 3:
+        //Blue
+        break;
+      case 4:
+        //Cyan
+        break;
+      case 5:
+        //Green
+        break;
+      case 6:
+        //Yellow
+        break;
+      case 7:
+        //Orange
+        break;
+      case 8:
+        //Brown
+        break;
+      case 9:
+        //Grey
+        break;
+      case 10:
+        //White
+        break;
+            
+
+    }
+  }
+
   /**
    * Checks against the predefined logic cases.
    * @param flag - Takes the Flag object
@@ -56,8 +93,6 @@ console.log("Getting Flag Manager ready")
     switch (name) {
       case "mining":
         this.checkVision(flag) ? this.ldm(flag) : this.keepVision(flag)
-        this.keepVision(flag)
-        this.ldm(flag)
         break;
       case "attack":
         this.attack(flag)
@@ -128,11 +163,8 @@ console.log("Getting Flag Manager ready")
 
   checkVision(flag) {
     if(!flag.room){
-      
-
-
       return false
-    }
+    } else {return true}
   }
 
 
