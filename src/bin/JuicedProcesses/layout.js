@@ -5,6 +5,7 @@ import each from 'lodash-es/each'
 import invoke from 'lodash-es/invoke'
 import filter from 'lodash-es/filter'
 import layouts from './layoutsys/static'
+import roomLayout from './layoutsys/layoutRoom'
 import {
     distanceTransform,
     blockablePixelsForRoom
@@ -52,6 +53,7 @@ export default class Layout extends BaseProcess {
         var buildQue = []
         let visionRooms = Game.rooms;
         for (let iterroom in visionRooms) {
+            this.status = `iterating through Rooms |  ${iterroom.name}`
 
             const room = visionRooms[iterroom]
             //console.log(room.name)
@@ -74,28 +76,41 @@ export default class Layout extends BaseProcess {
 
                 switch (level) {
                     case 1:
-                        if(this.dirtRoads(room, buildQue) == true) {
+                        if (this.dirtRoads(room, buildQue) == true) {
+                            this.status = "Empire foundations laid!"
                         } else {
                             console.log(this.dirtRoads(room, buildQue))
+                            this.status = "sleeping"
                             this.sleep.sleep(5)
+                            
                         }
                         break;
                     case 2:
-                        if(!(room.memory.dirtRoadOrder)) {
+                        if (!(room.memory.dirtRoadOrder)) {
                             this.dirtRoads(room, buildQue)
+                            this.status = "Some Reason I forgot we had roads!"
+                        } else {
+                            this.status = `Expansion selected | Level ${room.controller.level}`
+                            roomLayout.flex(room)
                         }
                         //this.tier1(level, room, buildQue)
                         break;
                     case 3:
+                        this.status = `Expansion selected | Level ${room.controller.level}`
+                        roomLayout.flex(room)
                         //this.tier1(level, room, buildQue)
                         break;
                     case 4:
-
+                        this.status = `Expansion selected | Level ${room.controller.level}`
+                        roomLayout.flex(room)
                         break;
                     case 5:
+                        this.status = `Expansion selected | Level ${room.controller.level}`
+                        roomLayout.flex(room)
                         break;
                     case 6:
-
+                        this.status = `Expansion selected | Level ${room.controller.level}`
+                        roomLayout.flex(room)
                         break;
                     case 7:
 
@@ -123,15 +138,15 @@ export default class Layout extends BaseProcess {
      * @return Boolean
      */
     dirtRoads(room, buildQue) {
-        switch (room.memory.dirtRoadOrder) {
-            case undefined:
-                var bs = C.USER;
+
+        if (!room.memory.dirtRoadOrder) {
+                var bs = room.spawns[0];
                 var destin = room.find(FIND_SOURCES)
                 destin.push(room.controller)
                 //let planner = this.roadInfo()
                 for (let i = 0; i < destin.length; i++) {
                     let pathplan;
-                    if(destin[i] == C.STRUCTURE_CONTROLLER){
+                    if (destin[i] == C.STRUCTURE_CONTROLLER) {
                         pathplan = bs.pos.findPathTo(destin[i], {
                             range: 3
                         })
@@ -140,7 +155,7 @@ export default class Layout extends BaseProcess {
                             range: 1
                         })
                     }
-        
+
                     for (let q = 0; q < pathplan.length; q++) {
                         let datafuckeryroad = {
                             building: STRUCTURE_ROAD,
@@ -152,204 +167,213 @@ export default class Layout extends BaseProcess {
                         buildQue.push(datafuckeryroad);
                     }
                 }
-                if(buildQue.length > 0){
+                if (buildQue.length > 0) {
                     //console.log("New BuildQue!")
                     this.buildNow(room, buildQue)
                     room.memory.dirtRoadOrder = true
                     return true;
                 } else {
-                    return false;
+                    return
                 }
-
-            case true:
-                //console.log("True! Are roads placed?")
-                return true;
-            default:
-                //console.log("Default")
-                return false;
         }
+    }
+
+
     
 
-}
+    tier1(level, room, buildQue) {
+        let localorders = [];
+        let wanted = [C.STRUCTURE_TOWER, C.STRUCTURE_EXTENSION, C.STRUCTURE_STORAGE, C.STRUCTURE_SPAWN, C.STRUCTURE_TERMINAL, C.STRUCTURE_CONTAINER, C.STRUCTURE_ROAD]
+        let want = _.mapValues(_.pick(C.CONTROLLER_STRUCTURES, wanted), level)
+        let allSites = room.find(C.FIND_MY_CONSTRUCTION_SITES)
+        let sites = _.groupBy(allSites, 'structureType')
+        let have = _.mapValues(room.structures, 'length')
+        want[C.STRUCTURE_CONTAINER] = Math.min(level, C.CONTROLLER_STRUCTURES[C.STRUCTURE_CONTAINER][level])
+        let src = room.spawns[0] || undefined
+        for (let type in want) {
+            let amount = want[type] - ((have[type] || 0) + (sites[type] || []).length)
+            //console.log(type, want[type], have[type] || 0, (sites[type] || []).length)
+            if (amount <= 0) continue
+            //console.log(`Want ${amount} of ${type}`)
 
-tier1(level, room, buildQue) {
-    let localorders = [];
-    let wanted = [C.STRUCTURE_TOWER, C.STRUCTURE_EXTENSION, C.STRUCTURE_STORAGE, C.STRUCTURE_SPAWN, C.STRUCTURE_TERMINAL, C.STRUCTURE_CONTAINER, C.STRUCTURE_ROAD]
-    let want = _.mapValues(_.pick(C.CONTROLLER_STRUCTURES, wanted), level)
-    let allSites = room.find(C.FIND_MY_CONSTRUCTION_SITES)
-    let sites = _.groupBy(allSites, 'structureType')
-    let have = _.mapValues(room.structures, 'length')
-    want[C.STRUCTURE_CONTAINER] = Math.min(level, C.CONTROLLER_STRUCTURES[C.STRUCTURE_CONTAINER][level])
-    let src = room.spawns[0] || undefined
-    for (let type in want) {
-        let amount = want[type] - ((have[type] || 0) + (sites[type] || []).length)
-        //console.log(type, want[type], have[type] || 0, (sites[type] || []).length)
-        if (amount <= 0) continue
-        //console.log(`Want ${amount} of ${type}`)
-
-        if (src.pos) {
-            if (src instanceof StructureSpawn) {
-                // Make a array to store the config deconstructed
-                var blueprintXy = []
-                let maxYlength = Object.entries(layouts.default.layout).length;
-                //Loop through each line in the layout object for the design
-                for (let i = 0; i <= maxYlength; i++) {
-                    let linedata = layouts.default.layout[i];
-                    if (linedata == undefined | null) {
-                        //backout if its not there
-                        break;
-                    }
-                    let outcome = linedata.split("")
-                    let datafuckery = {
-                        orderY: outcome,
-                        pos: {
-                            x: 0,
-                            y: i
+            if (src.pos) {
+                if (src instanceof StructureSpawn) {
+                    // Make a array to store the config deconstructed
+                    var blueprintXy = []
+                    let maxYlength = Object.entries(layouts.default.layout).length;
+                    //Loop through each line in the layout object for the design
+                    for (let i = 0; i <= maxYlength; i++) {
+                        let linedata = layouts.default.layout[i];
+                        if (linedata == undefined | null) {
+                            //backout if its not there
+                            break;
                         }
+                        let outcome = linedata.split("")
+                        let datafuckery = {
+                            orderY: outcome,
+                            pos: {
+                                x: 0,
+                                y: i
+                            }
+                        }
+                        blueprintXy.push(datafuckery)
                     }
-                    blueprintXy.push(datafuckery)
-                }
 
-                //By now I have an array of arrays. The first being omplete with arrays of the lines of buildings. Not decoded
-                let rowBluePrint = Object.values(blueprintXy);
-                if (rowBluePrint.length != null || undefined) {
+                    //By now I have an array of arrays. The first being omplete with arrays of the lines of buildings. Not decoded
+                    let rowBluePrint = Object.values(blueprintXy);
+                    if (rowBluePrint.length != null || undefined) {
 
-                    for (let e = 0; e < maxYlength; e++) {
-                        l
-                        let thline = rowBluePrint[e]
-                        let thepos = thline.pos
-                        let theline = thline.orderY
+                        for (let e = 0; e < maxYlength; e++) {
+                            l
+                            let thline = rowBluePrint[e]
+                            let thepos = thline.pos
+                            let theline = thline.orderY
 
-                        //Go through each letter
-                        theline.forEach((letter, theX) => {
+                            //Go through each letter
+                            theline.forEach((letter, theX) => {
 
-                            let selection;
-                            //dont forget to take a break... Litteratlly
+                                let selection;
+                                //dont forget to take a break... Litteratlly
 
-                            switch (letter) {
-                                case " ":
-                                    break
-                                case "c":
-                                    selection = C.STRUCTURE_CONTAINER
-                                    break;
-                                case "r":
-                                    selection = C.STRUCTURE_ROAD
-                                    break;
-                                case "e":
-                                    selection = C.STRUCTURE_EXTENSION
-                                    break;
-                                case "t":
-                                    selection = C.STRUCTURE_TOWER
-                                    break;
-                                case "T":
-                                    selection = C.STRUCTURE_TERMINAL
-                                    break;
-                                case "S":
-                                    selection = C.STRUCTURE_SPAWN
-                                    break;
-                                case "s":
-                                    selection = C.STRUCTURE_STORAGE
-                                    break;
-                                default:
-                                    break;
-                            }
-                            //nono if it no no
-                            if (!selection) {
-                                return
-                            }
-                            let datafuckery2 = {
-                                building: selection,
-                                pos: {
-                                    x: theX,
-                                    y: thepos.y
+                                switch (letter) {
+                                    case " ":
+                                        break
+                                    case "c":
+                                        selection = C.STRUCTURE_CONTAINER
+                                        break;
+                                    case "r":
+                                        selection = C.STRUCTURE_ROAD
+                                        break;
+                                    case "e":
+                                        selection = C.STRUCTURE_EXTENSION
+                                        break;
+                                    case "t":
+                                        selection = C.STRUCTURE_TOWER
+                                        break;
+                                    case "T":
+                                        selection = C.STRUCTURE_TERMINAL
+                                        break;
+                                    case "S":
+                                        selection = C.STRUCTURE_SPAWN
+                                        break;
+                                    case "s":
+                                        selection = C.STRUCTURE_STORAGE
+                                        break;
+                                    default:
+                                        break;
                                 }
-                            }
-                            localorders.push(datafuckery2);
-                        })
-                    }
-                }
-                let spawn = localorders.findIndex(item => item.building === C.STRUCTURE_SPAWN);
-                let blueprintspawnpos = localorders[spawn].pos
-
-                function diff(a, b) {
-                    return Math.abs(a - b);
-                }
-
-                let difX = diff(blueprintspawnpos.x, src.pos.x)
-                let difY = diff(blueprintspawnpos.y, src.pos.y)
-
-                localorders.forEach(function (order) {
-
-                    let lastx = order.pos.x += difX;
-                    let lasty = order.pos.y += difY;
-                    let selection = order.building;
-                    let datafuckery3 = {
-                        building: selection,
-                        pos: {
-                            x: lastx,
-                            y: lasty
+                                //nono if it no no
+                                if (!selection) {
+                                    return
+                                }
+                                let datafuckery2 = {
+                                    building: selection,
+                                    pos: {
+                                        x: theX,
+                                        y: thepos.y
+                                    }
+                                }
+                                localorders.push(datafuckery2);
+                            })
                         }
                     }
+                    let spawn = localorders.findIndex(item => item.building === C.STRUCTURE_SPAWN);
+                    let blueprintspawnpos = localorders[spawn].pos
 
-                    //ORDER UP PLS
-                    buildQue.push(datafuckery3)
-                }, room)
+                    function diff(a, b) {
+                        return Math.abs(a - b);
+                    }
+
+                    let difX = diff(blueprintspawnpos.x, src.pos.x)
+                    let difY = diff(blueprintspawnpos.y, src.pos.y)
+
+                    localorders.forEach(function (order) {
+
+                        let lastx = order.pos.x += difX;
+                        let lasty = order.pos.y += difY;
+                        let selection = order.building;
+                        let datafuckery3 = {
+                            building: selection,
+                            pos: {
+                                x: lastx,
+                                y: lasty
+                            }
+                        }
+
+                        //ORDER UP PLS
+                        buildQue.push(datafuckery3)
+                    }, room)
+                } else {
+                    return
+                }
+            }
+            return
+        }
+    }
+
+    buildNow(room, buildQue) {
+        buildQue.forEach((order) => {
+            roomLayout.buildTime(room, order.building, order.pos.x, order.pos.y)
+        }, room)
+    }
+
+
+
+    /**
+     * build a cost matrix based on structures in the room. Will be cached for more than one tick. Requires vision.
+     * @param room
+     * @param freshMatrix
+     * @returns {any}
+     */
+    static getStructureMatrix(room, freshMatrix) {
+        if (!this.structureMatrixCache[room.name] || (freshMatrix && Game.time !== this.structureMatrixTick)) {
+            this.structureMatrixTick = Game.time;
+            let matrix = new PathFinder.CostMatrix();
+            this.structureMatrixCache[room.name] = Traveler.addStructuresToMatrix(room, matrix, 1);
+        }
+        return this.structureMatrixCache[room.name];
+    }
+
+    /**
+     * add structures to matrix so that impassible structures can be avoided and roads given a lower cost
+     * @param room
+     * @param matrix
+     * @param roadCost
+     * @returns {CostMatrix}
+     */
+    static addStructuresToMatrix(room, matrix, roadCost) {
+        let impassibleStructures = [];
+        for (let structure of room.find(FIND_STRUCTURES)) {
+            if (structure instanceof StructureRampart) {
+                if (!structure.my && !structure.isPublic) {
+                    impassibleStructures.push(structure);
+                }
+            } else if (structure instanceof StructureRoad) {
+                matrix.set(structure.pos.x, structure.pos.y, roadCost);
+            } else if (structure instanceof StructureContainer) {
+                matrix.set(structure.pos.x, structure.pos.y, 5);
             } else {
-                return
+                impassibleStructures.push(structure);
             }
         }
-        return
-    }
-
-
-
-}
-
-buildNow(room, buildQue) {
-    buildQue.forEach((order) => {
-        this.buildTime(room, order.building, order.pos.x, order.pos.y)
-    },room)
-}
-
-/**
- * calls upon the all mighty city planner to carve out sections of the earth for devine travel
- * It creates roads. Pretty Simple
- * @param room - it needs an actual room refference here
- * @param strucutre - What kind of structure you want? fed directly to the creatConstructionsite call
- * @param x - its the X positon
- * @param y - its the Y postion
- * @returns NOTHING! Just does some shit with the room and builds crap, console logs result
- */
-buildTime(room, structure, x, y) {
-    //ORDER UP!
-    let freespot = room.lookForAt(LOOK_STRUCTURES, x, y);
-    if(freespot == undefined){
-        freespot = []
-    } else if (freespot.length == 0) {
-
-
-        switch (room.createConstructionSite(x, y, structure)) {
-            case 0:
-                console.log("Creating ", structure, " at (x,y) : ", x, " ", y)
-                break;
-            case -1:
-                console.log("Not Owner")
-                break;
-            case -7:
-                console.log("Bad Location!")
-                return -7;
-            case -8:
-                console.log("Construction Site Cap!")
-                break;
-            case -10:
-                console.log("Bad Location for ", structure, " ", x, " ", y)
-                break;
-            case -14:
-                break;
+        for (let site of room.find(FIND_MY_CONSTRUCTION_SITES)) {
+            if (site.structureType === STRUCTURE_CONTAINER || site.structureType === STRUCTURE_ROAD ||
+                site.structureType === STRUCTURE_RAMPART) {
+                continue;
+            }
+            matrix.set(site.pos.x, site.pos.y, 0xff);
         }
+        for (let structure of impassibleStructures) {
+            matrix.set(structure.pos.x, structure.pos.y, 0xff);
+        }
+        return matrix;
     }
 
-}
+
+
+        toString () {
+            return `${this.status || ''}`
+        }
 
 
 }
