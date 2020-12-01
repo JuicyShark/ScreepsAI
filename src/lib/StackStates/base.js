@@ -35,6 +35,11 @@ export default {
     this.creep.claimController(tgt)
     this.pop()
   },
+  reserveController (target){
+    const tgt = this.resolveTarget(target)
+      this.creep.reserveController(tgt)
+      this.pop()
+  },
   attackController (target) {
     const tgt = this.resolveTarget(target)
     this.creep.attackController(tgt)
