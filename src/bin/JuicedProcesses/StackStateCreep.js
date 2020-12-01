@@ -49,7 +49,7 @@ export default class StackStateCreep extends states {
     }
     try {
       this.runStack()
-      this.debug = true
+    //  this.debug = true
       if (this.debug) {
         this.say(this.stack.slice(-1)[0])
       }
