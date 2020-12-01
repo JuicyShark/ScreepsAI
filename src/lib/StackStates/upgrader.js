@@ -5,9 +5,9 @@ export default {
     if (!cache.work) {
       cache.work = this.creep.getActiveBodyparts(C.WORK)
     } 
+   if(this.creep.pos.roomName !== this.creep.memory.homeRoom){
     target = { x: 25, y: 25, roomName: this.creep.memory.homeRoom}
-   let tgt = this.resolveTarget(target)
-   if(this.creep.pos.roomName !== tgt.roomName){
+    let tgt = this.resolveTarget(target)
       this.push('moveToRoom', tgt)
      return this.runStack()
     }
@@ -20,11 +20,13 @@ export default {
       this.runStack()
     } else {
       this.status = 'Looking for energy'
-      let tgt = room.storage || room.containers.find(c => c.store.energy) || room.structures[STRUCTURE_SPAWN] && room.structures[STRUCTURE_SPAWN]
+      let tgt = room.storage || room.containers.find(c => c.store.energy) || room.structures[STRUCTURE_SPAWN] && room.structures[STRUCTURE_SPAWN][0]
       if(!tgt){
-       tgt = C.USER.room.storage || C.USER.room.containers.find(c => c.store.energy) || C.USER.room.structures[STRUCTURE_SPAWN] && C.USER.room.structures[STRUCTURE_SPAWN]
+       tgt = C.USER.room.storage || C.USER.room.containers.find(c => c.store.energy) || C.USER.room.structures[STRUCTURE_SPAWN] && C.USER.structures[STRUCTURE_SPAWN][0]
       }
       else (tgt) 
+      
+      console.log(`structure type: ${tgt.structureType}, tgt? ${tgt}, tgt ${tgt.pos}`)
         if (tgt.structureType === 'storage' && tgt.store.energy < 10000 && (!controller.ticksToDowngrade || controller.ticksToDowngrade < 10000)) {
           this.push('sleep', Game.time + 10)
           return this.runStack()

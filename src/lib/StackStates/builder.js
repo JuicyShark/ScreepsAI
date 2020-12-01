@@ -15,7 +15,6 @@ export default {
       return this.runStack()
     }
     let { room, pos } = this.creep
-    console.log(room, this.roomName)
     if (this.creep.carry.energy) {
       this.status = 'Looking for target'
       let sites = room.find(C.FIND_MY_CONSTRUCTION_SITES)
@@ -31,9 +30,9 @@ export default {
       this.runStack()
     } else {
       this.status = 'Looking for energy'
-      let tgt = room.storage || room.containers.find(c => c.store.energy) ||  room.structures[STRUCTURE_SPAWN] || room.structures[STRUCTURE_SPAWN] || room.structures[STRUCTURE_EXTENSION]
+      let tgt = room.storage || room.containers.find(c => c.store.energy) || room.structures[STRUCTURE_SPAWN] && room.structures[STRUCTURE_SPAWN][0]
       if(!tgt){
-        tgt = C.USER.room.storage || C.USER.room.containers.find(c => c.store.energy) ||  C.USER.room.structures[STRUCTURE_SPAWN][0] || C.USER.room.structures[STRUCTURE_SPAWN] || C.USER.room.structures[STRUCTURE_EXTENSION]
+       tgt = C.USER.room.storage || C.USER.room.containers.find(c => c.store.energy) || C.USER.room.structures[STRUCTURE_SPAWN] && C.USER.structures[STRUCTURE_SPAWN][0]
       }
       if (room.storage && room.storage.store.energy < 1000) {
         let { x, y, roomName } = room.storage.pos
@@ -41,6 +40,7 @@ export default {
         return this.runStack()
       }
       if (tgt) {
+        console.log(`structure type: ${tgt.structureType}, tgt? ${tgt}`)
         //removed sleeping if theres queue in spawn as caused a loop crashing builder process
         if (tgt.structureType ===  STRUCTURE_CONTAINER || STRUCTURE_STORAGE) {
           this.push('withdraw', tgt.id, C.RESOURCE_ENERGY)
