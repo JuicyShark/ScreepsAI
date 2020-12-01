@@ -111,7 +111,8 @@ export default class Room extends BaseProcess {
       const cid = this.ensureCreep('builder_1', {
         rooms: [this.roomName],
         body: [
-          expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE])
+          expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE]),
+          expand([6, C.CARRY, 3, C.WORK, 3, C.MOVE])
         ],
         priority: 5
       })
