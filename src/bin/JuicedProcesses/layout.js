@@ -131,7 +131,7 @@ export default class Layout extends BaseProcess {
                 //let planner = this.roadInfo()
                 for (let i = 0; i < destin.length; i++) {
                     let pathplan;
-                    if(destin == C.STRUCTURE_CONTROLLER){
+                    if(destin[i] == C.STRUCTURE_CONTROLLER){
                         pathplan = bs.pos.findPathTo(destin[i], {
                             range: 3
                         })
