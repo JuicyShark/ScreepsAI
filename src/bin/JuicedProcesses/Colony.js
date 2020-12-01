@@ -70,6 +70,26 @@ export default class Colony extends BaseProcess {
         })
       }
     }
+/**     if (Game.flags.reserve) {
+      let { pos: { x, y, roomName } } = Game.flags.reserve
+      let room = Game.rooms[roomName]
+      if (room && room.controller.my) {
+        invoke(room.find(FIND_HOSTILE_STRUCTURES), 'destroy')
+        invoke(room.find(FIND_HOSTILE_CONSTRUCTION_SITES), 'remove')
+        Game.flags.reserve.remove()
+      } else {
+        let cid = this.ensureCreep(`reserver_${roomName}`, {
+          rooms: [roomName],
+          body: [[MOVE, MOVE, CLAIM, CLAIM]],
+          priority: 10
+        })
+        this.ensureChild(`reserver_${roomName}_${cid}`, 'JuicedProcesses/stackStateCreep', {
+          spawnTicket: cid,
+          base: ['reserver', { x, y, roomName }]
+        })
+      }
+    }
+    */
     this.ensureChild('intel', 'JuicedProcesses/intel')
     this.ensureChild('flagManager', 'JuicedProcesses/flagManager')
     
