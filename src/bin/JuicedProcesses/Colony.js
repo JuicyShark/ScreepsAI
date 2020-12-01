@@ -52,6 +52,7 @@ export default class Colony extends BaseProcess {
       })
     }
     if (Game.flags.claim) {
+      if(Game.gcl.level >= 2) {
       let { pos: { x, y, roomName } } = Game.flags.claim
       let room = Game.rooms[roomName]
       if (room && room.controller.my) {
@@ -70,7 +71,8 @@ export default class Colony extends BaseProcess {
         })
       }
     }
-/**     if (Game.flags.reserve) {
+
+    /**     if (Game.flags.reserve) {
       let { pos: { x, y, roomName } } = Game.flags.reserve
       let room = Game.rooms[roomName]
       if (room && room.controller.my) {
@@ -89,10 +91,10 @@ export default class Colony extends BaseProcess {
         })
       }
     }
-    */
+    */    
+    }
     this.ensureChild('intel', 'JuicedProcesses/intel')
-    this.ensureChild('flagManager', 'JuicedProcesses/flagManager')
-    
+    this.ensureChild('flagManager', 'JuicedProcesses/flagManager', this.context)    
     this.sleep.sleep(5)
   }
 
