@@ -13,3 +13,21 @@ export function expand(body){
         }
         return returnMe
 }
+export function findStorage(room){
+  let roomSpawn = room.room.find(FIND_MY_STRUCTURES, {
+    filter: { structureType: STRUCTURE_SPAWN }
+  })
+  let tgt
+    if(roomSpawn){
+      let [container] = room.room.find(C.FIND_STRUCTURES, { 
+        filter: (s) => s.structureType === C.STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] < s.storeCapacity})
+        tgt = room.room.storage || container || room.room.spawns.find(s => s.energy < s.energyCapacity) || room.room.extensions.find(s => s.energy < s.energyCapacity)
+    }
+    else {
+      this.log.warn(`fallback needed`)
+      let [container] = C.USER.room.find(C.FIND_STRUCTURES, { 
+        filter: (s) => s.structureType === C.STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] < s.storeCapacity})
+        tgt = C.USER.room.storage || container || C.USER.room.spawns.find(s => s.energy < s.energyCapacity) || C.USER.room.extensions.find(s => s.energy < s.energyCapacity)
+    }
+    return tgt
+  }

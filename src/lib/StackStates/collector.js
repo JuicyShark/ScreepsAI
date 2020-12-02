@@ -1,9 +1,12 @@
 import C from '/include/constants'
 import sum from 'lodash-es/sum'
 import values from 'lodash-es/values'
+import {
+  findStorage
+} from '/etc/common'
 
 export default {
-  collector (target, resourceType = C.RESOURCE_ENERGY) {
+  collector(target, resourceType = C.RESOURCE_ENERGY) {
     this.status = 'idle collector'
     let tgt = this.resolveTarget(target)
     if (!this.creep.carryCapacity) {
@@ -23,27 +26,25 @@ export default {
       this.push('moveInRange', target, 3)
       return this.runStack()
     }
-    let { x, y } = tgt.pos
     let resources = this.creep.room.lookNear(C.LOOK_RESOURCES, tgt.pos)
       .filter(r => r.resourceType === resourceType)
     if (resources[0]) {
-      if(resources[0].amount > 49){
-      this.status = 'picking up resource'
-      this.push('pickup', resources[0].id)
-      this.push('moveNear', resources[0].id)
-      return this.runStack()
+      if (resources[0].amount > 49) {
+        this.status = 'sweeping up resource off the ground'
+        this.push('pickup', resources[0].id)
+        this.push('moveNear', resources[0].id)
+        return this.runStack()
+      }
     }
-  }
-    let [cont] = this.creep.room.lookNear(C.LOOK_STRUCTURES, tgt.pos)
-      .filter((s) => s.structureType === C.STRUCTURE_CONTAINER && s.store[resourceType])
-    if (cont) {
-      if(cont.store[resourceType] < this.creep.carryCapacity) {
+    let storage = findStorage(this.creep)
+    if (storage.structureType === C.STRUCTURE_CONTAINER) {
+      if (storage.store[resourceType] < this.creep.carryCapacity) {
         this.status = 'sleeping'
         this.push('sleep', Game.time + 5)
       }
       this.status = 'withdraw'
-      this.push('withdraw', cont.id, resourceType)
-      this.push('moveNear', cont.id)
+      this.push('withdraw', storage.id, resourceType)
+      this.push('moveNear', storage.id)
       return this.runStack()
     }
   }
