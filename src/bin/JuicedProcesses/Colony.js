@@ -39,8 +39,8 @@ export default class Colony extends BaseProcess {
         Room.pid = pid
       }
     })
-  
-    for (let i = 0; i < 1; i++) {
+    let want = Math.max(1, this.rooms.length / 2)
+    for (let i = 0; i < want; i++) {
       let cid = this.ensureCreep(`creep_${i}`, {
         rooms: map(filter(Game.rooms, r => r.controller && r.controller.my), 'name'),
         body: [[TOUGH, MOVE]],
