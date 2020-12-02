@@ -5,6 +5,7 @@ import HarvestManager from './HarvestManager'
 import UpgradeManager from './UpgradeManager'
 import TowerDefense from './TowerDefense'
 import Intel from './Intel'
+import SeasonalBrain from './SeasonalBrain'
 import FlagManager from './FlagManager'
 import ColonyExpansion from './ColonyExpansion'
 import Layout from './layout'
@@ -19,6 +20,7 @@ export const bundle = {
     processRegistry.register('JuicedProcesses/upgradeManager', UpgradeManager)
     processRegistry.register('JuicedProcesses/towerDefense', TowerDefense)
     processRegistry.register('JuicedProcesses/intel', Intel)
+    processRegistry.register('JuicedProcesses/SeasonalBrain', SeasonalBrain)
     processRegistry.register('JuicedProcesses/flagManager', FlagManager)
     processRegistry.register('JuicedProcesses/colonyExpansion', ColonyExpansion)
     processRegistry.register('JuicedProcesses/layout', Layout)
