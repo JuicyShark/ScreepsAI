@@ -50,7 +50,7 @@ export function findStorage(room){
       }
       amount = containersFull
     } else {
-      if(stored > 20000) amount = stored / 20000
+      if(stored > 200000) amount = stored / 200000
       else amount = 0
     }
     return amount
