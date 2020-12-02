@@ -38,7 +38,6 @@ export default class UpgradeManager extends BaseProcess {
                 want = Math.max(min, stored / 85000)
               }
             }
-            console.log(`wanting ${want} upgraders`)
             for(let i = 0; i < want; i++) {
               const cid = this.ensureCreep(`upgrader_${i}`, {
                 rooms: [this.room.name],
