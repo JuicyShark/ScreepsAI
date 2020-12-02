@@ -76,41 +76,41 @@ export default class Layout extends BaseProcess {
 
                 switch (level) {
                     case 1:
-                        if (this.dirtRoads(room, buildQue) == true) {
+                        /*if (this.dirtRoads(room, buildQue) == true) {
                             this.status = "Empire foundations laid!"
                         } else {
                             console.log(this.dirtRoads(room, buildQue))
                             this.status = "sleeping"
                             this.sleep.sleep(5)
                             
-                        }
+                        }*/
                         break;
                     case 2:
-                        if (!(room.memory.dirtRoadOrder)) {
+                        /*if (!(room.memory.dirtRoadOrder)) {
                             this.dirtRoads(room, buildQue)
                             this.status = "Some Reason I forgot we had roads!"
                         } else {
                             this.status = `Expansion selected | Level ${room.controller.level}`
                             roomLayout.flex(room)
-                        }
+                        }*/
                         //this.tier1(level, room, buildQue)
                         break;
                     case 3:
                         this.status = `Expansion selected | Level ${room.controller.level}`
-                        roomLayout.flex(room)
+                        //roomLayout.flex(room)
                         //this.tier1(level, room, buildQue)
                         break;
                     case 4:
                         this.status = `Expansion selected | Level ${room.controller.level}`
-                        roomLayout.flex(room)
+                        //roomLayout.flex(room)
                         break;
                     case 5:
                         this.status = `Expansion selected | Level ${room.controller.level}`
-                        roomLayout.flex(room)
+                        //roomLayout.flex(room)
                         break;
                     case 6:
                         this.status = `Expansion selected | Level ${room.controller.level}`
-                        roomLayout.flex(room)
+                        //roomLayout.flex(room)
                         break;
                     case 7:
 
