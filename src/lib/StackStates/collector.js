@@ -36,7 +36,7 @@ export default {
         return this.runStack()
       }
     }
-    let storage = findStorage(this.creep)
+    let storage = findStorage(this.creep, resourceType)
     if (storage.structureType === C.STRUCTURE_CONTAINER) {
       if (storage.store[resourceType] < this.creep.carryCapacity) {
         this.status = 'sleeping'
