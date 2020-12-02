@@ -18,10 +18,12 @@ export function findStorage(room){
     filter: { structureType: STRUCTURE_SPAWN }
   })
   let tgt
-    if(roomSpawn){
+    console.log(`${roomSpawn}, ${roomSpawn[0]}`)
+    if(roomSpawn[0]){
       let [container] = room.room.find(C.FIND_STRUCTURES, { 
         filter: (s) => s.structureType === C.STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] < s.storeCapacity})
         tgt = room.room.storage || container || room.room.spawns.find(s => s.energy < s.energyCapacity) || room.room.extensions.find(s => s.energy < s.energyCapacity)
+        console.log(`target found ${tgt}`)
     }
     else {
       this.log.warn(`fallback needed`)
@@ -30,4 +32,26 @@ export function findStorage(room){
         tgt = C.USER.room.storage || container || C.USER.room.spawns.find(s => s.energy < s.energyCapacity) || C.USER.room.extensions.find(s => s.energy < s.energyCapacity)
     }
     return tgt
+  }
+  
+  export function findIfSurplus(room) {
+    const stored = room.storage && room.storage.store.energy || false
+    let amount
+    if (!stored) {
+      let containers = room.find(C.FIND_STRUCTURES).filter((s) => s.structureType === C.STRUCTURE_CONTAINER)
+      if(!containers.length) {
+        return 0 }
+      let containersFull = 0 
+      for (let i in containers) {
+        let container = containers[i]
+        if (container.store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
+          containersFull++
+        } else continue
+      }
+      amount = containersFull
+    } else {
+      if(stored > 20000) amount = stored / 20000
+      else amount = 0
+    }
+    return amount
   }

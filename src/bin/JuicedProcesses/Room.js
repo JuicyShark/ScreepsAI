@@ -3,7 +3,11 @@ import each from 'lodash-es/each'
 import BaseProcess from './BaseProcess'
 import IFF from '/lib/IFF'
 import filter from 'lodash-es/filter'
-import { expand, findStorage } from "/etc/common"
+import {
+  expand,
+  findStorage,
+  findIfSurplus
+} from "/etc/common"
 
 
 
@@ -108,18 +112,22 @@ export default class Room extends BaseProcess {
    */
   builderOrganiser() {
     if (this.room.find(C.FIND_MY_CONSTRUCTION_SITES).length) {
-      const cid = this.ensureCreep('builder_1', {
-        rooms: [this.roomName],
-        body: [
-          expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE]),
-          expand([6, C.CARRY, 3, C.WORK, 3, C.MOVE])
-        ],
-        priority: 5
-      })
-      this.ensureChild(`builder_${cid}`, 'JuicedProcesses/stackStateCreep', {
-        spawnTicket: cid,
-        base: ['builder', this.roomName]
-      })
+      let surplus = findIfSurplus(this.room)
+      let builders = 1 + surplus
+      for (let i = 0; i < builders; i++) {
+        const cid = this.ensureCreep(`builder_${i}`, {
+          rooms: [this.roomName],
+          body: [
+            expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE]),
+            expand([6, C.CARRY, 3, C.WORK, 3, C.MOVE])
+          ],
+          priority: 5
+        })
+        this.ensureChild(`builder_${cid}`, 'JuicedProcesses/stackStateCreep', {
+          spawnTicket: cid,
+          base: ['builder', this.roomName]
+        })
+      }
     }
 
   }

@@ -1,6 +1,6 @@
 import C from '/include/constants'
 import BaseProcess from './BaseProcess'
-import { expand } from "/etc/common"
+import { expand, findIfSurplus } from "/etc/common"
 
 
 export default class UpgradeManager extends BaseProcess {
@@ -27,16 +27,18 @@ export default class UpgradeManager extends BaseProcess {
 
         if (this.room.controller && this.room.controller.level && this.room.controller.level < 8) {
             let want
+            let min  = findIfSurplus(this.room) + 3
             const stored = this.room.storage && this.room.storage.store.energy || false 
              if (stored === false) {
-              // 3-6 upgraders
-              want =  Math.max(3, this.room.extensions.length / 3.2)
+              // 3-6 upgraders pre surplus
+              want =  Math.max(min, this.room.extensions.length / 3.2)
             } else {
-              //4-11 upgraders
+              //3-11 upgraders pre surplus
               if (stored > 10000) {
-                want = Math.max(4, stored / 85000)
+                want = Math.max(min, stored / 85000)
               }
             }
+            console.log(`wanting ${want} upgraders`)
             for(let i = 0; i < want; i++) {
               const cid = this.ensureCreep(`upgrader_${i}`, {
                 rooms: [this.room.name],
