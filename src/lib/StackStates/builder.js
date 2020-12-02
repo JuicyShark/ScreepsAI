@@ -40,7 +40,6 @@ export default {
         return this.runStack()
       }
       if (tgt) {
-        console.log(`structure type: ${tgt.structureType}, tgt? ${tgt}`)
         //removed sleeping if theres queue in spawn as caused a loop crashing builder process
         if (tgt.structureType ===  STRUCTURE_CONTAINER || STRUCTURE_STORAGE) {
           this.push('withdraw', tgt.id, C.RESOURCE_ENERGY)
