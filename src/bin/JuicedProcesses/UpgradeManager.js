@@ -27,14 +27,14 @@ export default class UpgradeManager extends BaseProcess {
 
         if (this.room.controller && this.room.controller.level && this.room.controller.level < 8) {
             let want
-            const stored = this.room.storage && this.room.storage.store.energy || false
-            if (stored === false) {
-              // 2-5 upgraders
-              want =  Math.max(2, this.room.extensions.length / 3.5)
+            const stored = this.room.storage && this.room.storage.store.energy || false 
+             if (stored === false) {
+              // 3-6 upgraders
+              want =  Math.max(3, this.room.extensions.length / 3.2)
             } else {
-              //3-11 upgraders
+              //4-11 upgraders
               if (stored > 10000) {
-                want = Math.max(3, stored / 85000)
+                want = Math.max(4, stored / 85000)
               }
             }
             for(let i = 0; i < want; i++) {

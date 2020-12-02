@@ -62,7 +62,7 @@ export default class HarvestManager extends BaseProcess {
       const dist = spawns && spawns[0].pos.findPathTo(source).length || (this.storage && this.storage.pos.findPathTo(source).length) 
       const maxParts = this.room.level > 2 && Math.min(Math.floor(((this.room.energyAvailable / 50) * 0.80) / 2)) || 1
       const needed = Math.max(2, Math.ceil(((source.energyCapacity * 2 ) / (C.ENERGY_REGEN_TIME / (dist * 2))) / 50)) + 2 
-      var wanted = Math.min(Math.ceil(needed / maxParts), 2) ;
+      var wanted = Math.min(Math.ceil(needed / maxParts),2 / 2) ;
       console.log(`dist: ${dist}, needed: ${needed}, maxParts: ${maxParts}, wanted: ${wanted}`)
       for (let i = 1; i <= wanted; i++) {
         const spawnTicket = this.ensureCreep(`${source.id}_coll_${i+1}`, {
