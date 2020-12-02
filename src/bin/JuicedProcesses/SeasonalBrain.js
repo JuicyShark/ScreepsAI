@@ -39,9 +39,24 @@ export default class SeasonalBrain extends BaseProcess {
         const scoreContainers = curRoom.find(FIND_SCORE_CONTAINERS, {
           filter: (i) => i.store[RESOURCE_SCORE] > 500
         });
+        for(let i = 0; i > scoreContainers; i++){
         if (scoreContainers) {
           console.log(`Found Score Containers!`)
-        }
+          const spawnTicket = this.ensureCreep(`${scoreContainers.id}_coll_score${i}`, {
+            rooms: [this.memory.room],
+            // body: i ? cbody : wbody,
+            body: [
+              expand([6, C.CARRY, 6, C.MOVE]),
+              expand([4, C.CARRY, 4, C.MOVE]),
+              expand([2, C.CARRY, 2, C.MOVE]),
+            ],
+            priority: 3
+          })
+          this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', {
+            spawnTicket,
+            base: ['collector', scoreContainers.id, C.RESOURCE_SCORE]
+          })
+        }}
       }else continue 
     }
     this.sleep.sleep(5)

@@ -90,7 +90,7 @@ export default class HarvestManager extends BaseProcess {
         })
         this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', {
           spawnTicket,
-          base: ['collector', source.id]
+          base: ['collector', source.id, C.RESOURCE_ENERGY]
         })
       }
     })

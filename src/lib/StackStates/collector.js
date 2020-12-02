@@ -6,7 +6,7 @@ import {
 } from '/etc/common'
 
 export default {
-  collector(target, resourceType = C.RESOURCE_ENERGY) {
+  collector(target, resourceType) {
     this.status = 'idle collector'
     let tgt = this.resolveTarget(target)
     if (!this.creep.carryCapacity) {
