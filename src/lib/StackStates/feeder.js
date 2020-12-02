@@ -3,8 +3,13 @@ import values from 'lodash-es/values'
 
 export default {
   feeder () {
+    if(this.creep.pos.roomName != this.creep.memory.homeRoom){
+      let tgt = { x: 25, y: 25, roomName: this.creep.memory.homeRoom}
+      this.push('moveToRoom', tgt)
+      this.runStack()
+    }
     let { room, pos } = this.creep
-    if (sum(values(this.creep.carry)) === this.creep.carryCapacity) {
+    if (sum(values(this.creep.carry)) >= 50) {
       let tgt
       let types = [STRUCTURE_TOWER, STRUCTURE_EXTENSION, STRUCTURE_SPAWN]
       for (let i = 0; i < types.length; i++) {
@@ -18,8 +23,7 @@ export default {
         this.push('transfer', tgt, C.RESOURCE_ENERGY)
         this.push('moveNear', tgt)
         return this.runStack()
-      }
-      if (!tgt) {
+      } else {
         tgt = room.storage || room.structures[STRUCTURE_CONTAINER]
         if (tgt && pos.isNearTo(tgt)) {
           this.push('flee', [{ pos: tgt.pos, range: 2 }])
