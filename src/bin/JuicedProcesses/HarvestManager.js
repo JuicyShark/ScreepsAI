@@ -45,9 +45,6 @@ export default class HarvestManager extends BaseProcess {
       data.pos = { roomName: source.pos.roomName, x: source.pos.x, y: source.pos.y }
       data.id = source.id
 
-      const hasRoad = this.roads[source.id] && this.roads[source.id].complete
-      const maxParts = this.room.level > 2 && Math.min(hasRoad ? 33 : 25, Math.floor(((this.room.energyCapacity / 50) * 0.80) / 2)) || 1
-      
       const spawnTicket = this.ensureCreep(`${source.id}_harv`, {
         rooms: [this.memory.room],
         body: [
@@ -61,9 +58,12 @@ export default class HarvestManager extends BaseProcess {
       this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', { spawnTicket, base: ['harvester', source.id] })
 
       //How many haulers per source
-      const dist = (this.roads[source.id] && this.roads[source.id].path.length) || (this.storage && this.storage.pos.findPathTo(s).length) || 30
-     const needed = Math.max(2, Math.ceil((source.energyCapacity / (C.ENERGY_REGEN_TIME / (dist * 2))) / 50)) + 2 
-      var wanted = Math.min(Math.ceil(needed / maxParts), 2) / 2;
+      let spawns = this.room.find(FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_SPAWN }})
+      const dist = spawns && spawns[0].pos.findPathTo(source).length || (this.storage && this.storage.pos.findPathTo(source).length) 
+      const maxParts = this.room.level > 2 && Math.min(Math.floor(((this.room.energyAvailable / 50) * 0.80) / 2)) || 1
+      const needed = Math.max(2, Math.ceil(((source.energyCapacity * 2 ) / (C.ENERGY_REGEN_TIME / (dist * 2))) / 50)) + 2 
+      var wanted = Math.min(Math.ceil(needed / maxParts), 2) ;
+      console.log(`dist: ${dist}, needed: ${needed}, maxParts: ${maxParts}, wanted: ${wanted}`)
       for (let i = 1; i <= wanted; i++) {
         const spawnTicket = this.ensureCreep(`${source.id}_coll_${i+1}`, {
           rooms: [this.memory.room],
