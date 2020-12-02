@@ -41,6 +41,7 @@ export default {
       if (storage.store[resourceType] < this.creep.carryCapacity) {
         this.status = 'sleeping'
         this.push('sleep', Game.time + 5)
+        this.push('repeat',3,'flee', [{ pos: storage.pos, range: 5 }])
       }
       this.status = 'withdraw'
       this.push('withdraw', storage.id, resourceType)
