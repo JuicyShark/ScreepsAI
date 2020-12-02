@@ -27,15 +27,15 @@ export default class Intel extends BaseProcess {
       this.int.wait(C.INT_TYPE.SEGMENT, C.INT_STAGE.START, C.SEGMENTS.INTEL)
     } else {
       this.int.setInterrupt(C.INT_TYPE.VISION, C.INT_STAGE.START)
-      //this.sleep.sleep(5)
+      this.sleep.sleep(10)
     }
     const children = [
       ['JuicedProcesses/colonyExpansion', {
         intelLog: intelLog.rooms
-      }],
-      ['JuicedProcesses/layout', {
-        intelLog: intelLog.rooms
       }]
+//      ['JuicedProcesses/layout', {
+//        intelLog: intelLog.rooms
+//      }]
     ]
     each(children, ([child, context = {}]) => {
       this.ensureChild(child, child, context)
