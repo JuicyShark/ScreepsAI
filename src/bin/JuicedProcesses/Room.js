@@ -140,18 +140,52 @@ export default class Room extends BaseProcess {
   checkHostiles(hostiles) {
     if (hostiles.length) {
       if (true || hostiles[0].owner.username === 'Invader') {
-        const cid = this.ensureCreep('protector_1', {
-          rooms: [this.roomName],
-          body: [
-            expand([2, C.ATTACK, 2, C.MOVE]),
-            expand([1, C.ATTACK, 1, C.MOVE])
-          ],
-          priority: 0
-        })
-        this.ensureChild(`protector_${cid}`, 'JuicedProcesses/stackStateCreep', {
-          spawnTicket: cid,
-          base: ['protector', this.roomName]
-        })
+        this.status = "Under Attack"
+        let tower = this.room.find(FIND_MY_STRUCTURES, {
+          filter: { structureType: STRUCTURE_EXTENSION }
+        }) || undefined;
+
+        //eventually we want to probably spawn a creep to head the direction the attack is coming from to see if there is another wave inbound.
+        for(let hosCreep in hostiles){
+
+
+
+          if(tower && hosCreep){
+            //Needs to be more dynamic
+
+            const cid = this.ensureCreep('protector_1', {
+              rooms: [this.roomName],
+              body: [
+                expand([2, TOUGH, 1, C.ATTACK, 1, C.MOVE]),
+                expand([4, TOUGH, 1, C.ATTACK, 2, C.MOVE, 1, ATTACK]),
+                expand([8, TOUGH, 3, C.ATTACK, 1, C.MOVE, 1, ATTACK])
+              ],
+              priority: 1
+            })
+            this.ensureChild(`protector_${cid}`, 'JuicedProcesses/stackStateCreep', {
+              spawnTicket: cid,
+              base: ['protector', this.roomName]
+            })
+          } else if (hosCreep) {
+
+
+
+            const cid = this.ensureCreep('protector_1', {
+              rooms: [this.roomName],
+              body: [
+                expand([2, TOUGH, 1, C.ATTACK, 1, C.MOVE]),
+                expand([4, TOUGH, 1, C.ATTACK, 2, C.MOVE, 1, ATTACK]),
+                expand([8, TOUGH, 3, C.ATTACK, 1, C.MOVE, 1, ATTACK])
+              ],
+              priority: 1
+            })
+            this.ensureChild(`protector_${cid}`, 'JuicedProcesses/stackStateCreep', {
+              spawnTicket: cid,
+              base: ['protector', this.roomName]
+            })
+
+          }
+        }
       }
     }
   }
