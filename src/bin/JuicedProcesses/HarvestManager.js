@@ -2,7 +2,8 @@ import each from 'lodash-es/each'
 import C from '/include/constants'
 import BaseProcess from './BaseProcess'
 import {
-  expand, findIfSurplus
+  expand,
+  findIfSurplus
 } from "/etc/common"
 
 export default class HarvestManager extends BaseProcess {
@@ -42,105 +43,102 @@ export default class HarvestManager extends BaseProcess {
     }
     spawns.push(...(this.room.spawns || []))
     each(sources, source => {
-      const smem = this.room.memory.sources = this.room.memory.sources || {}
-      const data = smem[source.id] = smem[source.id] || {}
-      data.pos = {
-        roomName: source.pos.roomName,
-        x: source.pos.x,
-        y: source.pos.y
-      }
-      data.id = source.id
-
-      const spawnTicket = this.ensureCreep(`${source.id}_harv`, {
-        rooms: [this.memory.room],
-        body: [
-          expand([5, C.WORK, 3, C.MOVE]),
-          expand([4, C.WORK, 3, C.MOVE]),
-          expand([3, C.WORK, 2, C.MOVE]),
-          expand([2, C.WORK, 1, C.MOVE])
-        ],
-        priority: 2
-      })
-      this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', {
-        spawnTicket,
-        base: ['harvester', source.id]
-      })
-
-      //How many haulers per source
-      let spawns = this.room.find(FIND_MY_STRUCTURES, {
-        filter: {
-          structureType: STRUCTURE_SPAWN
+        const smem = this.room.memory.sources = this.room.memory.sources || {}
+        const data = smem[source.id] = smem[source.id] || {}
+        data.pos = {
+          roomName: source.pos.roomName,
+          x: source.pos.x,
+          y: source.pos.y
         }
-      })
-      const dist = spawns && spawns[0].pos.findPathTo(source).length || (this.storage && this.storage.pos.findPathTo(source).length)
-      const maxParts = this.room.level > 2 && Math.min(Math.floor(((this.room.energyAvailable / 50) * 0.80) / 2)) || 1
-      const needed = Math.max(2, Math.ceil(((source.energyCapacity * 2) / (C.ENERGY_REGEN_TIME / (dist * 2))) / 50)) + 2
-      var wanted = Math.min(Math.ceil(needed / maxParts), (2) / 2);
-      //console.log(`dist: ${dist}, needed: ${needed}, maxParts: ${maxParts}, wanted: ${wanted}`)
-      for (let i = 1; i <= wanted; i++) {
-        const spawnTicket = this.ensureCreep(`${source.id}_coll_${i+1}`, {
+        data.id = source.id
+        const spawnTicket = this.ensureCreep(`${source.id}_harv`, {
           rooms: [this.memory.room],
-          // body: i ? cbody : wbody,
           body: [
-            expand([6, C.CARRY, 6, C.MOVE]),
-            expand([4, C.CARRY, 4, C.MOVE]),
-            expand([2, C.CARRY, 2, C.MOVE]),
+            expand([5, C.WORK, 3, C.MOVE]),
+            expand([4, C.WORK, 3, C.MOVE]),
+            expand([3, C.WORK, 2, C.MOVE]),
+            expand([2, C.WORK, 1, C.MOVE])
           ],
-          priority: 3
+          priority: 2
         })
         this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', {
           spawnTicket,
-          base: ['collector', source.id, C.RESOURCE_ENERGY]
+          base: ['harvester', source.id]
         })
-      }
-    })
 
-    /**    if (CONTROLLER_STRUCTURES[C.STRUCTURE_EXTRACTOR][this.room.level]) {      
-          each(minerals, mineral => {
-            let [extractor] = mineral.pos.lookFor(C.LOOK_STRUCTURES)
-            if (!extractor) {
-              let [csite] = mineral.pos.lookFor(C.LOOK_CONSTRUCTION_SITES)
-              if (!csite) {
-                csite = mineral.pos.createConstructionSite(C.STRUCTURE_EXTRACTOR)
-              }
-              return
-            }
-            {
-              let spawnTicket = this.ensureCreep(`${mineral.id}_harv`, {
-                rooms: [this.memory.room],
-                body: [
-                  expand([49, C.WORK, 1, C.MOVE]),
-                  expand([40, C.WORK, 1, C.MOVE]),
-                  expand([30, C.WORK, 1, C.MOVE]),
-                  expand([25, C.WORK, 1, C.MOVE]),
-                  expand([20, C.WORK, 1, C.MOVE]),
-                  expand([15, C.WORK, 1, C.MOVE]),
-                  expand([10, C.WORK, 1, C.MOVE]),
-                ],
-                priority: 8,
-                maxRange: 1
-              })
-              this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', { spawnTicket, base: ['harvester', mineral.id] })
-            }
-            {
-              let spawnTicket = this.ensureCreep(`${mineral.id}_coll_1`, {
-                rooms: [this.memory.room],
-                body: [
-                  expand([8, C.CARRY, 8, C.MOVE]),
-                ],
-                priority: 8,
-                maxRange: 1
-              })
-              this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', { spawnTicket, base: ['collector', mineral.id, mineral.mineralType] })
-            }
+
+ 
+        let dist = spawns && spawns[0].pos.findPathTo(source).length || (this.storage && this.storage.pos.findPathTo(source).length)
+        let maxParts = this.room.level > 2 && Math.min(Math.floor(((this.room.energyAvailable / 50) * 0.80) / 2)) || 1
+        let needed = Math.max(2, Math.ceil(((source.energyCapacity * 2) / (C.ENERGY_REGEN_TIME / (dist * 2))) / 50)) + 2
+        var wanted = Math.min(Math.ceil(needed / maxParts), (2) / 2);
+        //console.log(`dist: ${dist}, needed: ${needed}, maxParts: ${maxParts}, wanted: ${wanted}`)
+        for (let i = 1; i <= wanted; i++) {
+          const spawnTicket = this.ensureCreep(`${source.id}_coll_${i+1}`, {
+            rooms: [this.memory.room],
+            // body: i ? cbody : wbody,
+            body: [
+              expand([6, C.CARRY, 6, C.MOVE]),
+              expand([4, C.CARRY, 4, C.MOVE]),
+              expand([2, C.CARRY, 2, C.MOVE]),
+            ],
+            priority: 3
           })
-        }*/
-  }
-  toString() {
-    return this.memory.room
-  }
-}
+          this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', {
+            spawnTicket,
+            base: ['collector', source.id, C.RESOURCE_ENERGY]
+          })
+        }
+      })
 
-function isObstacle(s) {
-  return !!~C.OBSTACLE_OBJECT_TYPES.indexOf(s.structureType) && (s.structureType !== C.STRUCTURE_RAMPART || s.my)
-}
+
+
+      /**    if (CONTROLLER_STRUCTURES[C.STRUCTURE_EXTRACTOR][this.room.level]) {      
+            each(minerals, mineral => {
+              let [extractor] = mineral.pos.lookFor(C.LOOK_STRUCTURES)
+              if (!extractor) {
+                let [csite] = mineral.pos.lookFor(C.LOOK_CONSTRUCTION_SITES)
+                if (!csite) {
+                  csite = mineral.pos.createConstructionSite(C.STRUCTURE_EXTRACTOR)
+                }
+                return
+              }
+              {
+                let spawnTicket = this.ensureCreep(`${mineral.id}_harv`, {
+                  rooms: [this.memory.room],
+                  body: [
+                    expand([49, C.WORK, 1, C.MOVE]),
+                    expand([40, C.WORK, 1, C.MOVE]),
+                    expand([30, C.WORK, 1, C.MOVE]),
+                    expand([25, C.WORK, 1, C.MOVE]),
+                    expand([20, C.WORK, 1, C.MOVE]),
+                    expand([15, C.WORK, 1, C.MOVE]),
+                    expand([10, C.WORK, 1, C.MOVE]),
+                  ],
+                  priority: 8,
+                  maxRange: 1
+                })
+                this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', { spawnTicket, base: ['harvester', mineral.id] })
+              }
+              {
+                let spawnTicket = this.ensureCreep(`${mineral.id}_coll_1`, {
+                  rooms: [this.memory.room],
+                  body: [
+                    expand([8, C.CARRY, 8, C.MOVE]),
+                  ],
+                  priority: 8,
+                  maxRange: 1
+                })
+                this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', { spawnTicket, base: ['collector', mineral.id, mineral.mineralType] })
+              }
+            })
+          }*/
+    }
+    toString() {
+      return this.memory.room
+    }
+  }
+
+  function isObstacle(s) {
+    return !!~C.OBSTACLE_OBJECT_TYPES.indexOf(s.structureType) && (s.structureType !== C.STRUCTURE_RAMPART || s.my)
+  }
