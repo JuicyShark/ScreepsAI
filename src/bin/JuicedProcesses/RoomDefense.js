@@ -31,8 +31,10 @@ export default class RoomDefense extends BaseProcess {
       this.towerLogic(hostiles)
     }
 
-    if (hostiles.length >= 0) {}
-    this.protectors()
+    if (hostiles.length >= 1) {
+      this.protectors()
+    }
+
 
 
   }

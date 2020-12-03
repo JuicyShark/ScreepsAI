@@ -33,7 +33,7 @@ export default class SpawnManager {
     this.cleanup()
     if (this.queue.length) {
       let spawns = filter(Game.spawns, (spawn) => !spawn.spawning && spawn.isActive())
-      let roomStorage = spawn.room.find(FIND_STRUCTURES, {
+      let roomStorage = spawns[0].room.find(FIND_STRUCTURES, {
         filter: { structureType: C.STRUCTURE_CONTAINER, structureType: C.STRUCTURE_STORAGE }
     });
     let queuePriority 
