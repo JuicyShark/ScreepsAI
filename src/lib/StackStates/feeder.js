@@ -11,7 +11,7 @@ export default {
     let { room, pos } = this.creep
     if (sum(values(this.creep.carry)) >= 50) {
       let tgt
-      let types = [STRUCTURE_TOWER, STRUCTURE_EXTENSION, STRUCTURE_SPAWN]
+      let types = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_TOWER]
       for (let i = 0; i < types.length; i++) {
         let tgts = (room.structures[types[i]] || []).filter(s => s.energy < s.energyCapacity)
         if (tgts.length) {
