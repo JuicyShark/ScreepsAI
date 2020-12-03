@@ -33,115 +33,120 @@ export default class SpawnManager {
     this.cleanup()
     if (this.queue.length) {
       let spawns = filter(Game.spawns, (spawn) => !spawn.spawning && spawn.isActive())
-      let roomStorage = spawns[0].room.find(FIND_STRUCTURES, {
-        filter: { structureType: C.STRUCTURE_CONTAINER, structureType: C.STRUCTURE_STORAGE }
-    });
-    let queuePriority 
-      if(roomStorage.length){
-        let energyAmount = 0
-        for(let storage in roomStorage){
-          energyAmount = energyAmount + storage.store.energy
-        }
-        if(energyAmount <= 1000){
-          queuePriority = this.queue.length
-        }else {
-          queuePriority = 4
-        }
-      } else queuePriority = 5
-      for (let qi = 0; qi < queuePriority; qi++) {
-        let queue = this.queue[qi]
-        let drop = []
-        for (let i = 0; i < queue.length; i++) {
-          if (!spawns.length) break
-          let item = queue[i]
-          let status = this.status[item.statusId]
-          try {
-            if (item.pid && !this.kernel.getProcessById(item.pid)) {
-              throw new Error('Spawning Process Dead')
-            }
-            let bodies = item.body.map(b => b.join())
-            let orphans = this.spawn.getOrphans(item.rooms)
-            for (let i in bodies) {
-              let body = bodies[i]
-              const [orphan] = orphans[body] || []
-              if (orphan) {
-                delete this.status[orphan]
-                status.name = orphan
-                status.status = C.EPosisSpawnStatus.SPAWNING
-                this.log.info(`Assigning orphan ${orphan} to ${item.statusId}`)
-                this.spawn.getCreep(item.statusId)
-              }
-            }
-            if (status.status === C.EPosisSpawnStatus.QUEUED) {
-              let cspawns = map(spawns, (spawn, index) => {
-                let dist = item.rooms && item.rooms[0] && (Game.map.getRoomLinearDistance(spawn.room.name, item.rooms[0]) || 0)
-                let energy = spawn.room.energyAvailable
-                let rank = energy - (dist * 100)
-                if (item.maxRange && item.maxRange < dist) {
-                  rank -= 10000
-                }
-                if (spawn.room.storage && spawn.room.storage.store.energy < 10000) {
-                  rank -= 10000
-                }
-                return {
-                  index,
-                  dist,
-                  energy,
-                  rank,
-                  spawn
-                }
-              })
-              cspawns = sortBy(cspawns, (s) => s.rank)
-              let bodies = map(item.body, (body) => {
-                let cost = reduce(body, (l, v) => l + C.BODYPART_COST[v], 0)
-                return {
-                  cost,
-                  body
-                }
-              })
-              let {
-                index,
-                energy,
-                spawn
-              } = cspawns.pop()
-              let {
-                body
-              } = maxBy(filter(bodies, (b) => b.cost <= energy), 'cost') || {
-                body: false
-              }
-              if (!body) continue
-              spawns.splice(index, 1)
-              let ret = spawn.spawnCreep(body, item.statusId, {
-                memory: {
-                  _p: this.kernel.currentId,
-                  homeRoom: item.rooms[0]
-                }
-              })
-              this.context.log.info(`Spawning ${item.statusId}`)
-              if (ret === C.OK) {
-                status.status = C.EPosisSpawnStatus.SPAWNING
- //               console.log(`Sleeping for ${spawn.spawning.needTime * 2} ticks (${Game.time})`)
-  //              this.sleep.sleep(spawn.spawning.needTime * 2)
-              } else {
-                status.status = C.EPosisSpawnStatus.ERROR
-                status.message = this.spawnErrMsg(ret)
-              }
- //             if (status.status == C.EPosisSpawnStatus.SPAWNING) {
- //               this.context.log.info(`Sleeping for ${spawn.spawning.needTime * 2} ticks (${Game.time})`)
- //               console.log(`Sleeping for ${spawn.spawning.needTime * 2} ticks (${Game.time})`)
-  //              this.sleep.sleep(spawn.spawning.needTime * 2)
-  //            }
-            }
-          } catch (e) {
-            status.status = C.EPosisSpawnStatus.ERROR
-            status.message = e.message || e
+      if (spawns.length) {
+        let roomStorage = spawns[0].room.find(FIND_STRUCTURES, {
+          filter: {
+            structureType: C.STRUCTURE_CONTAINER,
+            structureType: C.STRUCTURE_STORAGE
           }
-          drop.push(i)
+        });
+        let queuePriority
+        if (roomStorage.length) {
+          let energyAmount = 0
+          for (let storage in roomStorage) {
+            energyAmount = energyAmount + roomStorage[storage].store.energy
+          }
+          if (energyAmount <= 1000) {
+            queuePriority = this.queue.length
+          } else {
+            queuePriority = 4
+          }
+        } else queuePriority = 5
+        for (let qi = 0; qi < queuePriority; qi++) {
+          let queue = this.queue[qi]
+          let drop = []
+          for (let i = 0; i < queue.length; i++) {
+            if (!spawns.length) break
+            let item = queue[i]
+            let status = this.status[item.statusId]
+            try {
+              if (item.pid && !this.kernel.getProcessById(item.pid)) {
+                throw new Error('Spawning Process Dead')
+              }
+              let bodies = item.body.map(b => b.join())
+              let orphans = this.spawn.getOrphans(item.rooms)
+              for (let i in bodies) {
+                let body = bodies[i]
+                const [orphan] = orphans[body] || []
+                if (orphan) {
+                  delete this.status[orphan]
+                  status.name = orphan
+                  status.status = C.EPosisSpawnStatus.SPAWNING
+                  this.log.info(`Assigning orphan ${orphan} to ${item.statusId}`)
+                  this.spawn.getCreep(item.statusId)
+                }
+              }
+              if (status.status === C.EPosisSpawnStatus.QUEUED) {
+                let cspawns = map(spawns, (spawn, index) => {
+                  let dist = item.rooms && item.rooms[0] && (Game.map.getRoomLinearDistance(spawn.room.name, item.rooms[0]) || 0)
+                  let energy = spawn.room.energyAvailable
+                  let rank = energy - (dist * 100)
+                  if (item.maxRange && item.maxRange < dist) {
+                    rank -= 10000
+                  }
+                  if (spawn.room.storage && spawn.room.storage.store.energy < 10000) {
+                    rank -= 10000
+                  }
+                  return {
+                    index,
+                    dist,
+                    energy,
+                    rank,
+                    spawn
+                  }
+                })
+                cspawns = sortBy(cspawns, (s) => s.rank)
+                let bodies = map(item.body, (body) => {
+                  let cost = reduce(body, (l, v) => l + C.BODYPART_COST[v], 0)
+                  return {
+                    cost,
+                    body
+                  }
+                })
+                let {
+                  index,
+                  energy,
+                  spawn
+                } = cspawns.pop()
+                let {
+                  body
+                } = maxBy(filter(bodies, (b) => b.cost <= energy), 'cost') || {
+                  body: false
+                }
+                if (!body) continue
+                spawns.splice(index, 1)
+                let ret = spawn.spawnCreep(body, item.statusId, {
+                  memory: {
+                    _p: this.kernel.currentId,
+                    homeRoom: item.rooms[0]
+                  }
+                })
+                this.context.log.info(`Spawning ${item.statusId}`)
+                if (ret === C.OK) {
+                  status.status = C.EPosisSpawnStatus.SPAWNING
+                  //               console.log(`Sleeping for ${spawn.spawning.needTime * 2} ticks (${Game.time})`)
+                  //              this.sleep.sleep(spawn.spawning.needTime * 2)
+                } else {
+                  status.status = C.EPosisSpawnStatus.ERROR
+                  status.message = this.spawnErrMsg(ret)
+                }
+                //             if (status.status == C.EPosisSpawnStatus.SPAWNING) {
+                //               this.context.log.info(`Sleeping for ${spawn.spawning.needTime * 2} ticks (${Game.time})`)
+                //               console.log(`Sleeping for ${spawn.spawning.needTime * 2} ticks (${Game.time})`)
+                //              this.sleep.sleep(spawn.spawning.needTime * 2)
+                //            }
+              }
+            } catch (e) {
+              status.status = C.EPosisSpawnStatus.ERROR
+              status.message = e.message || e
+            }
+            drop.push(i)
+          }
+          while (drop.length) {
+            queue.splice(drop.pop(), 1)
+          }
+          if (queue.length) break
         }
-        while (drop.length) {
-          queue.splice(drop.pop(), 1)
-        }
-        if (queue.length) break
       }
     }
   }
