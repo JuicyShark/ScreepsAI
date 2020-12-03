@@ -2,6 +2,7 @@ import IFF from '/lib/IFF'
 import C from '../../include/constants'
 const SIGN_MSG = `Territory of Juicy Boys`
 
+//Scout needs to have 2 different functions. A "Auto Scout" and a "Intel/VISION"
 
 export default {
   scout (state = {}) {
