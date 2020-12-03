@@ -6,7 +6,6 @@ import feeder from './feeder'
 import collector from './collector'
 import claimer from './claimer'
 import reserver from './reserver'
-import miner from './miner'
 import harvester from './harvester'
 import base from './base'
 import core from './core'
@@ -17,7 +16,6 @@ let parts = [
   base,
   commonTasks,
   harvester,
-  miner,
   claimer,
   reserver,
   collector,
