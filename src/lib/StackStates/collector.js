@@ -30,23 +30,29 @@ export default {
       .filter(r => r.resourceType === resourceType)
     if (resources[0]) {
       if (resources[0].amount > 49) {
-        this.status = 'sweeping up resource off the ground'
+        this.status = 'sweeping up resource'
         this.push('pickup', resources[0].id)
         this.push('moveNear', resources[0].id)
         return this.runStack()
+      } else {
+        this.status = 'waiting for more resource'
+        this.push('sleep', Game.time + 10)
+        this.push('moveNear', resources[0].id)
       }
     }
-    let storage = findStorage(this.creep, resourceType)
-    if (storage.structureType === C.STRUCTURE_CONTAINER) {
-      if (storage.store[resourceType] < this.creep.carryCapacity) {
-        this.status = 'sleeping'
-        this.push('sleep', Game.time + 5)
-        this.push('repeat',3,'flee', [{ pos: storage.pos, range: 5 }])
+    let [cont] = this.creep.room.lookNear(C.LOOK_STRUCTURES, tgt.pos)
+      .filter((s) => s.structureType === (C.STRUCTURE_CONTAINER) && s.store[resourceType])
+    if (cont) {
+      if (cont.structureType === C.STRUCTURE_CONTAINER) {
+        if (cont.store[resourceType] < this.creep.carryCapacity) {
+          this.status = 'sleeping'
+          this.push('sleep', Game.time + 5)
+        }
+        this.status = 'withdraw'
+        this.push('withdraw', cont.id, resourceType)
+        this.push('moveNear', cont.id)
+        return this.runStack()
       }
-      this.status = 'withdraw'
-      this.push('withdraw', storage.id, resourceType)
-      this.push('moveNear', storage.id)
-      return this.runStack()
     }
   }
 }

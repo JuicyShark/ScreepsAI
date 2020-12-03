@@ -57,7 +57,7 @@ export default {
       return this.runStack()
     }
     // find a target via findStorage
-    let tgt = findStorage(this.creep)
+    let tgt = findStorage(this.creep, res)
     if (tgt) {
       this.push('transfer', tgt.id, res)
       this.push('moveNear', tgt.id)
