@@ -20,6 +20,10 @@ export default {
     this.creep.rangedAttack(tgt)
     this.pop()
   },
+  rangedMassAttack () {
+    this.creep.rangedMassAttack()
+    this.pop()
+  },
   heal (target) {
     const tgt = this.resolveTarget(target)
     this.creep.heal(tgt)
