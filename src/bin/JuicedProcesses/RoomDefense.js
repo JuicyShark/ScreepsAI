@@ -2,7 +2,7 @@ import each from 'lodash-es/each'
 import C from '/include/constants'
 import BaseProcess from './BaseProcess'
 import IFF from '/lib/IFF'
-import expand from "/etc/common"
+import { expand } from "/etc/common"
 
 export default class RoomDefense extends BaseProcess {
   constructor(context) {
