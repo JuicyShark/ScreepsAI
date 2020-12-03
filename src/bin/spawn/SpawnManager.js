@@ -35,28 +35,27 @@ export default class SpawnManager {
       let spawns = filter(Game.spawns, (spawn) => !spawn.spawning && spawn.isActive())
       if (spawns.length) {
         let roomStorage = spawns[0].room.find(FIND_STRUCTURES, {
-          filter: {
-            structureType: C.STRUCTURE_CONTAINER,
-            structureType: C.STRUCTURE_STORAGE
+          filter: (i) => {
+            return (i.structureType == C.STRUCTURE_STORAGE || i.structureType == C.STRUCTURE_CONTAINER)
           }
-        });
+        })
         let queuePriority
         if (roomStorage.length) {
           let energyAmount = 0
           for (let storage in roomStorage) {
             energyAmount = energyAmount + roomStorage[storage].store.energy
           }
-          if (energyAmount <= 1000) {
+          if (energyAmount >= 1000) {
+
             queuePriority = this.queue.length
           } else {
-            queuePriority = 4
+            queuePriority = 5
           }
-        } else queuePriority = 5
+        } else queuePriority = 6
         for (let qi = 0; qi < queuePriority; qi++) {
           let queue = this.queue[qi]
           let drop = []
           for (let i = 0; i < queue.length; i++) {
-            if (!spawns.length) break
             let item = queue[i]
             let status = this.status[item.statusId]
             try {
