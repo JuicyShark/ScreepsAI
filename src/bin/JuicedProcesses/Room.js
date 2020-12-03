@@ -57,7 +57,7 @@ export default class Room extends BaseProcess {
       ['JuicedProcesses/upgradeManager', {
         room: this.roomName
       }],
-      ['JuicedProcesses/towerDefense', {
+      ['JuicedProcesses/roomDefense', {
         room: this.roomName
       }],
     ]
@@ -189,6 +189,8 @@ export default class Room extends BaseProcess {
       }
     }
   }
+
+
 
   toString() {
     return `${this.roomName} ${this.room.level}/${this.room.controller.level}`

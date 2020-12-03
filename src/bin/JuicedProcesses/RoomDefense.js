@@ -3,7 +3,7 @@ import C from '/include/constants'
 import BaseProcess from './BaseProcess'
 import IFF from '/lib/IFF'
 
-export default class TowerDefense extends BaseProcess {
+export default class RoomDefense extends BaseProcess {
   constructor (context) {
     super(context)
     this.context = context
@@ -19,9 +19,20 @@ export default class TowerDefense extends BaseProcess {
       this.log.warn(`No vision in ${this.memory.room}`)
       return
     }
-    const vis = room.visual
+
     const hostiles = room.find(FIND_HOSTILE_CREEPS).filter(({ pos: { x, y } }) => x && x !== 49 && y && y !== 49).filter(IFF.notAlly)
+    if (hostiles){
+      this.towerLogic(hostiles)
+
+    }
+    
+
+  }
+
+
+  towerLogic(hostiles) {
     if (hostiles.length) {
+      const vis = room.visual
       //console.log('Hostiles!',hostiles.map(h=>`${h} ${h.owner.username}`))
       room.towers.forEach(tower => {
         const tgt = tower.pos.findClosestByRange(hostiles)
@@ -47,8 +58,12 @@ export default class TowerDefense extends BaseProcess {
       })
     } else {
       this.doTowerMaint()
-    }    
+    }
+
   }
+
+
+
   doTowerMaint () {
     const room = this.room
     let repairList = this.room.find(C.FIND_STRUCTURES, { filter: s => s.hits < (s.hitsMax / 2 )}) 

@@ -18,7 +18,7 @@ export const bundle = {
     processRegistry.register('JuicedProcesses/stackStateCreep', StackStateCreep)
     processRegistry.register('JuicedProcesses/harvestManager', HarvestManager)
     processRegistry.register('JuicedProcesses/upgradeManager', UpgradeManager)
-    processRegistry.register('JuicedProcesses/towerDefense', TowerDefense)
+    processRegistry.register('JuicedProcesses/roomDefense', TowerDefense)
     processRegistry.register('JuicedProcesses/intel', Intel)
     processRegistry.register('JuicedProcesses/SeasonalBrain', SeasonalBrain)
     processRegistry.register('JuicedProcesses/flagManager', FlagManager)
