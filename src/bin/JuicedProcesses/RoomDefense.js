@@ -14,11 +14,22 @@ export default class RoomDefense extends BaseProcess {
     return Game.rooms[this.memory.room]
   }
 
+  get UID() {
+    return ('C' + Game.time.toString(36).slice(-4) + Math.random().toString(36).slice(-2)).toUpperCase()
+  }
+
   run() {
     const room = this.room
     if (!room) {
       this.log.warn(`No vision in ${this.memory.room}`)
       return
+    }
+
+    census[this.room.name] = {}
+    const creeps = this.room.find(FIND_MY_CREEPS)
+    for (const creep of creeps) {
+      census[creep.memory.group] = census[creep.memory.group] || 0
+      census[creep.memory.group]++
     }
 
     const hostiles = room.find(FIND_HOSTILE_CREEPS).filter(({
@@ -27,13 +38,31 @@ export default class RoomDefense extends BaseProcess {
         y
       }
     }) => x && x !== 49 && y && y !== 49).filter(IFF.notAlly)
+    
+
+    if(!hostiles){
+      this.cleanChildren()
+      return
+    }
+    /*hostiles.forEach(hosCreep => {
+      hosCreep.get
+    })*/
+
     if (hostiles) {
       this.towerLogic(hostiles)
     }
 
-    if (hostiles.length >= 1) {
-      this.protectors()
+    //Logic for checking creeps to come... for now just quantity
+    console.log("HERE ", hostiles.length)
+    this.status = "Defending Room"
+    for(let hostile of hostiles){
+    if (hostiles.length >= 1 && hostiles.length < 3) {
+
+      this.protectors("fodder",room)
+    } else if (hostiles.length >= 3){
+      this.protectors("strong",room)
     }
+  }
 
 
 
@@ -82,34 +111,61 @@ export default class RoomDefense extends BaseProcess {
     this.room.towers.forEach(tower => {
       if (tower.energy < (tower.energyCapacity / 2)) return
       const damagedStruct = repairList.pop()
-      if (damagedStruct) tower.repair(damagedStruct)
+      if (damagedStruct && damagedStruct.structureType != C.STRUCTURE.WALL) tower.repair(damagedStruct)
     })
   }
 
-  protectors() {
+  protectors(type, room) {
     //eventually we want to probably spawn a creep to head the direction the attack is coming from to see if there is another wave inbound.
+    var cid;
+    switch(type){
+      case "fodder":
+        cid = this.ensureCreep(`${this.UID}Fodder`, {
+          rooms: [room.roomName],
+          body: [
+            expand([4, C.TOUGH, 1, C.ATTACK, 2, C.MOVE]), //200 energy
+            expand([8, C.TOUGH , 1 , RANGED_ATTACK, 1, C.ATTACK, 4, C.MOVE]) //450energy
+          ],
+          priority: 1
+        })
+        return this.ensureChild(`protector_${cid}`, 'JuicedProcesses/stackStateCreep', {
+          spawnTicket: cid,
+          base: ['protector', room.roomName]
+        })
+        
+      case "strong":
+        cid = this.ensureCreep(`${this.UID}StrongMans`, {
+          rooms: [room.roomName],
+          body: [
+            expand([8, C.TOUGH, 2, C.ATTACK, 2, C.MOVE]),
+            expand([8, C.TOUGH , 2 , RANGED_ATTACK, 3, C.ATTACK, 3, C.MOVE])
+          ],
+          priority: 1
+        })
+        return this.ensureChild(`protector_${cid}`, 'JuicedProcesses/stackStateCreep', {
+          spawnTicket: cid,
+          base: ['protector', room.roomName]
+        })
+        
+      default:
+        cid = this.ensureCreep('protector_1', {
+          rooms: [room.roomName],
+          body: [
+            expand([2, C.TOUGH, 2, C.ATTACK, 2, C.MOVE]),
+            expand([4, C.TOUGH , 2, C.ATTACK, 4, C.MOVE])
+          ],
+          priority: 1
+        })
+        return this.ensureChild(`protector_${cid}`, 'JuicedProcesses/stackStateCreep', {
+          spawnTicket: cid,
+          base: ['protector', room.roomName]
+        })
 
-
+    }
     
       //Needs to be more dynamic
 
-      const cid = this.ensureCreep('protector_1', {
-        rooms: [this.roomName],
-        body: [
-          expand([2, TOUGH , 1 , RANGED_ATTACK, 1, C.ATTACK, 1, C.MOVE]),
-          expand([4, TOUGH, 1, C.ATTACK, 2, C.MOVE, 1, ATTACK]),
-          expand([8, TOUGH, 3, C.ATTACK, 1, C.MOVE, 1, ATTACK])
-        ],
-        priority: 1
-      })
-      this.ensureChild(`protector_${cid}`, 'JuicedProcesses/stackStateCreep', {
-        spawnTicket: cid,
-        base: ['protector', this.roomName]
-      })
-
-    
-
-
+      
 
   }
 
