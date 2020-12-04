@@ -66,9 +66,11 @@ export default class HarvestManager extends BaseProcess {
           base: ['harvester', source.id]
         })
 
-
- 
-        let dist = spawns && spawns[0].pos.findPathTo(source).length || (this.storage && this.storage.pos.findPathTo(source).length)
+        let dist
+       if(spawns && spawns[0]){ 
+         dist = spawns && spawns[0].pos.findPathTo(source).length || (this.storage && this.storage.pos.findPathTo(source).length)
+        } else {
+           dist = C.USER.pos.findPathTo(source).length}
         let maxParts = this.room.level > 2 && Math.min(Math.floor(((this.room.energyAvailable / 50) * 0.80) / 2)) || 1
         let needed = Math.max(2, Math.ceil(((source.energyCapacity * 2) / (C.ENERGY_REGEN_TIME / (dist * 2))) / 50)) + 2
         var wanted = Math.min(Math.ceil(needed / maxParts), (2) / 2);

@@ -1,5 +1,6 @@
 import C from '/include/constants'
 import BaseProcess from './BaseProcess'
+import {expand} from '/etc/common'
 
 
 export default class SeasonalBrain extends BaseProcess {
@@ -36,13 +37,14 @@ export default class SeasonalBrain extends BaseProcess {
     for (let room in visionRooms) {
       let curRoom = visionRooms[room]
       if (curRoom.controller.level >= 4) {
-        const scoreContainers = curRoom.find(FIND_SCORE_CONTAINERS, {
+        console.log(`looking for scoreContainers`)
+        let scoreContainers = curRoom.find(FIND_SCORE_CONTAINERS, {
           filter: (i) => i.store[RESOURCE_SCORE] > 500
         });
-        for(let i = 0; i > scoreContainers; i++){
-        if (scoreContainers) {
+        console.log(`found ${scoreContainers}, total amount: ${scoreContainers.length}`)
+        for(let score in scoreContainers){
           console.log(`Found Score Containers!`)
-          const spawnTicket = this.ensureCreep(`${scoreContainers.id}_coll_score${i}`, {
+          const spawnTicket = this.ensureCreep(`${scoreContainers[score].id}_coll_score${score}`, {
             rooms: [this.memory.room],
             // body: i ? cbody : wbody,
             body: [
@@ -56,7 +58,7 @@ export default class SeasonalBrain extends BaseProcess {
             spawnTicket,
             base: ['collector', scoreContainers.id, C.RESOURCE_SCORE]
           })
-        }}
+        }
       }else continue 
     }
     this.sleep.sleep(5)

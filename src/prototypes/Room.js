@@ -25,18 +25,21 @@ const multipleList = [
 
 const singleList = [
   STRUCTURE_OBSERVER, STRUCTURE_POWER_BANK, STRUCTURE_POWER_SPAWN, STRUCTURE_EXTRACTOR,
-  STRUCTURE_NUKER        // STRUCTURE_TERMINAL,   STRUCTURE_CONTROLLER,   STRUCTURE_STORAGE,
+  STRUCTURE_NUKER // STRUCTURE_TERMINAL,   STRUCTURE_CONTROLLER,   STRUCTURE_STORAGE,
 ]
 
 let obj = {
   lookNear: {
     value: function (type, pos) {
-      let { x, y } = pos.pos || pos
+      let {
+        x,
+        y
+      } = pos.pos || pos
       let res = []
-      for(let yo = -1; yo <= 1; yo++) {
-        if(y + yo > 49 || y + yo < 0) continue
-        for(let xo = -1; xo <= 1; xo++) {
-          if(x + xo > 49 || x + xo < 0) continue
+      for (let yo = -1; yo <= 1; yo++) {
+        if (y + yo > 49 || y + yo < 0) continue
+        for (let xo = -1; xo <= 1; xo++) {
+          if (x + xo > 49 || x + xo < 0) continue
           res.push(...this.lookForAt(type, x + xo, y + yo))
         }
       }
@@ -72,7 +75,22 @@ let obj = {
       return PRL
     },
     configurable: true
+  },
+  roomType: {
+    get: function () {
+      let homeOrRemote
+      if (this.controller) {
+        if (this.controller.my) homeOrRemote = 'home'
+        else if (this.controller.reservation) {
+          if (this.controller.reservation.username == C.USERNAME)homeOrRemote = 'reserved'
+        } else homeOrRemote = 'undefined'
+      }
+      return homeOrRemote
+    },
+    configurable: true
   }
+
+
 }
 
 multipleList.forEach(function (type) {
@@ -94,5 +112,6 @@ singleList.forEach(function (type) {
     configurable: true
   }
 })
+
 
 export default obj

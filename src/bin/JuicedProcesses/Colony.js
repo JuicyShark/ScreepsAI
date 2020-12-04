@@ -20,22 +20,15 @@ export default class Colony extends BaseProcess {
 
   run() {
     each(Game.rooms, (room, name) => {
-      let homeOrRemote
-      if(room.controller.my){
-        homeOrRemote = room.controller.my
-      } else if(room.controller.reservation){
-        if(room.controller.reservation.username == C.USERNAME) homeOrRemote = true
-        else homeOrRemote = false
-      }
-      console.log(`${room.controller}  ${homeOrRemote}`)
-      if (!room.controller || !homeOrRemote) return
+      console.log(`room ${name} is type: ${room.roomType}`)
+      if (room.roomType == 'undefined') return
       if (!this.rooms[name]) {
         this.rooms[name] = {}
       }
     })
     each(this.rooms, (Room, room) => {
       let proc = this.kernel.getProcessById(Room.pid)
-      if (!Game.rooms[room] || !Game.rooms[room].controller || !Game.rooms[room].controller.my) {
+      if (!Game.rooms[room] || Game.rooms[room].roomType == 'undefined') {
         if (proc) {
           this.kernel.killProcess(Room.pid)
         }
@@ -51,20 +44,6 @@ export default class Colony extends BaseProcess {
         Room.pid = pid
       }
     })
-    let want = Math.max(1, this.rooms.length / 2)
-    for (let i = 0; i < want; i++) {
-      let cid = this.ensureCreep(`creep_${i}`, {
-        rooms: map(filter(Game.rooms, r => r.controller && r.controller.my), 'name'),
-        body: [
-          [TOUGH, MOVE]
-        ],
-        priority: 10
-      })
-      this.ensureChild(`creep_${i}_${cid}`, 'JuicedProcesses/stackStateCreep', {
-        spawnTicket: cid,
-        base: ['scout']
-      })
-    }
     if (Game.flags.claim) {
       if (Game.gcl.level > Game.spawns.length) {
         let {
@@ -97,61 +76,76 @@ export default class Colony extends BaseProcess {
           })
         }
       }
-
-      if (Game.flags.reserve) {
-        let {
-          pos: {
+    }
+    if (Game.flags.reserve) {
+      let {
+        pos: {
+          x,
+          y,
+          roomName
+        }
+      } = Game.flags.reserve
+      let room = Game.rooms[roomName]
+      if (room && room.controller.my) {
+        invoke(room.find(FIND_HOSTILE_STRUCTURES), 'destroy')
+        invoke(room.find(FIND_HOSTILE_CONSTRUCTION_SITES), 'remove')
+        Game.flags.reserve.remove()
+      } else {
+        let cid = this.ensureCreep(`reserver_${roomName}`, {
+          rooms: [roomName],
+          body: [
+            [MOVE, MOVE, CLAIM, CLAIM]
+          ],
+          priority: 6
+        })
+        this.ensureChild(`reserver_${roomName}_${cid}`, 'JuicedProcesses/stackStateCreep', {
+          spawnTicket: cid,
+          base: ['reserver', {
             x,
             y,
             roomName
-          }
-        } = Game.flags.reserve
-        let room = Game.rooms[roomName]
-        if (room && room.controller.my) {
-          invoke(room.find(FIND_HOSTILE_STRUCTURES), 'destroy')
-          invoke(room.find(FIND_HOSTILE_CONSTRUCTION_SITES), 'remove')
-          Game.flags.reserve.remove()
-        } else {
-          let cid = this.ensureCreep(`reserver_${roomName}`, {
-            rooms: [roomName],
-            body: [
-              [MOVE, MOVE, CLAIM, CLAIM]
-            ],
-            priority: 10
-          })
-          this.ensureChild(`reserver_${roomName}_${cid}`, 'JuicedProcesses/stackStateCreep', {
-            spawnTicket: cid,
-            base: ['reserver', {
-              x,
-              y,
-              roomName
-            }]
-          })
-        }
+          }]
+        })
       }
-
     }
-    this.ensureChild('intel', 'JuicedProcesses/intel')
-    this.ensureChild('flagManager', 'JuicedProcesses/flagManager', this.context)
-    this.sleep.sleep(5)
+
+  let want = Math.max(1, (this.rooms.length / 2))
+  for (let i = 0; i < 1; i++) {
+    let cid = this.ensureCreep(`creep_${i}`, {
+      rooms: map(filter(Game.rooms, r => r.controller && r.controller.my), 'name'),
+      body: [
+        [TOUGH, MOVE]
+      ],
+      priority: 10
+    })
+    this.ensureChild(`creep_${i}_${cid}`, 'JuicedProcesses/stackStateCreep', {
+      spawnTicket: cid,
+      base: ['scout']
+    })
   }
 
-  interrupt({
-    hook: {
-      type,
-      stage
-    },
-    key
-  }) {
-    this.log.info(`INT ${type} ${stage} ${key}`)
-  }
 
-  wake() {
-    this.log.info('I Have awoken!')
-  }
+  this.ensureChild('intel', 'JuicedProcesses/intel')
+  this.ensureChild('flagManager', 'JuicedProcesses/flagManager', this.context)
+  //this.sleep.sleep(5)
+}
 
-  toString() {
-    let rooms = Object.keys(this.rooms)
-    return `Rooms: ${rooms.length}`
-  }
+interrupt({
+  hook: {
+    type,
+    stage
+  },
+  key
+}) {
+  this.log.info(`INT ${type} ${stage} ${key}`)
+}
+
+wake() {
+  this.log.info('I Have awoken!')
+}
+
+toString() {
+  let rooms = Object.keys(this.rooms)
+  return `Rooms: ${rooms.length}`
+}
 }
