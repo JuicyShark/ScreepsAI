@@ -20,6 +20,7 @@ export default class RoomDefense extends BaseProcess {
 
   run() {
     const room = this.room
+  
     if (!room) {
       this.log.warn(`No vision in ${this.memory.room}`)
       return
@@ -117,6 +118,7 @@ export default class RoomDefense extends BaseProcess {
 
   protectors(type, room) {
     //eventually we want to probably spawn a creep to head the direction the attack is coming from to see if there is another wave inbound.
+
     var cid;
     switch(type){
       case "fodder":
@@ -166,6 +168,7 @@ export default class RoomDefense extends BaseProcess {
       //Needs to be more dynamic
 
       
+
 
   }
 

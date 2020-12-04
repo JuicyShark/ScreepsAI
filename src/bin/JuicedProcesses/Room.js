@@ -42,15 +42,16 @@ export default class Room extends BaseProcess {
 
 
   run() {
-    if (!this.room || !this.room.controller || !this.room.controller.my) {
+    
+    if (!this.room && this.room.roomType == 'undefined') {
       this.log.warn(`Invalid Room, terminating. (${this.roomName},${JSON.stringify(this.memory)})`)
       this.kernel.killProcess(this.context.id)
     }
 
-    this.sleep.sleep(5)
-
-
-    const children = [
+    //this.sleep.sleep(5)
+    let children
+    if(this.room.roomType == 'home'){
+     children = [
       ['JuicedProcesses/harvestManager', {
         room: this.roomName
       }],
@@ -59,9 +60,17 @@ export default class Room extends BaseProcess {
       }],
       ['JuicedProcesses/roomDefense', {
         room: this.roomName
-      }],
+      }]
     ]
-
+  } else if(this.room.roomType == 'reserved') {
+    children = [
+      ['JuicedProcesses/harvestManager', {
+        room: this.roomName
+      }],['JuicedProcesses/roomDefense', {
+        room: this.roomName
+      }]
+    ]
+  }
 
     each(children, ([child, context = {}]) => {
       this.ensureChild(child, child, context)
@@ -82,8 +91,9 @@ export default class Room extends BaseProcess {
   feederOrganiser() {
     let [container] = this.room.lookNear(C.LOOK_STRUCTURES, this.room.find(C.FIND_STRUCTURES).filter((s) => s.structureType === C.STRUCTURE_CONTAINER))
     let storage = this.room.find(C.FIND_STRUCTURES).filter(s => s.structureType === C.STRUCTURE_STORAGE && s.hits < (s.hitsMax / 1.5))
+    let spawns = this.room.find(C.FIND_MY_STRUCTURES).filter(s => s.structureType === C.STRUCTURE_SPAWN)
 
-    if (container || storage) {
+    if ((container || storage) && spawns[0]) {
       var feeders = 1;
       for (let i = 0; i < feeders; i++) {
         const cid = this.ensureCreep(`feeder_${i}`, {

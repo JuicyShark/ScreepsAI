@@ -26,7 +26,7 @@ export function findStorage(room, resourceType){
         console.log(`target found ${tgt}`)
     }
     else {
-      this.log.warn(`fallback needed`)
+      console.log(`fallback needed`)
       let [container] = C.USER.room.find(C.FIND_STRUCTURES, { 
         filter: (s) => s.structureType === C.STRUCTURE_CONTAINER && s.store[resourceType] < s.storeCapacity})
         tgt = C.USER.room.storage || container || C.USER.room.spawns.find(s => s.energy < s.energyCapacity) || C.USER.room.extensions.find(s => s.energy < s.energyCapacity)

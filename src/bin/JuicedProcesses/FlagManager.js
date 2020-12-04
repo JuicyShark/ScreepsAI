@@ -39,8 +39,8 @@ export default class FlagManager extends BaseProcess {
     //using for f
     for (let flag in Game.flags) {
 
-//      flag.room ? this.checkFlag(flag) :
-// console.log("Getting Flag Manager ready")
+      flag.room ? this.checkFlag(flag) :
+ console.log("Getting Flag Manager ready")
 
     }
   }
@@ -91,6 +91,12 @@ export default class FlagManager extends BaseProcess {
     let name = ab.toLowerCase()
 
     switch (name) {
+      case "claim":
+      this.claim(flag)
+        break
+        case "reserve":
+          this.reserve(flag)
+          break
       case "mining":
         this.checkVision(flag) ? this.ldm(flag) : this.keepVision(flag)
         break;
@@ -102,14 +108,19 @@ export default class FlagManager extends BaseProcess {
         break;
         //Default is to get and keep vision in the room if there isnt any name on the flag
       default:
-        this.keepVision(flag)
+       console.log(`no flag found under ${flag.name}`)
         break;
     }
-
+    console.log(`found flag named: ${flag.name}`)
     //anymore logic to be done after
 
   }
+  claim(flag){
 
+  }
+  reserve(flag){
+
+  }
   /**
    * This will do some attack logic on an enemy room or if you just want a bunch of trigger happy attack creeps in a room... for "Defence"
    *  @param flag Flag Object
@@ -122,7 +133,7 @@ export default class FlagManager extends BaseProcess {
             expand([2, C.ATTACK, 2, C.MOVE]),
             expand([1, C.ATTACK, 1, C.MOVE])
           ],
-          priority: 0
+          priority: 1
         })
         this.ensureChild(`protector_${cid}`, 'JuicedProcesses/stackStateCreep', {
           spawnTicket: cid,
