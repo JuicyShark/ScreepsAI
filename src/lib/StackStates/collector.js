@@ -26,10 +26,21 @@ export default {
       this.push('moveInRange', target, 3)
       return this.runStack()
     }
-    let resources = this.creep.room.lookNear(C.LOOK_RESOURCES, tgt.pos)
-      .filter(r => r.resourceType === resourceType)
+    let resources
+      if(resourceType == 'score'){
+        resources = this.creep.room.find(FIND_SCORE_CONTAINERS, {
+          filter: (i) => i.store[RESOURCE_SCORE] > 500
+        });
+        this.status = 'withdraw'
+        this.push('withdraw', resources[0].id, resourceType)
+        this.push('moveNear', resources[0].id)
+        return this.runStack()
+      } else {
+        resources = this.creep.room.lookNear(C.LOOK_RESOURCES, tgt.pos)
+        .filter(r => r.resourceType === resourceType)
+      }
     if (resources[0]) {
-      if (resources[0].amount > 49) {
+      if (resources[0] > 49) {
         this.status = 'sweeping up resource'
         this.push('pickup', resources[0].id)
         this.push('moveNear', resources[0].id)
