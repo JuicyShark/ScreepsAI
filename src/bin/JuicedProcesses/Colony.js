@@ -125,9 +125,9 @@ export default class Colony extends BaseProcess {
   }
 
 
-  this.ensureChild('intel', 'JuicedProcesses/intel')
-  this.ensureChild('flagManager', 'JuicedProcesses/flagManager', this.context)
-  //this.sleep.sleep(5)
+  this.ensureChild('intel', 'JuicedProcesses/intel', {rooms: this.rooms})
+  this.ensureChild('flagManager', 'JuicedProcesses/flagManager', {rooms: this.rooms})
+
 }
 
 interrupt({

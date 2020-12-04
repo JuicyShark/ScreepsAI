@@ -50,7 +50,7 @@ export default class Room extends BaseProcess {
 
     //this.sleep.sleep(5)
     let children
-    if(!this.room.controller.reservation){
+    if(this.room.roomType == 'home'){
      children = [
       ['JuicedProcesses/harvestManager', {
         room: this.roomName
@@ -62,7 +62,7 @@ export default class Room extends BaseProcess {
         room: this.roomName
       }]
     ]
-  } else {
+  } else if(this.room.roomType == 'reserved') {
     children = [
       ['JuicedProcesses/harvestManager', {
         room: this.roomName

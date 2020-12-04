@@ -16,6 +16,7 @@ export default class RoomDefense extends BaseProcess {
 
   run() {
     const room = this.room
+  
     if (!room) {
       this.log.warn(`No vision in ${this.memory.room}`)
       return
@@ -88,11 +89,7 @@ export default class RoomDefense extends BaseProcess {
 
   protectors() {
     //eventually we want to probably spawn a creep to head the direction the attack is coming from to see if there is another wave inbound.
-
-
-    
       //Needs to be more dynamic
-
       const cid = this.ensureCreep('protector_1', {
         rooms: [this.roomName],
         body: [
@@ -104,13 +101,8 @@ export default class RoomDefense extends BaseProcess {
       })
       this.ensureChild(`protector_${cid}`, 'JuicedProcesses/stackStateCreep', {
         spawnTicket: cid,
-        base: ['protector', this.roomName]
+        base: ['protector', this.room.name]
       })
-
-    
-
-
-
   }
 
 

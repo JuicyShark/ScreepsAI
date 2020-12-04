@@ -18,6 +18,9 @@ export default class Intel extends BaseProcess {
   get log() {
     return this.context.log
   }
+  get rooms(){
+    return this.memory.rooms
+  }
 
   run() {
     let intelLog = this.segments.load(C.SEGMENTS.INTEL)
@@ -31,7 +34,7 @@ export default class Intel extends BaseProcess {
     }
     let children = [
       ['JuicedProcesses/colonyExpansion', {
-        intelLog: intelLog.rooms
+        rooms: Game.rooms
       }],
       //      ['JuicedProcesses/layout', {
       //        intelLog: intelLog.rooms
@@ -39,7 +42,7 @@ export default class Intel extends BaseProcess {
     ]
     if (Game.shard.name == 'shardSeason') {
       children.push(['JuicedProcesses/SeasonalBrain', {
-        intelLog: intelLog.rooms
+        rooms: this.rooms
       }])
     }
     each(children, ([child, context = {}]) => {
@@ -54,6 +57,7 @@ export default class Intel extends BaseProcess {
     },
     key
   }) {
+
     this.log.info(`Collecting intel on ${key}`, )
     let room = Game.rooms[key]
     let mem = this.segments.load(C.SEGMENTS.INTEL) || {}
