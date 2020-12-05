@@ -57,19 +57,20 @@ export default class RoomDefense extends BaseProcess {
 
     this.towerLogic(hostiles)
 
-    if (!hostiles) {
+    if (!hostiles || hostiles.length == 0) {
       room.memory.underAttack.now = false;
       room.memory.underAttack.needDef = false;
-      this.cleanChildren()
+      this.kernel.killProcess(this.context.id)
       return
     }
     /*hostiles.forEach(hosCreep => {
-      hosCreep.get
+      hosCreep.getActiveBodyparts()
     })*/
 
     if (hostiles) {
       room.memory.underAttack.now = true;
-      if (room.memory.underAttack.needDef == undefined) {
+      if (room.memory.underAttack.needDef == false) {
+        //Check to see if we need defenders!
         room.memory.underAttack.needDef = true;
       }
 
@@ -78,7 +79,7 @@ export default class RoomDefense extends BaseProcess {
       }
 
       //Logic for checking creeps to come... for now just quantity
-      console.log("HERE ", hostiles.length, " ", census)
+      console.log("HERE ", hostiles.length, " ", JSON.stringify(census))
       this.status = "Defending Room"
       if (room.memory.underAttack.now && room.memory.underAttack.needDef) {
 
@@ -102,7 +103,7 @@ export default class RoomDefense extends BaseProcess {
         //console.log('Hostiles!',hostiles.map(h=>`${h} ${h.owner.username}`))
         this.room.towers.forEach(tower => {
           if (tower.energy != 0) {
-            const tgt = tower.pos.findClosestByRange(hostiles)
+            const tgt = hostiles.pop()
             tower.attack(tgt)
             vis.line(tower.pos, tgt.pos, {
               width: 0.1,
@@ -175,7 +176,7 @@ export default class RoomDefense extends BaseProcess {
               expand([4, C.TOUGH, 1, C.ATTACK, 3, C.MOVE]), //200 energy
               expand([8, C.TOUGH, 1, RANGED_ATTACK, 1, C.ATTACK, 4, C.MOVE]) //450energy
             ],
-            priority: 1
+            priority: 2
           })
           return this.ensureChild(`protector${hostile.id}_${cid}`, 'JuicedProcesses/stackStateCreep', {
             spawnTicket: cid,
@@ -189,7 +190,7 @@ export default class RoomDefense extends BaseProcess {
               expand([8, C.TOUGH, 2, C.ATTACK, 2, C.MOVE]),
               expand([8, C.TOUGH, 2, RANGED_ATTACK, 3, C.ATTACK, 3, C.MOVE])
             ],
-            priority: 1
+            priority: 2
           })
           return this.ensureChild(`protector${hostile.id}_${cid}`, 'JuicedProcesses/stackStateCreep', {
             spawnTicket: cid,
@@ -203,7 +204,7 @@ export default class RoomDefense extends BaseProcess {
               expand([2, C.TOUGH, 2, C.ATTACK, 2, C.MOVE]),
               expand([4, C.TOUGH, 2, C.ATTACK, 4, C.MOVE])
             ],
-            priority: 1
+            priority: 2
           })
           return this.ensureChild(`protector${hostile.id}_${cid}`, 'JuicedProcesses/stackStateCreep', {
             spawnTicket: cid,
