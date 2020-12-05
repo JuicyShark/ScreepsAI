@@ -42,6 +42,7 @@ export default class UpgradeManager extends BaseProcess {
               const cid = this.ensureCreep(`upgrader_${i}`, {
                 rooms: [this.room.name],
                 body: [
+                  expand([10, C.CARRY, 6, C.WORK, 3, C.MOVE]),
                   expand([7, C.CARRY, 3, C.WORK, 3, C.MOVE ]),
                   expand([4, C.CARRY, 2, C.WORK, 2, C.MOVE]),
                   expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE])

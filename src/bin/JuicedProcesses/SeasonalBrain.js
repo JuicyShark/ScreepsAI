@@ -27,9 +27,8 @@ export default class SeasonalBrain extends BaseProcess {
 
   run() {
 
-    for(let room in this.rooms){
-      console.log(Game.rooms[room], Game.rooms[room].controller.level)
-      if (C.USER.room.controller.level >= 4) {
+    for(let room in Game.rooms){
+      if (C.USER.room.storage) {
         this.collectPoints(Game.rooms[room])
       }
     }
@@ -52,9 +51,7 @@ export default class SeasonalBrain extends BaseProcess {
         rooms: [room.name],
         // body: i ? cbody : wbody,
         body: [
-          expand([6, C.CARRY, 6, C.MOVE]),
-          expand([4, C.CARRY, 4, C.MOVE]),
-          expand([2, C.CARRY, 2, C.MOVE]),
+          expand([10, C.CARRY, 10, C.MOVE]),
         ],
         priority: 3
       })

@@ -94,15 +94,16 @@ export default class Room extends BaseProcess {
     let spawns = this.room.find(C.FIND_MY_STRUCTURES).filter(s => s.structureType === C.STRUCTURE_SPAWN)
 
     if ((container || storage) && spawns[0]) {
-      var feeders = 1;
+      var feeders = Math.max(1, this.room.extensions.length / 10) 
       for (let i = 0; i < feeders; i++) {
         const cid = this.ensureCreep(`feeder_${i}`, {
           rooms: [this.roomName],
           body: [
-            expand([1, C.CARRY, 1, C.MOVE]),
-            expand([4, C.CARRY, 4, C.MOVE])
+            expand([12, C.CARRY, 6, C.MOVE]),
+            expand([4, C.CARRY, 4, C.MOVE]),
+            expand([1, C.CARRY, 1, C.MOVE])
           ],
-          priority: 4
+          priority: 1
         })
 
         this.ensureChild(`feeder_${cid}`, 'JuicedProcesses/stackStateCreep', {

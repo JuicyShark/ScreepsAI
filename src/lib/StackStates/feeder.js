@@ -15,6 +15,12 @@ export default {
       for (let i = 0; i < types.length; i++) {
         let tgts = (room.structures[types[i]] || []).filter(s => s.energy < s.energyCapacity)
         if (tgts.length) {
+          if(tgts[0].structureType == C.STRUCTURE_TOWER){
+            tgts.sort((a,b) => a.store.energy - b.store.energy)
+            tgt = tgts[0].id
+            break
+          }
+          
           tgt = pos.findClosestByRange(tgts).id
           break
         }

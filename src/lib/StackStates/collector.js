@@ -40,7 +40,7 @@ export default {
         .filter(r => r.resourceType === resourceType)
       }
     if (resources[0]) {
-      if (resources[0] > 49) {
+      if (resources[0].amount > 49) {
         this.status = 'sweeping up resource'
         this.push('pickup', resources[0].id)
         this.push('moveNear', resources[0].id)

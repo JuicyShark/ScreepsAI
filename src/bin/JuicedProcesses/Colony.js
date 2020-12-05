@@ -21,7 +21,10 @@ export default class Colony extends BaseProcess {
   run() {
     each(Game.rooms, (room, name) => {
       console.log(`room ${name} is type: ${room.roomType}`)
-      if (room.roomType == 'undefined') return
+      if (room.roomType == 'undefined') {
+        delete this.rooms[name]
+        return
+      }
       if (!this.rooms[name]) {
         this.rooms[name] = {}
       }
@@ -86,7 +89,7 @@ export default class Colony extends BaseProcess {
         }
       } = Game.flags.reserve
       let room = Game.rooms[roomName]
-      if (room && room.controller.my) {
+      if (room && room.controller.reservation) {
         invoke(room.find(FIND_HOSTILE_STRUCTURES), 'destroy')
         invoke(room.find(FIND_HOSTILE_CONSTRUCTION_SITES), 'remove')
         Game.flags.reserve.remove()
@@ -125,7 +128,7 @@ export default class Colony extends BaseProcess {
   }
 
 
-  this.ensureChild('intel', 'JuicedProcesses/intel', {rooms: this.rooms})
+  this.ensureChild('intel', 'JuicedProcesses/intel',)
   this.ensureChild('flagManager', 'JuicedProcesses/flagManager', {rooms: this.rooms})
 
 }

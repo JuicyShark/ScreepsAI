@@ -42,6 +42,35 @@ export default class HarvestManager extends BaseProcess {
       census[creep.memory.group]++
     }
     spawns.push(...(this.room.spawns || []))
+    if(this.room.roomType == 'reserved'){
+      let cid
+      let {x,y,roomName} = this.room.controller.pos 
+      if(this.room.controller.reservation.ticksToEnd >= 4000){
+        cid  = this.ensureCreep(`reserver_${this.room.name}`, {
+          rooms: [this.room.name],
+          body: [
+            [MOVE, CLAIM]
+          ],
+          priority: 6
+        })
+      }else{
+         cid  = this.ensureCreep(`reserver_${this.room.name}`, {
+          rooms: [this.room.name],
+          body: [
+            [MOVE, MOVE, CLAIM, CLAIM]
+          ],
+          priority: 6
+        })
+      }
+      this.ensureChild(`reserver_${this.room.name}_${cid}`, 'JuicedProcesses/stackStateCreep', {
+        spawnTicket: cid,
+        base: ['reserver', {
+          x,
+          y,
+          roomName
+        }]
+      })
+    }
     each(sources, source => {
         const smem = this.room.memory.sources = this.room.memory.sources || {}
         const data = smem[source.id] = smem[source.id] || {}
@@ -54,9 +83,9 @@ export default class HarvestManager extends BaseProcess {
         const spawnTicket = this.ensureCreep(`${source.id}_harv`, {
           rooms: [this.memory.room],
           body: [
-            expand([5, C.WORK, 3, C.MOVE]),
-            expand([4, C.WORK, 3, C.MOVE]),
-            expand([3, C.WORK, 2, C.MOVE]),
+            expand([5, C.WORK, 2, C.MOVE]),
+            expand([4, C.WORK, 2, C.MOVE]),
+            expand([3, C.WORK, 1, C.MOVE]),
             expand([2, C.WORK, 1, C.MOVE])
           ],
           priority: 2
@@ -66,23 +95,25 @@ export default class HarvestManager extends BaseProcess {
           base: ['harvester', source.id]
         })
 
-        let dist
+       let wanted
        if(spawns && spawns[0]){ 
-         dist = spawns && spawns[0].pos.findPathTo(source).length || (this.storage && this.storage.pos.findPathTo(source).length)
-        } else {
-           dist = C.USER.pos.findPathTo(source).length}
-        let maxParts = this.room.level > 2 && Math.min(Math.floor(((this.room.energyAvailable / 50) * 0.80) / 2)) || 1
+         let dist = spawns && spawns[0].pos.findPathTo(source).length || (this.storage && this.storage.pos.findPathTo(source).length)
+         let maxParts = this.room.level > 2 && Math.min(Math.floor(((this.room.energyAvailable / 50) * 0.80) / 2)) || 1
         let needed = Math.max(2, Math.ceil(((source.energyCapacity * 2) / (C.ENERGY_REGEN_TIME / (dist * 2))) / 50)) + 2
-        var wanted = Math.min(Math.ceil(needed / maxParts), (2) / 2);
+         wanted = Math.min(Math.ceil(needed / maxParts), (2) / 2);
+        } else {
+            wanted = 3
+        }
         //console.log(`dist: ${dist}, needed: ${needed}, maxParts: ${maxParts}, wanted: ${wanted}`)
         for (let i = 1; i <= wanted; i++) {
           const spawnTicket = this.ensureCreep(`${source.id}_coll_${i+1}`, {
             rooms: [this.memory.room],
             // body: i ? cbody : wbody,
             body: [
-              expand([6, C.CARRY, 6, C.MOVE]),
-              expand([4, C.CARRY, 4, C.MOVE]),
-              expand([2, C.CARRY, 2, C.MOVE]),
+              expand([10, C.CARRY, 5, C.MOVE]),
+              expand([6, C.CARRY, 3, C.MOVE]),
+              expand([4, C.CARRY, 2, C.MOVE]),
+              expand([2, C.CARRY, 1, C.MOVE]),
             ],
             priority: 3
           })

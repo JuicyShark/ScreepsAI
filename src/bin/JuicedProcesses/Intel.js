@@ -19,7 +19,7 @@ export default class Intel extends BaseProcess {
     return this.context.log
   }
   get rooms(){
-    return this.memory.rooms
+    return Game.rooms
   }
 
   run() {

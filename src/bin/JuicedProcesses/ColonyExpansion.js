@@ -46,6 +46,7 @@ export default class ColonyExpansion extends BaseProcess {
           this.log.info(`cannot find anything useful in Intel, Sleeping for 50 Ticks`)
           this.sleep.sleep(50)
         } else {
+          if(!Memory.rooms) break
           if(Game.GCL >= Memory.rooms.length){
           let bestRoom = this.findBestRooms(intelLog)[0]
           let roomMem = intelLog.rooms[`${room}`]
