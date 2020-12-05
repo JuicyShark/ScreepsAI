@@ -133,7 +133,7 @@ export default class FlagManager extends BaseProcess {
             expand([2, C.ATTACK, 2, C.MOVE]),
             expand([1, C.ATTACK, 1, C.MOVE])
           ],
-          priority: 1
+          priority: 4
         })
         this.ensureChild(`protector_${cid}`, 'JuicedProcesses/stackStateCreep', {
           spawnTicket: cid,
@@ -161,7 +161,7 @@ export default class FlagManager extends BaseProcess {
     const cid = this.ensureCreep('claimer', {
       rooms: [flag.pos.roomName],
       body: [ MOVE, CLAIM ],
-      priority: 10
+      priority: 9
     })
     this.ensureChild(`claimer_${cid}`, 'JuicedProcesses/stackStateCreep', {
       spawnTicket: cid,
