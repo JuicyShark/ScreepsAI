@@ -9,8 +9,6 @@ import {
   findIfSurplus
 } from "/etc/common"
 
-
-
 export default class Room extends BaseProcess {
   constructor(context) {
     super(context)
@@ -18,24 +16,19 @@ export default class Room extends BaseProcess {
     this.kernel = context.queryPosisInterface('baseKernel')
     this.segments = context.queryPosisInterface('segments')
   }
-
   get log() {
     return this.context.log
   }
-
   get memory() {
     return this.context.memory
   }
-
   get children() {
     this.memory.children = this.memory.children || {}
     return this.memory.children
   }
-
   get roomName() {
     return this.memory.room
   }
-
   get room() {
     return Game.rooms[this.roomName]
   }
@@ -43,12 +36,10 @@ export default class Room extends BaseProcess {
 
   run() {
     
-    if (!this.room && this.room.roomType == 'undefined') {
+    if (!this.room || this.room.roomType == 'undefined') {
       this.log.warn(`Invalid Room, terminating. (${this.roomName},${JSON.stringify(this.memory)})`)
       this.kernel.killProcess(this.context.id)
     }
-
-    //this.sleep.sleep(5)
     let children
     if(this.room.roomType == 'home'){
      children = [
@@ -71,19 +62,25 @@ export default class Room extends BaseProcess {
       }]
     ]
   }
-
+  this.setRoomState(this.room)
     each(children, ([child, context = {}]) => {
       this.ensureChild(child, child, context)
     })
 
-
     this.feederOrganiser()
     this.builderOrganiser()
-
-    this.cleanChildren()
-
+  }
+  /**
+   * managing what state the room is in
+   * 
+   */
+  setRoomState(){
 
   }
+  updateRoomState(){
+
+  }
+
 
   /**
    * Spawns a feeder if needed
@@ -94,7 +91,7 @@ export default class Room extends BaseProcess {
     let spawns = this.room.find(C.FIND_MY_STRUCTURES).filter(s => s.structureType === C.STRUCTURE_SPAWN)
 
     if ((container || storage) && spawns[0]) {
-      var feeders = Math.max(1, this.room.extensions.length / 10) 
+      var feeders = Math.max(1, this.room.extensions.length / 15) 
       for (let i = 0; i < feeders; i++) {
         const cid = this.ensureCreep(`feeder_${i}`, {
           rooms: [this.roomName],
@@ -120,14 +117,22 @@ export default class Room extends BaseProcess {
    */
   builderOrganiser() {
     if (this.room.find(C.FIND_MY_CONSTRUCTION_SITES).length) {
-      let surplus = findIfSurplus(this.room)
-      let builders = 1 + surplus
+      //let surplus = findIfSurplus(this.room)
+      let builders
+      if(this.room.storage){
+        if(this.room.storage.store.energy >= C.ENERGY_WANTED[this.room.controller.level]){
+          builders = 1
+        }else builders = 0
+      }else {
+        builders = 1
+      }
+     
       for (let i = 0; i < builders; i++) {
         const cid = this.ensureCreep(`builder_${i}`, {
           rooms: [this.roomName],
           body: [
-            expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE]),
-            expand([6, C.CARRY, 3, C.WORK, 3, C.MOVE])
+            expand([6, C.CARRY, 3, C.WORK, 3, C.MOVE]),
+            expand([2, C.CARRY, 1, C.WORK, 1, C.MOVE])
           ],
           priority: 5
         })

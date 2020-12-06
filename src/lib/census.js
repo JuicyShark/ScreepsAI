@@ -22,11 +22,6 @@ let census = {
       this.roles[mem.role].push(creep)
       room.roles[mem.role] = room.roles[mem.role] || []
       room.roles[mem.role].push(creep)
-
-      this.groups[mem.g] = this.groups[mem.g] || []
-      this.groups[mem.g].push(creep)
-      room.groups[mem.g] = room.groups[mem.g] || []
-      room.groups[mem.g].push(creep)
     })
   }
 }

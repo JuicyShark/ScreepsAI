@@ -31,12 +31,12 @@ export default class UpgradeManager extends BaseProcess {
             const stored = this.room.storage && this.room.storage.store.energy || false 
              if (stored === false) {
               // 3-6 upgraders pre surplus
-              want =  Math.max(min, this.room.extensions.length / 3.2)
+              want =  Math.max(1, this.room.extensions.length / 3.2)
             } else {
               //3-11 upgraders pre surplus
-              if (stored > 10000) {
-                want = Math.max(min, stored / 85000)
-              }
+              if (stored.amount > C.ENERGY_WANTED) {
+                want = Math.max(1, stored / C.ENERGY_WANTED)
+              } else want = 1 
             }
             for(let i = 0; i < want; i++) {
               const cid = this.ensureCreep(`upgrader_${i}`, {

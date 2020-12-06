@@ -11,6 +11,14 @@ C.EPosisSpawnStatus = {
   SPAWNED: 2
 }
 
+C.ENERGY_WANTED = {
+  1: 0,
+  2: 0,
+  3: 2000,
+  4: 15000,
+  5: 40000,
+  6: 100000
+}
 C.USER = Game.spawns.HomeBase
 C.USERNAME = Game.spawns.HomeBase.owner.username
 

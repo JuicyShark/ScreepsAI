@@ -39,11 +39,9 @@ export default class SeasonalBrain extends BaseProcess {
 
   }
   collectPoints(room) {
-    console.log(`looking for scoreContainers`)
     const scoreContainers = room.find(FIND_SCORE_CONTAINERS, {
       filter: (i) => i.store[RESOURCE_SCORE] > 500
     });
-    console.log(`found ${scoreContainers}, total amount: ${scoreContainers.length}`)
     each(scoreContainers, scoreContainer => {
     //for(let score in scoreContainers){
       

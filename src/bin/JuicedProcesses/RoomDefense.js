@@ -13,7 +13,6 @@ export default class RoomDefense extends BaseProcess {
     super(context)
     this.context = context
     this.kernel = context.queryPosisInterface('baseKernel')
-    this.sleeper = this.context.queryPosisInterface('sleep')
   }
 
   get room() {
@@ -25,7 +24,6 @@ export default class RoomDefense extends BaseProcess {
   }
 
   run() {
-    this.sleeper.sleep(5)
     const room = this.room
 
     if (!room) {
@@ -57,12 +55,7 @@ export default class RoomDefense extends BaseProcess {
 
     this.towerLogic(hostiles)
 
-    if (!hostiles || hostiles.length == 0) {
-      room.memory.underAttack.now = false;
-      room.memory.underAttack.needDef = false;
-      this.kernel.killProcess(this.context.id)
-      return
-    }
+
     /*hostiles.forEach(hosCreep => {
       hosCreep.getActiveBodyparts()
     })*/
@@ -79,7 +72,7 @@ export default class RoomDefense extends BaseProcess {
       }
 
       //Logic for checking creeps to come... for now just quantity
-      console.log("HERE ", hostiles.length, " ", JSON.stringify(census))
+      //console.log(`found hostiles  ${hostiles.length}  ${JSON.stringify(census)}`)
       this.status = "Defending Room"
       if (room.memory.underAttack.now && room.memory.underAttack.needDef) {
 
@@ -94,6 +87,10 @@ export default class RoomDefense extends BaseProcess {
         }
 
       }
+    } else { 
+      room.memory.underAttack.now = false;
+      room.memory.underAttack.needDef = false;
+      return
     }
     }
 
@@ -152,6 +149,7 @@ export default class RoomDefense extends BaseProcess {
           for (let i in strongholdList) {
             let defenses = strongholdList[i]
             if (defenses.hits / defenses.hitsMax < target) {
+              if(this.room.storage && this.room.storage.store.energy < C.ENERGY_WANTED[this.room.controller.level]) return
               target = defenses.hits / defenses.hitsMax
               damagedStruct = strongholdList.pop()
             }

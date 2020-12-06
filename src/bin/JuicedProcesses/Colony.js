@@ -20,7 +20,6 @@ export default class Colony extends BaseProcess {
 
   run() {
     each(Game.rooms, (room, name) => {
-      console.log(`room ${name} is type: ${room.roomType}`)
       if (room.roomType == 'undefined') {
         delete this.rooms[name]
         return
@@ -114,14 +113,14 @@ export default class Colony extends BaseProcess {
 
   let want = Math.max(1, (this.rooms.length / 2))
   for (let i = 0; i < 1; i++) {
-    let cid = this.ensureCreep(`creep_${i}`, {
-      rooms: map(filter(Game.rooms, r => r.controller && r.controller.my), 'name'),
+    let cid = this.ensureCreep(`scout_${i}`, {
+      rooms: [C.USER.room.name],
       body: [
         [TOUGH, MOVE]
       ],
       priority: 10
     })
-    this.ensureChild(`creep_${i}_${cid}`, 'JuicedProcesses/stackStateCreep', {
+    this.ensureChild(`scout_${i}_${cid}`, 'JuicedProcesses/stackStateCreep', {
       spawnTicket: cid,
       base: ['scout']
     })

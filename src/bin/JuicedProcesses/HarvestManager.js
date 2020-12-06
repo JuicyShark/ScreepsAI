@@ -41,7 +41,7 @@ export default class HarvestManager extends BaseProcess {
       census[creep.memory.group] = census[creep.memory.group] || 0
       census[creep.memory.group]++
     }
-    spawns.push(...(this.room.spawns || []))
+    spawns.push(...(this.room.spawns || C.USER))
     if(this.room.roomType == 'reserved'){
       let cid
       let {x,y,roomName} = this.room.controller.pos 
@@ -72,16 +72,9 @@ export default class HarvestManager extends BaseProcess {
       })
     }
     each(sources, source => {
-        const smem = this.room.memory.sources = this.room.memory.sources || {}
-        const data = smem[source.id] = smem[source.id] || {}
-        data.pos = {
-          roomName: source.pos.roomName,
-          x: source.pos.x,
-          y: source.pos.y
-        }
-        data.id = source.id
-        const spawnTicket = this.ensureCreep(`${source.id}_harv`, {
-          rooms: [this.memory.room],
+
+      const spawnTicket = this.ensureCreep(`${source.id}_harv`, {
+          rooms: [this.room.name],
           body: [
             expand([5, C.WORK, 2, C.MOVE]),
             expand([4, C.WORK, 2, C.MOVE]),
@@ -95,19 +88,22 @@ export default class HarvestManager extends BaseProcess {
           base: ['harvester', source.id]
         })
 
-       let wanted
-       if(spawns && spawns[0]){ 
-         let dist = spawns && spawns[0].pos.findPathTo(source).length || (this.storage && this.storage.pos.findPathTo(source).length)
-         let maxParts = this.room.level > 2 && Math.min(Math.floor(((this.room.energyAvailable / 50) * 0.80) / 2)) || 1
+       let wanted            
+         let dist = C.USER.room.storage && C.USER.room.storage.pos.findPathTo(source) || C.USER && C.USER.pos.findPathTo(source)
+          let lastStep = dist.slice(-1)
+          this.room.memory.pathTest = C.USER.room.storage.pos.findPathTo(source)
+          this.room.memory.pathTest2 = lastStep
+          if(lastStep[0].x == 0 || lastStep[0].x == 49) dist = dist.length * 2.2
+          else if(lastStep[0].y == 0 || lastStep[0].y == 49) dist = dist.length * 2.2
+          else dist = dist.length
+         let maxParts = Math.min(Math.floor(((C.USER.room.energyCapacityAvailable / 50) * 0.80) / 2)) || 1
         let needed = Math.max(2, Math.ceil(((source.energyCapacity * 2) / (C.ENERGY_REGEN_TIME / (dist * 2))) / 50)) + 2
-         wanted = Math.min(Math.ceil(needed / maxParts), (2) / 2);
-        } else {
-            wanted = 3
-        }
-        //console.log(`dist: ${dist}, needed: ${needed}, maxParts: ${maxParts}, wanted: ${wanted}`)
+         wanted = Math.max(Math.ceil(needed / maxParts), 1);
+       
+      console.log(`dist: ${dist}, needed: ${needed}, maxParts: ${maxParts}, wanted: ${wanted}`)
         for (let i = 1; i <= wanted; i++) {
           const spawnTicket = this.ensureCreep(`${source.id}_coll_${i+1}`, {
-            rooms: [this.memory.room],
+            rooms: [this.room.name],
             // body: i ? cbody : wbody,
             body: [
               expand([10, C.CARRY, 5, C.MOVE]),

@@ -79,18 +79,20 @@ let obj = {
   roomType: {
     get: function () {
       let homeOrRemote
-      if (this.controller) {
+      if (!this.controller) {
+        homeOrRemote = 'undefined'
+        return homeOrRemote
+      }
         if (this.controller.my) homeOrRemote = 'home'
         else if (this.controller.reservation) {
           if (this.controller.reservation.username == C.USERNAME)homeOrRemote = 'reserved'
+          else homeOrRemote = 'undefined'
         } else homeOrRemote = 'undefined'
-      }
+      
       return homeOrRemote
     },
     configurable: true
   }
-
-
 }
 
 multipleList.forEach(function (type) {
