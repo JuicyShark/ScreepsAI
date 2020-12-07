@@ -55,35 +55,45 @@ export default class RoomDefense extends BaseProcess {
 
     this.towerLogic(hostiles)
 
+    if (!hostiles || hostiles.length == 0) {
+      room.memory.underAttack.now = false;
+      if(room.memory.underAttack.needDef){
+      room.memory.underAttack.needDef = false;
+      return}
+    }
 
     /*hostiles.forEach(hosCreep => {
       hosCreep.getActiveBodyparts()
     })*/
 
-    if (hostiles) {
+    if (hostiles && hostiles.length > 0) {
       room.memory.underAttack.now = true;
       if (room.memory.underAttack.needDef == false) {
         //Check to see if we need defenders!
-        room.memory.underAttack.needDef = true;
+        if(room.towers.length <=1){
+          room.memory.underAttack.needDef = true;
+        }
+        //IF attack is HUGE then HELP
+        if (hostiles.length > 2){
+          room.memory.underAttack.needDef = true;
+        }
       }
 
-      if (hostiles.length >= 1) {
-        //  this.protectors()
-      }
 
       //Logic for checking creeps to come... for now just quantity
-      //console.log(`found hostiles  ${hostiles.length}  ${JSON.stringify(census)}`)
-      this.status = "Defending Room"
+
+      console.log("HERE ", hostiles.length)
+      this.status = `Defending Room from ${hostiles.length +1} hostiles`
+
       if (room.memory.underAttack.now && room.memory.underAttack.needDef) {
 
         let count = 0
-        hostiles.forEach(hostile => {
-          this.protectors("fodder", hostile)
-          this.protectors("strong", hostile)
-          count++
-        })
         if (count >= hostiles.length) {
           room.memory.underAttack.needDef = false;
+        } else {
+          this.protectors("quick", "fast", room.name)
+          this.protectors("fodder", "chunky", room.name)
+          this.protectors("strong", "rangy", room.name)
         }
 
       }
@@ -94,6 +104,10 @@ export default class RoomDefense extends BaseProcess {
     }
     }
 
+    /**
+     * Tower Drawer. Draws the target and line. Also calls tower logic
+     * @param {*} hostiles 
+     */
     towerLogic(hostiles) {
       if (hostiles.length) {
         const vis = this.room.visual
@@ -127,6 +141,9 @@ export default class RoomDefense extends BaseProcess {
       }
     }
 
+    /**
+     * Tower MainLogic
+     */
     doTowerMaint() {
       let urgentList = this.room.find(C.FIND_STRUCTURES, {
         filter: s => s.hits < 650 && s.hits > 10
@@ -163,56 +180,75 @@ export default class RoomDefense extends BaseProcess {
       })
     }
 
-    protectors(type, hostile) {
+    /**
+     * 
+     * @param {*} type 
+     * @param {*} name 
+     */
+    protectors(type, name, roomName) {
       //eventually we want to probably spawn a creep to head the direction the attack is coming from to see if there is another wave inbound.
       var cid;
       switch (type) {
+        case "quick":
+          cid = this.ensureCreep(`${name}protector`, {
+            rooms: [roomName],
+            body: [
+              expand([1, C.TOUGH, 1, C.ATTACK, 1, C.MOVE]) //200 energy
+            ],
+            priority: 3
+          })
+          return this.ensureChild(`protector${name}_${cid}`, 'JuicedProcesses/stackStateCreep', {
+            spawnTicket: cid,
+            base: ['protector', roomName]
+          })
+
         case "fodder":
-          cid = this.ensureCreep(`${hostile.id}Fodder`, {
-            rooms: [this.room.name],
+          cid = this.ensureCreep(`${name}protector`, {
+            rooms: [roomName],
             body: [
               expand([4, C.TOUGH, 1, C.ATTACK, 3, C.MOVE]), //200 energy
               expand([8, C.TOUGH, 1, RANGED_ATTACK, 1, C.ATTACK, 4, C.MOVE]) //450energy
             ],
-            priority: 2
+            priority: 3
           })
-          return this.ensureChild(`protector${hostile.id}_${cid}`, 'JuicedProcesses/stackStateCreep', {
+          return this.ensureChild(`protector${name}_${cid}`, 'JuicedProcesses/stackStateCreep', {
             spawnTicket: cid,
-            base: ['protector', this.room.name]
+            base: ['protector', roomName]
           })
 
         case "strong":
-          cid = this.ensureCreep(`${hostile.id}StrongMans`, {
-            rooms: [this.room.name],
+          cid = this.ensureCreep(`${name}protector`, {
+            rooms: [roomName],
             body: [
               expand([8, C.TOUGH, 2, C.ATTACK, 2, C.MOVE]),
               expand([8, C.TOUGH, 2, RANGED_ATTACK, 3, C.ATTACK, 3, C.MOVE])
             ],
-            priority: 2
+            priority: 3
           })
-          return this.ensureChild(`protector${hostile.id}_${cid}`, 'JuicedProcesses/stackStateCreep', {
+          return this.ensureChild(`protector${name}_${cid}`, 'JuicedProcesses/stackStateCreep', {
             spawnTicket: cid,
-            base: ['protector', this.room.name]
+            base: ['protector', roomName]
           })
 
         default:
-          cid = this.ensureCreep(`protector_${hostile.id}1`, {
-            rooms: [this.room.name],
+          const spawnTicket = this.ensureCreep(`${name}_protector_`, {
+            rooms: [roomName],
+            // body: i ? cbody : wbody,
             body: [
-              expand([2, C.TOUGH, 2, C.ATTACK, 2, C.MOVE]),
-              expand([4, C.TOUGH, 2, C.ATTACK, 4, C.MOVE])
+              expand([4, C.TOUGH, 1, C.ATTACK, 3, C.MOVE]), //200 energy
+              expand([8, C.TOUGH, 1, RANGED_ATTACK, 1, C.ATTACK, 4, C.MOVE]) //450energy
             ],
-            priority: 2
+            priority: 3
           })
-          return this.ensureChild(`protector${hostile.id}_${cid}`, 'JuicedProcesses/stackStateCreep', {
-            spawnTicket: cid,
-            base: ['protector', this.room.name]
+          this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', {
+            spawnTicket,
+            base: ['protector', roomName]
           })
       }
     }
 
 
     toString() {
-      return this.memory.room
+      return this.memory.room, " || ", this.status
     }
   }
