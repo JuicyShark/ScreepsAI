@@ -33,9 +33,10 @@ export default class UpgradeManager extends BaseProcess {
               // 3-6 upgraders pre surplus
               want =  Math.max(1, this.room.extensions.length / 3.2)
             } else {
-              //3-11 upgraders pre surplus
-              if (stored.amount > C.ENERGY_WANTED) {
-                want = Math.max(1, stored / C.ENERGY_WANTED)
+              //3-11 upgraders pre  surplus
+              if (stored > C.ENERGY_WANTED[this.room.controller.level]) {
+                want = Math.max(1, stored / C.ENERGY_WANTED[this.room.controller.level])
+                if(want >= 10) want = 9
               } else want = 1 
             }
             for(let i = 0; i < want; i++) {
