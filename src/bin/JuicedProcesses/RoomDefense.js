@@ -53,7 +53,7 @@ export default class RoomDefense extends BaseProcess {
       }
     }) => x && x !== 49 && y && y !== 49).filter(IFF.notAlly)
 
-    this.towerLogic(hostiles)
+    
 
     if (!hostiles || hostiles.length == 0) {
       room.memory.underAttack.now = false;
@@ -67,6 +67,7 @@ export default class RoomDefense extends BaseProcess {
     })*/
 
     if (hostiles && hostiles.length > 0) {
+      this.towerLogic(hostiles)
       room.memory.underAttack.now = true;
       if (room.memory.underAttack.needDef == false) {
         //Check to see if we need defenders!
