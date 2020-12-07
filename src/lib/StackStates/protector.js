@@ -49,5 +49,5 @@ export default {
         this.push('suicide')
         this.runStack()}
     }
-  }
+
 }
