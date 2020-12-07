@@ -169,7 +169,7 @@ export default class RoomDefense extends BaseProcess {
       switch (type) {
         case "fodder":
           cid = this.ensureCreep(`${hostile.id}Fodder`, {
-            rooms: [room.roomName],
+            rooms: [this.room.name],
             body: [
               expand([4, C.TOUGH, 1, C.ATTACK, 3, C.MOVE]), //200 energy
               expand([8, C.TOUGH, 1, RANGED_ATTACK, 1, C.ATTACK, 4, C.MOVE]) //450energy
@@ -178,12 +178,12 @@ export default class RoomDefense extends BaseProcess {
           })
           return this.ensureChild(`protector${hostile.id}_${cid}`, 'JuicedProcesses/stackStateCreep', {
             spawnTicket: cid,
-            base: ['protector', room.roomName]
+            base: ['protector', this.room.name]
           })
 
         case "strong":
           cid = this.ensureCreep(`${hostile.id}StrongMans`, {
-            rooms: [room.roomName],
+            rooms: [this.room.name],
             body: [
               expand([8, C.TOUGH, 2, C.ATTACK, 2, C.MOVE]),
               expand([8, C.TOUGH, 2, RANGED_ATTACK, 3, C.ATTACK, 3, C.MOVE])
@@ -192,12 +192,12 @@ export default class RoomDefense extends BaseProcess {
           })
           return this.ensureChild(`protector${hostile.id}_${cid}`, 'JuicedProcesses/stackStateCreep', {
             spawnTicket: cid,
-            base: ['protector', room.roomName]
+            base: ['protector', this.room.name]
           })
 
         default:
           cid = this.ensureCreep(`protector_${hostile.id}1`, {
-            rooms: [room.roomName],
+            rooms: [this.room.name],
             body: [
               expand([2, C.TOUGH, 2, C.ATTACK, 2, C.MOVE]),
               expand([4, C.TOUGH, 2, C.ATTACK, 4, C.MOVE])
@@ -206,7 +206,7 @@ export default class RoomDefense extends BaseProcess {
           })
           return this.ensureChild(`protector${hostile.id}_${cid}`, 'JuicedProcesses/stackStateCreep', {
             spawnTicket: cid,
-            base: ['protector', room.roomName]
+            base: ['protector', this.room.name]
           })
       }
     }
