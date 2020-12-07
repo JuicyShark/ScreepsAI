@@ -86,11 +86,9 @@ export default class Room extends BaseProcess {
    * Spawns a feeder if needed
    */
   feederOrganiser() {
-    let [container] = this.room.lookNear(C.LOOK_STRUCTURES, this.room.find(C.FIND_STRUCTURES).filter((s) => s.structureType === C.STRUCTURE_CONTAINER))
-    let storage = this.room.find(C.FIND_STRUCTURES).filter(s => s.structureType === C.STRUCTURE_STORAGE && s.hits < (s.hitsMax / 1.5))
     let spawns = this.room.find(C.FIND_MY_STRUCTURES).filter(s => s.structureType === C.STRUCTURE_SPAWN)
 
-    if ((container || storage) && spawns[0]) {
+    if (spawns.length) {
       var feeders = Math.max(1, this.room.extensions.length / 15) 
       for (let i = 0; i < feeders; i++) {
         const cid = this.ensureCreep(`feeder_${i}`, {
@@ -128,7 +126,7 @@ export default class Room extends BaseProcess {
       }
      
       for (let i = 0; i < builders; i++) {
-        const cid = this.ensureCreep(`builder_${i}`, {
+        const spawnTicket  = this.ensureCreep(`builder_${i}`, {
           rooms: [this.roomName],
           body: [
             expand([6, C.CARRY, 3, C.WORK, 3, C.MOVE]),
@@ -136,8 +134,8 @@ export default class Room extends BaseProcess {
           ],
           priority: 5
         })
-        this.ensureChild(`builder_${cid}`, 'JuicedProcesses/stackStateCreep', {
-          spawnTicket: cid,
+        this.ensureChild(spawnTicket, 'JuicedProcesses/stackStateCreep', {
+          spawnTicket,
           base: ['builder', this.roomName]
         })
       }
