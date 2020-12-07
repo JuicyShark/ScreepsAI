@@ -91,7 +91,12 @@ export default class HarvestManager extends BaseProcess {
        let wanted            
          let dist = C.USER.room.storage && C.USER.room.storage.pos.findPathTo(source) || C.USER && C.USER.pos.findPathTo(source)
           let lastStep = dist.slice(-1)
-          this.room.memory.pathTest = C.USER.room.storage.pos.findPathTo(source)
+          if(C.USER.room.storage){
+            this.room.memory.pathTest = C.USER.room.storage.pos.findPathTo(source)
+          } else {
+            this.room.memory.pathTest = C.USER.pos.findPathTo(source);
+          }
+          
           this.room.memory.pathTest2 = lastStep
           if(lastStep[0].x == 0 || lastStep[0].x == 49) dist = dist.length * 2.2
           else if(lastStep[0].y == 0 || lastStep[0].y == 49) dist = dist.length * 2.2
