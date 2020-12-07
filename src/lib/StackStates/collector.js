@@ -7,8 +7,9 @@ import {
 
 export default {
   collector(target, resourceType) {
-    this.status = 'idle collector'
+    this.status = `idle ${resourceType} collector`
     let tgt = this.resolveTarget(target)
+
     if (!this.creep.carryCapacity) {
       this.status = 'dying'
       this.creep.say('No CARRY', true)
@@ -23,13 +24,13 @@ export default {
     if (!this.creep.pos.inRangeTo(tgt, 3)) {
       this.status = 'traveling'
       this.log.info(`moveInRange`)
-      this.push('moveInRange', target, 3)
+      this.push('moveInRange', tgt, 3)
       return this.runStack()
     }
     let resources
       if(resourceType == 'score'){
         resources = this.creep.room.find(FIND_SCORE_CONTAINERS, {
-          filter: (i) => i.store[RESOURCE_SCORE] > 500
+          filter: (i) => i.store[RESOURCE_SCORE]
         });
         this.status = 'withdraw'
         this.push('withdraw', resources[0].id, resourceType)

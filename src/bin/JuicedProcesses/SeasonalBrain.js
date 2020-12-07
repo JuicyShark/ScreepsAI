@@ -1,7 +1,11 @@
 import C from '/include/constants'
 import BaseProcess from './BaseProcess'
-import {expand} from '/etc/common'
-import { each } from 'lodash-es'
+import {
+  expand
+} from '/etc/common'
+import {
+  each
+} from 'lodash-es'
 
 
 export default class SeasonalBrain extends BaseProcess {
@@ -27,7 +31,7 @@ export default class SeasonalBrain extends BaseProcess {
 
   run() {
 
-    for(let room in Game.rooms){
+    for (let room in Game.rooms) {
       if (C.USER.room.storage) {
         this.collectPoints(Game.rooms[room])
       }
@@ -40,14 +44,12 @@ export default class SeasonalBrain extends BaseProcess {
   }
   collectPoints(room) {
     const scoreContainers = room.find(FIND_SCORE_CONTAINERS, {
-      filter: (i) => i.store[RESOURCE_SCORE] > 500
+      filter: (i) => i.store[RESOURCE_SCORE]
     });
-    each(scoreContainers, scoreContainer => {
-    //for(let score in scoreContainers){
-      
+    const scoreContainer = scoreContainers[0]
+    if (scoreContainer) {
       const spawnTicket = this.ensureCreep(`${scoreContainer.id}_coll_score`, {
-        rooms: [room.name],
-        // body: i ? cbody : wbody,
+        rooms: [scoreContainer.pos.roomName],
         body: [
           expand([10, C.CARRY, 10, C.MOVE]),
         ],
@@ -57,6 +59,6 @@ export default class SeasonalBrain extends BaseProcess {
         spawnTicket,
         base: ['collector', scoreContainer.id, C.RESOURCE_SCORE]
       })
-    })
+    }
   }
 }
