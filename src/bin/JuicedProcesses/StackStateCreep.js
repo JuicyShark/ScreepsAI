@@ -2,22 +2,22 @@ import C from '/include/constants'
 import states from '/lib/StackStates/index'
 
 export default class StackStateCreep extends states {
-  constructor (context) {
+  constructor(context) {
     super()
     this.context = context
     this.kernel = context.queryPosisInterface('baseKernel')
     this.spawn = context.queryPosisInterface('spawn')
   }
 
-  get log () {
+  get log() {
     return this.context.log
   }
 
-  get memory () {
+  get memory() {
     return this.context.memory
   }
 
-  get stack () {
+  get stack() {
     this.memory.stack = this.memory.stack || []
     if (!(this.memory.stack instanceof Array)) {
       this.memory.stack = []
@@ -28,14 +28,15 @@ export default class StackStateCreep extends states {
     return this.memory.stack
   }
 
-  get creep () {
+  get creep() {
     return this.spawn.getCreep(this.memory.spawnTicket)
   }
 
-  run () {
+  run() {
     let start = Game.cpu.getUsed()
     let status = this.spawn.getStatus(this.memory.spawnTicket)
     if (status.status === C.EPosisSpawnStatus.ERROR) {
+      // TODO: queue currently returning error and causing all programs to re init
       throw new Error(`Spawning ticket error: ${status.message}`)
     }
     let creep = this.creep
@@ -49,7 +50,7 @@ export default class StackStateCreep extends states {
     }
     try {
       this.runStack()
-    //  this.debug = true
+      //  this.debug = true
       if (this.debug) {
         this.say(this.stack.slice(-1)[0])
       }
@@ -59,11 +60,13 @@ export default class StackStateCreep extends states {
     }
     let end = Game.cpu.getUsed()
     if (creep) {
-      creep.room.visual.text(Math.round((end - start) * 100) / 100, creep.pos.x + 1, creep.pos.y, { size: 0.6 })
+      creep.room.visual.text(Math.round((end - start) * 100) / 100, creep.pos.x + 1, creep.pos.y, {
+        size: 0.6
+      })
     }
   }
 
-  toString () {
+  toString() {
     return `${this.memory.spawnTicket} ${this.stack.slice(-1)[0]} ${this.status || ''}`
   }
 }

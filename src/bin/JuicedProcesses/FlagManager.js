@@ -14,33 +14,16 @@ export default class FlagManager extends BaseProcess {
   get log() {
     return this.context.log
   }
-  get memory() {
-    return this.context.memory
-  }
 
-  get children() {
-    this.memory.children = this.memory.children || {}
-    return this.memory.children
-  }
-
-  get roomName() {
-    return this.memory.room
-  }
-
-  get room() {
-    return Game.rooms[this.roomName]
-  }
 
   /**
    *  Runs the Flag Logic. Located in FlagManager.js
    */
   run() {
-    this.sleep.sleep(50)
+    console.log("Getting Flag Manager ready")
+   // this.sleep.sleep(50)
     //using for f
     for (let flag in Game.flags) {
-
-      flag.room ? this.checkFlag(flag) :
- console.log("Getting Flag Manager ready")
 
     }
   }

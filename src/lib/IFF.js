@@ -13,7 +13,9 @@ const OFFICIAL = {
 const SHARD = {
   DEFAULT: {
     allied: {'CrazedGod': true,
-    'Juicy-Shark': true},
+    'Juicy-Shark': true, 
+    'crazed': true
+  },
     friends: {}
   },
   shard0: OFFICIAL,

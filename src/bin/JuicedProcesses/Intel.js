@@ -34,7 +34,7 @@ export default class Intel extends BaseProcess {
     }
     let children = [
       ['JuicedProcesses/colonyExpansion', {
-        rooms: Game.rooms
+        rooms: this.rooms
       }],
       //      ['JuicedProcesses/layout', {
       //        intelLog: intelLog.rooms

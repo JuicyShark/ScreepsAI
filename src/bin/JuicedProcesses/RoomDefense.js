@@ -83,7 +83,7 @@ export default class RoomDefense extends BaseProcess {
 
       //Logic for checking creeps to come... for now just quantity
 
-      console.log("HERE ", hostiles.length)
+     // console.log("HERE ", hostiles.length)
       this.status = `Defending Room from ${hostiles.length +1} hostiles`
 
       if (room.memory.underAttack.now && room.memory.underAttack.needDef) {

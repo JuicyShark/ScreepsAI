@@ -24,20 +24,25 @@ export default {
     if (!this.creep.pos.inRangeTo(tgt, 3)) {
       this.status = 'traveling'
       this.log.info(`moveInRange`)
-      this.push('moveInRange', tgt, 3)
+      this.push('moveInRange', target, 3)
       return this.runStack()
     }
     let resources
       if(resourceType == 'score'){
-        resources = this.creep.room.find(FIND_SCORE_CONTAINERS, {
+        if(!target){
+         score = this.creep.room.find(FIND_SCORE_CONTAINERS, {
           filter: (i) => i.store[RESOURCE_SCORE]
         });
+        if(!score[0])
+        target = score[0].id
+        else this.creep.suicide()
+      }
         this.status = 'withdraw'
-        this.push('withdraw', resources[0].id, resourceType)
-        this.push('moveNear', resources[0].id)
+        this.push('withdraw', target, resourceType)
+        this.push('moveNear', target)
         return this.runStack()
       } else {
-        resources = this.creep.room.lookNear(C.LOOK_RESOURCES, tgt.pos)
+         resources = this.creep.room.lookNear(C.LOOK_RESOURCES, tgt.pos)
         .filter(r => r.resourceType === resourceType)
       }
     if (resources[0]) {

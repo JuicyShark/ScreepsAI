@@ -62,7 +62,6 @@ export default class Room extends BaseProcess {
       }]
     ]
   }
-  this.setRoomState(this.room)
     each(children, ([child, context = {}]) => {
       this.ensureChild(child, child, context)
     })
@@ -70,17 +69,6 @@ export default class Room extends BaseProcess {
     this.feederOrganiser()
     this.builderOrganiser()
   }
-  /**
-   * managing what state the room is in
-   * 
-   */
-  setRoomState(){
-
-  }
-  updateRoomState(){
-
-  }
-
 
   /**
    * Spawns a feeder if needed

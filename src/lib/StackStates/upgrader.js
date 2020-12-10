@@ -5,6 +5,17 @@ export default {
     if (!cache.work) {
       cache.work = this.creep.getActiveBodyparts(C.WORK)
     }
+    const { room: {controller}} = this.creep
+    if(this.creep.store.energy < this.creep.store.getCapacity(RESOURCE_ENERGY)){
+    this.status = 'Looking for energy'
+    let tgt = this.creep.room.storage || this.creep.room.containers.find(c => c.store.energy) || this.creep.room.structures[STRUCTURE_SPAWN] && this.creep.room.structures[STRUCTURE_SPAWN][0]
+    if (!tgt) {
+      tgt = C.USER.room.storage || C.USER.room.containers.find(c => c.store.energy) || C.USER.room.structures[STRUCTURE_SPAWN] && C.USER.structures[STRUCTURE_SPAWN][0]
+    }
+    this.push('withdraw', tgt.id, C.RESOURCE_ENERGY)
+    this.push('moveNear', tgt.id)
+    return this.runStack()
+}
     if (this.creep.pos.roomName !== this.creep.memory.homeRoom) {
       let target = {
         x: 25,
@@ -15,33 +26,12 @@ export default {
       this.push('moveToRoom', tgt)
       return this.runStack()
     }
-    const {
-      room,
-      pos,
-      room: {
-        controller
-      }
-    } = this.creep
     if (this.creep.carry.energy) {
       this.status = 'Upgrading'
       let upCnt = Math.ceil(this.creep.carry.energy / cache.work)
       this.push('repeat', upCnt, 'upgradeController', controller.id)
       this.push('moveInRange', controller.id, 3)
       this.runStack()
-    } else {
-      this.status = 'Looking for energy'
-      let tgt = room.storage || room.containers.find(c => c.store.energy) || room.structures[STRUCTURE_SPAWN] && room.structures[STRUCTURE_SPAWN][0]
-      if (!tgt) {
-        tgt = C.USER.room.storage || C.USER.room.containers.find(c => c.store.energy) || C.USER.room.structures[STRUCTURE_SPAWN] && C.USER.structures[STRUCTURE_SPAWN][0]
-      } else(tgt)
-      if (tgt.structureType === 'storage' && tgt.store.energy < 10000 && (!controller.ticksToDowngrade || controller.ticksToDowngrade < 10000)) {
-        this.push('sleep', Game.time + 10)
-        return this.runStack()
-      }
-      this.push('withdraw', tgt.id, C.RESOURCE_ENERGY)
-      this.push('moveNear', tgt.id)
-      return this.runStack()
-
-    }
+    } 
   }
 }

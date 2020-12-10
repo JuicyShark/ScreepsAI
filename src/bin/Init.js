@@ -1,19 +1,5 @@
 import each from 'lodash-es/each'
 import config from '/etc/init'
-// interface IInitMemory {
-//   posisTestId?: PosisPID,
-//   sleepTestId?: PosisPID,
-//   msg?: string,
-//   services: { [id: string]: ServiceDefinition }
-// }
-
-// export interface ServiceDefinition {
-//   restart: boolean
-//   name: string
-//   context: any
-//   status: 'started' | 'stopped'
-//   pid?: PosisPID
-// }
 
 export default class Init {
   constructor (context) {

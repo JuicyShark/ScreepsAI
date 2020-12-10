@@ -47,7 +47,6 @@ export default class Colony extends BaseProcess {
       }
     })
     if (Game.flags.claim) {
-      if (Game.gcl.level > Game.spawns.length) {
         let {
           pos: {
             x,
@@ -77,7 +76,6 @@ export default class Colony extends BaseProcess {
             }]
           })
         }
-      }
     }
     if (Game.flags.reserve) {
       let {
@@ -128,8 +126,7 @@ export default class Colony extends BaseProcess {
 
 
   this.ensureChild('intel', 'JuicedProcesses/intel',)
-  this.ensureChild('flagManager', 'JuicedProcesses/flagManager', {room})
-
+//  this.ensureChild('flagManager', 'JuicedProcesses/flagManager',)
 }
 
 interrupt({

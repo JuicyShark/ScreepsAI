@@ -4,20 +4,49 @@ import values from 'lodash-es/values'
 
 
 export default {
-  builder (target, cache = {}) {
+  builder(target, cache = {}) {
     if (!cache.work) {
       cache.work = this.creep.getActiveBodyparts(C.WORK)
     }
-    target = { x: 25, y: 25, roomName: target }
+    if (this.creep.store.energy < this.creep.store.getCapacity(RESOURCE_ENERGY)) {
+      this.status = 'Looking for energy'
+      let storage = this.creep.room.storage || this.creep.room.containers.find(c => c.store.energy) || this.creep.room.structures[STRUCTURE_SPAWN] && this.creep.room.structures[STRUCTURE_SPAWN][0]
+      if (!storage) {
+        storage = C.USER.room.storage || C.USER.room.containers.find(c => c.store.energy) || C.USER.room.structures[STRUCTURE_SPAWN] && C.USER.structures[STRUCTURE_SPAWN][0]
+      }
+      if (this.creep.room.storage && this.creep.room.storage.store.energy < 1000) {
+        this.push('repeat', 5, 'flee', [{
+          pos: this.creep.room.storage.pos,
+          range: 5
+        }])
+        return this.runStack()
+      }
+      if (storage) {
+        if (storage.structureType === STRUCTURE_CONTAINER || STRUCTURE_STORAGE) {
+          this.push('withdraw', storage.id, C.RESOURCE_ENERGY)
+          this.push('moveNear', storage.id)
+          return this.runStack()
+        } else if (storage.structureType === STRUCTURE_SPAWN || STRUCTURE_EXTENSION && this.creep.room.spawn.queueLength == 0) {
+          this.push('withdraw', storage.id, C.RESOURCE_ENERGY)
+          this.push('moveNear', storage.id)
+          return this.runStack()
+        }
+      }
+    }
+    target = {
+      x: 25,
+      y: 25,
+      roomName: target
+    }
     let tgt = this.resolveTarget(target)
     if (this.creep.pos.roomName !== tgt.roomName) {
+      this.status = `Moving to room ${tgt.roomName}`
       this.push('moveToRoom', tgt)
       return this.runStack()
     }
-    let { room, pos } = this.creep
     if (this.creep.carry.energy) {
       this.status = 'Looking for target'
-      let sites = room.find(C.FIND_MY_CONSTRUCTION_SITES)
+      let sites = this.creep.room.find(C.FIND_MY_CONSTRUCTION_SITES)
       if (!sites.length) {
         this.push('suicide');
         return this.runStack();
@@ -28,30 +57,6 @@ export default {
       this.push('repeat', hitsMax, 'build', site.id)
       this.push('moveInRange', site.id, 3)
       this.runStack()
-    } else {
-      this.status = 'Looking for energy'
-      let tgt = room.storage || room.containers.find(c => c.store.energy) || room.structures[STRUCTURE_SPAWN] && room.structures[STRUCTURE_SPAWN][0]
-      if(!tgt){
-       tgt = C.USER.room.storage || C.USER.room.containers.find(c => c.store.energy) || C.USER.room.structures[STRUCTURE_SPAWN] && C.USER.structures[STRUCTURE_SPAWN][0]
-      }
-      if (room.storage && room.storage.store.energy < 1000) {
-        let { x, y, roomName } = room.storage.pos
-        this.push('repeat',5,'flee', [{ pos: { x, y, roomName }, range: 5 }])
-        return this.runStack()
-      }
-      if (tgt) {
-        //removed sleeping if theres queue in spawn as caused a loop crashing builder process
-        if (tgt.structureType ===  STRUCTURE_CONTAINER || STRUCTURE_STORAGE) {
-          this.push('withdraw', tgt.id, C.RESOURCE_ENERGY)
-        this.push('moveNear', tgt.id)
-        return this.runStack()
-        } else if(tgt.structureType === STRUCTURE_SPAWN || STRUCTURE_EXTENSION && this.creep.room.spawn.queueLength == 0){
-          this.push('withdraw', tgt.id, C.RESOURCE_ENERGY)
-          this.push('moveNear', tgt.id)
-          return this.runStack()
-        }
-      }
     }
-    } 
   }
-
+}

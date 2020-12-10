@@ -17,10 +17,6 @@ export default class SeasonalBrain extends BaseProcess {
   get log() {
     return this.context.log
   }
-  get memory() {
-    return this.context.memory
-  }
-
   get children() {
     this.memory.children = this.memory.children || {}
     return this.memory.children
