@@ -20,7 +20,7 @@
     "stack-trace": "^0.0.10"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-screeps": "^1.0.3",
     "rollup": "^0.56.5",
     "rollup-plugin-commonjs": "^8.0.2",
